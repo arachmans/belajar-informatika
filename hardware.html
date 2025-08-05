@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Interaktif: Hardware, Software, & Brainware</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Muted Accents -->
+    <!-- Application Structure Plan: The SPA is designed with a three-section architecture: 1) 'Belajar' (Learn), 2) 'Studi Kasus' (Case Study), and 3) 'Uji Pemahaman' (Test Understanding). This structure transforms the linear lesson plan into an exploratory learning path. The 'Belajar' section uses interactive cards and a central chart to explain core concepts. The 'Studi Kasus' provides a practical application of the knowledge. The 'Uji Pemahaman' allows for self-assessment. This non-linear, task-oriented design is chosen to enhance student engagement and comprehension by allowing them to learn, apply, and test their knowledge in a flexible manner. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: H/S/B Relationship -> Goal: Inform/Compare -> Viz: Doughnut Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Visually represents the three components as interconnected parts of a whole system.
+        - Report Info: H/S/B Categories & Examples -> Goal: Organize/Inform -> Viz: Interactive Cards/Tabs (HTML/Tailwind/JS) -> Interaction: Click tabs to reveal content -> Justification: Breaks down dense information into manageable, user-controlled chunks, preventing cognitive overload.
+        - Report Info: Case Study (Cash Register) -> Goal: Apply/Relationships -> Viz: Interactive Diagram (HTML/Tailwind/JS) -> Interaction: Click on components to show a modal with details -> Justification: Provides a hands-on, contextual learning experience that reinforces the concepts in a real-world scenario.
+        - Report Info: Essay Questions -> Goal: Test -> Viz: Quiz-style Interface (HTML/JS) -> Interaction: Navigate questions with 'Next'/'Previous' buttons -> Justification: Turns a static list of questions into a simple, interactive self-assessment tool. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            width: 100%;
+            max-width: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-width: 350px;
+            }
+        }
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .case-study-item {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .case-study-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-blue-600">Dunia Komputer</h1>
+            <nav>
+                <button onclick="showSection('belajar')" class="nav-button px-3 py-2 text-sm md:text-base font-semibold text-stone-600 hover:text-blue-600">Belajar</button>
+                <button onclick="showSection('studi-kasus')" class="nav-button px-3 py-2 text-sm md:text-base font-semibold text-stone-600 hover:text-blue-600">Studi Kasus</button>
+                <button onclick="showSection('uji-pemahaman')" class="nav-button px-3 py-2 text-sm md:text-base font-semibold text-stone-600 hover:text-blue-600">Uji Pemahaman</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Section: Belajar -->
+        <section id="belajar" class="app-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Selamat Datang di Dunia Komputer!</h2>
+                <p class="text-stone-600 max-w-3xl mx-auto">Di sini, kita akan menjelajahi tiga pilar utama yang membuat komputer bekerja: Hardware, Software, dan Brainware. Pahami bagaimana ketiganya saling bekerja sama untuk menciptakan teknologi yang kita gunakan setiap hari.</p>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Tiga Komponen Tak Terpisahkan</h3>
+                     <div class="chart-container">
+                        <canvas id="hsbChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-stone-500 mt-2">Arahkan kursor ke diagram untuk melihat detail.</p>
+                </div>
+                <div class="md:col-span-3 bg-white p-6 rounded-lg shadow">
+                     <h3 class="text-2xl font-bold mb-4">Analogi Restoran 🍽️</h3>
+                     <p class="mb-4 text-stone-600">Bayangkan sebuah restoran. Agar bisa menyajikan makanan lezat, dibutuhkan tiga hal:</p>
+                     <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-4">🍳</span>
+                            <div><strong class="text-blue-600">Hardware</strong> adalah dapurnya: kompor, panci, dan pisau. Ini adalah peralatan fisiknya.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-4">📜</span>
+                            <div><strong class="text-green-600">Software</strong> adalah resepnya. Kumpulan instruksi yang memberi tahu cara mengolah bahan.</div>
+                        </li>
+                        <li class="flex items-start">
+                           <span class="text-2xl mr-4">👨‍🍳</span>
+                           <div><strong class="text-amber-600">Brainware</strong> adalah kokinya. Orang yang menggunakan peralatan (hardware) dan resep (software) untuk memasak.</div>
+                        </li>
+                     </ul>
+                     <p class="mt-4 font-semibold">Tanpa salah satunya, restoran tidak akan bisa beroperasi. Begitu pula dengan komputer!</p>
+                </div>
+            </div>
+
+            <div id="interactive-cards" class="mt-16">
+                <div class="flex justify-center mb-8 border-b">
+                    <button id="btn-hardware" class="main-tab-button text-lg font-bold py-3 px-6 border-b-4 border-transparent" onclick="showMainTab('hardware')">Hardware</button>
+                    <button id="btn-software" class="main-tab-button text-lg font-bold py-3 px-6 border-b-4 border-transparent" onclick="showMainTab('software')">Software</button>
+                    <button id="btn-brainware" class="main-tab-button text-lg font-bold py-3 px-6 border-b-4 border-transparent" onclick="showMainTab('brainware')">Brainware</button>
+                </div>
+
+                <div id="content-hardware" class="main-tab-content">
+                    <h3 class="text-2xl font-bold mb-2 text-center">Hardware (Perangkat Keras)</h3>
+                    <p class="text-stone-600 text-center mb-6 max-w-2xl mx-auto">Segala komponen fisik dari sistem komputer yang dapat dilihat dan disentuh. Klik tab di bawah untuk melihat jenis-jenisnya.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-inner">
+                        <div class="flex flex-wrap justify-center gap-2 mb-6">
+                            <button onclick="showSubTab('hardware', 'input')" class="sub-tab-button hardware active px-4 py-2 rounded-full bg-stone-200 hover:bg-blue-500 hover:text-white transition">Input</button>
+                            <button onclick="showSubTab('hardware', 'process')" class="sub-tab-button hardware px-4 py-2 rounded-full bg-stone-200 hover:bg-blue-500 hover:text-white transition">Proses</button>
+                            <button onclick="showSubTab('hardware', 'output')" class="sub-tab-button hardware px-4 py-2 rounded-full bg-stone-200 hover:bg-blue-500 hover:text-white transition">Output</button>
+                            <button onclick="showSubTab('hardware', 'storage')" class="sub-tab-button hardware px-4 py-2 rounded-full bg-stone-200 hover:bg-blue-500 hover:text-white transition">Penyimpanan</button>
+                        </div>
+                        <div id="sub-content-input" class="sub-tab-content hardware">
+                            <h4 class="font-bold text-lg mb-2">Perangkat Input</h4>
+                            <p class="mb-4">Alat untuk memasukkan data atau perintah ke dalam komputer.</p>
+                            <ul class="list-disc list-inside text-stone-600"><li>Keyboard</li><li>Mouse</li><li>Scanner</li><li>Mikrofon</li><li>Webcam</li></ul>
+                        </div>
+                        <div id="sub-content-process" class="sub-tab-content hardware" style="display:none;">
+                            <h4 class="font-bold text-lg mb-2">Perangkat Proses</h4>
+                            <p class="mb-4">"Otak" komputer yang memproses semua instruksi.</p>
+                            <ul class="list-disc list-inside text-stone-600"><li>CPU (Central Processing Unit)</li><li>Motherboard</li><li>RAM (Random Access Memory)</li></ul>
+                        </div>
+                        <div id="sub-content-output" class="sub-tab-content hardware" style="display:none;">
+                             <h4 class="font-bold text-lg mb-2">Perangkat Output</h4>
+                            <p class="mb-4">Alat untuk menampilkan hasil dari data yang telah diproses.</p>
+                            <ul class="list-disc list-inside text-stone-600"><li>Monitor</li><li>Printer</li><li>Speaker</li><li>Proyektor</li></ul>
+                        </div>
+                        <div id="sub-content-storage" class="sub-tab-content hardware" style="display:none;">
+                             <h4 class="font-bold text-lg mb-2">Perangkat Penyimpanan</h4>
+                            <p class="mb-4">Alat untuk menyimpan data secara permanen atau sementara.</p>
+                            <ul class="list-disc list-inside text-stone-600"><li>Hard Disk Drive (HDD)</li><li>Solid State Drive (SSD)</li><li>Flashdisk</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-software" class="main-tab-content" style="display:none;">
+                    <h3 class="text-2xl font-bold mb-2 text-center">Software (Perangkat Lunak)</h3>
+                    <p class="text-stone-600 text-center mb-6 max-w-2xl mx-auto">Kumpulan instruksi elektronik yang dijalankan komputer untuk melakukan fungsi tertentu. Software tidak memiliki bentuk fisik.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-inner">
+                        <div class="flex flex-wrap justify-center gap-2 mb-6">
+                            <button onclick="showSubTab('software', 'os')" class="sub-tab-button software active px-4 py-2 rounded-full bg-stone-200 hover:bg-green-500 hover:text-white transition">Sistem Operasi</button>
+                            <button onclick="showSubTab('software', 'app')" class="sub-tab-button software px-4 py-2 rounded-full bg-stone-200 hover:bg-green-500 hover:text-white transition">Aplikasi</button>
+                        </div>
+                        <div id="sub-content-os" class="sub-tab-content software">
+                            <h4 class="font-bold text-lg mb-2">Sistem Operasi (OS)</h4>
+                            <p class="mb-4">Software paling dasar yang mengelola semua sumber daya komputer. Tanpanya, komputer tidak bisa digunakan.</p>
+                            <ul class="list-disc list-inside text-stone-600"><li>Microsoft Windows</li><li>macOS</li><li>Linux</li><li>Android & iOS</li></ul>
+                        </div>
+                        <div id="sub-content-app" class="sub-tab-content software" style="display:none;">
+                            <h4 class="font-bold text-lg mb-2">Software Aplikasi</h4>
+                            <p class="mb-4">Program yang dirancang untuk membantu pengguna melakukan tugas spesifik.</p>
+                            <ul class="list-disc list-inside text-stone-600"><li>Microsoft Office (Word, Excel)</li><li>Google Chrome</li><li>Adobe Photoshop</li><li>Game</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-brainware" class="main-tab-content" style="display:none;">
+                    <h3 class="text-2xl font-bold mb-2 text-center">Brainware (Pengguna)</h3>
+                    <p class="text-stone-600 text-center mb-6 max-w-2xl mx-auto">Manusia yang terlibat dalam penggunaan, pengoperasian, serta pengaturan sistem komputer. Brainware adalah "otak" di balik teknologi.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow text-center">
+                            <h4 class="font-bold text-lg">Programmer</h4>
+                            <p class="text-sm text-stone-600">Pembuat software.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center">
+                            <h4 class="font-bold text-lg">System Analyst</h4>
+                            <p class="text-sm text-stone-600">Perancang sistem.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center">
+                            <h4 class="font-bold text-lg">Operator</h4>
+                            <p class="text-sm text-stone-600">Pengguna operasional.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center">
+                            <h4 class="font-bold text-lg">Pengguna Akhir</h4>
+                            <p class="text-sm text-stone-600">Kita semua!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Studi Kasus -->
+        <section id="studi-kasus" class="app-section" style="display: none;">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Studi Kasus: Mesin Kasir</h2>
+                <p class="text-stone-600 max-w-3xl mx-auto">Ayo kita bedah sebuah mesin kasir di supermarket. Klik pada setiap komponen di bawah untuk mengidentifikasi apakah itu Hardware, Software, atau Brainware.</p>
+            </div>
+            <div class="relative w-full max-w-4xl mx-auto bg-stone-200 rounded-lg p-8 h-[500px]">
+                <div class="case-study-item absolute bg-white border-2 border-blue-500 rounded p-2" style="top: 10%; left: 35%; width: 30%;" onclick="showModal('Monitor', 'Hardware Output', 'Menampilkan daftar belanjaan dan total harga kepada kasir dan pelanggan.')">🖥️ Monitor</div>
+                <div class="case-study-item absolute bg-white border-2 border-blue-500 rounded p-2" style="top: 40%; left: 10%;" onclick="showModal('Scanner', 'Hardware Input', 'Membaca barcode pada produk untuk memasukkan data barang ke sistem.')">📊 Barcode Scanner</div>
+                <div class="case-study-item absolute bg-white border-2 border-blue-500 rounded p-2" style="top: 70%; left: 38%;" onclick="showModal('Laci Uang', 'Hardware Output/Storage', 'Membuka secara otomatis untuk menyimpan uang dan memberikan kembalian.')">💰 Laci Uang</div>
+                <div class="case-study-item absolute bg-white border-2 border-blue-500 rounded p-2" style="top: 40%; left: 65%;" onclick="showModal('Printer Struk', 'Hardware Output', 'Mencetak bukti pembayaran untuk pelanggan.')">🧾 Printer Struk</div>
+                <div class="case-study-item absolute bg-white border-2 border-green-500 rounded p-2" style="top: 25%; left: 5%;" onclick="showModal('Sistem POS', 'Software Aplikasi', 'Program yang menghitung total belanja, mengelola stok, dan memproses pembayaran.')">💻 Sistem Kasir (POS)</div>
+                <div class="case-study-item absolute bg-white border-2 border-amber-500 rounded p-2" style="bottom: 10%; left: 10%;" onclick="showModal('Kasir', 'Brainware', 'Orang yang mengoperasikan seluruh sistem untuk melayani pelanggan.')">👩‍💼 Kasir</div>
+                 <div class="absolute bottom-4 right-4 text-xs text-stone-500">Diagram Interaktif</div>
+            </div>
+        </section>
+
+        <!-- Section: Uji Pemahaman -->
+        <section id="uji-pemahaman" class="app-section" style="display: none;">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-2">Uji Pemahamanmu</h2>
+                <p class="text-stone-600 max-w-3xl mx-auto">Jawablah pertanyaan berikut untuk mengukur seberapa dalam pemahamanmu tentang materi ini. Gunakan tombol navigasi untuk berpindah antar soal.</p>
+            </div>
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                <div id="question-container" class="mb-6 min-h-[150px]">
+                    <p id="question-number" class="font-bold text-blue-600 mb-2"></p>
+                    <p id="question-text" class="text-lg"></p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <button onclick="navigateQuestion(-1)" class="px-6 py-2 bg-stone-300 text-stone-800 rounded-lg hover:bg-stone-400 transition">Sebelumnya</button>
+                    <span id="question-indicator" class="text-sm font-semibold"></span>
+                    <button onclick="navigateQuestion(1)" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Selanjutnya</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
+            <h3 id="modal-title" class="text-xl font-bold mb-2"></h3>
+            <p id="modal-category" class="text-sm font-semibold text-white rounded-full px-3 py-1 inline-block mb-4"></p>
+            <p id="modal-description" class="text-stone-600 mb-6"></p>
+            <button onclick="closeModal()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('.app-section');
+        const navButtons = document.querySelectorAll('.nav-button');
+        const mainTabButtons = document.querySelectorAll('.main-tab-button');
+        
+        function showSection(id) {
+            sections.forEach(section => {
+                section.style.display = section.id === id ? 'block' : 'none';
+            });
+            navButtons.forEach(button => {
+                if (button.getAttribute('onclick').includes(id)) {
+                    button.classList.add('text-blue-600');
+                } else {
+                    button.classList.remove('text-blue-600');
+                }
+            });
+             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showMainTab(tabName) {
+            document.querySelectorAll('.main-tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`content-${tabName}`).style.display = 'block';
+
+            mainTabButtons.forEach(button => {
+                button.classList.remove('border-blue-600', 'text-blue-600');
+                button.classList.add('border-transparent');
+            });
+            document.getElementById(`btn-${tabName}`).classList.add('border-blue-600', 'text-blue-600');
+        }
+
+        function showSubTab(mainTab, subTab) {
+            document.querySelectorAll(`.sub-tab-content.${mainTab}`).forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`sub-content-${subTab}`).style.display = 'block';
+
+            document.querySelectorAll(`.sub-tab-button.${mainTab}`).forEach(button => {
+                button.classList.remove('active');
+                if (mainTab === 'hardware') {
+                    button.classList.remove('bg-blue-500', 'text-white');
+                } else {
+                    button.classList.remove('bg-green-500', 'text-white');
+                }
+            });
+            const activeButton = document.querySelector(`.sub-tab-button.${mainTab}[onclick*="'${subTab}'"]`);
+            activeButton.classList.add('active');
+             if (mainTab === 'hardware') {
+                activeButton.classList.add('bg-blue-500', 'text-white');
+            } else {
+                activeButton.classList.add('bg-green-500', 'text-white');
+            }
+        }
+        
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalCategory = document.getElementById('modal-category');
+        const modalDescription = document.getElementById('modal-description');
+
+        function showModal(title, category, description) {
+            modalTitle.textContent = title;
+            modalCategory.textContent = category;
+            modalDescription.textContent = description;
+            
+            modalCategory.className = 'text-sm font-semibold text-white rounded-full px-3 py-1 inline-block mb-4';
+            if (category.includes('Hardware')) {
+                modalCategory.classList.add('bg-blue-500');
+            } else if (category.includes('Software')) {
+                modalCategory.classList.add('bg-green-500');
+            } else {
+                modalCategory.classList.add('bg-amber-500');
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+        
+        const questions = [
+            "Jelaskan dengan bahasamu sendiri apa yang dimaksud dengan hardware, software, dan brainware!",
+            "Mengapa ketiga komponen (hardware, software, brainware) tidak dapat dipisahkan dalam sebuah sistem komputer? Gunakan sebuah analogi selain restoran untuk menjelaskannya!",
+            "Sebutkan masing-masing 2 contoh perangkat input, proses, output, dan penyimpanan, lalu jelaskan fungsi dari salah satu contoh yang kamu sebutkan di setiap kategori!",
+            "Apa perbedaan mendasar antara software sistem operasi (contoh: Windows) dengan software aplikasi (contoh: Microsoft Word)?",
+            "Menurutmu, mengapa brainware dianggap sebagai komponen terpenting dalam sistem komputer? Berikan alasanmu!",
+            "Kamu ingin merakit sebuah komputer untuk keperluan desain grafis. Komponen hardware apa saja yang akan kamu prioritaskan untuk memiliki spesifikasi tinggi? Jelaskan mengapa!",
+            "Komputermu tiba-tiba menjadi sangat lambat. Bagaimana caramu membedakan apakah masalah tersebut disebabkan oleh hardware atau software? Langkah apa yang akan kamu coba pertama kali?",
+            "Android dan iOS keduanya adalah sistem operasi untuk smartphone. Sebutkan satu kelebihan dan satu kekurangan dari masing-masing sistem operasi tersebut dari sudut pandang pengguna!",
+            "Jelaskan peran seorang programmer (sebagai bagian dari brainware) dalam ekosistem teknologi saat ini!",
+            "Bagaimana interaksi antara hardware, software, dan brainware terjadi saat kamu melakukan video call dengan temanmu menggunakan laptop? Uraikan prosesnya secara singkat."
+        ];
+
+        let currentQuestionIndex = 0;
+        const questionNumberEl = document.getElementById('question-number');
+        const questionTextEl = document.getElementById('question-text');
+        const questionIndicatorEl = document.getElementById('question-indicator');
+
+        function displayQuestion() {
+            questionNumberEl.textContent = `Soal ${currentQuestionIndex + 1}`;
+            questionTextEl.textContent = questions[currentQuestionIndex];
+            questionIndicatorEl.textContent = `${currentQuestionIndex + 1} / ${questions.length}`;
+        }
+
+        function navigateQuestion(direction) {
+            currentQuestionIndex += direction;
+            if (currentQuestionIndex < 0) {
+                currentQuestionIndex = questions.length - 1;
+            } else if (currentQuestionIndex >= questions.length) {
+                currentQuestionIndex = 0;
+            }
+            displayQuestion();
+        }
+
+        window.onload = function() {
+            showSection('belajar');
+            showMainTab('hardware');
+            showSubTab('hardware', 'input');
+            displayQuestion();
+
+            const ctx = document.getElementById('hsbChart').getContext('2d');
+            const hsbChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hardware', 'Software', 'Brainware'],
+                    datasets: [{
+                        label: 'Komponen Sistem Komputer',
+                        data: [33.3, 33.3, 33.4],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',  // blue
+                            'rgba(16, 185, 129, 0.8)', // green
+                            'rgba(245, 158, 11, 0.8)'  // amber
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(245, 158, 11, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += 'Bagian penting dari sistem.';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+
+</body>
+</html>
