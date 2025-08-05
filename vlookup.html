@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif VLOOKUP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Calm Blue Accent -->
+    <!-- Application Structure Plan: Aplikasi ini dirancang sebagai sebuah alur pembelajaran vertikal yang terstruktur. Dimulai dari pengenalan konsep ('Mengapa'), dilanjutkan dengan pembedahan sintaks secara interaktif ('Bagaimana'), dan puncaknya adalah proyek praktik langsung ('Lakukan'). Struktur ini dipilih untuk mengubah pembelajaran pasif (membaca dokumen) menjadi pengalaman aktif (berinteraksi dan mencoba), yang sangat efektif untuk pemahaman konsep teknis seperti VLOOKUP. Navigasi sticky di bagian atas memudahkan siswa untuk melompat antar bagian. -->
+    <!-- Visualization & Content Choices: 
+        1. Info: Konsep & Pentingnya VLOOKUP -> Goal: Inform -> Presentation: Kartu-kartu ringkasan dengan ikon. -> Interaction: Statis. -> Justification: Memecah teks panjang menjadi poin-poin kunci yang mudah dicerna. -> Method: HTML/Tailwind.
+        2. Info: Sintaks VLOOKUP -> Goal: Organize/Inform -> Presentation: Diagram sintaks interaktif. -> Interaction: Hover pada setiap argumen untuk melihat penjelasan detail. -> Justification: Membuat sintaks yang teknis menjadi lebih mudah dipahami dan tidak mengintimidasi. -> Method: HTML/Tailwind/JS (untuk event hover).
+        3. Info: Proyek Praktik (Data Barang & Penjualan) -> Goal: Relationships/Practice -> Presentation: Dua tabel berdampingan, satu sebagai referensi statis dan satu lagi sebagai area kerja interaktif. -> Interaction: Siswa memilih Kode Barang dari dropdown, dan Nama Barang serta Harga terisi otomatis. Siswa memasukkan Jumlah, dan Total Harga serta Grand Total terhitung real-time. -> Justification: Ini adalah inti dari pembelajaran berbasis proyek. Siswa secara langsung mengalami 'keajaiban' VLOOKUP dan melihat dampaknya secara instan. -> Method: HTML/Tailwind/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .syntax-item:hover .syntax-tooltip { display: block; }
+        .syntax-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: normal;
+            width: 280px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <ul class="flex justify-center space-x-4 md:space-x-8 text-sm md:text-base">
+                <li><a href="#pengenalan" class="nav-link font-medium text-gray-600 hover:text-blue-600 border-b-2 border-transparent pb-2">Pengenalan</a></li>
+                <li><a href="#sintaks" class="nav-link font-medium text-gray-600 hover:text-blue-600 border-b-2 border-transparent pb-2">Sintaks</a></li>
+                <li><a href="#proyek" class="nav-link font-medium text-gray-600 hover:text-blue-600 border-b-2 border-transparent pb-2">Proyek Praktik</a></li>
+                <li><a href="#tantangan" class="nav-link font-medium text-gray-600 hover:text-blue-600 border-b-2 border-transparent pb-2">Tantangan</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="pengenalan" class="text-center mb-16 md:mb-24 scroll-mt-20">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700 mb-4">Modul Interaktif VLOOKUP Excel</h1>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">Selamat datang! Mari kita pelajari salah satu fungsi paling berguna di Excel dengan cara yang lebih seru dan langsung praktik.</p>
+        
+            <div class="mt-12">
+                <h2 class="text-2xl font-semibold mb-8">Mengapa VLOOKUP Penting?</h2>
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                        <div class="text-3xl mb-3">⏱️</div>
+                        <h3 class="text-xl font-semibold mb-2">Menghemat Waktu</h3>
+                        <p class="text-gray-600">Stop mencari data satu per satu! VLOOKUP dapat menemukan informasi yang relevan dari ribuan baris data dalam sekejap.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                        <div class="text-3xl mb-3">🎯</div>
+                        <h3 class="text-xl font-semibold mb-2">Mengurangi Kesalahan</h3>
+                        <p class="text-gray-600">Dengan otomatisasi, Anda menghindari risiko salah ketik atau salah salin data (human error) saat menggabungkan informasi dari tabel berbeda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-200">
+
+        <section id="sintaks" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">Bagaimana Cara Kerjanya?</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Fungsi VLOOKUP memiliki 4 bagian (argumen). Arahkan kursor ke setiap bagian di bawah ini untuk melihat penjelasannya.</p>
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto border border-gray-200">
+                <p class="text-center text-lg md:text-xl font-mono bg-gray-100 p-4 rounded-md text-gray-700 break-words">
+                    =VLOOKUP(
+                    <span class="relative syntax-item cursor-pointer text-blue-600 font-semibold">
+                        nilai_dicari,
+                        <span class="syntax-tooltip bg-gray-800 text-white text-sm rounded-lg p-3 shadow-xl text-left">
+                            <strong class="block text-base font-bold text-blue-300 mb-1">Nilai yang Dicari</strong>
+                            Ini adalah data kunci yang ingin Anda cari. Contoh: kode barang, NIS siswa, atau NIP pegawai.
+                        </span>
+                    </span>
+                    <span class="relative syntax-item cursor-pointer text-green-600 font-semibold">
+                        tabel_data,
+                        <span class="syntax-tooltip bg-gray-800 text-white text-sm rounded-lg p-3 shadow-xl text-left">
+                            <strong class="block text-base font-bold text-green-300 mb-1">Tabel Data</strong>
+                            Seluruh rentang tabel tempat data Anda berada. Penting: kolom 'nilai_dicari' harus ada di paling kiri dari tabel ini.
+                        </span>
+                    </span>
+                    <span class="relative syntax-item cursor-pointer text-purple-600 font-semibold">
+                        nomor_kolom,
+                        <span class="syntax-tooltip bg-gray-800 text-white text-sm rounded-lg p-3 shadow-xl text-left">
+                            <strong class="block text-base font-bold text-purple-300 mb-1">Nomor Kolom</strong>
+                            Nomor urut kolom (dihitung dari kiri) di 'tabel_data' yang nilainya ingin Anda ambil.
+                        </span>
+                    </span>
+                    <span class="relative syntax-item cursor-pointer text-red-600 font-semibold">
+                        [tipe_pencarian]
+                        <span class="syntax-tooltip bg-gray-800 text-white text-sm rounded-lg p-3 shadow-xl text-left">
+                            <strong class="block text-base font-bold text-red-300 mb-1">Tipe Pencarian</strong>
+                            Gunakan `FALSE` untuk mencari kecocokan yang sama persis (paling umum digunakan). Gunakan `TRUE` untuk pencocokan terdekat.
+                        </span>
+                    </span>)
+                </p>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-200">
+
+        <section id="proyek" class="scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">Proyek Praktik: Kasir Toko Sederhana</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">Ayo kita buat simulasi kasir. Tugas Anda adalah mengisi tabel 'Transaksi Penjualan' dengan memilih Kode Barang. Nama Barang dan Harga akan terisi otomatis, persis seperti kerja VLOOKUP!</p>
+
+            <div class="grid lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2">
+                    <h3 class="font-semibold text-xl mb-4 text-center lg:text-left">Tabel Referensi: Daftar Barang</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="p-3">Kode Barang</th>
+                                    <th class="p-3">Nama Barang</th>
+                                    <th class="p-3">Harga</th>
+                                    <th class="p-3">Diskon (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ref-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <h3 class="font-semibold text-xl mb-4 text-center lg:text-left">Area Kerja: Transaksi Penjualan</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left min-w-[600px]">
+                                <thead class="bg-blue-50">
+                                    <tr>
+                                        <th class="p-3">Kode Barang</th>
+                                        <th class="p-3">Nama Barang</th>
+                                        <th class="p-3">Harga Satuan</th>
+                                        <th class="p-3">Diskon (%)</th>
+                                        <th class="p-3 w-24">Jumlah</th>
+                                        <th class="p-3">Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transaction-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-6 text-right pr-4">
+                            <p class="text-gray-600">Grand Total</p>
+                            <p id="grand-total" class="text-2xl font-bold text-blue-700">Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 md:my-24 border-gray-200">
+
+        <section id="tantangan" class="text-center scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">Tantangan Mandiri</h2>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                <p class="text-lg text-gray-600 mb-6">Sekarang giliran Anda! Dalam file Excel Anda sendiri, coba replikasi proyek kasir yang baru saja kita lakukan. Pastikan Anda berhasil:</p>
+                <ul class="text-left list-disc list-inside space-y-3 text-gray-700">
+                    <li>Membuat dua tabel: `DAFTAR BARANG` (dengan kolom **Diskon dalam Persentase**) dan `TRANSAKSI PENJUALAN` (dengan kolom Diskon dan Total Harga).</li>
+                    <li>Menggunakan rumus `=VLOOKUP(...)` untuk mengisi kolom Nama Barang, Harga Satuan, dan **Diskon (%)** secara otomatis.</li>
+                    <li>Membuat rumus perhitungan **Total Harga** (`=Harga Satuan * Jumlah * (1 - Diskon)`).</li>
+                    <li>Menggunakan rumus `=SUM(...)` untuk menghitung Grand Total.</li>
+                </ul>
+                <p class="mt-6 font-semibold text-blue-600">Selamat mencoba dan bereksperimen!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 mt-12 bg-gray-100 border-t">
+        <p class="text-gray-500">Modul Interaktif dibuat untuk pembelajaran Informatika Kelas 11.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const daftarBarang = [
+                { kode: 'BRG001', nama: 'Pensil', harga: 3500, diskon: 0 },
+                { kode: 'BRG002', nama: 'Buku Tulis', harga: 6000, diskon: 0.10 }, // 10%
+                { kode: 'BRG003', nama: 'Penghapus', harga: 1500, diskon: 0 },
+                { kode: 'BRG004', nama: 'Penggaris', harga: 2500, diskon: 0.05 }, // 5%
+                { kode: 'BRG005', nama: 'Spidol', harga: 8000, diskon: 0.15 }, // 15%
+            ];
+
+            const refTableBody = document.getElementById('ref-table-body');
+            daftarBarang.forEach(item => {
+                const row = `
+                    <tr class="border-b">
+                        <td class="p-3 font-mono">${item.kode}</td>
+                        <td class="p-3">${item.nama}</td>
+                        <td class="p-3">${formatRupiah(item.harga)}</td>
+                        <td class="p-3">${formatPercentage(item.diskon)}</td>
+                    </tr>
+                `;
+                refTableBody.innerHTML += row;
+            });
+
+            const transactionTableBody = document.getElementById('transaction-table-body');
+            const initialTransactionRows = ['BRG001', 'BRG003', 'BRG005', '', ''];
+
+            initialTransactionRows.forEach((kode, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('border-b');
+                row.dataset.index = index;
+
+                const selectOptions = '<option value="">Pilih Kode</option>' + daftarBarang.map(item => `<option value="${item.kode}" ${kode === item.kode ? 'selected' : ''}>${item.kode}</option>`).join('');
+
+                row.innerHTML = `
+                    <td class="p-2">
+                        <select class="kode-barang-select w-full p-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            ${selectOptions}
+                        </select>
+                    </td>
+                    <td class="nama-barang-cell p-3 text-gray-500"></td>
+                    <td class="harga-satuan-cell p-3 text-gray-500"></td>
+                    <td class="diskon-cell p-3 text-gray-500"></td>
+                    <td class="p-2">
+                        <input type="number" min="0" class="jumlah-beli-input w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0">
+                    </td>
+                    <td class="total-harga-cell p-3 font-semibold"></td>
+                `;
+                transactionTableBody.appendChild(row);
+            });
+
+            function formatRupiah(angka) {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+            }
+
+            function formatPercentage(value) {
+                return new Intl.NumberFormat('id-ID', { style: 'percent', minimumFractionDigits: 0 }).format(value);
+            }
+
+            function updateRow(row) {
+                const kode = row.querySelector('.kode-barang-select').value;
+                const jumlah = parseInt(row.querySelector('.jumlah-beli-input').value) || 0;
+                
+                const namaCell = row.querySelector('.nama-barang-cell');
+                const hargaCell = row.querySelector('.harga-satuan-cell');
+                const diskonCell = row.querySelector('.diskon-cell');
+                const totalCell = row.querySelector('.total-harga-cell');
+
+                const barang = daftarBarang.find(item => item.kode === kode);
+
+                if (barang) {
+                    namaCell.textContent = barang.nama;
+                    namaCell.classList.remove('text-gray-500');
+                    hargaCell.textContent = formatRupiah(barang.harga);
+                    hargaCell.classList.remove('text-gray-500');
+                    diskonCell.textContent = formatPercentage(barang.diskon);
+                    diskonCell.classList.remove('text-gray-500');
+                    const totalHarga = barang.harga * jumlah * (1 - barang.diskon);
+                    totalCell.textContent = formatRupiah(totalHarga);
+                    row.dataset.total = totalHarga;
+                } else {
+                    namaCell.textContent = '';
+                    hargaCell.textContent = '';
+                    diskonCell.textContent = '';
+                    totalCell.textContent = '';
+                    row.dataset.total = 0;
+                }
+                updateGrandTotal();
+            }
+
+            function updateGrandTotal() {
+                const rows = transactionTableBody.querySelectorAll('tr');
+                let grandTotal = 0;
+                rows.forEach(row => {
+                    grandTotal += parseFloat(row.dataset.total || 0);
+                });
+                document.getElementById('grand-total').textContent = formatRupiah(grandTotal);
+            }
+
+            transactionTableBody.addEventListener('change', function(e) {
+                if (e.target.classList.contains('kode-barang-select')) {
+                    const row = e.target.closest('tr');
+                    const jumlahInput = row.querySelector('.jumlah-beli-input');
+                    if(e.target.value && jumlahInput.value == 0) {
+                        jumlahInput.value = 1;
+                    }
+                    if(!e.target.value) {
+                         jumlahInput.value = 0;
+                    }
+                    updateRow(row);
+                }
+            });
+
+            transactionTableBody.addEventListener('input', function(e) {
+                if (e.target.classList.contains('jumlah-beli-input')) {
+                    updateRow(e.target.closest('tr'));
+                }
+            });
+
+            document.querySelectorAll('#transaction-table-body tr').forEach(row => {
+                 const select = row.querySelector('.kode-barang-select');
+                 if(select.value){
+                     const jumlahInput = row.querySelector('.jumlah-beli-input');
+                     jumlahInput.value = Math.floor(Math.random() * 5) + 1;
+                 }
+                 updateRow(row);
+            });
+            
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
