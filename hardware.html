@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Hardware Komputer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        .device-card {
+            transition: all 0.3s ease;
+        }
+        
+        .device-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+        }
+        
+        .incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        
+        .dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        
+        .drop-zone {
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            background-color: #fef3c7;
+            border-color: #f59e0b;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 via-purple-50 to-blue-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-purple-300 to-pink-300 p-6 shadow-lg">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold text-white mb-2">🖥️ Belajar Hardware Komputer 🖥️</h1>
+            <p class="text-purple-100 text-lg">Mari belajar tentang perangkat keras komputer dengan cara yang menyenangkan!</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-1 py-4">
+                <button onclick="showSection('materi')" class="nav-btn bg-blue-200 hover:bg-blue-300 px-6 py-2 rounded-full text-blue-800 font-semibold transition-all">📚 Materi</button>
+                <button onclick="showSection('game1')" class="nav-btn bg-green-200 hover:bg-green-300 px-6 py-2 rounded-full text-green-800 font-semibold transition-all">🎮 Game 1</button>
+                <button onclick="showSection('game2')" class="nav-btn bg-yellow-200 hover:bg-yellow-300 px-6 py-2 rounded-full text-yellow-800 font-semibold transition-all">🎯 Game 2</button>
+                <button onclick="showSection('quiz')" class="nav-btn bg-purple-200 hover:bg-purple-300 px-6 py-2 rounded-full text-purple-800 font-semibold transition-all">❓ Quiz</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Materi Section -->
+    <section id="materi" class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <h2 class="text-3xl font-bold text-center text-purple-600 mb-8">📖 Materi Hardware Komputer</h2>
+            
+            <!-- Input Devices -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-blue-600 mb-6 flex items-center">
+                    <span class="bg-blue-200 rounded-full p-3 mr-4">⌨️</span>
+                    Input Devices (Perangkat Masukan)
+                </h3>
+                <div class="bg-blue-50 rounded-2xl p-6 mb-6">
+                    <p class="text-gray-700 text-lg mb-4">Input devices adalah perangkat yang digunakan untuk memasukkan data atau perintah ke dalam komputer.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
+                        <div class="text-6xl text-center mb-4">⌨️</div>
+                        <h4 class="font-bold text-center text-blue-800">Keyboard</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk mengetik huruf dan angka</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
+                        <div class="text-6xl text-center mb-4">🖱️</div>
+                        <h4 class="font-bold text-center text-blue-800">Mouse</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk mengklik dan menggerakkan kursor</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
+                        <div class="text-6xl text-center mb-4">🎤</div>
+                        <h4 class="font-bold text-center text-blue-800">Microphone</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk merekam suara</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200">
+                        <div class="text-6xl text-center mb-4">📷</div>
+                        <h4 class="font-bold text-center text-blue-800">Webcam</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk mengambil foto dan video</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Devices -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-green-600 mb-6 flex items-center">
+                    <span class="bg-green-200 rounded-full p-3 mr-4">🖥️</span>
+                    Output Devices (Perangkat Keluaran)
+                </h3>
+                <div class="bg-green-50 rounded-2xl p-6 mb-6">
+                    <p class="text-gray-700 text-lg mb-4">Output devices adalah perangkat yang digunakan untuk menampilkan atau mengeluarkan hasil dari komputer.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
+                        <div class="text-6xl text-center mb-4">🖥️</div>
+                        <h4 class="font-bold text-center text-green-800">Monitor</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk menampilkan gambar dan teks</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
+                        <div class="text-6xl text-center mb-4">🔊</div>
+                        <h4 class="font-bold text-center text-green-800">Speaker</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk mengeluarkan suara</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
+                        <div class="text-6xl text-center mb-4">🖨️</div>
+                        <h4 class="font-bold text-center text-green-800">Printer</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk mencetak dokumen</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200">
+                        <div class="text-6xl text-center mb-4">🎧</div>
+                        <h4 class="font-bold text-center text-green-800">Headphone</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Untuk mendengar suara pribadi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Processing Devices -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-purple-600 mb-6 flex items-center">
+                    <span class="bg-purple-200 rounded-full p-3 mr-4">🧠</span>
+                    Processing Devices (Perangkat Pemroses)
+                </h3>
+                <div class="bg-purple-50 rounded-2xl p-6 mb-6">
+                    <p class="text-gray-700 text-lg mb-4">Processing devices adalah perangkat yang memproses data dan menjalankan program komputer.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200">
+                        <div class="text-6xl text-center mb-4">🔲</div>
+                        <h4 class="font-bold text-center text-purple-800">CPU</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Otak komputer yang memproses data</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200">
+                        <div class="text-6xl text-center mb-4">🎮</div>
+                        <h4 class="font-bold text-center text-purple-800">GPU</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Memproses gambar dan grafik</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200">
+                        <div class="text-6xl text-center mb-4">🧮</div>
+                        <h4 class="font-bold text-center text-purple-800">RAM</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Menyimpan data sementara</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200">
+                        <div class="text-6xl text-center mb-4">🔧</div>
+                        <h4 class="font-bold text-center text-purple-800">Motherboard</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Menghubungkan semua komponen</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storage Devices -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-orange-600 mb-6 flex items-center">
+                    <span class="bg-orange-200 rounded-full p-3 mr-4">💿</span>
+                    Storage Devices (Perangkat Penyimpanan)
+                </h3>
+                <div class="bg-orange-50 rounded-2xl p-6 mb-6">
+                    <p class="text-gray-700 text-lg mb-4">Storage devices adalah perangkat yang digunakan untuk menyimpan data secara permanen.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+                        <div class="text-6xl text-center mb-4">💽</div>
+                        <h4 class="font-bold text-center text-orange-800">Hard Disk</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Menyimpan file dan program</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+                        <div class="text-6xl text-center mb-4">⚡</div>
+                        <h4 class="font-bold text-center text-orange-800">SSD</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Penyimpanan cepat tanpa bagian bergerak</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+                        <div class="text-6xl text-center mb-4">🔌</div>
+                        <h4 class="font-bold text-center text-orange-800">USB Flash Drive</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Penyimpanan portabel</p>
+                    </div>
+                    <div class="device-card bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+                        <div class="text-6xl text-center mb-4">💿</div>
+                        <h4 class="font-bold text-center text-orange-800">CD/DVD</h4>
+                        <p class="text-sm text-gray-600 text-center mt-2">Penyimpanan optik</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game 1: Matching Game -->
+    <section id="game1" class="container mx-auto px-4 py-8 hidden">
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center text-green-600 mb-8">🎮 Game 1: Pasangkan Nama dan Gambar</h2>
+            <div class="text-center mb-6">
+                <p class="text-lg text-gray-700 mb-4">Klik pada nama perangkat, lalu klik pada gambar yang sesuai!</p>
+                <div class="bg-green-100 rounded-2xl p-4 inline-block">
+                    <span class="text-green-800 font-bold">Skor: </span>
+                    <span id="score1" class="text-green-800 font-bold text-xl">0</span>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Names Column -->
+                <div class="bg-blue-50 rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-blue-800 mb-4 text-center">Nama Perangkat</h3>
+                    <div id="names-container" class="space-y-3">
+                        <!-- Names will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Images Column -->
+                <div class="bg-green-50 rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-green-800 mb-4 text-center">Gambar Perangkat</h3>
+                    <div id="images-container" class="grid grid-cols-2 gap-3">
+                        <!-- Images will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button onclick="resetGame1()" class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-full font-bold transition-all">🔄 Reset Game</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game 2: Categorization Game -->
+    <section id="game2" class="container mx-auto px-4 py-8 hidden">
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center text-yellow-600 mb-8">🎯 Game 2: Kategorikan Perangkat</h2>
+            <div class="text-center mb-6">
+                <p class="text-lg text-gray-700 mb-4">Seret perangkat ke kategori yang tepat!</p>
+                <div class="bg-yellow-100 rounded-2xl p-4 inline-block">
+                    <span class="text-yellow-800 font-bold">Skor: </span>
+                    <span id="score2" class="text-yellow-800 font-bold text-xl">0</span>
+                </div>
+            </div>
+            
+            <!-- Devices to Drag -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Perangkat yang Akan Dikategorikan</h3>
+                <div id="devices-container" class="flex flex-wrap justify-center gap-4">
+                    <!-- Devices will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Categories -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="drop-zone bg-blue-100 border-2 border-dashed border-blue-300 rounded-2xl p-4" data-category="input">
+                    <h3 class="text-lg font-bold text-blue-800 text-center mb-4">⌨️ Input Devices</h3>
+                    <div class="dropped-items space-y-2"></div>
+                </div>
+                <div class="drop-zone bg-green-100 border-2 border-dashed border-green-300 rounded-2xl p-4" data-category="output">
+                    <h3 class="text-lg font-bold text-green-800 text-center mb-4">🖥️ Output Devices</h3>
+                    <div class="dropped-items space-y-2"></div>
+                </div>
+                <div class="drop-zone bg-purple-100 border-2 border-dashed border-purple-300 rounded-2xl p-4" data-category="processing">
+                    <h3 class="text-lg font-bold text-purple-800 text-center mb-4">🧠 Processing Devices</h3>
+                    <div class="dropped-items space-y-2"></div>
+                </div>
+                <div class="drop-zone bg-orange-100 border-2 border-dashed border-orange-300 rounded-2xl p-4" data-category="storage">
+                    <h3 class="text-lg font-bold text-orange-800 text-center mb-4">💿 Storage Devices</h3>
+                    <div class="dropped-items space-y-2"></div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button onclick="resetGame2()" class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-full font-bold transition-all">🔄 Reset Game</button>
+                <button onclick="checkGame2()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition-all ml-4">✅ Periksa Jawaban</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="container mx-auto px-4 py-8 hidden">
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center text-purple-600 mb-8">❓ Quiz Hardware Komputer</h2>
+            <div class="text-center mb-6">
+                <div class="bg-purple-100 rounded-2xl p-4 inline-block">
+                    <span class="text-purple-800 font-bold">Soal: </span>
+                    <span id="current-question" class="text-purple-800 font-bold text-xl">1</span>
+                    <span class="text-purple-800 font-bold"> / 10</span>
+                    <span class="text-purple-800 font-bold ml-4">Skor: </span>
+                    <span id="quiz-score" class="text-purple-800 font-bold text-xl">0</span>
+                </div>
+            </div>
+            
+            <div id="quiz-container">
+                <!-- Quiz questions will be populated by JavaScript -->
+            </div>
+            
+            <div class="text-center mt-6">
+                <button id="quiz-btn" onclick="nextQuestion()" class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-full font-bold transition-all">Jawab</button>
+                <button onclick="resetQuiz()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-full font-bold transition-all ml-4">🔄 Mulai Ulang</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Global variables
+        let currentSection = 'materi';
+        let game1Score = 0;
+        let game2Score = 0;
+        let quizScore = 0;
+        let currentQuizQuestion = 0;
+        let selectedName = null;
+        let selectedImage = null;
+
+        // Device data
+        const devices = [
+            {name: 'Keyboard', emoji: '⌨️', category: 'input'},
+            {name: 'Mouse', emoji: '🖱️', category: 'input'},
+            {name: 'Microphone', emoji: '🎤', category: 'input'},
+            {name: 'Webcam', emoji: '📷', category: 'input'},
+            {name: 'Monitor', emoji: '🖥️', category: 'output'},
+            {name: 'Speaker', emoji: '🔊', category: 'output'},
+            {name: 'Printer', emoji: '🖨️', category: 'output'},
+            {name: 'Headphone', emoji: '🎧', category: 'output'},
+            {name: 'CPU', emoji: '🔲', category: 'processing'},
+            {name: 'GPU', emoji: '🎮', category: 'processing'},
+            {name: 'RAM', emoji: '🧮', category: 'processing'},
+            {name: 'Motherboard', emoji: '🔧', category: 'processing'},
+            {name: 'Hard Disk', emoji: '💽', category: 'storage'},
+            {name: 'SSD', emoji: '⚡', category: 'storage'},
+            {name: 'USB Flash Drive', emoji: '🔌', category: 'storage'},
+            {name: 'CD/DVD', emoji: '💿', category: 'storage'}
+        ];
+
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "Perangkat mana yang termasuk input device?",
+                options: ["Monitor", "Keyboard", "Speaker", "Printer"],
+                correct: 1
+            },
+            {
+                question: "Apa fungsi utama CPU?",
+                options: ["Menyimpan data", "Memproses data", "Menampilkan gambar", "Mencetak dokumen"],
+                correct: 1
+            },
+            {
+                question: "Perangkat mana yang digunakan untuk mengeluarkan suara?",
+                options: ["Microphone", "Webcam", "Speaker", "Mouse"],
+                correct: 2
+            },
+            {
+                question: "Hard disk termasuk dalam kategori?",
+                options: ["Input device", "Output device", "Processing device", "Storage device"],
+                correct: 3
+            },
+            {
+                question: "Perangkat mana yang digunakan untuk mengambil foto?",
+                options: ["Speaker", "Webcam", "Printer", "Keyboard"],
+                correct: 1
+            },
+            {
+                question: "RAM berfungsi untuk?",
+                options: ["Menyimpan data permanen", "Menyimpan data sementara", "Menampilkan gambar", "Mencetak dokumen"],
+                correct: 1
+            },
+            {
+                question: "Perangkat mana yang termasuk output device?",
+                options: ["Mouse", "Keyboard", "Monitor", "Microphone"],
+                correct: 2
+            },
+            {
+                question: "GPU digunakan untuk memproses?",
+                options: ["Suara", "Gambar dan grafik", "Teks", "Data numerik"],
+                correct: 1
+            },
+            {
+                question: "USB Flash Drive termasuk dalam kategori?",
+                options: ["Input device", "Output device", "Processing device", "Storage device"],
+                correct: 3
+            },
+            {
+                question: "Motherboard berfungsi untuk?",
+                options: ["Menyimpan data", "Menghubungkan semua komponen", "Menampilkan gambar", "Merekam suara"],
+                correct: 1
+            }
+        ];
+
+        // Navigation functions
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            
+            // Show selected section
+            document.getElementById(section).classList.remove('hidden');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-purple-400');
+            });
+            
+            currentSection = section;
+            
+            // Initialize section if needed
+            if (section === 'game1') {
+                initGame1();
+            } else if (section === 'game2') {
+                initGame2();
+            } else if (section === 'quiz') {
+                initQuiz();
+            }
+        }
+
+        // Game 1 functions
+        function initGame1() {
+            const shuffledDevices = [...devices].sort(() => Math.random() - 0.5).slice(0, 8);
+            
+            // Populate names
+            const namesContainer = document.getElementById('names-container');
+            namesContainer.innerHTML = '';
+            shuffledDevices.forEach((device, index) => {
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'name-item bg-white border-2 border-blue-200 rounded-xl p-3 text-center cursor-pointer hover:bg-blue-100 transition-all';
+                nameDiv.textContent = device.name;
+                nameDiv.dataset.device = index;
+                nameDiv.onclick = () => selectName(nameDiv, index);
+                namesContainer.appendChild(nameDiv);
+            });
+            
+            // Populate images (shuffled)
+            const imagesContainer = document.getElementById('images-container');
+            imagesContainer.innerHTML = '';
+            const shuffledImages = [...shuffledDevices].sort(() => Math.random() - 0.5);
+            shuffledImages.forEach((device, index) => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'image-item bg-white border-2 border-green-200 rounded-xl p-6 text-center cursor-pointer hover:bg-green-100 transition-all';
+                imageDiv.innerHTML = `<div class="text-4xl mb-2">${device.emoji}</div>`;
+                imageDiv.dataset.device = shuffledDevices.findIndex(d => d.name === device.name);
+                imageDiv.onclick = () => selectImage(imageDiv, shuffledDevices.findIndex(d => d.name === device.name));
+                imagesContainer.appendChild(imageDiv);
+            });
+        }
+
+        function selectName(element, index) {
+            // Remove previous selection
+            document.querySelectorAll('.name-item').forEach(item => {
+                item.classList.remove('bg-blue-300', 'border-blue-500');
+                item.classList.add('bg-white', 'border-blue-200');
+            });
+            
+            // Select current
+            element.classList.remove('bg-white', 'border-blue-200');
+            element.classList.add('bg-blue-300', 'border-blue-500');
+            selectedName = index;
+            
+            checkMatch();
+        }
+
+        function selectImage(element, index) {
+            // Remove previous selection
+            document.querySelectorAll('.image-item').forEach(item => {
+                item.classList.remove('bg-green-300', 'border-green-500');
+                item.classList.add('bg-white', 'border-green-200');
+            });
+            
+            // Select current
+            element.classList.remove('bg-white', 'border-green-200');
+            element.classList.add('bg-green-300', 'border-green-500');
+            selectedImage = index;
+            
+            checkMatch();
+        }
+
+        function checkMatch() {
+            if (selectedName !== null && selectedImage !== null) {
+                if (selectedName === selectedImage) {
+                    // Correct match
+                    game1Score += 10;
+                    document.getElementById('score1').textContent = game1Score;
+                    
+                    // Mark as correct
+                    document.querySelector(`[data-device="${selectedName}"].name-item`).classList.add('correct');
+                    document.querySelector(`[data-device="${selectedImage}"].image-item`).classList.add('correct');
+                    
+                    // Disable matched items
+                    document.querySelector(`[data-device="${selectedName}"].name-item`).onclick = null;
+                    document.querySelector(`[data-device="${selectedImage}"].image-item`).onclick = null;
+                    
+                    setTimeout(() => {
+                        alert('🎉 Benar! +10 poin');
+                    }, 100);
+                } else {
+                    // Incorrect match
+                    setTimeout(() => {
+                        alert('❌ Salah! Coba lagi.');
+                    }, 100);
+                }
+                
+                // Reset selections
+                selectedName = null;
+                selectedImage = null;
+                
+                // Remove selection styling
+                document.querySelectorAll('.name-item:not(.correct)').forEach(item => {
+                    item.classList.remove('bg-blue-300', 'border-blue-500');
+                    item.classList.add('bg-white', 'border-blue-200');
+                });
+                document.querySelectorAll('.image-item:not(.correct)').forEach(item => {
+                    item.classList.remove('bg-green-300', 'border-green-500');
+                    item.classList.add('bg-white', 'border-green-200');
+                });
+            }
+        }
+
+        function resetGame1() {
+            game1Score = 0;
+            document.getElementById('score1').textContent = game1Score;
+            selectedName = null;
+            selectedImage = null;
+            initGame1();
+        }
+
+        // Game 2 functions
+        function initGame2() {
+            const shuffledDevices = [...devices].sort(() => Math.random() - 0.5).slice(0, 12);
+            
+            const devicesContainer = document.getElementById('devices-container');
+            devicesContainer.innerHTML = '';
+            
+            shuffledDevices.forEach((device, index) => {
+                const deviceDiv = document.createElement('div');
+                deviceDiv.className = 'device-drag bg-white border-2 border-gray-300 rounded-xl p-4 cursor-move hover:shadow-lg transition-all';
+                deviceDiv.draggable = true;
+                deviceDiv.innerHTML = `
+                    <div class="text-3xl text-center mb-2">${device.emoji}</div>
+                    <div class="text-sm font-bold text-center">${device.name}</div>
+                `;
+                deviceDiv.dataset.category = device.category;
+                deviceDiv.dataset.name = device.name;
+                
+                deviceDiv.addEventListener('dragstart', handleDragStart);
+                deviceDiv.addEventListener('dragend', handleDragEnd);
+                
+                devicesContainer.appendChild(deviceDiv);
+            });
+            
+            // Clear drop zones
+            document.querySelectorAll('.dropped-items').forEach(zone => {
+                zone.innerHTML = '';
+            });
+            
+            // Setup drop zones
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.category);
+            e.dataTransfer.setData('text/name', e.target.dataset.name);
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            const deviceCategory = e.dataTransfer.getData('text/plain');
+            const deviceName = e.dataTransfer.getData('text/name');
+            const dropZoneCategory = e.currentTarget.dataset.category;
+            
+            // Find the dragged element
+            const draggedElement = document.querySelector(`[data-name="${deviceName}"]`);
+            
+            if (draggedElement) {
+                // Move to drop zone
+                const droppedItems = e.currentTarget.querySelector('.dropped-items');
+                draggedElement.classList.remove('cursor-move');
+                draggedElement.classList.add('cursor-default');
+                draggedElement.draggable = false;
+                
+                droppedItems.appendChild(draggedElement);
+            }
+        }
+
+        function checkGame2() {
+            let correct = 0;
+            let total = 0;
+            
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                const category = zone.dataset.category;
+                const items = zone.querySelectorAll('.device-drag');
+                
+                items.forEach(item => {
+                    total++;
+                    if (item.dataset.category === category) {
+                        correct++;
+                        item.classList.add('correct');
+                    } else {
+                        item.classList.add('incorrect');
+                    }
+                });
+            });
+            
+            game2Score = Math.round((correct / total) * 100);
+            document.getElementById('score2').textContent = game2Score;
+            
+            alert(`🎯 Hasil: ${correct}/${total} benar! Skor: ${game2Score}`);
+        }
+
+        function resetGame2() {
+            game2Score = 0;
+            document.getElementById('score2').textContent = game2Score;
+            initGame2();
+        }
+
+        // Quiz functions
+        function initQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score').textContent = quizScore;
+            document.getElementById('current-question').textContent = 1;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuizQuestion >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuizQuestion];
+            const container = document.getElementById('quiz-container');
+            
+            container.innerHTML = `
+                <div class="bg-purple-50 rounded-2xl p-6 mb-6">
+                    <h3 class="text-xl font-bold text-purple-800 mb-6">${question.question}</h3>
+                    <div class="space-y-3">
+                        ${question.options.map((option, index) => `
+                            <label class="flex items-center p-4 bg-white rounded-xl border-2 border-purple-200 cursor-pointer hover:bg-purple-100 transition-all">
+                                <input type="radio" name="quiz-answer" value="${index}" class="mr-4 text-purple-600">
+                                <span class="text-lg">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector('input[name="quiz-answer"]:checked');
+            
+            if (!selected) {
+                alert('Pilih jawaban terlebih dahulu!');
+                return;
+            }
+            
+            const answer = parseInt(selected.value);
+            const correct = quizQuestions[currentQuizQuestion].correct;
+            
+            if (answer === correct) {
+                quizScore += 10;
+                document.getElementById('quiz-score').textContent = quizScore;
+                alert('🎉 Benar! +10 poin');
+            } else {
+                alert(`❌ Salah! Jawaban yang benar: ${quizQuestions[currentQuizQuestion].options[correct]}`);
+            }
+            
+            currentQuizQuestion++;
+            document.getElementById('current-question').textContent = currentQuizQuestion + 1;
+            
+            setTimeout(showQuestion, 1000);
+        }
+
+        function showQuizResults() {
+            const container = document.getElementById('quiz-container');
+            const percentage = (quizScore / 100) * 100;
+            
+            let grade = '';
+            if (percentage >= 80) grade = 'Sangat Baik! 🌟';
+            else if (percentage >= 60) grade = 'Baik! 👍';
+            else if (percentage >= 40) grade = 'Cukup! 📚';
+            else grade = 'Perlu Belajar Lagi! 💪';
+            
+            container.innerHTML = `
+                <div class="bg-purple-50 rounded-2xl p-8 text-center">
+                    <h3 class="text-2xl font-bold text-purple-800 mb-4">🎊 Quiz Selesai! 🎊</h3>
+                    <div class="text-6xl mb-4">🏆</div>
+                    <p class="text-xl text-purple-700 mb-2">Skor Akhir: <span class="font-bold">${quizScore}/100</span></p>
+                    <p class="text-lg text-purple-600 mb-4">Persentase: <span class="font-bold">${percentage}%</span></p>
+                    <p class="text-2xl font-bold text-purple-800">${grade}</p>
+                </div>
+            `;
+            
+            document.getElementById('quiz-btn').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-btn').style.display = 'inline-block';
+            initQuiz();
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('materi');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b3eea703e42a84',t:'MTc1NDUzOTkxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
