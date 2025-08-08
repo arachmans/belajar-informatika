@@ -10,28 +10,40 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* Custom scrollbar untuk tabel */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background-color: #9ca3af;
+            border-radius: 4px;
+        }
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background-color: #e5e7eb;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 antialiased">
 
-    <div id="app" class="min-h-screen p-8">
+    <div id="app" class="min-h-screen p-4 md:p-8">
         <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-4xl font-bold text-gray-900">Absensi Siswa</h1>
-                <div class="flex items-center space-x-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Absensi Siswa</h1>
+                <div class="flex flex-col md:flex-row items-stretch md:items-center space-y-2 md:space-y-0 md:space-x-4 w-full md:w-auto">
                     <button
                         @click="handleExportToCSV"
-                        class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2"
+                        class="px-4 md:px-6 py-2 md:py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center gap-2"
                     >
                         <!-- Icon Export -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
-                        Export ke Excel
+                        Export
                     </button>
                     <button
                         @click="handleAddStudent"
-                        class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center gap-2"
+                        class="px-4 md:px-6 py-2 md:py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-center gap-2"
                     >
                         <!-- Icon Tambah Siswa -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -46,8 +58,8 @@
                 <!-- Header Tabel -->
                 <div class="flex">
                     <!-- Header Nama Siswa (Sticky) -->
-                    <div class="flex-none w-64 bg-gray-100 border-r border-gray-200 sticky left-0 z-20">
-                        <div class="p-4 bg-gray-50 font-bold text-lg text-gray-700 sticky top-0 border-b border-gray-200">
+                    <div class="flex-none w-40 md:w-64 bg-gray-100 border-r border-gray-200 sticky left-0 z-20">
+                        <div class="p-4 bg-gray-50 font-bold text-base md:text-lg text-gray-700 sticky top-0 border-b border-gray-200">
                             Nama Siswa
                         </div>
                     </div>
@@ -60,14 +72,14 @@
                                 :key="date"
                                 class="w-24 text-center p-4 bg-gray-50 font-bold text-gray-700 border-b border-gray-200 sticky top-0"
                             >
-                                <div class="text-sm font-semibold mb-2">
+                                <div class="text-xs md:text-sm font-semibold mb-2">
                                     {{ formatDate(date) }}
                                 </div>
                             </div>
-                            <div class="flex-none w-24 text-center p-4 bg-gray-50 border-b border-gray-200 sticky right-0 z-20">
+                            <div class="flex-none w-16 md:w-24 text-center p-4 bg-gray-50 border-b border-gray-200 sticky right-0 z-20">
                                 <button
                                     @click="isDateInputModalOpen = true"
-                                    class="w-full h-12 flex items-center justify-center text-xl bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+                                    class="w-full h-8 md:h-12 flex items-center justify-center text-lg md:text-xl bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
                                     aria-label="Tambah Kolom Kehadiran"
                                 >
                                     +
@@ -81,12 +93,12 @@
                 <div class="overflow-y-auto max-h-[80vh]">
                     <div v-for="student in students" :key="student.id" class="flex border-b border-gray-200">
                         <!-- Kolom Nama Siswa (Sticky) -->
-                        <div class="flex-none w-64 p-4 bg-white border-r border-gray-200 sticky left-0 z-10 flex items-center group hover:bg-gray-100 transition-colors">
+                        <div class="flex-none w-40 md:w-64 p-4 bg-white border-r border-gray-200 sticky left-0 z-10 flex items-center group hover:bg-gray-100 transition-colors">
                             <input
                                 type="text"
                                 :value="student.name"
                                 @input="e => handleStudentNameChange(e, student.id)"
-                                class="bg-transparent border-none focus:outline-none focus:border-b focus:border-blue-500 p-0 text-lg font-medium text-gray-900 w-full"
+                                class="bg-transparent border-none focus:outline-none focus:border-b focus:border-blue-500 p-0 text-sm md:text-lg font-medium text-gray-900 w-full"
                             />
                         </div>
                         <!-- Kolom Data Absensi (Scrollable) -->
@@ -99,7 +111,7 @@
                             >
                                 {{ attendanceData[student.id]?.find(att => att.date === date)?.status.charAt(0) || '-' }}
                             </div>
-                            <div class="w-24 p-4 bg-white border-r border-gray-200 sticky right-0 z-10">
+                            <div class="w-16 md:w-24 p-4 bg-white border-r border-gray-200 sticky right-0 z-10">
                                 <!-- Kolom kosong untuk keselarasan -->
                             </div>
                         </div>
@@ -109,66 +121,66 @@
         </div>
 
         <!-- Modal Absensi -->
-        <div v-if="isAttendanceModalOpen && selectedStudent" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
-            <div class="bg-white rounded-3xl p-8 shadow-2xl max-w-lg w-full transform transition-all scale-100 opacity-100">
-                <div class="flex justify-between items-start mb-6">
-                    <h2 class="text-3xl font-bold text-gray-800">Absensi Siswa</h2>
+        <div v-if="isAttendanceModalOpen && selectedStudent" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-2 md:p-4 z-50">
+            <div class="bg-white rounded-xl md:rounded-3xl p-6 md:p-8 shadow-2xl max-w-sm md:max-w-lg w-full transform transition-all scale-100 opacity-100">
+                <div class="flex justify-between items-start mb-4 md:mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Absensi Siswa</h2>
                     <button @click="handleCloseAttendanceModal" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
                 
-                <div class="flex flex-col items-center mb-6 text-center">
-                    <img :src="selectedStudent.photo" :alt="selectedStudent.name" class="w-24 h-24 rounded-full mb-4 shadow-md object-cover" />
-                    <h3 class="text-2xl font-bold text-gray-900">{{ selectedStudent.name }}</h3>
-                    <p class="text-lg text-gray-600">{{ selectedStudent.class }}</p>
+                <div class="flex flex-col items-center mb-4 md:mb-6 text-center">
+                    <img :src="selectedStudent.photo" :alt="selectedStudent.name" class="w-20 h-20 md:w-24 md:h-24 rounded-full mb-2 md:mb-4 shadow-md object-cover" />
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900">{{ selectedStudent.name }}</h3>
+                    <p class="text-sm md:text-lg text-gray-600">{{ selectedStudent.class }}</p>
                 </div>
 
-                <div class="mb-8">
-                    <h4 class="text-xl font-semibold text-gray-700 mb-4">Pilih Status Kehadiran</h4>
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="mb-6 md:mb-8">
+                    <h4 class="text-lg md:text-xl font-semibold text-gray-700 mb-2 md:mb-4">Pilih Status Kehadiran</h4>
+                    <div class="grid grid-cols-2 gap-2 md:gap-4">
                         <button
                             @click="currentAttendanceStatus = 'Hadir'"
                             :class="getStatusButtonClass('Hadir', currentAttendanceStatus)"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                             Hadir
                         </button>
                         <button
                             @click="currentAttendanceStatus = 'Telat'"
                             :class="getStatusButtonClass('Telat', currentAttendanceStatus)"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>
                             Telat
                         </button>
                         <button
                             @click="currentAttendanceStatus = 'Izin'"
                             :class="getStatusButtonClass('Izin', currentAttendanceStatus)"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
                             Izin
                         </button>
                         <button
                             @click="currentAttendanceStatus = 'Sakit'"
                             :class="getStatusButtonClass('Sakit', currentAttendanceStatus)"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586l-1.293-1.293z" clip-rule="evenodd" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586l-1.293-1.293z" clip-rule="evenodd" /></svg>
                             Sakit
                         </button>
                         <button
                             @click="currentAttendanceStatus = 'Alpha'"
                             :class="getStatusButtonClass('Alpha', currentAttendanceStatus)"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586l-1.293-1.293z" clip-rule="evenodd" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586l-1.293-1.293z" clip-rule="evenodd" /></svg>
                             Alpha
                         </button>
                         <button
                             @click="currentAttendanceStatus = 'Kabur'"
                             :class="getStatusButtonClass('Kabur', currentAttendanceStatus)"
                         >
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10 4a2 2 0 100 4 2 2 0 000-4zm-2 6a2 2 0 114 0v4a2 2 0 11-4 0v-4zm.707-7.707a1 1 0 011.414 0l1.414 1.414a1 1 0 01-1.414 1.414L10 3.414V11a1 1 0 11-2 0V3.414L6.293 5.121a1 1 0 01-1.414-1.414l1.414-1.414z" /></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10 4a2 2 0 100 4 2 2 0 000-4zm-2 6a2 2 0 114 0v4a2 2 0 11-4 0v-4zm.707-7.707a1 1 0 011.414 0l1.414 1.414a1 1 0 01-1.414 1.414L10 3.414V11a1 1 0 11-2 0V3.414L6.293 5.121a1 1 0 01-1.414-1.414l1.414-1.414z" /></svg>
                             Kabur
                         </button>
                     </div>
@@ -176,7 +188,7 @@
 
                 <button
                     @click="handleSaveAttendance"
-                    class="w-full py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
+                    class="w-full py-3 md:py-4 bg-blue-600 text-white font-bold text-base md:text-lg rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
                 >
                     Simpan & Lanjut ke Siswa Berikutnya
                 </button>
@@ -184,37 +196,37 @@
         </div>
 
         <!-- Modal Tambah Tanggal Kehadiran -->
-        <div v-if="isDateInputModalOpen" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
-            <div class="bg-white rounded-3xl p-8 shadow-2xl max-w-lg w-full transform transition-all scale-100 opacity-100">
-                <div class="flex justify-between items-start mb-6">
-                    <h2 class="text-3xl font-bold text-gray-800">Tambah Kolom Kehadiran</h2>
+        <div v-if="isDateInputModalOpen" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-2 md:p-4 z-50">
+            <div class="bg-white rounded-xl md:rounded-3xl p-6 md:p-8 shadow-2xl max-w-sm md:max-w-lg w-full transform transition-all scale-100 opacity-100">
+                <div class="flex justify-between items-start mb-4 md:mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Tambah Kolom Kehadiran</h2>
                     <button @click="isDateInputModalOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
                 
-                <div class="mb-6">
-                    <label for="new-date" class="block text-lg font-medium text-gray-700 mb-2">Pilih Tanggal:</label>
+                <div class="mb-4 md:mb-6">
+                    <label for="new-date" class="block text-base md:text-lg font-medium text-gray-700 mb-2">Pilih Tanggal:</label>
                     <input
                         type="date"
                         id="new-date"
                         v-model="newAttendanceDate"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        class="w-full p-2 md:p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                 </div>
 
-                <div class="flex justify-end space-x-4">
+                <div class="flex justify-end space-x-2 md:space-x-4">
                     <button
                         @click="isDateInputModalOpen = false"
-                        class="px-6 py-3 bg-gray-300 text-gray-800 font-bold rounded-xl shadow-md hover:bg-gray-400 transition-colors"
+                        class="px-4 md:px-6 py-2 md:py-3 bg-gray-300 text-gray-800 font-bold rounded-xl shadow-md hover:bg-gray-400 transition-colors"
                     >
                         Batal
                     </button>
                     <button
                         @click="handleConfirmAddAttendanceColumn"
-                        class="px-6 py-3 bg-purple-600 text-white font-bold rounded-xl shadow-md hover:bg-purple-700 transition-colors"
+                        class="px-4 md:px-6 py-2 md:py-3 bg-purple-600 text-white font-bold rounded-xl shadow-md hover:bg-purple-700 transition-colors"
                     >
                         Tambahkan
                     </button>
@@ -359,7 +371,7 @@
                 };
 
                 const getStatusButtonClass = (status, currentSelected) => {
-                    const baseClasses = "px-6 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2";
+                    const baseClasses = "text-sm md:text-base px-4 py-2 md:px-6 md:py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2";
                     if (status === currentSelected) {
                         switch (status) {
                             case 'Hadir': return `${baseClasses} bg-green-500 text-white shadow-lg transform scale-105`;
