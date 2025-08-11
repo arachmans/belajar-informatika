@@ -197,40 +197,40 @@
           background-color: #fef08a;
         }
         
-        /* Custom styles for the quiz section to ensure correct layout */
-        .quiz-question-item {
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .quiz-question-item:last-of-type {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        .quiz-question-text {
-            font-weight: 600; /* semibold */
-            font-size: 1.125rem; /* lg */
-            margin-bottom: 0.5rem;
-        }
-        .quiz-options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+        /* Custom styles for the quiz section */
         .quiz-option-label {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
-            transition: color 0.2s;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 9999px; /* rounded-full */
+            transition: all 0.2s;
         }
         .quiz-option-label:hover {
-            color: #9333ea; /* purple-700 */
+            background-color: #f3e8ff; /* purple-100 */
+            border-color: #d8b4fe; /* purple-300 */
+        }
+        .quiz-option-label.selected {
+            background-color: #f3e8ff;
+            border-color: #9333ea;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .quiz-option-label.correct {
+            background-color: #d1fae5; /* green-100 */
+            border-color: #34d399; /* green-400 */
+            color: #065f46; /* green-800 */
+        }
+        .quiz-option-label.incorrect {
+            background-color: #fee2e2; /* red-100 */
+            border-color: #f87171; /* red-400 */
+            color: #991b1b; /* red-800 */
         }
         .quiz-option-input {
             height: 1rem;
             width: 1rem;
-            color: #6d28d9; /* purple-700 */
+            accent-color: #6d28d9; /* purple-700 */
         }
     </style>
 </head>
@@ -564,27 +564,34 @@
 
                 </section>
 
-                <!-- Section 5: Quiz -->
+                <!-- Section 5: Quiz (Interactive) -->
                 <section id="quiz" class="content-section" :class="{'active': activeSection === 'quiz'}">
                     <h2 class="text-purple-700 flex items-center"><i class="ph ph-graduation-cap icon-title"></i>Kuis Pengetahuan Tabel</h2>
                     <p>Uji pemahaman Anda tentang tag dan properti tabel HTML & CSS dengan 10 pertanyaan ini. Pilih jawaban yang paling tepat.</p>
-                    <div id="quiz-container" class="mt-4">
-                        <form id="quiz-form" class="space-y-6">
-                            <div v-for="(q, index) in quizQuestions" :key="index" class="quiz-question-item">
-                                <p class="quiz-question-text">{{ index + 1 }}. {{ q.question }}</p>
-                                <div class="quiz-options-container">
-                                    <label v-for="(option, optionIndex) in q.options" :key="optionIndex" class="quiz-option-label">
-                                        <input type="radio" :name="'question-' + index" :value="optionIndex" v-model="q.selectedAnswer" class="quiz-option-input">
-                                        <span>{{ option }}</span>
-                                    </label>
-                                </div>
+                    
+                    <!-- Quiz Questions -->
+                    <div v-if="!showQuizResults" class="mt-4 p-6 bg-purple-50 rounded-xl shadow-md">
+                        <div v-if="currentQuestionIndex < quizQuestions.length" class="animate-fade-in-up">
+                            <p class="text-xs text-gray-500 mb-2">Pertanyaan {{ currentQuestionIndex + 1 }} dari {{ quizQuestions.length }}</p>
+                            <p class="text-lg font-semibold text-purple-800 mb-4">{{ quizQuestions[currentQuestionIndex].question }}</p>
+                            <div class="flex flex-col gap-3">
+                                <label v-for="(option, optionIndex) in quizQuestions[currentQuestionIndex].options" :key="optionIndex" 
+                                    class="quiz-option-label"
+                                    :class="{'selected': quizQuestions[currentQuestionIndex].selectedAnswer === optionIndex,
+                                             'correct': quizQuestions[currentQuestionIndex].isAnswered && quizQuestions[currentQuestionIndex].correctAnswer === optionIndex,
+                                             'incorrect': quizQuestions[currentQuestionIndex].isAnswered && quizQuestions[currentQuestionIndex].selectedAnswer === optionIndex && quizQuestions[currentQuestionIndex].correctAnswer !== optionIndex}"
+                                    @click="handleAnswer(optionIndex)">
+                                    <input type="radio" :name="'question-' + currentQuestionIndex" :value="optionIndex" :checked="quizQuestions[currentQuestionIndex].selectedAnswer === optionIndex" class="quiz-option-input hidden">
+                                    <span>{{ option }}</span>
+                                </label>
                             </div>
-                        </form>
-                        <button type="button" @click="checkAnswers" class="mt-6 px-6 py-2 bg-purple-500 text-white font-semibold rounded-full hover:bg-purple-600 transition shadow-md">Submit Kuis</button>
+                        </div>
                     </div>
-                    <div id="quiz-results" class="mt-8 p-4 border rounded-md bg-gray-50" :class="{'hidden': !showQuizResults}">
+
+                    <!-- Quiz Results -->
+                    <div v-if="showQuizResults" class="mt-8 p-6 bg-white rounded-xl shadow-lg">
                         <h3 class="text-xl font-bold mb-4">Hasil Kuis: {{ score }} dari {{ quizQuestions.length }}</h3>
-                        <div v-for="(q, index) in quizQuestions" :key="index" class="p-3 mb-2 rounded-xl" :class="{'bg-green-100': q.isCorrect, 'bg-red-100': !q.isCorrect}">
+                        <div v-for="(q, index) in quizQuestions" :key="index" class="p-3 mb-2 rounded-xl border" :class="{'bg-green-100 border-green-300': q.isCorrect, 'bg-red-100 border-red-300': !q.isCorrect}">
                             <p class="font-bold text-lg" :class="{'text-green-700': q.isCorrect, 'text-red-700': !q.isCorrect}">{{ q.isCorrect ? '✅' : '❌' }} Pertanyaan {{ index + 1 }}:</p>
                             <p class="my-1">{{ q.question }}</p>
                             <p class="font-semibold">Jawaban Anda: <span class="font-normal">{{ q.selectedAnswer !== null ? q.options[q.selectedAnswer] : 'Tidak dijawab' }}</span></p>
@@ -722,6 +729,7 @@
                 const finalOutput = ref('');
                 const score = ref(0);
                 const showQuizResults = ref(false);
+                const currentQuestionIndex = ref(0);
 
                 const sections = [
                     { id: 'pendahuluan', title: 'Intro', icon: 'ph-book-open' },
@@ -802,7 +810,8 @@
                         correctAnswer: 1,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Tag <tr> (table row) digunakan untuk membuat baris baru dalam tabel."
+                        explanation: "Tag <tr> (table row) digunakan untuk membuat baris baru dalam tabel.",
+                        isAnswered: false
                     },
                     {
                         question: "Tag mana yang digunakan untuk membuat sel header di dalam tabel?",
@@ -810,7 +819,8 @@
                         correctAnswer: 2,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Tag <th> (table header) digunakan untuk sel header. Teksnya akan tercetak tebal secara default."
+                        explanation: "Tag <th> (table header) digunakan untuk sel header. Teksnya akan tercetak tebal secara default.",
+                        isAnswered: false
                     },
                     {
                         question: "Atribut apa yang digunakan untuk menggabungkan dua atau lebih sel secara horizontal (kolom)?",
@@ -818,7 +828,8 @@
                         correctAnswer: 1,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Atribut colspan digunakan untuk menggabungkan sel secara horizontal."
+                        explanation: "Atribut colspan digunakan untuk menggabungkan sel secara horizontal.",
+                        isAnswered: false
                     },
                     {
                         question: "Atribut apa yang digunakan untuk menggabungkan dua atau lebih sel secara vertikal (baris)?",
@@ -826,7 +837,8 @@
                         correctAnswer: 0,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Atribut rowspan digunakan untuk menggabungkan sel secara vertikal."
+                        explanation: "Atribut rowspan digunakan untuk menggabungkan sel secara vertikal.",
+                        isAnswered: false
                     },
                     {
                         question: "Properti CSS mana yang paling umum digunakan untuk menghilangkan ruang antar garis (border) di tabel?",
@@ -834,7 +846,8 @@
                         correctAnswer: 1,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Properti border-collapse: collapse; digunakan untuk menggabungkan border sel menjadi satu."
+                        explanation: "Properti border-collapse: collapse; digunakan untuk menggabungkan border sel menjadi satu.",
+                        isAnswered: false
                     },
                     {
                         question: "Apa fungsi dari tag <tbody>?",
@@ -842,7 +855,8 @@
                         correctAnswer: 2,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Tag <tbody> (table body) digunakan untuk mengelompokkan baris yang berisi data utama tabel."
+                        explanation: "Tag <tbody> (table body) digunakan untuk mengelompokkan baris yang berisi data utama tabel.",
+                        isAnswered: false
                     },
                     {
                         question: "Jika Anda ingin memberi warna latar yang berbeda pada setiap baris genap, pseudo-class CSS mana yang akan Anda gunakan?",
@@ -850,7 +864,8 @@
                         correctAnswer: 2,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Pseudo-class :nth-child(even) akan memilih semua elemen yang merupakan anak genap."
+                        explanation: "Pseudo-class :nth-child(even) akan memilih semua elemen yang merupakan anak genap.",
+                        isAnswered: false
                     },
                     {
                         question: "Tag mana yang digunakan untuk membuat sel data di dalam tabel?",
@@ -858,7 +873,8 @@
                         correctAnswer: 2,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Tag <td> (table data) digunakan untuk membuat sel data biasa dalam tabel."
+                        explanation: "Tag <td> (table data) digunakan untuk membuat sel data biasa dalam tabel.",
+                        isAnswered: false
                     },
                     {
                         question: "Manakah dari tag berikut yang tidak termasuk dalam struktur semantik tabel?",
@@ -866,7 +882,8 @@
                         correctAnswer: 1,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Tag <tfooting> tidak ada. Tag yang benar adalah <thead>, <tbody>, dan <tfoot>."
+                        explanation: "Tag <tfooting> tidak ada. Tag yang benar adalah <thead>, <tbody>, dan <tfoot>.",
+                        isAnswered: false
                     },
                     {
                         question: "Bagaimana cara membuat teks rata tengah di sel header tabel menggunakan CSS?",
@@ -874,13 +891,17 @@
                         correctAnswer: 2,
                         selectedAnswer: null,
                         isCorrect: false,
-                        explanation: "Properti text-align: center; pada selektor th akan membuat teks di semua sel header rata tengah."
+                        explanation: "Properti text-align: center; pada selektor th akan membuat teks di semua sel header rata tengah.",
+                        isAnswered: false
                     }
                 ]);
 
                 const showSection = (id) => {
                     activeSection.value = id;
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (id === 'quiz') {
+                        resetQuiz();
+                    }
                 };
 
                 const runCode = (index) => {
@@ -898,15 +919,36 @@
                     finalOutput.value = `<style>${finalCss.value}</style>${finalHtml.value}`;
                 };
 
-                const checkAnswers = () => {
+                const resetQuiz = () => {
+                    currentQuestionIndex.value = 0;
                     score.value = 0;
+                    showQuizResults.value = false;
                     quizQuestions.value.forEach(q => {
-                        q.isCorrect = (parseInt(q.selectedAnswer) === q.correctAnswer);
-                        if (q.isCorrect) {
-                            score.value++;
-                        }
+                        q.selectedAnswer = null;
+                        q.isCorrect = false;
+                        q.isAnswered = false;
                     });
-                    showQuizResults.value = true;
+                };
+
+                const handleAnswer = (optionIndex) => {
+                    const currentQuestion = quizQuestions.value[currentQuestionIndex.value];
+                    if (currentQuestion.isAnswered) return; // Prevent re-answering
+
+                    currentQuestion.selectedAnswer = optionIndex;
+                    currentQuestion.isAnswered = true;
+                    currentQuestion.isCorrect = (optionIndex === currentQuestion.correctAnswer);
+                    
+                    if (currentQuestion.isCorrect) {
+                        score.value++;
+                    }
+
+                    setTimeout(() => {
+                        if (currentQuestionIndex.value < quizQuestions.value.length - 1) {
+                            currentQuestionIndex.value++;
+                        } else {
+                            showQuizResults.value = true;
+                        }
+                    }, 1000); // Wait 1 second before showing the next question
                 };
 
                 onMounted(() => {
@@ -926,10 +968,11 @@
                     finalOutput,
                     score,
                     showQuizResults,
+                    currentQuestionIndex,
                     showSection,
                     runCode,
                     runFinalTest,
-                    checkAnswers,
+                    handleAnswer,
                 };
             }
         });
