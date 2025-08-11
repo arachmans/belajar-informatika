@@ -153,8 +153,11 @@
         }
 
         .zebra-table thead {
-            background-color: #6d28d9;
+            background-color: #B027F5;
             color: white;
+        }
+        .zebra-tabel tbody tr:nth-child(odd) {
+            background-color: #C28AFF;
         }
         .zebra-table tbody tr:nth-child(even) {
             background-color: #f3e8ff; /* purple-100 */
@@ -504,6 +507,11 @@
   background-color: #c084fc;
   color: white;
 }
+/* baris ganjil */
+.zebra-tabel tbody tr:nth-child(odd) {
+    background-color: #C28AFF;
+}
+/* baris genap */
 .zebra-table tbody tr:nth-child(even) {
   background-color: #f3e8ff;
 }
@@ -546,7 +554,7 @@
 
                 <!-- Section 4: Latihan -->
                 <section id="latihan" class="content-section" :class="{'active': activeSection === 'latihan'}">
-                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-pencil icon-title"></i>Latihan Interaktif</h2>
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-pencil icon-title"></i> Latihan Interaktif</h2>
                     <p>Saatnya praktik! Coba selesaikan tantangan di bawah ini. Tulis kode HTML Anda di kotak, lalu klik "Jalankan Kode" untuk melihat hasilnya.</p>
                     
                     <div id="latihan-container" class="space-y-8">
@@ -566,7 +574,7 @@
 
                 <!-- Section 5: Quiz (Interactive) -->
                 <section id="quiz" class="content-section" :class="{'active': activeSection === 'quiz'}">
-                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-graduation-cap icon-title"></i>Kuis</h2>
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-graduation-cap icon-title"></i> Kuis</h2>
                     <p>Uji pemahaman Anda tentang tag dan properti tabel HTML & CSS dengan 10 pertanyaan ini. Pilih jawaban yang paling tepat.</p>
                     
                     <!-- Quiz Questions -->
@@ -603,7 +611,7 @@
 
                 <!-- Section 6: Ujian Praktek -->
                 <section id="ujian-praktek" class="content-section" :class="{'active': activeSection === 'ujian-praktek'}">
-                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-sparkle icon-title"></i>Ujian Praktek Final</h2>
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-sparkle icon-title"></i> Ujian Praktek</h2>
                     <p>Sekarang, gabungkan semua yang telah Anda pelajari. Buatlah tabel "Jadwal Pelajaran" di bawah ini menggunakan HTML dan CSS. Perhatikan ada sel yang digabung (colspan dan rowspan) serta styling yang rapi.</p>
                     
                     <div class="bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 rounded-md my-4">
