@@ -3,28 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial Interaktif: Tabel HTML & CSS (Responsif)</title>
+    <title>Tutorial Tabel Vue.js</title>
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for cute icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* light blue-50 */
+            color: #374151; /* dark gray */
+        }
+        
+        /* Updated font sizes for headings */
+        .prose h2, .prose h3 {
+            color: #6d28d9; /* purple-700 */
+        }
+        .prose h2 {
+            font-size: 1.875rem; /* text-3xl from 2.25rem */
+            font-weight: 700;
         }
         .prose h3 {
+            font-size: 1.25rem; /* text-xl from 1.5rem */
             margin-top: 1.5em;
             margin-bottom: 0.8em;
+            font-weight: 600;
         }
+
         .prose code {
-            background-color: #f3f4f6;
-            color: #4b5563;
+            background-color: #f3e8ff; /* purple-100 */
+            color: #6d28d9; /* purple-700 */
             padding: 0.2em 0.4em;
             border-radius: 4px;
             font-size: 0.9em;
         }
         .prose pre {
-            background-color: #1f2937;
+            background-color: #1f2937; /* gray-800 */
             color: #d1d5db;
             padding: 1em;
             border-radius: 8px;
@@ -34,11 +54,43 @@
             background-color: transparent;
             color: inherit;
             padding: 0;
+            font-family: 'Fira Code', 'Roboto Mono', 'Source Code Pro', monospace;
         }
-        .tab-button.active {
-            background-color: #4f46e5;
-            color: white;
+
+        /* Styles for the new bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50; /* Tailwind z-50 */
+            background-color: white;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -2px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0;
         }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem 0.25rem;
+            color: #6b7280; /* gray-500 */
+            font-size: 0.75rem; /* text-xs */
+            transition: color 0.2s;
+            text-align: center;
+            flex: 1;
+        }
+        .nav-button.active {
+            color: #6d28d9; /* purple-700 */
+        }
+        .nav-button i {
+            font-size: 1.5rem; /* text-2xl */
+            margin-bottom: 0.25rem;
+        }
+
         .content-section {
             display: none;
         }
@@ -57,10 +109,11 @@
         }
         .rendered-table th {
             font-weight: bold;
+            background-color: #e5e7eb; /* gray-200 */
         }
         /* Style for `<th>` example */
         .table-with-th th {
-            background-color: #f3f4f6;
+            background-color: #f3e8ff; /* purple-100 */
         }
         /* Style for `colspan` example */
         .table-with-colspan th {
@@ -72,12 +125,12 @@
         }
         /* Style for `thead`, `tbody`, `tfoot` example */
         .table-semantic thead {
-            background-color: #4f46e5;
+            background-color: #6d28d9; /* purple-700 */
             color: white;
         }
         .table-semantic tfoot {
             font-weight: bold;
-            background-color: #e5e7eb;
+            background-color: #e5e7eb; /* gray-200 */
         }
         /* --- Styles for CSS examples in Section 3 --- */
         .border-table table {
@@ -100,11 +153,14 @@
         }
 
         .zebra-table thead {
-            background-color: #4f46e5;
+            background-color: #6d28d9;
             color: white;
         }
         .zebra-table tbody tr:nth-child(even) {
-            background-color: #f3f4f6;
+            background-color: #f3e8ff; /* purple-100 */
+        }
+        .zebra-table tbody tr:hover {
+            background-color: #d8b4fe; /* purple-300 */
         }
 
         /* Style untuk tabel contoh di ujian */
@@ -118,7 +174,7 @@
           min-width: 500px;
         }
         .jadwal-contoh thead {
-          background-color: #4f46e5;
+          background-color: #6d28d9; /* purple-700 */
           color: #ffffff;
         }
         .jadwal-contoh th, .jadwal-contoh td {
@@ -130,10 +186,10 @@
           text-align: center;
         }
         .jadwal-contoh tbody tr:nth-of-type(odd) {
-              background-color: #f9fafb;
+              background-color: #f3e8ff; /* purple-100 */
         }
         .jadwal-contoh tbody tr:nth-of-type(even) {
-              background-color: #ffffff;
+              background-color: #faf5ff; /* purple-50 */
         }
         .jadwal-contoh .istirahat-contoh {
           text-align: center;
@@ -166,49 +222,39 @@
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+            transition: color 0.2s;
+        }
+        .quiz-option-label:hover {
+            color: #9333ea; /* purple-700 */
         }
         .quiz-option-input {
             height: 1rem;
             width: 1rem;
-            color: #4f46e5;
+            color: #6d28d9; /* purple-700 */
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-[#f8fafc] text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8">
+    <div id="app" class="container mx-auto p-4 md:p-8 pb-20"> <!-- Added pb-20 for bottom padding -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Tutorial Interaktif Tabel HTML & CSS</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-violet-700">Tutorial Interaktif Tabel HTML & CSS</h1>
             <p class="text-md md:text-lg text-gray-600 mt-2">Belajar membuat tabel dari dasar sampai mahir dengan praktik langsung.</p>
         </header>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Sidebar Navigasi -->
-            <aside class="lg:w-1/4 w-full">
-                <nav class="bg-white p-4 rounded-lg shadow-md sticky top-8">
-                    <ul class="space-y-2" id="navigation">
-                        <li><button onclick="showSection('pendahuluan')" class="tab-button w-full text-left p-3 rounded-md font-medium hover:bg-gray-200 transition duration-200 active">1. Pendahuluan</button></li>
-                        <li><button onclick="showSection('html-tags')" class="tab-button w-full text-left p-3 rounded-md font-medium hover:bg-gray-200 transition duration-200">2. Tag HTML untuk Tabel</button></li>
-                        <li><button onclick="showSection('css-styling')" class="tab-button w-full text-left p-3 rounded-md font-medium hover:bg-gray-200 transition duration-200">3. Menghias Tabel (CSS)</button></li>
-                        <li><button onclick="showSection('latihan')" class="tab-button w-full text-left p-3 rounded-md font-medium hover:bg-gray-200 transition duration-200">4. Latihan Interaktif</button></li>
-                        <li><button onclick="showSection('quiz')" class="tab-button w-full text-left p-3 rounded-md font-medium hover:bg-gray-200 transition duration-200">5. Kuis Pengetahuan Tabel</button></li>
-                        <li><button onclick="showSection('ujian-praktek')" class="tab-button w-full text-left p-3 rounded-md font-medium hover:bg-gray-200 transition duration-200">6. Ujian Praktek Final</button></li>
-                    </ul>
-                </nav>
-            </aside>
-
+        <div class="flex flex-col gap-8">
             <!-- Konten Utama -->
-            <main class="lg:w-3/4 w-full bg-white p-6 md:p-8 rounded-lg shadow-md prose max-w-none">
+            <main class="w-full bg-white p-6 md:p-8 rounded-xl shadow-lg prose max-w-none">
                 
                 <!-- Section 1: Pendahuluan -->
-                <section id="pendahuluan" class="content-section active">
-                    <h2>1. Apa itu Tabel di HTML?</h2>
+                <section id="pendahuluan" class="content-section" :class="{'active': activeSection === 'pendahuluan'}">
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-book-open icon-title"></i>Apa itu Tabel di HTML?</h2>
                     <p>Bayangkan sebuah spreadsheet seperti Microsoft Excel atau Google Sheets. Tabel di HTML punya fungsi yang sama: <strong>menampilkan data dalam format baris dan kolom</strong>. Ini sangat berguna untuk menyajikan data terstruktur seperti jadwal, daftar harga, atau data statistik.</p>
                     <p>Struktur dasar sebuah tabel terdiri dari 3 bagian utama:</p>
                     <ul>
-                        <li><code>&lt;table&gt;</code>: Tag pembungkus yang menandakan kita akan membuat sebuah tabel.</li>
-                        <li><code>&lt;tr&gt;</code>: Singkatan dari "Table Row", digunakan untuk membuat <strong>baris</strong>.</li>
-                        <li><code>&lt;td&gt;</code>: Singkatan dari "Table Data", digunakan untuk membuat <strong>sel data</strong> di dalam setiap baris.</li>
+                        <li><code class="bg-purple-100">&lt;table&gt;</code>: Tag pembungkus yang menandakan kita akan membuat sebuah tabel.</li>
+                        <li><code class="bg-purple-100">&lt;tr&gt;</code>: Singkatan dari "Table Row", digunakan untuk membuat <strong>baris</strong>.</li>
+                        <li><code class="bg-purple-100">&lt;td&gt;</code>: Singkatan dari "Table Data", digunakan untuk membuat <strong>sel data</strong> di dalam setiap baris.</li>
                     </ul>
                     <p>Mari kita lihat contoh paling sederhana:</p>
                     <pre><code>&lt;table&gt;
@@ -240,8 +286,8 @@
                 </section>
 
                 <!-- Section 2: Tag HTML -->
-                <section id="html-tags" class="content-section">
-                    <h2>2. Tag HTML Penting dan Atributnya</h2>
+                <section id="html-tags" class="content-section" :class="{'active': activeSection === 'html-tags'}">
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-brackets-angle icon-title"></i>Tag HTML Penting dan Atributnya</h2>
                     <p>Selain tag dasar, ada beberapa tag dan atribut lain yang sangat penting untuk membuat tabel yang informatif.</p>
                     
                     <h3>Tag <code>&lt;th&gt;</code> (Table Header)</h3>
@@ -337,9 +383,9 @@
                     <h3>Struktur Semantik: <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, dan <code>&lt;tfoot&gt;</code></h3>
                     <p>Untuk tabel yang kompleks, kita bisa mengelompokkan baris-baris menjadi tiga bagian:</p>
                     <ul>
-                        <li><code>&lt;thead&gt;</code>: Untuk bagian kepala/header tabel.</li>
-                        <li><code>&lt;tbody&gt;</code>: Untuk bagian isi/tubuh utama tabel.</li>
-                        <li><code>&lt;tfoot&gt;</code>: Untuk bagian kaki/footer tabel (misalnya total).</li>
+                        <li><code class="bg-purple-100">&lt;thead&gt;</code>: Untuk bagian kepala/header tabel.</li>
+                        <li><code class="bg-purple-100">&lt;tbody&gt;</code>: Untuk bagian isi/tubuh utama tabel.</li>
+                        <li><code class="bg-purple-100">&lt;tfoot&gt;</code>: Untuk bagian kaki/footer tabel (misalnya total).</li>
                     </ul>
                     <p>Ini tidak mengubah tampilan visual secara default, tapi sangat membantu struktur kode dan aksesibilitas.</p>
                     <h4 class="font-semibold mt-4">Hasil:</h4>
@@ -374,8 +420,8 @@
                 </section>
 
                 <!-- Section 3: CSS Styling -->
-                <section id="css-styling" class="content-section">
-                    <h2>3. Menghias Tabel dengan CSS</h2>
+                <section id="css-styling" class="content-section" :class="{'active': activeSection === 'css-styling'}">
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-palette icon-title"></i>Menghias Tabel dengan CSS</h2>
                     <p>Tabel HTML standar terlihat sangat polos. Dengan CSS (Cascading Style Sheets), kita bisa membuatnya jauh lebih menarik dan mudah dibaca.</p>
                     
                     <h3><code>border</code> & <code>border-collapse</code></h3>
@@ -455,11 +501,14 @@
                     <p>Membuat warna baris selang-seling (zebra-striping) sangat membantu keterbacaan. Kita bisa menggunakan pseudo-class <code>:nth-child()</code>.</p>
                     <pre><code>/* CSS */
 .zebra-table thead {
-  background-color: #4f46e5;
+  background-color: #c084fc;
   color: white;
 }
 .zebra-table tbody tr:nth-child(even) {
-  background-color: #f3f4f6;
+  background-color: #f3e8ff;
+}
+.zebra-table tbody tr:hover {
+    background-color: #d8b4fe;
 }</code></pre>
                     <p>Dengan properti-properti di atas, tabel yang tadinya polos bisa menjadi jauh lebih profesional.</p>
                     <h4 class="font-semibold mt-4">Hasil:</h4>
@@ -496,37 +545,61 @@
                 </section>
 
                 <!-- Section 4: Latihan -->
-                <section id="latihan" class="content-section">
-                    <h2>4. Latihan Interaktif</h2>
+                <section id="latihan" class="content-section" :class="{'active': activeSection === 'latihan'}">
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-pencil icon-title"></i>Latihan Interaktif</h2>
                     <p>Saatnya praktik! Coba selesaikan tantangan di bawah ini. Tulis kode HTML Anda di kotak, lalu klik "Jalankan Kode" untuk melihat hasilnya.</p>
                     
-                    <!-- Latihan akan di-generate oleh JavaScript -->
-                    <div id="latihan-container" class="space-y-8"></div>
+                    <div id="latihan-container" class="space-y-8">
+                        <div v-for="(exercise, index) in exercises" :key="index" class="p-4 border rounded-xl bg-purple-50 shadow-md">
+                            <h3 class="text-lg font-semibold text-purple-700 flex items-center"><i class="ph ph-list-numbers icon-title"></i>{{ exercise.title }}</h3>
+                            <p class="mb-2 text-gray-700">{{ exercise.description }}</p>
+                            <textarea v-model="exercise.code" class="w-full h-40 p-2 border rounded-xl font-mono text-sm bg-white focus:ring-2 focus:ring-purple-400 focus:outline-none" :placeholder="exercise.placeholder"></textarea>
+                            <button @click="runCode(index)" class="mt-2 px-4 py-1.5 bg-pink-400 text-white font-semibold rounded-full hover:bg-pink-500 transition shadow-md">Jalankan Kode</button>
+                            <h4 class="font-medium mt-4 mb-2 text-purple-700">Hasil:</h4>
+                            <div class="w-full overflow-x-auto">
+                                <div :id="'output-' + index" class="p-2 border rounded-xl min-h-[50px] bg-white" v-html="exercise.output"></div>
+                            </div>
+                        </div>
+                    </div>
 
                 </section>
 
                 <!-- Section 5: Quiz -->
-                <section id="quiz" class="content-section">
-                    <h2>5. Kuis Pengetahuan Tabel</h2>
+                <section id="quiz" class="content-section" :class="{'active': activeSection === 'quiz'}">
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-graduation-cap icon-title"></i>Kuis Pengetahuan Tabel</h2>
                     <p>Uji pemahaman Anda tentang tag dan properti tabel HTML & CSS dengan 10 pertanyaan ini. Pilih jawaban yang paling tepat.</p>
                     <div id="quiz-container" class="mt-4">
                         <form id="quiz-form" class="space-y-6">
-                            <!-- Pertanyaan kuis akan di-generate di sini oleh JavaScript -->
+                            <div v-for="(q, index) in quizQuestions" :key="index" class="quiz-question-item">
+                                <p class="quiz-question-text">{{ index + 1 }}. {{ q.question }}</p>
+                                <div class="quiz-options-container">
+                                    <label v-for="(option, optionIndex) in q.options" :key="optionIndex" class="quiz-option-label">
+                                        <input type="radio" :name="'question-' + index" :value="optionIndex" v-model="q.selectedAnswer" class="quiz-option-input">
+                                        <span>{{ option }}</span>
+                                    </label>
+                                </div>
+                            </div>
                         </form>
-                        <button type="button" onclick="checkAnswers()" class="mt-6 px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition">Submit Kuis</button>
+                        <button type="button" @click="checkAnswers" class="mt-6 px-6 py-2 bg-purple-500 text-white font-semibold rounded-full hover:bg-purple-600 transition shadow-md">Submit Kuis</button>
                     </div>
-                    <div id="quiz-results" class="mt-8 p-4 border rounded-md bg-gray-50 hidden">
-                        <h3 class="text-xl font-bold mb-4">Hasil Kuis</h3>
-                        <!-- Hasil kuis akan ditampilkan di sini -->
+                    <div id="quiz-results" class="mt-8 p-4 border rounded-md bg-gray-50" :class="{'hidden': !showQuizResults}">
+                        <h3 class="text-xl font-bold mb-4">Hasil Kuis: {{ score }} dari {{ quizQuestions.length }}</h3>
+                        <div v-for="(q, index) in quizQuestions" :key="index" class="p-3 mb-2 rounded-xl" :class="{'bg-green-100': q.isCorrect, 'bg-red-100': !q.isCorrect}">
+                            <p class="font-bold text-lg" :class="{'text-green-700': q.isCorrect, 'text-red-700': !q.isCorrect}">{{ q.isCorrect ? '✅' : '❌' }} Pertanyaan {{ index + 1 }}:</p>
+                            <p class="my-1">{{ q.question }}</p>
+                            <p class="font-semibold">Jawaban Anda: <span class="font-normal">{{ q.selectedAnswer !== null ? q.options[q.selectedAnswer] : 'Tidak dijawab' }}</span></p>
+                            <p class="font-semibold">Jawaban Benar: <span class="font-normal">{{ q.options[q.correctAnswer] }}</span></p>
+                            <p class="text-sm mt-1"><strong>Penjelasan:</strong> {{ q.explanation }}</p>
+                        </div>
                     </div>
                 </section>
 
                 <!-- Section 6: Ujian Praktek -->
-                <section id="ujian-praktek" class="content-section">
-                    <h2>6. Ujian Praktek Final</h2>
+                <section id="ujian-praktek" class="content-section" :class="{'active': activeSection === 'ujian-praktek'}">
+                    <h2 class="text-purple-700 flex items-center"><i class="ph ph-sparkle icon-title"></i>Ujian Praktek Final</h2>
                     <p>Sekarang, gabungkan semua yang telah Anda pelajari. Buatlah tabel "Jadwal Pelajaran" di bawah ini menggunakan HTML dan CSS. Perhatikan ada sel yang digabung (colspan dan rowspan) serta styling yang rapi.</p>
                     
-                    <div class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 rounded-md my-4">
+                    <div class="bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 rounded-md my-4">
                         <p class="font-bold">Tantangan:</p>
                         <p>Buat ulang tabel jadwal pelajaran di bawah ini. Header harus memiliki latar belakang berbeda, baris harus memiliki warna yang rapi, dan teks di header harus di tengah.</p>
                     </div>
@@ -610,290 +683,258 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
                         <div>
                             <label for="final-html" class="block font-medium mb-1">Kode HTML Anda:</label>
-                            <textarea id="final-html" class="w-full h-64 p-2 border rounded-md font-mono text-sm bg-gray-50" placeholder="Tulis kode HTML di sini..."></textarea>
+                            <textarea v-model="finalHtml" id="final-html" class="w-full h-64 p-2 border rounded-md font-mono text-sm bg-gray-50" placeholder="Tulis kode HTML di sini..."></textarea>
                         </div>
                         <div>
                             <label for="final-css" class="block font-medium mb-1">Kode CSS Anda:</label>
-                            <textarea id="final-css" class="w-full h-64 p-2 border rounded-md font-mono text-sm bg-gray-50" placeholder="Tulis kode CSS di sini..."></textarea>
+                            <textarea v-model="finalCss" id="final-css" class="w-full h-64 p-2 border rounded-md font-mono text-sm bg-gray-50" placeholder="Tulis kode CSS di sini..."></textarea>
                         </div>
                     </div>
                     
-                    <button onclick="runFinalTest()" class="mt-4 px-6 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition">Lihat Hasil</button>
+                    <button @click="runFinalTest" class="mt-4 px-6 py-2 bg-purple-500 text-white font-semibold rounded-full hover:bg-purple-600 transition shadow-md">Lihat Hasil</button>
 
                     <h3 class="mt-8">Hasil Anda:</h3>
                     <div class="w-full overflow-x-auto">
-                        <div id="final-output" class="p-4 border rounded-md min-h-[100px] bg-gray-50"></div>
+                        <div id="final-output" class="p-4 border rounded-md min-h-[100px] bg-white" v-html="finalOutput"></div>
                     </div>
 
                 </section>
             </main>
         </div>
+        
+        <!-- Bottom Navigation Menu -->
+        <nav class="bottom-nav">
+            <button v-for="(section, index) in sections" :key="index" @click="showSection(section.id)" :class="{'nav-button': true, 'active': activeSection === section.id}">
+                <i :class="['ph', section.icon]"></i>
+                <span class="mt-1">{{ section.title }}</span>
+            </button>
+        </nav>
     </div>
 
-    <script>
-        // Data untuk latihan interaktif
-        const exercises = [
-            {
-                title: "1. Tabel Dasar 2x2",
-                description: "Buatlah sebuah tabel sederhana dengan 2 baris dan 2 kolom.",
-                placeholder: "<table>\n  <!-- Tulis kode Anda di sini -->\n  <tr>\n    <td>Baris 1, Kolom 1</td>\n    <td>Baris 1, Kolom 2</td>\n  </tr>\n  <tr>\n    <td>Baris 2, Kolom 1</td>\n    <td>Baris 2, Kolom 2</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "2. Tabel dengan Header",
-                description: "Buat tabel 2x2 dengan baris pertama sebagai header (gunakan <th>) untuk kolom 'Nama' dan 'Usia'.",
-                placeholder: "<table>\n  <tr>\n    <th>Nama</th>\n    <th>Usia</th>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "3. Tabel 3x3",
-                description: "Buat tabel dengan 3 baris dan 3 kolom.",
-                placeholder: "<table>\n  <!-- 3 baris dan 3 kolom -->\n  <tr>\n    <td>1,1</td>\n    <td>1,2</td>\n    <td>1,3</td>\n  </tr>\n  <tr>\n    <td>2,1</td>\n    <td>2,2</td>\n    <td>2,3</td>\n  </tr>\n  <tr>\n    <td>3,1</td>\n    <td>3,2</td>\n    <td>3,3</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "4. Menggunakan `colspan`",
-                description: "Buat tabel di mana sel header pertama membentang sepanjang 2 kolom.",
-                placeholder: "<table>\n  <tr>\n    <th colspan=\"2\">Data Siswa</th>\n  </tr>\n  <tr>\n    <td>Nama</td>\n    <td>Usia</td>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "5. Menggunakan `rowspan`",
-                description: "Buat tabel di mana sel header pertama di kolom pertama membentang sepanjang 2 baris.",
-                placeholder: "<table>\n  <tr>\n    <th>Nama</th>\n    <td>Budi</td>\n  </tr>\n  <tr>\n    <th rowspan=\"2\" style=\"vertical-align: middle;\">Telepon</th>\n    <td>081234567</td>\n  </tr>\n  <tr>\n    <td>087654321</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "6. Styling: Menambah Garis",
-                description: "Buat tabel 2x2 dan tambahkan style CSS untuk memberi garis (border) pada tabel, th, dan td. Tambahkan juga `border-collapse`.",
-                placeholder: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n</style>\n\n<table>\n  <tr>\n    <th>Nama</th>\n    <th>Usia</th>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "7. Styling: Menambah Padding",
-                description: "Beri padding 10px pada semua sel (th dan td) pada tabel Anda.",
-                placeholder: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n  th, td {\n    padding: 10px;\n  }\n</style>\n\n<table>\n  <tr>\n    <th>Nama</th>\n    <th>Usia</th>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>"
-            },
-            {
-                title: "8. Styling: Warna Header",
-                description: "Beri warna latar belakang (mis: `lightblue`) pada baris header (tr di dalam thead).",
-                placeholder: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n  th, td {\n    padding: 10px;\n  }\n  thead tr {\n    background-color: lightblue;\n  }\n</style>\n\n<table>\n  <thead>\n    <tr>\n      <th>Nama</th>\n      <th>Usia</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Budi</td>\n      <td>25</td>\n    </tr>\n  </tbody>\n</table>"
-            },
-            {
-                title: "9. Styling: Zebra Stripes",
-                description: "Gunakan `:nth-child(even)` untuk memberi warna latar pada baris genap di `tbody`.",
-                placeholder: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n  th, td {\n    padding: 10px;\n  }\n  thead tr {\n    background-color: lightblue;\n  }\n  tbody tr:nth-child(even) {\n    background-color: #f2f2f2;\n  }\n</style>\n\n<table>\n  <thead>\n    <tr>\n      <th>Nama</th>\n      <th>Usia</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Budi</td>\n      <td>25</td>\n    </tr>\n    <tr>\n      <td>Ani</td>\n      <td>30</td>\n    </tr>\n  </tbody>\n</table>"
-            },
-            {
-                title: "10. Gabungan `colspan` dan `rowspan`",
-                description: "Buat tabel jadwal sederhana yang menggabungkan kedua atribut `colspan` dan `rowspan`.",
-                placeholder: "<!-- Coba buat jadwal sederhana -->\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"2\">Jadwal Kelas</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th rowspan=\"2\" style=\"vertical-align: middle;\">Senin</th>\n      <td>08:00 - Matematika</td>\n    </tr>\n    <tr>\n      <td>10:00 - Bahasa Inggris</td>\n    </tr>\n  </tbody>\n</table>"
-            }
-        ];
+    <script type="module">
+        const { createApp, ref, onMounted } = Vue;
 
-        // Data untuk kuis
-        const quizQuestions = [
-            {
-                question: "Tag HTML apa yang digunakan untuk membuat baris baru dalam sebuah tabel?",
-                options: ["<td>", "<tr>", "<th>", "<table>"],
-                correctAnswer: 1,
-                explanation: "Tag <tr> (table row) digunakan untuk membuat baris baru dalam tabel."
-            },
-            {
-                question: "Tag mana yang digunakan untuk membuat sel header di dalam tabel?",
-                options: ["<td>", "<tr>", "<th>", "<header>"],
-                correctAnswer: 2,
-                explanation: "Tag <th> (table header) digunakan untuk sel header. Teksnya akan tercetak tebal secara default."
-            },
-            {
-                question: "Atribut apa yang digunakan untuk menggabungkan dua atau lebih sel secara horizontal (kolom)?",
-                options: ["rowspan", "colspan", "merge", "span"],
-                correctAnswer: 1,
-                explanation: "Atribut colspan digunakan untuk menggabungkan sel secara horizontal."
-            },
-            {
-                question: "Atribut apa yang digunakan untuk menggabungkan dua atau lebih sel secara vertikal (baris)?",
-                options: ["rowspan", "colspan", "merge", "span"],
-                correctAnswer: 0,
-                explanation: "Atribut rowspan digunakan untuk menggabungkan sel secara vertikal."
-            },
-            {
-                question: "Properti CSS mana yang paling umum digunakan untuk menghilangkan ruang antar garis (border) di tabel?",
-                options: ["border-spacing: 0;", "border-collapse: collapse;", "margin: 0;", "padding: 0;"],
-                correctAnswer: 1,
-                explanation: "Properti border-collapse: collapse; digunakan untuk menggabungkan border sel menjadi satu."
-            },
-            {
-                question: "Apa fungsi dari tag <tbody>?",
-                options: ["Untuk membuat baris baru", "Untuk mengelompokkan baris header tabel", "Untuk mengelompokkan baris isi tabel", "Untuk membuat sel data"],
-                correctAnswer: 2,
-                explanation: "Tag <tbody> (table body) digunakan untuk mengelompokkan baris yang berisi data utama tabel."
-            },
-            {
-                question: "Jika Anda ingin memberi warna latar yang berbeda pada setiap baris genap, pseudo-class CSS mana yang akan Anda gunakan?",
-                options: [":nth-child(odd)", ":first-child", ":nth-child(even)", ":last-child"],
-                correctAnswer: 2,
-                explanation: "Pseudo-class :nth-child(even) akan memilih semua elemen yang merupakan anak genap."
-            },
-            {
-                question: "Tag mana yang digunakan untuk membuat sel data di dalam tabel?",
-                options: ["<tr>", "<th>", "<td>", "<data>"],
-                correctAnswer: 2,
-                explanation: "Tag <td> (table data) digunakan untuk membuat sel data biasa dalam tabel."
-            },
-            {
-                question: "Manakah dari tag berikut yang tidak termasuk dalam struktur semantik tabel?",
-                options: ["<thead>", "<tfooting>", "<tbody>", "<tfoot>"],
-                correctAnswer: 1,
-                explanation: "Tag <tfooting> tidak ada. Tag yang benar adalah <thead>, <tbody>, dan <tfoot>."
-            },
-            {
-                question: "Bagaimana cara membuat teks rata tengah di sel header tabel menggunakan CSS?",
-                options: ["th { align: center; }", "td { text-align: center; }", "th { text-align: center; }", "table { text-align: center; }"],
-                correctAnswer: 2,
-                explanation: "Properti text-align: center; pada selektor th akan membuat teks di semua sel header rata tengah."
-            }
-        ];
+        const app = createApp({
+            setup() {
+                const activeSection = ref('pendahuluan');
+                const finalHtml = ref('');
+                const finalCss = ref('');
+                const finalOutput = ref('');
+                const score = ref(0);
+                const showQuizResults = ref(false);
 
-        // Fungsi untuk menampilkan section
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
+                const sections = [
+                    { id: 'pendahuluan', title: 'Intro', icon: 'ph-book-open' },
+                    { id: 'html-tags', title: 'HTML', icon: 'ph-brackets-angle' },
+                    { id: 'css-styling', title: 'CSS', icon: 'ph-palette' },
+                    { id: 'latihan', title: 'Latihan', icon: 'ph-pencil' },
+                    { id: 'quiz', title: 'Kuis', icon: 'ph-graduation-cap' },
+                    { id: 'ujian-praktek', title: 'Ujian', icon: 'ph-sparkle' },
+                ];
 
-            document.querySelectorAll('#navigation .tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            document.querySelector(`#navigation .tab-button[onclick="showSection('${sectionId}')"]`).classList.add('active');
-            window.scrollTo(0, 0);
-        }
+                const exercises = ref([
+                    {
+                        title: "1. Tabel Dasar 2x2",
+                        description: "Buatlah sebuah tabel sederhana dengan 2 baris dan 2 kolom.",
+                        code: "<table>\n  <!-- Tulis kode Anda di sini -->\n  <tr>\n    <td>Baris 1, Kolom 1</td>\n    <td>Baris 1, Kolom 2</td>\n  </tr>\n  <tr>\n    <td>Baris 2, Kolom 1</td>\n    <td>Baris 2, Kolom 2</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "2. Tabel dengan Header",
+                        description: "Buat tabel 2x2 dengan baris pertama sebagai header (gunakan <th>) untuk kolom 'Nama' dan 'Usia'.",
+                        code: "<table>\n  <tr>\n    <th>Nama</th>\n    <th>Usia</th>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "3. Tabel 3x3",
+                        description: "Buat tabel dengan 3 baris dan 3 kolom.",
+                        code: "<table>\n  <!-- 3 baris dan 3 kolom -->\n  <tr>\n    <td>1,1</td>\n    <td>1,2</td>\n    <td>1,3</td>\n  </tr>\n  <tr>\n    <td>2,1</td>\n    <td>2,2</td>\n    <td>2,3</td>\n  </tr>\n  <tr>\n    <td>3,1</td>\n    <td>3,2</td>\n    <td>3,3</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "4. Menggunakan `colspan`",
+                        description: "Buat tabel di mana sel header pertama membentang sepanjang 2 kolom.",
+                        code: "<table>\n  <tr>\n    <th colspan=\"2\">Data Siswa</th>\n  </tr>\n  <tr>\n    <td>Nama</td>\n    <td>Usia</td>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "5. Menggunakan `rowspan`",
+                        description: "Buat tabel di mana sel header pertama di kolom pertama membentang sepanjang 2 baris.",
+                        code: "<table>\n  <tr>\n    <th>Nama</th>\n    <td>Budi</td>\n  </tr>\n  <tr>\n    <th rowspan=\"2\" style=\"vertical-align: middle;\">Telepon</th>\n    <td>081234567</td>\n  </tr>\n  <tr>\n    <td>087654321</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "6. Styling: Menambah Garis",
+                        description: "Buat tabel 2x2 dan tambahkan style CSS untuk memberi garis (border) pada tabel, th, dan td. Tambahkan juga `border-collapse`.",
+                        code: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n</style>\n\n<table>\n  <tr>\n    <th>Nama</th>\n    <th>Usia</th>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "7. Styling: Menambah Padding",
+                        description: "Beri padding 10px pada semua sel (th dan td) pada tabel Anda.",
+                        code: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n  th, td {\n    padding: 10px;\n  }\n</style>\n\n<table>\n  <tr>\n    <th>Nama</th>\n    <th>Usia</th>\n  </tr>\n  <tr>\n    <td>Budi</td>\n    <td>25</td>\n  </tr>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "8. Styling: Warna Header",
+                        description: "Beri warna latar belakang (mis: `lightblue`) pada baris header (tr di dalam thead).",
+                        code: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n  th, td {\n    padding: 10px;\n  }\n  thead tr {\n    background-color: lightblue;\n  }\n</style>\n\n<table>\n  <thead>\n    <tr>\n      <th>Nama</th>\n      <th>Usia</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Budi</td>\n      <td>25</td>\n    </tr>\n  </tbody>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "9. Styling: Zebra Stripes",
+                        description: "Gunakan `:nth-child(even)` untuk memberi warna latar pada baris genap di `tbody`.",
+                        code: "<style>\n  table, th, td {\n    border: 1px solid black;\n    border-collapse: collapse;\n  }\n  th, td {\n    padding: 10px;\n  }\n  thead tr {\n    background-color: lightblue;\n  }\n  tbody tr:nth-child(even) {\n    background-color: #f2f2f2;\n  }\n</style>\n\n<table>\n  <thead>\n    <tr>\n      <th>Nama</th>\n      <th>Usia</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Budi</td>\n      <td>25</td>\n    </tr>\n    <tr>\n      <td>Ani</td>\n      <td>30</td>\n    </tr>\n  </tbody>\n</table>",
+                        output: "",
+                    },
+                    {
+                        title: "10. Gabungan `colspan` dan `rowspan`",
+                        description: "Buat tabel jadwal sederhana yang menggabungkan kedua atribut `colspan` dan `rowspan`.",
+                        code: "<!-- Coba buat jadwal sederhana -->\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"2\">Jadwal Kelas</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th rowspan=\"2\" style=\"vertical-align: middle;\">Senin</th>\n      <td>08:00 - Matematika</td>\n    </tr>\n    <tr>\n      <td>10:00 - Bahasa Inggris</td>\n    </tr>\n  </tbody>\n</table>",
+                        output: "",
+                    }
+                ]);
 
-        // Fungsi untuk generate latihan
-        function generateExercises() {
-            const container = document.getElementById('latihan-container');
-            let html = '';
-            exercises.forEach((exercise, index) => {
-                html += `
-                    <div class="p-4 border rounded-lg bg-gray-50">
-                        <h3 class="text-lg font-semibold">${exercise.title}</h3>
-                        <p class="mb-2">${exercise.description}</p>
-                        <textarea id="code-${index}" class="w-full h-40 p-2 border rounded-md font-mono text-sm bg-gray-100" placeholder="Tulis kode Anda di sini...">${exercise.placeholder}</textarea>
-                        <button onclick="runCode(${index})" class="mt-2 px-4 py-1.5 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition">Jalankan Kode</button>
-                        <h4 class="font-medium mt-4 mb-2">Hasil:</h4>
-                        <div class="w-full overflow-x-auto">
-                            <div id="output-${index}" class="p-2 border rounded-md min-h-[50px] rendered-table"></div>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
+                const quizQuestions = ref([
+                    {
+                        question: "Tag HTML apa yang digunakan untuk membuat baris baru dalam sebuah tabel?",
+                        options: ["<td>", "<tr>", "<th>", "<table>"],
+                        correctAnswer: 1,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Tag <tr> (table row) digunakan untuk membuat baris baru dalam tabel."
+                    },
+                    {
+                        question: "Tag mana yang digunakan untuk membuat sel header di dalam tabel?",
+                        options: ["<td>", "<tr>", "<th>", "<header>"],
+                        correctAnswer: 2,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Tag <th> (table header) digunakan untuk sel header. Teksnya akan tercetak tebal secara default."
+                    },
+                    {
+                        question: "Atribut apa yang digunakan untuk menggabungkan dua atau lebih sel secara horizontal (kolom)?",
+                        options: ["rowspan", "colspan", "merge", "span"],
+                        correctAnswer: 1,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Atribut colspan digunakan untuk menggabungkan sel secara horizontal."
+                    },
+                    {
+                        question: "Atribut apa yang digunakan untuk menggabungkan dua atau lebih sel secara vertikal (baris)?",
+                        options: ["rowspan", "colspan", "merge", "span"],
+                        correctAnswer: 0,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Atribut rowspan digunakan untuk menggabungkan sel secara vertikal."
+                    },
+                    {
+                        question: "Properti CSS mana yang paling umum digunakan untuk menghilangkan ruang antar garis (border) di tabel?",
+                        options: ["border-spacing: 0;", "border-collapse: collapse;", "margin: 0;", "padding: 0;"],
+                        correctAnswer: 1,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Properti border-collapse: collapse; digunakan untuk menggabungkan border sel menjadi satu."
+                    },
+                    {
+                        question: "Apa fungsi dari tag <tbody>?",
+                        options: ["Untuk membuat baris baru", "Untuk mengelompokkan baris header tabel", "Untuk mengelompokkan baris isi tabel", "Untuk membuat sel data"],
+                        correctAnswer: 2,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Tag <tbody> (table body) digunakan untuk mengelompokkan baris yang berisi data utama tabel."
+                    },
+                    {
+                        question: "Jika Anda ingin memberi warna latar yang berbeda pada setiap baris genap, pseudo-class CSS mana yang akan Anda gunakan?",
+                        options: [":nth-child(odd)", ":first-child", ":nth-child(even)", ":last-child"],
+                        correctAnswer: 2,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Pseudo-class :nth-child(even) akan memilih semua elemen yang merupakan anak genap."
+                    },
+                    {
+                        question: "Tag mana yang digunakan untuk membuat sel data di dalam tabel?",
+                        options: ["<tr>", "<th>", "<td>", "<data>"],
+                        correctAnswer: 2,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Tag <td> (table data) digunakan untuk membuat sel data biasa dalam tabel."
+                    },
+                    {
+                        question: "Manakah dari tag berikut yang tidak termasuk dalam struktur semantik tabel?",
+                        options: ["<thead>", "<tfooting>", "<tbody>", "<tfoot>"],
+                        correctAnswer: 1,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Tag <tfooting> tidak ada. Tag yang benar adalah <thead>, <tbody>, dan <tfoot>."
+                    },
+                    {
+                        question: "Bagaimana cara membuat teks rata tengah di sel header tabel menggunakan CSS?",
+                        options: ["th { align: center; }", "td { text-align: center; }", "th { text-align: center; }", "table { text-align: center; }"],
+                        correctAnswer: 2,
+                        selectedAnswer: null,
+                        isCorrect: false,
+                        explanation: "Properti text-align: center; pada selektor th akan membuat teks di semua sel header rata tengah."
+                    }
+                ]);
 
-        // Fungsi untuk menjalankan kode latihan
-        function runCode(index) {
-            const code = document.getElementById(`code-${index}`).value;
-            const output = document.getElementById(`output-${index}`);
-            // Mengambil style dari textarea jika ada
-            const styleMatch = code.match(/<style>([\s\S]*?)<\/style>/);
-            let styleCode = '';
-            if (styleMatch && styleMatch[1]) {
-              styleCode = styleMatch[1];
-            }
-            // Hapus tag <style> dari HTML untuk ditampilkan
-            const htmlCode = code.replace(/<style>[\s\S]*?<\/style>/, '');
-            output.innerHTML = `<style>${styleCode}</style>${htmlCode}`;
-        }
-        
-        // Fungsi untuk menjalankan ujian praktek
-        function runFinalTest() {
-            const htmlCode = document.getElementById('final-html').value;
-            const cssCode = document.getElementById('final-css').value;
-            const output = document.getElementById('final-output');
-            
-            // Gabungkan HTML dan CSS dalam satu scope
-            output.innerHTML = `<style>${cssCode}</style>${htmlCode}`;
-        }
+                const showSection = (id) => {
+                    activeSection.value = id;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
 
-        // Fungsi untuk membuat kuis secara dinamis
-        function generateQuiz() {
-            const quizForm = document.getElementById('quiz-form');
-            if (!quizForm) {
-                console.error("Elemen form kuis tidak ditemukan.");
-                return;
-            }
-            quizForm.innerHTML = ''; // Hapus konten lama
-            
-            quizQuestions.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.classList.add('quiz-question-item');
-                
-                const questionText = document.createElement('p');
-                questionText.classList.add('quiz-question-text');
-                questionText.textContent = `${index + 1}. ${q.question}`;
-                questionDiv.appendChild(questionText);
+                const runCode = (index) => {
+                    const code = exercises.value[index].code;
+                    const styleMatch = code.match(/<style>([\s\S]*?)<\/style>/);
+                    let styleCode = '';
+                    if (styleMatch && styleMatch[1]) {
+                        styleCode = styleMatch[1];
+                    }
+                    const htmlCode = code.replace(/<style>[\s\S]*?<\/style>/, '');
+                    exercises.value[index].output = `<style>${styleCode}</style>${htmlCode}`;
+                };
 
-                const optionsDiv = document.createElement('div');
-                optionsDiv.classList.add('quiz-options-container');
+                const runFinalTest = () => {
+                    finalOutput.value = `<style>${finalCss.value}</style>${finalHtml.value}`;
+                };
 
-                q.options.forEach((option, optionIndex) => {
-                    const label = document.createElement('label');
-                    label.classList.add('quiz-option-label');
+                const checkAnswers = () => {
+                    score.value = 0;
+                    quizQuestions.value.forEach(q => {
+                        q.isCorrect = (parseInt(q.selectedAnswer) === q.correctAnswer);
+                        if (q.isCorrect) {
+                            score.value++;
+                        }
+                    });
+                    showQuizResults.value = true;
+                };
 
-                    const input = document.createElement('input');
-                    input.type = 'radio';
-                    input.name = `question-${index}`;
-                    input.value = optionIndex;
-                    input.classList.add('quiz-option-input');
-
-                    const span = document.createElement('span');
-                    span.textContent = option;
-
-                    label.appendChild(input);
-                    label.appendChild(span);
-                    optionsDiv.appendChild(label);
+                onMounted(() => {
+                    // Initialize with some default code in the exercise textareas if needed
+                    exercises.value.forEach(ex => {
+                        ex.code = ex.code; // Vue handles this with v-model
+                    });
                 });
 
-                questionDiv.appendChild(optionsDiv);
-                quizForm.appendChild(questionDiv);
-            });
-        }
+                return {
+                    activeSection,
+                    sections,
+                    exercises,
+                    quizQuestions,
+                    finalHtml,
+                    finalCss,
+                    finalOutput,
+                    score,
+                    showQuizResults,
+                    showSection,
+                    runCode,
+                    runFinalTest,
+                    checkAnswers,
+                };
+            }
+        });
 
-        // Fungsi untuk memeriksa jawaban dan menampilkan hasil kuis
-        function checkAnswers() {
-            const resultsContainer = document.getElementById('quiz-results');
-            resultsContainer.innerHTML = '';
-            let score = 0;
-            let resultsHTML = '';
-
-            quizQuestions.forEach((q, index) => {
-                const selectedAnswer = document.querySelector(`input[name="question-${index}"]:checked`);
-                const isCorrect = selectedAnswer && parseInt(selectedAnswer.value) === q.correctAnswer;
-                
-                if (isCorrect) {
-                    score++;
-                }
-
-                const statusColor = isCorrect ? 'text-green-700' : 'text-red-700';
-                const statusIcon = isCorrect ? '✅' : '❌';
-
-                resultsHTML += `
-                    <div class="p-3 mb-2 rounded-md ${isCorrect ? 'bg-green-50' : 'bg-red-50'}">
-                        <p class="font-bold text-lg ${statusColor}">${statusIcon} Pertanyaan ${index + 1}:</p>
-                        <p class="my-1">${q.question}</p>
-                        <p class="font-semibold">Jawaban Anda: <span class="font-normal">${selectedAnswer ? q.options[selectedAnswer.value] : 'Tidak dijawab'}</span></p>
-                        <p class="font-semibold">Jawaban Benar: <span class="font-normal">${q.options[q.correctAnswer]}</span></p>
-                        <p class="text-sm mt-1"><strong>Penjelasan:</strong> ${q.explanation}</p>
-                    </div>
-                `;
-            });
-
-            const finalScoreHTML = `<h3 class="text-2xl font-bold mb-4">Hasil Kuis: ${score} dari ${quizQuestions.length}</h3>`;
-            resultsContainer.innerHTML = finalScoreHTML + resultsHTML;
-            resultsContainer.classList.remove('hidden');
-            window.scrollTo(0, resultsContainer.offsetTop);
-        }
-
-        // Inisialisasi
-        window.onload = () => {
-            generateExercises();
-            generateQuiz();
-            showSection('pendahuluan');
-        };
+        app.mount('#app');
     </script>
 </body>
 </html>
