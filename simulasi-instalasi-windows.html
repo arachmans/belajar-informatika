@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 11 Installation Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Inter', sans-serif;
+            overflow: hidden;
+            user-select: none;
+        }
+        .win-btn {
+            background-color: #0078d4;
+            color: white;
+            padding: 8px 20px;
+            border: 1px solid #005a9e;
+            transition: background-color 0.2s;
+        }
+        .win-btn:hover:not(:disabled) {
+            background-color: #005a9e;
+        }
+        .win-btn:disabled {
+            background-color: #ccc;
+            color: #666;
+            border-color: #bbb;
+            cursor: not-allowed;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        .spinner-dark {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #0078d4;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: flex;
+        }
+        .oobe-bg {
+            background: radial-gradient(circle at 10% 20%, rgb(9, 11, 123) 0%, rgb(4, 3, 40) 90.2%);
+        }
+        .desktop-bg {
+            background-image: url('https://img.wallpapersafari.com/desktop/1920/1080/94/89/lE2WvV.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .partition-table tr.selected {
+            background-color: #004a9e;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+    <!-- Screen: Booting -->
+    <div id="screen-boot" class="screen active h-screen w-screen flex-col items-center justify-center gap-8">
+        <h1 class="text-5xl font-semibold text-gray-300">ACME</h1>
+        <div class="spinner"></div>
+        <p class="text-gray-400">Press any key to boot from CD or DVD...</p>
+    </div>
+
+    <!-- Screen: Windows Logo -->
+    <div id="screen-win-logo" class="screen h-screen w-screen flex-col items-center justify-center gap-8">
+        <svg class="h-24 w-24 text-blue-500" fill="currentColor" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0 H 48 V 48 H 0 Z M 52 0 H 100 V 48 H 52 Z M 0 52 H 48 V 100 H 0 Z M 52 52 H 100 V 100 H 52 Z" />
+        </svg>
+    </div>
+    
+    <!-- Screen: Language Setup -->
+    <div id="screen-language" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl">
+            <h1 class="text-3xl font-semibold text-blue-400 mb-2">Windows Setup</h1>
+            <div class="border-b border-gray-600 mb-6"></div>
+            <div class="space-y-4">
+                <div>
+                    <label for="language" class="block mb-1">Language to install</label>
+                    <select id="language" class="w-full p-2 bg-gray-700 border border-gray-500 rounded">
+                        <option>English (United States)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="time_format" class="block mb-1">Time and currency format</label>
+                    <select id="time_format" class="w-full p-2 bg-gray-700 border border-gray-500 rounded">
+                        <option>Indonesian (Indonesia)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="keyboard" class="block mb-1">Keyboard or input method</label>
+                    <select id="keyboard" class="w-full p-2 bg-gray-700 border border-gray-500 rounded">
+                        <option>US</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen()" class="win-btn">Next</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Screen: Install Now -->
+    <div id="screen-install-now" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl text-center">
+               <h1 class="text-3xl font-semibold text-blue-400 mb-6">Windows Setup</h1>
+            <button onclick="nextScreen()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 text-2xl rounded">Install now</button>
+        </div>
+    </div>
+
+    <!-- Screen: Product Key -->
+    <div id="screen-product-key" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl">
+            <h1 class="text-3xl font-semibold text-blue-400 mb-4">Activate Windows</h1>
+            <p class="mb-4">Enter the product key to activate Windows.</p>
+            <input type="text" placeholder="XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" class="w-full p-2 bg-gray-700 border border-gray-500 rounded mb-4" />
+            <a href="#" onclick="event.preventDefault(); nextScreen();" class="text-blue-400 hover:underline">I don't have a product key</a>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen()" class="win-btn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen: Select OS -->
+    <div id="screen-select-os" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl">
+            <h1 class="text-3xl font-semibold text-blue-400 mb-4">Select the operating system you want to install</h1>
+            <div class="space-y-2 bg-gray-700 p-4 border border-gray-500 rounded">
+                <label class="flex items-center p-2 rounded hover:bg-gray-600"><input type="radio" name="os_version" class="mr-3"> Windows 11 Home</label>
+                <label class="flex items-center p-2 rounded hover:bg-gray-600"><input type="radio" name="os_version" class="mr-3"> Windows 11 Education</label>
+                <label class="flex items-center p-2 rounded hover:bg-gray-600 bg-blue-900"><input type="radio" name="os_version" class="mr-3" checked> Windows 11 Pro</label>
+                <label class="flex items-center p-2 rounded hover:bg-gray-600"><input type="radio" name="os_version" class="mr-3"> Windows 11 Pro for Workstations</label>
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen()" class="win-btn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen: EULA -->
+    <div id="screen-eula" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl">
+            <h1 class="text-3xl font-semibold text-blue-400 mb-4">Applicable notices and license terms</h1>
+            <div class="h-64 overflow-y-scroll p-2 border border-gray-500 bg-gray-700 text-sm mb-4">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum...</p>
+                <p class="mt-4">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+            </div>
+            <label class="flex items-center">
+                <input type="checkbox" id="eula-checkbox" onchange="document.getElementById('eula-next').disabled = !this.checked;" class="mr-2"> I accept the license terms
+            </label>
+            <div class="mt-8 flex justify-end">
+                <button id="eula-next" onclick="nextScreen()" class="win-btn" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen: Install Type -->
+    <div id="screen-install-type" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl">
+            <h1 class="text-3xl font-semibold text-blue-400 mb-6">Which type of installation do you want?</h1>
+            <div class="space-y-4">
+                <div class="p-4 border border-gray-500 rounded cursor-not-allowed opacity-50">
+                    <h2 class="text-lg font-semibold">Upgrade: Install Windows and keep files, settings, and applications</h2>
+                    <p class="text-sm text-gray-400">The files, settings, and applications are moved to Windows with this option.</p>
+                </div>
+                <div onclick="nextScreen()" class="p-4 border border-gray-500 rounded hover:bg-blue-900 cursor-pointer">
+                    <h2 class="text-lg font-semibold">Custom: Install Windows only (advanced)</h2>
+                    <p class="text-sm text-gray-400">The files, settings, and applications aren't moved to Windows with this option.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen: Partition Manager -->
+    <div id="screen-partition" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-3xl">
+            <h1 class="text-3xl font-semibold text-blue-400 mb-4">Where do you want to install Windows?</h1>
+            <div class="border border-gray-500 h-64 overflow-y-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="p-2">Name</th>
+                            <th class="p-2">Total size</th>
+                            <th class="p-2">Free space</th>
+                            <th class="p-2">Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="partition-table-body" class="partition-table bg-gray-900">
+                        <!-- Partitions will be rendered here by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 flex items-center space-x-4 text-sm">
+                <button class="text-blue-400 hover:underline" disabled>Refresh</button>
+                <button id="btn-delete" onclick="deletePartition()" class="text-blue-400 hover:underline" disabled>Delete</button>
+                <button class="text-blue-400 hover:underline" disabled>Format</button>
+                <button id="btn-new" onclick="showNewPartitionPrompt()" class="text-blue-400 hover:underline" disabled>New</button>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button id="partition-next" onclick="nextScreen()" class="win-btn" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal untuk input ukuran partisi baru -->
+    <div id="new-partition-modal" class="modal">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-white w-full max-w-sm">
+            <h2 class="text-xl font-semibold mb-4">Create New Partition</h2>
+            <p id="new-partition-message" class="text-sm text-gray-300 mb-4"></p>
+            <label for="partition-size-input" class="block mb-2">Size (in MB):</label>
+            <input type="number" id="partition-size-input" class="w-full p-2 bg-gray-700 border border-gray-500 rounded" value="">
+            <div class="mt-6 flex justify-end space-x-2">
+                <button onclick="hideNewPartitionPrompt()" class="win-btn bg-gray-600 hover:bg-gray-700 border-gray-500">Cancel</button>
+                <button onclick="confirmNewPartition()" class="win-btn">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen: Installing -->
+    <div id="screen-installing" class="screen h-screen w-screen items-center justify-center bg-blue-700">
+        <div class="bg-gray-800 bg-opacity-80 backdrop-blur-xl p-8 rounded-lg shadow-2xl text-white w-full max-w-2xl">
+            <h1 class="text-2xl font-semibold mb-4">Installing Windows</h1>
+            <p class="text-sm text-gray-300 mb-6">Your PC will restart several times. This might take a while.</p>
+            <div class="space-y-2 text-sm">
+                <p id="install-status-1">Copying Windows files</p>
+                <p id="install-status-2">Getting files ready for installation (<span id="install-progress">0</span>%)</p>
+                <p id="install-status-3" class="text-gray-500">Installing features</p>
+                <p id="install-status-4" class="text-gray-500">Installing updates</p>
+                <p id="install-status-5" class="text-gray-500">Finishing up</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- OOBE Screens (Out of Box Experience) -->
+    
+    <!-- OOBE: Region Selection -->
+    <div id="screen-oobe-region" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
+        <div class="w-full max-w-md text-left">
+            <h1 class="text-4xl font-semibold mb-6">Is this the right country or region?</h1>
+            <div class="bg-white/10 p-4 rounded cursor-pointer" onclick="nextScreen()">Indonesia</div>
+        </div>
+    </div>
+
+    <!-- OOBE: Keyboard Layout Selection -->
+    <div id="screen-oobe-keyboard" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
+        <div class="w-full max-w-md text-left">
+            <h1 class="text-4xl font-semibold mb-6">Is this the right keyboard layout?</h1>
+            <div class="bg-white/10 p-4 rounded mb-4">US</div>
+            <button onclick="nextScreen()" class="w-full bg-blue-600 p-3 rounded text-lg">Yes</button>
+        </div>
+    </div>
+
+    <!-- OOBE: Account Creation -->
+    <div id="screen-oobe-account" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
+        <div class="w-full max-w-md text-left">
+            <h1 class="text-4xl font-semibold mb-6">Let's create an account</h1>
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block mb-2 text-gray-300">Who's going to use this PC?</label>
+                    <input type="text" id="username" placeholder="Enter your name" class="w-full p-3 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
+                </div>
+                <div>
+                    <label for="password" class="block mb-2 text-gray-300">Create a password</label>
+                    <input type="password" id="password" placeholder="Password" class="w-full p-3 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
+                </div>
+                <div>
+                    <label for="password-confirm" class="block mb-2 text-gray-300">Confirm password</label>
+                    <input type="password" id="password-confirm" placeholder="Confirm password" class="w-full p-3 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
+                </div>
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen()" class="w-40 bg-blue-600 p-3 rounded text-lg">Next</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- OOBE: Finalizing Setup -->
+    <div id="screen-oobe-final" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white text-center">
+        <div class="spinner-dark spinner mb-8"></div>
+        <h1 id="oobe-final-text" class="text-2xl">This might take a few minutes</h1>
+        <p>Don't turn off your PC</p>
+    </div>
+    
+    <!-- Screen: Desktop (Updated to show completion message) -->
+    <div id="screen-desktop" class="screen h-screen w-screen flex-col items-center justify-center desktop-bg">
+        <div class="bg-gray-900/50 backdrop-blur-xl p-8 rounded-lg text-white text-center">
+            <h1 class="text-5xl font-semibold text-blue-400">Simulasi Selesai</h1>
+            <p class="mt-4 text-xl">Anda telah berhasil menyelesaikan instalasi Windows 11.</p>
+        </div>
+    </div>
+
+
+<script>
+    // --- STATE MANAGEMENT ---
+    const screens = [
+        'screen-boot', 'screen-win-logo', 'screen-language', 'screen-install-now',
+        'screen-product-key', 'screen-select-os', 'screen-eula', 'screen-install-type',
+        'screen-partition', 'screen-installing', 'screen-win-logo', // This is the restart screen
+        'screen-oobe-region', 'screen-oobe-keyboard', 'screen-oobe-account', 'screen-oobe-final',
+        'screen-desktop'
+    ];
+    let currentScreenIndex = 0;
+
+    // --- PARTITION STATE ---
+    const totalDiskSize = 131072; // 128 GB in MB
+    let partitions = [{ id: 0, name: 'Drive 0 Unallocated Space', size: totalDiskSize, type: 'Unallocated' }];
+    let selectedPartitionId = null;
+    let nextPartitionId = 1;
+
+    // --- UTILITY FUNCTIONS ---
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        const activeScreen = document.getElementById(screenId);
+        if (activeScreen) {
+            activeScreen.classList.add('active');
+            if (screenId === 'screen-partition') {
+                renderPartitions();
+            } else if (screenId === 'screen-installing' && currentScreenIndex === 9) {
+                startInstallationProcess();
+            } else if (screenId === 'screen-win-logo' && currentScreenIndex === 10) {
+                // BUG FIX: Automatically advance after a brief restart logo screen
+                setTimeout(nextScreen, 3000);
+            } else if (screenId === 'screen-oobe-final') {
+                startOobeFinalAnimation();
+            }
+        }
+    }
+
+    function nextScreen() {
+        if (currentScreenIndex < screens.length - 1) {
+            currentScreenIndex++;
+            showScreen(screens[currentScreenIndex]);
+        }
+    }
+
+    // =================================================================
+    // --- REVISED PARTITION LOGIC ---
+    // =================================================================
+
+    /**
+     * Memperbarui status tombol "New", "Delete", dan "Next"
+     * berdasarkan partisi yang saat ini dipilih.
+     */
+    function updatePartitionButtons() {
+        const newBtn = document.getElementById('btn-new');
+        const deleteBtn = document.getElementById('btn-delete');
+        const nextBtn = document.getElementById('partition-next');
+        
+        if (selectedPartitionId === null) {
+            newBtn.disabled = true;
+            deleteBtn.disabled = true;
+            nextBtn.disabled = true;
+            return;
+        }
+
+        const partition = partitions.find(p => p.id === selectedPartitionId);
+
+        if (!partition) return;
+
+        // Aktifkan 'New' jika partisi yang dipilih adalah 'Unallocated'
+        newBtn.disabled = partition.type !== 'Unallocated';
+        
+        // Aktifkan 'Delete' jika partisi yang dipilih BUKAN 'Unallocated'
+        deleteBtn.disabled = partition.type === 'Unallocated';
+        
+        // Aktifkan 'Next' jika partisi yang dipilih adalah 'Primary'
+        nextBtn.disabled = partition.type !== 'Primary';
+    }
+
+    /**
+     * Merender tabel partisi berdasarkan array partitions.
+     */
+    function renderPartitions() {
+        const tableBody = document.getElementById('partition-table-body');
+        tableBody.innerHTML = '';
+        partitions.forEach(p => {
+            const row = document.createElement('tr');
+            row.className = `cursor-pointer hover:bg-gray-700 ${p.id === selectedPartitionId ? 'selected' : ''}`;
+            row.onclick = () => selectPartition(p.id);
+            
+            const totalSizeGB = (p.size / 1024).toFixed(1);
+            const freeSpaceGB = p.type === 'Unallocated' ? totalSizeGB : (p.size / 1024).toFixed(1);
+
+            row.innerHTML = `
+                <td class="p-2">${p.name}</td>
+                <td class="p-2">${totalSizeGB} GB</td>
+                <td class="p-2">${freeSpaceGB} GB</td>
+                <td class="p-2">${p.type}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        updatePartitionButtons();
+    }
+
+    /**
+     * Memilih partisi yang diklik dan memperbarui tombol.
+     * @param {number} id - ID partisi yang dipilih.
+     */
+    function selectPartition(id) {
+        selectedPartitionId = id;
+        renderPartitions();
+    }
+
+    /**
+     * Menampilkan prompt modal untuk membuat partisi baru.
+     */
+    function showNewPartitionPrompt() {
+        const unallocatedSpace = partitions.find(p => p.type === 'Unallocated' && p.id === selectedPartitionId);
+        if (!unallocatedSpace) return;
+        
+        document.getElementById('new-partition-modal').classList.add('show');
+        const availableGB = (unallocatedSpace.size / 1024).toFixed(2);
+        document.getElementById('new-partition-message').textContent = `The total available space is ${availableGB} GB.`;
+        document.getElementById('partition-size-input').value = unallocatedSpace.size; 
+    }
+
+    /**
+     * Menyembunyikan prompt modal.
+     */
+    function hideNewPartitionPrompt() {
+        document.getElementById('new-partition-modal').classList.remove('show');
+    }
+
+    /**
+     * Mengkonfirmasi input dari modal dan membuat partisi.
+     */
+    function confirmNewPartition() {
+        const inputElement = document.getElementById('partition-size-input');
+        const requestedSizeMB = parseInt(inputElement.value);
+
+        const unallocatedSpace = partitions.find(p => p.type === 'Unallocated' && p.id === selectedPartitionId);
+
+        if (isNaN(requestedSizeMB) || requestedSizeMB <= 0) {
+            alert('Please enter a valid number greater than 0.');
+            return;
+        }
+
+        if (requestedSizeMB > unallocatedSpace.size) {
+            alert(`The size you entered (${(requestedSizeMB/1024).toFixed(2)} GB) is larger than the available space (${(unallocatedSpace.size/1024).toFixed(2)} GB).`);
+            return;
+        }
+
+        createPartition(unallocatedSpace, requestedSizeMB);
+        hideNewPartitionPrompt();
+    }
+    
+    /**
+     * Membuat partisi sistem dan partisi utama dari ruang yang tidak dialokasikan.
+     * Tidak akan membuat partisi sistem jika sudah ada.
+     * @param {object} unallocatedPartition - Partisi yang tidak dialokasikan yang akan dipartisi.
+     * @param {number} requestedSizeMB - Ukuran yang diminta oleh pengguna.
+     */
+    function createPartition(unallocatedPartition, requestedSizeMB) {
+        const unallocatedIndex = partitions.findIndex(p => p.id === unallocatedPartition.id);
+        if (unallocatedIndex === -1) return;
+
+        const newPartitions = [];
+        const systemPartitionSize = 500;
+        let primaryPartitionSize = requestedSizeMB;
+        const systemPartitionExists = partitions.some(p => p.type === 'System');
+
+        // Hanya buat partisi Sistem jika belum ada dan ruangnya cukup
+        if (!systemPartitionExists && requestedSizeMB > systemPartitionSize) {
+            newPartitions.push({
+                id: nextPartitionId++,
+                name: `Drive 0 Partition ${nextPartitionId-1}`,
+                size: systemPartitionSize,
+                type: 'System'
+            });
+            primaryPartitionSize = requestedSizeMB - systemPartitionSize;
+        }
+        
+        // Buat partisi primer dengan sisa ukuran yang diminta
+        newPartitions.push({
+            id: nextPartitionId++,
+            name: `Drive 0 Partition ${nextPartitionId-1}`,
+            size: primaryPartitionSize,
+            type: 'Primary'
+        });
+
+        // Hapus partisi yang tidak dialokasikan dan tambahkan partisi baru
+        partitions.splice(unallocatedIndex, 1, ...newPartitions);
+
+        // Tambahkan kembali sisa ruang yang tidak dialokasikan jika ada
+        const remainingSize = unallocatedPartition.size - requestedSizeMB;
+        if (remainingSize > 0) {
+            partitions.push({
+                id: nextPartitionId++,
+                name: 'Drive 0 Unallocated Space',
+                size: remainingSize,
+                type: 'Unallocated'
+            });
+        }
+        
+        // Pilih partisi Primary secara otomatis
+        selectedPartitionId = newPartitions.find(p => p.type === 'Primary').id;
+        renderPartitions();
+    }
+
+    /**
+     * Menggabungkan ruang yang tidak dialokasikan yang berdekatan.
+     */
+    function mergeUnallocatedSpaces() {
+        let i = 0;
+        while (i < partitions.length - 1) {
+            let current = partitions[i];
+            let next = partitions[i + 1];
+            if (current.type === 'Unallocated' && next.type === 'Unallocated') {
+                current.size += next.size;
+                partitions.splice(i + 1, 1);
+            } else {
+                i++;
+            }
+        }
+        // Pastikan partisi tidak dialokasikan diurutkan di bagian akhir
+        partitions.sort((a, b) => a.type === 'Unallocated' ? 1 : b.type === 'Unallocated' ? -1 : 0);
+    }
+    
+    /**
+     * Menghapus partisi yang dipilih, mengubahnya menjadi ruang yang tidak dialokasikan.
+     */
+    function deletePartition() {
+        const partitionIndex = partitions.findIndex(p => p.id === selectedPartitionId);
+        if (partitionIndex === -1) return;
+        
+        const deletedPartition = partitions[partitionIndex];
+        
+        // Ubah partisi yang dihapus menjadi ruang yang tidak dialokasikan
+        const newUnallocated = {
+            id: nextPartitionId++,
+            name: 'Drive 0 Unallocated Space',
+            size: deletedPartition.size,
+            type: 'Unallocated'
+        };
+        partitions.splice(partitionIndex, 1, newUnallocated);
+
+        // Gabungkan ruang yang tidak dialokasikan jika ada yang berdekatan
+        partitions.sort((a, b) => a.id - b.id); 
+        mergeUnallocatedSpaces();
+
+        selectedPartitionId = null;
+        renderPartitions();
+    }
+    
+    /**
+     * Fungsi yang belum diimplementasikan untuk simulasi format.
+     */
+    function formatPartition() {
+        // Implementasi fungsionalitas format bisa ditambahkan di sini
+    }
+
+    // =================================================================
+    // --- END OF REVISED PARTITION LOGIC ---
+    // =================================================================
+
+    // --- INSTALLATION PROCESS ---
+    function startInstallationProcess() {
+        const progressEl = document.getElementById('install-progress');
+        let progress = 0;
+        
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 5) + 1;
+            if (progress > 100) progress = 100;
+            progressEl.textContent = progress;
+
+            if (progress >= 25) document.getElementById('install-status-1').textContent = '✓ Copying Windows files';
+            if (progress >= 50) document.getElementById('install-status-3').classList.remove('text-gray-500');
+            if (progress >= 75) document.getElementById('install-status-4').classList.remove('text-gray-500');
+            if (progress >= 90) document.getElementById('install-status-5').classList.remove('text-gray-500');
+
+            if (progress === 100) {
+                clearInterval(interval);
+                document.getElementById('install-status-2').textContent = '✓ Getting files ready for installation (100%)';
+                setTimeout(nextScreen, 2000);
+            }
+        }, 200);
+    }
+    
+    // --- OOBE ANIMATION ---
+    function startOobeFinalAnimation() {
+        const textEl = document.getElementById('oobe-final-text');
+        const messages = [
+            "Just a moment...",
+            "Getting things ready for you",
+            "This might take a few minutes",
+            "Almost there..."
+        ];
+        let msgIndex = 0;
+        
+        const interval = setInterval(() => {
+            msgIndex++;
+            if (msgIndex >= messages.length) {
+                clearInterval(interval);
+                nextScreen();
+                return;
+            }
+            textEl.textContent = messages[msgIndex];
+        }, 3000);
+    }
+
+    // --- INITIALIZATION ---
+    window.onload = () => {
+        setTimeout(() => {
+            nextScreen();
+            setTimeout(() => {
+                nextScreen();
+            }, 2000);
+        }, 3000);
+    };
+</script>
+
+</body>
+</html>
