@@ -983,7 +983,7 @@
                         <div class="relative z-10">
                             <div id="result-emoji" class="text-6xl mb-4 animate-bounce">🎉</div>
                             <h3 class="text-3xl font-bold mb-3">Kuis Selesai!</h3>
-                            <p id="final-score" class="text-xl mb-4 font-bold"></p>
+                            <p id="final-score" class="text-xl mb-4 font-bold">Skor Anda: 0/100</p>
                             
                             <!-- Score Progress -->
                             <div class="mb-6">
@@ -1190,15 +1190,25 @@
                 </div>
 
                 <div class="space-y-4" id="practice-folders">
-                    <div class="flex items-center space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300">
+                    <div class="folder-row flex items-start space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300">
+                        <button class="toggle-btn text-gray-500 hover:text-gray-700 mt-1" onclick="toggleChildren(this)" title="Buka/Tutup">
+                            +
+                        </button>
                         <div class="bg-blue-500 rounded-lg p-2">
                             <span class="text-white">📁</span>
                         </div>
                         <input type="text" placeholder="Contoh: Kuliah_Semester_3" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200">
-                            🗑️
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="addSubfolder(this)" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 rounded-lg px-3 py-2 transition-colors duration-200" title="Tambah Subfolder">+ Subfolder</button>
+                            <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200" title="Hapus Folder">🗑️</button>
+                        </div>
                     </div>
+                    <div class="children space-y-3 ml-8 hidden"></div>
+                </div>
+                
+                <div class="flex gap-3 mt-4">
+                    <button onclick="expandAll()" class="flex-1 py-3 border-2 border-indigo-300 rounded-xl text-indigo-700 hover:border-indigo-500 hover:bg-indigo-50 font-medium transition-all duration-200">Expand All</button>
+                    <button onclick="collapseAll()" class="flex-1 py-3 border-2 border-indigo-300 rounded-xl text-indigo-700 hover:border-indigo-500 hover:bg-indigo-50 font-medium transition-all duration-200">Collapse All</button>
                 </div>
                 
                 <button onclick="addPracticeFolder()" class="w-full py-4 border-2 border-dashed border-indigo-300 rounded-xl text-indigo-600 hover:border-indigo-500 hover:bg-indigo-50 font-medium transition-all duration-200 mt-4 flex items-center justify-center space-x-2">
@@ -2013,11 +2023,12 @@
             const finalScore = Math.max(quizScore, window.quizScore || 0);
             console.log(`Final quiz score: ${finalScore}`);
             
-            // Update the main score display to show percentage and correct count
-            const finalScoreElement = document.getElementById('final-score');
-            const percentage = Math.round((finalScore / 100) * 100);
+            // Calculate percentage and correct answers
+            const percentage = finalScore; // finalScore is already the percentage (0-100)
             const correctCount = Math.round(finalScore / 5); // 5 points per correct answer, 20 questions
             
+            // Update the main score display to show percentage and correct count
+            const finalScoreElement = document.getElementById('final-score');
             finalScoreElement.innerHTML = `
                 <div class="text-4xl font-extrabold mb-1 animate-pulse text-white">
                     ${percentage}%
@@ -2030,19 +2041,25 @@
                 </div>
             `;
             
+            // Also update the paragraph with id="final-score" that shows "Skor Anda: X/100"
+            const finalScoreParagraph = document.querySelector('#quiz-result p[id="final-score"]');
+            if (finalScoreParagraph) {
+                finalScoreParagraph.textContent = `Skor Anda: ${percentage}/100`;
+            }
+            
             // Update result card styling based on performance
             const resultCard = document.getElementById('result-card');
             const resultEmoji = document.getElementById('result-emoji');
             
-            if (finalScore >= 85) {
+            if (percentage >= 85) {
                 resultCard.className = 'bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
                 resultEmoji.textContent = '🏆';
                 resultEmoji.classList.add('animate-bounce');
-            } else if (finalScore >= 70) {
+            } else if (percentage >= 70) {
                 resultCard.className = 'bg-gradient-to-br from-blue-400 via-purple-500 to-indigo-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
                 resultEmoji.textContent = '🎉';
                 resultEmoji.classList.add('animate-pulse');
-            } else if (finalScore >= 50) {
+            } else if (percentage >= 50) {
                 resultCard.className = 'bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
                 resultEmoji.textContent = '👍';
             } else {
@@ -2053,17 +2070,17 @@
             // Animate the progress bar
             setTimeout(() => {
                 const progressBar = document.getElementById('final-progress');
-                progressBar.style.width = finalScore + '%';
+                progressBar.style.width = percentage + '%';
                 progressBar.style.transition = 'width 2s ease-in-out';
             }, 300);
             
             // Set encouraging message based on score
             let message = '';
-            if (finalScore >= 85) {
+            if (percentage >= 85) {
                 message = '🌟 EXCELLENT! Anda menguasai file management dengan sempurna!';
-            } else if (finalScore >= 70) {
+            } else if (percentage >= 70) {
                 message = '🎯 GREAT JOB! Pemahaman Anda sangat baik tentang file management!';
-            } else if (finalScore >= 50) {
+            } else if (percentage >= 50) {
                 message = '👍 GOOD EFFORT! Anda sudah memahami dasar-dasar file management!';
             } else {
                 message = '💪 KEEP LEARNING! Mari pelajari materi lagi untuk hasil yang lebih baik!';
@@ -2071,10 +2088,10 @@
             document.getElementById('result-message').textContent = message;
             
             // Show achievement badges
-            showAchievementBadges(finalScore);
+            showAchievementBadges(percentage);
             
             // Add confetti effect for high scores
-            if (finalScore >= 80) {
+            if (percentage >= 80) {
                 setTimeout(() => {
                     createConfettiEffect();
                 }, 1000);
@@ -2204,25 +2221,76 @@
         // Practice functions
         function addPracticeFolder() {
             const container = document.getElementById('practice-folders');
-            const newFolder = document.createElement('div');
-            newFolder.className = 'flex items-center space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300';
-            newFolder.innerHTML = `
-                <div class="bg-blue-500 rounded-lg p-2">
-                    <span class="text-white">📁</span>
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = createFolderRow('Nama folder...');
+            // append row and empty children holder
+            container.appendChild(wrapper.firstElementChild);
+            const children = document.createElement('div');
+            children.className = 'children space-y-3 ml-8 hidden';
+            container.appendChild(children);
+        }
+
+        function createFolderRow(placeholder = 'Nama folder...') {
+            return `
+            <div class="folder-row flex items-start space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300">
+                <button class="toggle-btn text-gray-500 hover:text-gray-700 mt-1" onclick="toggleChildren(this)" title="Buka/Tutup">+</button>
+                <div class="bg-blue-500 rounded-lg p-2"><span class="text-white">📁</span></div>
+                <input type="text" placeholder="${placeholder}" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <div class="flex items-center gap-2">
+                    <button onclick="addSubfolder(this)" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 rounded-lg px-3 py-2 transition-colors duration-200" title="Tambah Subfolder">+ Subfolder</button>
+                    <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200" title="Hapus Folder">🗑️</button>
                 </div>
-                <input type="text" placeholder="Nama folder..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200">
-                    🗑️
-                </button>
-            `;
-            container.appendChild(newFolder);
+            </div>`;
+        }
+
+        function addSubfolder(button) {
+            // find the correct children container for this row
+            let parent = button.closest('.folder-row');
+            let children = parent.nextElementSibling;
+            // if the next element is not children holder, create one
+            if (!children || !children.classList.contains('children')) {
+                children = document.createElement('div');
+                children.className = 'children space-y-3 ml-8 hidden';
+                parent.after(children);
+            }
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = createFolderRow('Nama subfolder...');
+            children.appendChild(wrapper.firstElementChild);
+        }
+
+        function toggleChildren(btn) {
+            const row = btn.closest('.folder-row');
+            let children = row.nextElementSibling;
+            if (children && children.classList.contains('children')) {
+                const isHidden = children.classList.contains('hidden');
+                if (isHidden) {
+                    children.classList.remove('hidden');
+                    btn.textContent = '▼';
+                } else {
+                    children.classList.add('hidden');
+                    btn.textContent = '▶';
+                }
+            }
+        }
+
+        function expandAll() {
+            document.querySelectorAll('#practice-folders .children').forEach(c => c.classList.remove('hidden'));
+            document.querySelectorAll('#practice-folders .toggle-btn').forEach(b => b.textContent = '▼');
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('#practice-folders .children').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('#practice-folders .toggle-btn').forEach(b => b.textContent = '▶');
         }
 
         function removePracticeFolder(button) {
-            const folders = document.querySelectorAll('#practice-folders .flex');
-            if (folders.length > 1) {
-                button.parentElement.remove();
+            const row = button.closest('.folder-row');
+            const maybeChildren = row.nextElementSibling;
+            // remove row and its children group (if exists)
+            if (maybeChildren && maybeChildren.classList.contains('children')) {
+                maybeChildren.remove();
             }
+            row.remove();
         }
 
         function submitPractice() {
@@ -2233,26 +2301,18 @@
             // Hide result section
             document.getElementById('practice-result').classList.add('hidden');
             
-            // Clear all folder inputs
-            const folderInputs = document.querySelectorAll('#practice-folders input');
-            folderInputs.forEach(input => input.value = '');
+            // Reset to a single clean root folder
+            const container = document.getElementById('practice-folders');
+            container.innerHTML = '';
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = createFolderRow('Contoh: Kuliah_Semester_3');
+            container.appendChild(wrapper.firstElementChild);
+            const children = document.createElement('div');
+            children.className = 'children space-y-3 ml-8 hidden';
+            container.appendChild(children);
             
             // Clear explanation textarea
             document.getElementById('practice-explanation').value = '';
-            
-            // Reset to single folder input
-            const container = document.getElementById('practice-folders');
-            container.innerHTML = `
-                <div class="flex items-center space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300">
-                    <div class="bg-blue-500 rounded-lg p-2">
-                        <span class="text-white">📁</span>
-                    </div>
-                    <input type="text" placeholder="Contoh: Kuliah_Semester_3" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200">
-                        🗑️
-                    </button>
-                </div>
-            `;
         }
 
         // Initialize when page loads
@@ -2260,5 +2320,5 @@
             // Game will be initialized when start button is clicked
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f5efb413e25f6e',t:'MTc1NTIzMjAxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f6874c06e47b39',t:'MTc1NTIzODIyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
