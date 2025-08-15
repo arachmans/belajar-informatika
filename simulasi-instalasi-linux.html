@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubuntu 25.04 Installation Simulator - Interactive Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Ubuntu', sans-serif;
+        }
+        
+        .ubuntu-gradient {
+            background: linear-gradient(135deg, #E95420 0%, #772953 100%);
+        }
+        
+        .ubuntu-purple {
+            background: #772953;
+        }
+        
+        .ubuntu-orange {
+            background: #E95420;
+        }
+        
+        .page-transition {
+            transition: all 0.4s ease-in-out;
+            transform: translateX(0);
+        }
+        
+        .page-slide-out {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        
+        .page-slide-in {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        
+        .progress-animation {
+            animation: progressFill 5s ease-in-out forwards;
+        }
+        
+        @keyframes progressFill {
+            0% { width: 0%; }
+            25% { width: 25%; }
+            50% { width: 50%; }
+            75% { width: 75%; }
+            100% { width: 100%; }
+        }
+        
+        .pulse-icon {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto p-4">
+        <!-- Header with Progress Indicator -->
+        <div class="bg-white rounded-t-lg shadow-lg p-4 border-b">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">🐧 Ubuntu 25.04 Installation Simulator</h1>
+                <div class="text-sm text-gray-600">
+                    Step <span id="current-step">1</span> of 9
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-orange-500 h-2 rounded-full transition-all duration-300" style="width: 11%"></div>
+            </div>
+        </div>
+
+        <!-- Simulator Screen -->
+        <div class="bg-black rounded-b-lg shadow-lg p-4">
+            <div class="bg-gray-900 rounded-lg p-2 mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span class="text-gray-400 text-sm ml-2">Ubuntu Installation Simulator</span>
+                </div>
+            </div>
+
+            <!-- Page 1: Booting Computer -->
+            <div id="page-1" class="page ubuntu-gradient rounded-lg p-8 text-center min-h-96 page-transition">
+                <div class="pulse-icon mb-8">
+                    <svg class="w-24 h-24 mx-auto text-white" viewBox="0 0 100 100" fill="currentColor">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="50" cy="50" r="15" fill="currentColor"/>
+                        <circle cx="50" cy="20" r="8" fill="currentColor"/>
+                        <circle cx="73" cy="65" r="8" fill="currentColor"/>
+                        <circle cx="27" cy="65" r="8" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h2 class="text-4xl font-bold text-white mb-8">Ubuntu 25.04 LTS</h2>
+                <div class="space-y-4 max-w-md mx-auto">
+                    <button onclick="navigateTo('dummy-live')" class="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-6 rounded-lg transition-all">
+                        🔍 Try Ubuntu
+                    </button>
+                    <button onclick="navigateTo(2)" class="w-full ubuntu-orange hover:bg-orange-600 text-white py-3 px-6 rounded-lg transition-all font-semibold">
+                        💿 Install Ubuntu
+                    </button>
+                    <button onclick="navigateTo('dummy-advanced')" class="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-6 rounded-lg transition-all">
+                        ⚙️ Advanced Options
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page 2: Language Selection -->
+            <div id="page-2" class="page hidden bg-white rounded-lg p-8 min-h-96 page-transition">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🌐 Pilih Bahasa / Choose Language</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer border">🇺🇸 English</div>
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer border">🇪🇸 Español</div>
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer border">🇫🇷 Français</div>
+                        <div class="p-3 bg-orange-100 border-l-4 border-orange-500 rounded cursor-pointer font-semibold border">
+                            🇮🇩 Bahasa Indonesia ✓
+                        </div>
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer border">🇩🇪 Deutsch</div>
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer border">🇯🇵 日本語</div>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <div class="text-center mb-8">
+                            <h3 class="text-xl font-semibold mb-2">Selamat datang di Ubuntu</h3>
+                            <p class="text-gray-600">Sistem operasi yang mudah digunakan dan aman</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button onclick="navigateTo(1)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-6 rounded-lg">
+                        ← Back
+                    </button>
+                    <button onclick="navigateTo(3)" class="ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg">
+                        Next →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page 3: Network Setup -->
+            <div id="page-3" class="page hidden bg-white rounded-lg p-8 min-h-96 page-transition">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🌐 Pengaturan Jaringan</h2>
+                <div class="space-y-4 mb-8">
+                    <div class="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="text-2xl">📶</div>
+                                <div>
+                                    <div class="font-semibold">WiFi-Rumah-5G</div>
+                                    <div class="text-sm text-gray-500">WPA2 Personal • Signal: Strong</div>
+                                </div>
+                            </div>
+                            <button onclick="connectNetwork(this)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Connect</button>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="text-2xl">📶</div>
+                                <div>
+                                    <div class="font-semibold">Indihome-Office</div>
+                                    <div class="text-sm text-gray-500">WPA2 Personal • Signal: Medium</div>
+                                </div>
+                            </div>
+                            <button onclick="connectNetwork(this)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded">Connect</button>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg p-4 bg-green-50 border-green-300">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="text-2xl">🔌</div>
+                                <div>
+                                    <div class="font-semibold">Wired Connection</div>
+                                    <div class="text-sm text-gray-500">Ethernet • Connected</div>
+                                </div>
+                            </div>
+                            <div class="text-green-600 font-semibold">✓ Connected</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between">
+                    <button onclick="navigateTo(2)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-6 rounded-lg">
+                        ← Back
+                    </button>
+                    <div class="space-x-2">
+                        <button onclick="navigateTo(4)" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg">
+                            Skip
+                        </button>
+                        <button onclick="navigateTo(4)" class="ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg">
+                            Continue →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 4: Time Zone -->
+            <div id="page-4" class="page hidden bg-white rounded-lg p-8 min-h-96 page-transition">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Where are you?</h2>
+                    <p class="text-gray-600">Select your location to configure the time zone and keyboard layout.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- World Map -->
+                    <div class="bg-gray-50 border rounded-lg p-4">
+                        <div class="relative">
+                            <!-- Simplified world map with timezone regions -->
+                            <svg id="world-map" viewBox="0 0 800 400" class="w-full h-80 cursor-pointer">
+                                <!-- Ocean Background -->
+                                <rect width="800" height="400" fill="#E6F3FF"/>
+                                
+                                <!-- Timezone vertical lines -->
+                                <defs>
+                                    <pattern id="timezone-lines" patternUnits="userSpaceOnUse" width="66.67" height="400">
+                                        <path d="M 66.67 0 L 66.67 400" stroke="#B0C4DE" stroke-width="1" opacity="0.5"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="800" height="400" fill="url(#timezone-lines)"/>
+                                
+                                <!-- Continents with more realistic shapes -->
+                                <!-- North America -->
+                                <path d="M50 100 L80 90 L120 95 L160 100 L200 110 L240 120 L280 130 L320 140 L360 150 L400 160 L440 170 L480 180 L520 190 L560 200 L600 210 L640 220 L680 230 L720 240 L760 250 L800 260 L800 0 L0 0 L0 100 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('America')"/>
+                                
+                                <!-- South America -->
+                                <path d="M200 260 L240 270 L280 280 L320 290 L360 300 L400 310 L440 320 L480 330 L520 340 L560 350 L600 360 L640 370 L680 380 L720 390 L760 400 L800 400 L800 260 L200 260 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('America')"/>
+                                
+                                <!-- Europe -->
+                                <path d="M350 80 L390 75 L430 80 L470 85 L510 90 L550 95 L590 100 L630 105 L670 110 L710 115 L750 120 L790 125 L800 130 L800 0 L350 0 L350 80 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Europe')"/>
+                                
+                                <!-- Africa -->
+                                <path d="M380 130 L420 135 L460 140 L500 145 L540 150 L580 155 L620 160 L660 165 L700 170 L740 175 L780 180 L800 185 L800 350 L780 355 L740 360 L700 365 L660 370 L620 375 L580 380 L540 385 L500 390 L460 395 L420 400 L380 400 L380 130 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Africa')"/>
+                                
+                                <!-- Asia -->
+                                <path d="M450 60 L490 55 L530 60 L570 65 L610 70 L650 75 L690 80 L730 85 L770 90 L800 95 L800 0 L450 0 L450 60 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Asia')"/>
+                                
+                                <!-- Southeast Asia & Indonesia -->
+                                <path d="M550 130 L590 135 L630 140 L670 145 L710 150 L750 155 L790 160 L800 165 L800 280 L790 285 L750 290 L710 295 L670 300 L630 305 L590 310 L550 315 L550 130 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Asia')"/>
+                                
+                                <!-- Australia -->
+                                <path d="M580 320 L620 325 L660 330 L700 335 L740 340 L780 345 L800 350 L800 400 L580 400 L580 320 Z" 
+                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Australia')"/>
+                                
+                                <!-- Selected location marker -->
+                                <circle id="location-marker" cx="650" cy="155" r="6" fill="#E95420" stroke="#ffffff" stroke-width="2" class="pulse-icon"/>
+                                
+                                <!-- Timezone labels -->
+                                <text x="67" y="20" class="text-xs fill-gray-600" text-anchor="middle">-12</text>
+                                <text x="133" y="20" class="text-xs fill-gray-600" text-anchor="middle">-9</text>
+                                <text x="200" y="20" class="text-xs fill-gray-600" text-anchor="middle">-6</text>
+                                <text x="267" y="20" class="text-xs fill-gray-600" text-anchor="middle">-3</text>
+                                <text x="333" y="20" class="text-xs fill-gray-600" text-anchor="middle">0</text>
+                                <text x="400" y="20" class="text-xs fill-gray-600" text-anchor="middle">+3</text>
+                                <text x="467" y="20" class="text-xs fill-gray-600" text-anchor="middle">+6</text>
+                                <text x="533" y="20" class="text-xs fill-gray-600" text-anchor="middle">+9</text>
+                                <text x="600" y="20" class="text-xs fill-gray-600" text-anchor="middle">+12</text>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Selection Panel -->
+                    <div class="space-y-6">
+                        <!-- Region Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                            <select id="region-select" onchange="updateCities()" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                <option value="Asia">Asia</option>
+                                <option value="Europe">Europe</option>
+                                <option value="America">America</option>
+                                <option value="Africa">Africa</option>
+                                <option value="Australia">Australia</option>
+                            </select>
+                        </div>
+                        
+                        <!-- City Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                            <select id="city-select" onchange="selectTimezoneFromDropdown()" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                <option value="Asia/Jakarta">Jakarta</option>
+                                <option value="Asia/Tokyo">Tokyo</option>
+                                <option value="Asia/Shanghai">Shanghai</option>
+                                <option value="Asia/Bangkok">Bangkok</option>
+                                <option value="Asia/Singapore">Singapore</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Selected Location Info -->
+                        <div class="bg-gray-50 border rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <div class="text-sm text-gray-600">Selected location</div>
+                                    <div class="font-semibold text-lg" id="selected-location">Jakarta, Indonesia</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm text-gray-600">Time zone</div>
+                                    <div class="font-semibold" id="timezone-display">UTC+7</div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-600">Current time</div>
+                                    <div class="font-mono text-lg font-semibold" id="current-time-display">14:30:25</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button onclick="navigateTo(3)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-6 rounded-lg transition-colors">
+                        ← Back
+                    </button>
+                    <button onclick="navigateTo(5)" class="ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg transition-colors">
+                        Continue →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page 5: Keyboard Layout -->
+            <div id="page-5" class="page hidden bg-white rounded-lg p-8 min-h-96 page-transition">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">⌨️ Layout Keyboard</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="font-semibold mb-4">Pilih Layout:</h3>
+                        <div class="space-y-2" id="keyboard-layouts">
+                            <div class="layout-option border rounded-lg p-3 bg-orange-50 border-orange-300 cursor-pointer" onclick="selectKeyboardLayout('us', this)">
+                                <div class="font-semibold">🇺🇸 English (US) ✓</div>
+                                <div class="text-sm text-gray-600">QWERTY Layout</div>
+                            </div>
+                            <div class="layout-option border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKeyboardLayout('id', this)">
+                                <div class="font-semibold">🇮🇩 Bahasa Indonesia</div>
+                                <div class="text-sm text-gray-600">QWERTY Layout</div>
+                            </div>
+                            <div class="layout-option border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKeyboardLayout('uk', this)">
+                                <div class="font-semibold">🇬🇧 English (UK)</div>
+                                <div class="text-sm text-gray-600">QWERTY Layout</div>
+                            </div>
+                            <div class="layout-option border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKeyboardLayout('de', this)">
+                                <div class="font-semibold">🇩🇪 Deutsch (German)</div>
+                                <div class="text-sm text-gray-600">QWERTZ Layout</div>
+                            </div>
+                            <div class="layout-option border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKeyboardLayout('fr', this)">
+                                <div class="font-semibold">🇫🇷 Français (French)</div>
+                                <div class="text-sm text-gray-600">AZERTY Layout</div>
+                            </div>
+                            <div class="layout-option border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKeyboardLayout('es', this)">
+                                <div class="font-semibold">🇪🇸 Español (Spanish)</div>
+                                <div class="text-sm text-gray-600">QWERTY Layout</div>
+                            </div>
+                            <div class="layout-option border rounded-lg p-3 hover:bg-gray-50 cursor-pointer" onclick="selectKeyboardLayout('ru', this)">
+                                <div class="font-semibold">🇷🇺 Русский (Russian)</div>
+                                <div class="text-sm text-gray-600">ЙЦУКЕН Layout</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Preview Keyboard:</h3>
+                        <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                            <div id="keyboard-preview">
+                                <!-- Top row -->
+                                <div class="grid grid-cols-10 gap-1 text-xs mb-1" id="keyboard-row-1">
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">Q</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">W</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">E</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">R</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">T</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">Y</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">U</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">I</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">O</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">P</div>
+                                </div>
+                                <!-- Middle row -->
+                                <div class="grid grid-cols-9 gap-1 text-xs ml-4 mb-1" id="keyboard-row-2">
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">A</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">S</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">D</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">F</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">G</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">H</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">J</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">K</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">L</div>
+                                </div>
+                                <!-- Bottom row -->
+                                <div class="grid grid-cols-7 gap-1 text-xs ml-8" id="keyboard-row-3">
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">Z</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">X</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">C</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">V</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">B</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">N</div>
+                                    <div class="key bg-white p-2 rounded text-center shadow-sm">M</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Layout Info -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="text-blue-600 font-semibold">ℹ️ Layout Info:</div>
+                            </div>
+                            <div class="text-sm text-blue-800">
+                                <div><strong>Selected:</strong> <span id="selected-layout-name">English (US)</span></div>
+                                <div><strong>Type:</strong> <span id="selected-layout-type">QWERTY</span></div>
+                                <div><strong>Language:</strong> <span id="selected-layout-lang">English</span></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Test keyboard:</label>
+                            <input type="text" id="keyboard-test-input" placeholder="Type here to test..." class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                            <div class="text-xs text-gray-500 mt-1">Try typing to see how the layout works</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between">
+                    <button onclick="navigateTo(4)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-6 rounded-lg">
+                        ← Back
+                    </button>
+                    <button onclick="navigateTo(6)" class="ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg">
+                        Next →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page 6: Disk Partitioning -->
+            <div id="page-6" class="page hidden bg-white rounded-lg p-8 min-h-96 page-transition">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">💾 Pembuatan Partisi Penyimpanan</h2>
+                
+                <!-- Disk Information -->
+                <div class="bg-gray-50 border rounded-lg p-4 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="text-3xl">💽</div>
+                            <div>
+                                <div class="font-bold text-lg">/dev/sda - 500 GB SSD</div>
+                                <div class="text-sm text-gray-600">Samsung 980 PRO NVMe • SATA 6.0 Gb/s</div>
+                                <div class="text-xs text-gray-500">Model: MZ-V8P500BW • Serial: S4EWNX0N123456</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600">Total Size:</div>
+                            <div class="font-bold text-lg">500.11 GB</div>
+                            <div class="text-xs text-gray-500">465.76 GiB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partition Table -->
+                <div class="border rounded-lg mb-6">
+                    <div class="bg-gray-100 px-4 py-3 border-b flex items-center justify-between">
+                        <h3 class="font-semibold">Partition Table</h3>
+                        <div class="flex gap-2">
+                            <button onclick="showPartitionPopup('create')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm flex items-center gap-1">
+                                <span>➕</span> New Partition
+                            </button>
+                            <button onclick="showPartitionPopup('auto')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                🔧 Auto Partition
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Partition Visual Display -->
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <div class="text-sm text-gray-600 mb-2">Disk Layout:</div>
+                            <div id="disk-visual" class="bg-gray-200 rounded-lg h-12 flex overflow-hidden border-2">
+                                <!-- Empty disk initially -->
+                                <div class="flex-1 bg-gray-300 flex items-center justify-center text-gray-600 text-sm border-r border-gray-400">
+                                    Unallocated Space (500 GB)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Partition List Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="text-left p-2 border">Device</th>
+                                        <th class="text-left p-2 border">Size</th>
+                                        <th class="text-left p-2 border">Type</th>
+                                        <th class="text-left p-2 border">Mount Point</th>
+                                        <th class="text-left p-2 border">File System</th>
+                                        <th class="text-left p-2 border">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="partition-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center p-8 text-gray-500 border">
+                                            <div class="text-4xl mb-2">📁</div>
+                                            <div>No partitions created yet</div>
+                                            <div class="text-xs">Click "New Partition" to create your first partition</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partition Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="text-blue-600 font-semibold mb-1">Total Space</div>
+                        <div class="text-2xl font-bold text-blue-800" id="total-space">500 GB</div>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="text-green-600 font-semibold mb-1">Used Space</div>
+                        <div class="text-2xl font-bold text-green-800" id="used-space">0 GB</div>
+                    </div>
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                        <div class="text-orange-600 font-semibold mb-1">Free Space</div>
+                        <div class="text-2xl font-bold text-orange-800" id="free-space">500 GB</div>
+                    </div>
+                </div>
+
+                <!-- Installation Requirements Warning -->
+                <div id="requirements-warning" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start gap-3">
+                        <div class="text-yellow-500 text-xl">⚠️</div>
+                        <div>
+                            <div class="font-semibold text-yellow-800">Minimum Requirements Not Met</div>
+                            <div class="text-sm text-yellow-700 mt-1">
+                                Ubuntu requires at least:
+                                <ul class="list-disc list-inside mt-1">
+                                    <li>Root partition (/) with minimum 25 GB</li>
+                                    <li>Swap partition (recommended 2-8 GB)</li>
+                                    <li>Boot partition (/boot) with minimum 500 MB (optional but recommended)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button onclick="navigateTo(5)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-6 rounded-lg">
+                        ← Back
+                    </button>
+                    <button id="partition-next-btn" onclick="navigateTo(7)" class="bg-gray-400 text-gray-600 py-2 px-6 rounded-lg cursor-not-allowed" disabled>
+                        Next → (Create partitions first)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page 7: User Configuration -->
+            <div id="page-7" class="page hidden bg-white rounded-lg p-8 min-h-96 page-transition">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">👤 Konfigurasi User</h2>
+                <div class="max-w-md mx-auto space-y-6 mb-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap: <span class="text-red-500">*</span></label>
+                        <input type="text" id="full-name" placeholder="John Doe" class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none" oninput="validateUserForm()">
+                        <div id="full-name-error" class="text-red-500 text-xs mt-1 hidden">Nama lengkap harus diisi</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Pengguna: <span class="text-red-500">*</span></label>
+                        <input type="text" id="username" placeholder="johndoe" class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none" oninput="handleUsernameInput()" onblur="validateUsername()">
+                        <div class="text-xs text-gray-500 mt-1">Akan digunakan untuk login (huruf kecil, tanpa spasi)</div>
+                        <div id="username-error" class="text-red-500 text-xs mt-1 hidden">Nama pengguna harus diisi dan valid</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Komputer: <span class="text-red-500">*</span></label>
+                        <input type="text" id="computer-name" placeholder="ubuntu-desktop" class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none bg-gray-50" oninput="validateUserForm()" onblur="validateComputerName()" readonly>
+                        <div class="text-xs text-gray-500 mt-1">Otomatis dibuat dari nama pengguna (dapat diedit)</div>
+                        <div id="computer-name-error" class="text-red-500 text-xs mt-1 hidden">Nama komputer harus diisi dan valid</div>
+                        <button type="button" onclick="enableComputerNameEdit()" class="text-xs text-blue-600 hover:text-blue-800 mt-1">✏️ Edit manual</button>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password: <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input type="password" id="password" placeholder="••••••••" class="w-full border rounded-lg p-3 pr-12 focus:border-orange-500 focus:outline-none" oninput="validateUserForm()">
+                            <button type="button" onclick="togglePasswordVisibility('password')" class="absolute right-3 top-3 text-gray-500 hover:text-gray-700">
+                                <span id="password-eye">👁️</span>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">Minimal 6 karakter</div>
+                        <div id="password-error" class="text-red-500 text-xs mt-1 hidden">Password minimal 6 karakter</div>
+                        
+                        <!-- Password Strength Indicator -->
+                        <div id="password-strength" class="mt-2 hidden">
+                            <div class="text-xs text-gray-600 mb-1">Kekuatan password:</div>
+                            <div class="flex gap-1">
+                                <div id="strength-bar-1" class="h-2 w-1/4 bg-gray-200 rounded"></div>
+                                <div id="strength-bar-2" class="h-2 w-1/4 bg-gray-200 rounded"></div>
+                                <div id="strength-bar-3" class="h-2 w-1/4 bg-gray-200 rounded"></div>
+                                <div id="strength-bar-4" class="h-2 w-1/4 bg-gray-200 rounded"></div>
+                            </div>
+                            <div id="strength-text" class="text-xs mt-1">Lemah</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Konfirmasi Password: <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input type="password" id="confirm-password" placeholder="••••••••" class="w-full border rounded-lg p-3 pr-12 focus:border-orange-500 focus:outline-none" oninput="validateUserForm()">
+                            <button type="button" onclick="togglePasswordVisibility('confirm-password')" class="absolute right-3 top-3 text-gray-500 hover:text-gray-700">
+                                <span id="confirm-password-eye">👁️</span>
+                            </button>
+                        </div>
+                        <div id="confirm-password-error" class="text-red-500 text-xs mt-1 hidden">Password tidak cocok</div>
+                        <div id="confirm-password-success" class="text-green-600 text-xs mt-1 hidden">✓ Password cocok</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="auto-login" class="text-orange-500">
+                        <label for="auto-login" class="text-sm">Login otomatis saat startup</label>
+                    </div>
+                    
+                    <!-- Form Summary -->
+                    <div id="form-summary" class="bg-gray-50 border rounded-lg p-4 hidden">
+                        <div class="text-sm font-semibold text-gray-700 mb-2">📋 Ringkasan Konfigurasi:</div>
+                        <div class="space-y-1 text-xs text-gray-600">
+                            <div>Nama: <span id="summary-name" class="font-semibold"></span></div>
+                            <div>Username: <span id="summary-username" class="font-mono font-semibold"></span></div>
+                            <div>Komputer: <span id="summary-computer" class="font-mono font-semibold"></span></div>
+                            <div>Auto-login: <span id="summary-autologin" class="font-semibold"></span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Validation Status -->
+                <div id="validation-status" class="max-w-md mx-auto mb-6">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="text-yellow-600">⚠️</div>
+                            <div class="font-semibold text-yellow-800">Lengkapi semua field yang diperlukan</div>
+                        </div>
+                        <div class="space-y-1 text-sm">
+                            <div id="check-fullname" class="flex items-center gap-2 text-red-600">
+                                <span>❌</span> <span>Nama lengkap</span>
+                            </div>
+                            <div id="check-username" class="flex items-center gap-2 text-red-600">
+                                <span>❌</span> <span>Nama pengguna</span>
+                            </div>
+                            <div id="check-computer" class="flex items-center gap-2 text-red-600">
+                                <span>❌</span> <span>Nama komputer</span>
+                            </div>
+                            <div id="check-password" class="flex items-center gap-2 text-red-600">
+                                <span>❌</span> <span>Password (minimal 6 karakter)</span>
+                            </div>
+                            <div id="check-confirm" class="flex items-center gap-2 text-red-600">
+                                <span>❌</span> <span>Konfirmasi password</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button onclick="navigateTo(6)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-6 rounded-lg">
+                        ← Back
+                    </button>
+                    <button id="user-next-btn" onclick="proceedToInstallation()" class="bg-gray-400 text-gray-600 py-2 px-6 rounded-lg cursor-not-allowed" disabled>
+                        Next → (Lengkapi form dulu)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Page 8: Installation Progress -->
+            <div id="page-8" class="page hidden ubuntu-purple rounded-lg p-8 text-center min-h-96 page-transition">
+                <div class="text-white">
+                    <div class="mb-8">
+                        <div class="pulse-icon mb-4">
+                            <svg class="w-16 h-16 mx-auto" viewBox="0 0 100 100" fill="currentColor">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="50" cy="50" r="15" fill="currentColor"/>
+                                <circle cx="50" cy="20" r="8" fill="currentColor"/>
+                                <circle cx="73" cy="65" r="8" fill="currentColor"/>
+                                <circle cx="27" cy="65" r="8" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold mb-4">Installing Ubuntu 25.04</h2>
+                        <p class="text-lg opacity-90">Please wait while Ubuntu is being installed...</p>
+                    </div>
+                    
+                    <div class="max-w-md mx-auto mb-8">
+                        <div class="bg-white bg-opacity-20 rounded-full h-4 mb-4">
+                            <div id="install-progress" class="bg-orange-500 h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <div class="text-xl font-semibold mb-2" id="progress-percent">0%</div>
+                        <div class="text-sm opacity-80" id="progress-text">Preparing installation...</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm opacity-75 mb-8">
+                        <div class="flex flex-col items-center">
+                            <div class="text-2xl mb-2">📁</div>
+                            <div>Copying Files</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-2xl mb-2">⚙️</div>
+                            <div>Installing Packages</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-2xl mb-2">🔧</div>
+                            <div>Configuring System</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-2xl mb-2">🎨</div>
+                            <div>Setting up Desktop</div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <button onclick="navigateTo(7)" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-6 rounded-lg">
+                            ← Back
+                        </button>
+                        <button id="continue-btn" onclick="navigateTo(9)" class="hidden ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg">
+                            Continue →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Page 9: Installation Complete -->
+            <div id="page-9" class="page hidden bg-white rounded-lg p-8 text-center min-h-96 page-transition">
+                <div class="max-w-md mx-auto">
+                    <div class="mb-8">
+                        <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 pulse-icon">
+                            <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Installation Complete!</h2>
+                        <p class="text-gray-600 mb-8">Ubuntu 25.04 LTS has been successfully installed on your computer. You can now restart your system to begin using Ubuntu.</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-8">
+                        <button onclick="navigateTo(1)" class="w-full ubuntu-orange hover:bg-orange-600 text-white py-4 px-6 rounded-lg font-semibold text-lg">
+                            🔄 Reboot Now
+                        </button>
+                        <button onclick="navigateTo('exit')" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-6 rounded-lg">
+                            Exit Simulator
+                        </button>
+                    </div>
+                    
+                    <div class="text-sm text-gray-500">
+                        <p>🎉 Selamat! Anda telah berhasil menginstal Ubuntu 25.04</p>
+                        <p>Sistem siap digunakan setelah restart</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dummy Pages -->
+            <!-- Live Mode -->
+            <div id="dummy-live" class="page hidden bg-purple-600 rounded-lg p-8 text-center min-h-96 page-transition">
+                <div class="text-white">
+                    <h2 class="text-3xl font-bold mb-4">🔍 Ubuntu Live Mode</h2>
+                    <p class="text-lg mb-8">You are now running Ubuntu from the installation media without installing it to your hard drive.</p>
+                    <div class="space-y-4 max-w-md mx-auto">
+                        <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                            <p class="text-sm">This is a demonstration of the Live mode. You can explore Ubuntu without making any changes to your computer.</p>
+                        </div>
+                        <button onclick="navigateTo(1)" class="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-6 rounded-lg">
+                            ← Back to Boot Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Options -->
+            <div id="dummy-advanced" class="page hidden bg-gray-800 rounded-lg p-8 text-center min-h-96 page-transition">
+                <div class="text-white">
+                    <h2 class="text-3xl font-bold mb-4">⚙️ Advanced Boot Options</h2>
+                    <div class="space-y-4 max-w-md mx-auto mb-8">
+                        <div class="bg-white bg-opacity-10 p-3 rounded text-left">Recovery Mode</div>
+                        <div class="bg-white bg-opacity-10 p-3 rounded text-left">Memory Test</div>
+                        <div class="bg-white bg-opacity-10 p-3 rounded text-left">Boot from Hard Disk</div>
+                        <div class="bg-white bg-opacity-10 p-3 rounded text-left">Check Installation Media</div>
+                    </div>
+                    <button onclick="navigateTo(1)" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-6 rounded-lg">
+                        ← Back to Boot Menu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exit Page -->
+            <div id="exit" class="page hidden bg-gradient-to-br from-orange-500 to-purple-600 rounded-lg p-8 text-center min-h-96 page-transition">
+                <div class="text-white">
+                    <div class="mb-8">
+                        <div class="text-6xl mb-4">🎓</div>
+                        <h2 class="text-3xl font-bold mb-4">Terima Kasih!</h2>
+                        <p class="text-lg mb-8">Anda telah menyelesaikan simulasi instalasi Ubuntu 25.04. Semoga pembelajaran ini bermanfaat!</p>
+                    </div>
+                    
+                    <div class="space-y-4 max-w-md mx-auto">
+                        <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                            <p class="text-sm">Simulator ini dirancang untuk tujuan edukasi. Proses instalasi sebenarnya mungkin sedikit berbeda tergantung pada konfigurasi hardware Anda.</p>
+                        </div>
+                        <button onclick="navigateTo(1)" class="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-6 rounded-lg">
+                            🔄 Restart Simulator
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Popup -->
+            <div id="delete-confirmation-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-red-600">⚠️ Konfirmasi Hapus Partisi</h3>
+                        <button onclick="hideDeleteConfirmationPopup()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-gray-700 mb-4">Apakah Anda yakin ingin menghapus partisi ini?</p>
+                        
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="font-semibold">Device:</span>
+                                    <span id="delete-device-name" class="font-mono"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="font-semibold">Size:</span>
+                                    <span id="delete-partition-size"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="font-semibold">Mount Point:</span>
+                                    <span id="delete-mount-point" class="font-mono"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="font-semibold">File System:</span>
+                                    <span id="delete-filesystem"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                            <div class="flex items-start gap-2">
+                                <div class="text-yellow-500 text-lg">⚠️</div>
+                                <div class="text-sm text-yellow-800">
+                                    <div class="font-semibold mb-1">Peringatan:</div>
+                                    <ul class="text-xs space-y-1">
+                                        <li>• Semua data pada partisi ini akan hilang</li>
+                                        <li>• Tindakan ini tidak dapat dibatalkan</li>
+                                        <li>• Partisi lain akan diatur ulang nomornya</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-3">
+                        <button onclick="hideDeleteConfirmationPopup()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg">
+                            ❌ Batal
+                        </button>
+                        <button id="confirm-delete-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold">
+                            🗑️ Ya, Hapus Partisi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partition Popup -->
+            <div id="partition-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4 fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold" id="popup-title">Create New Partition</h3>
+                        <button onclick="hidePartitionPopup()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                    </div>
+                    
+                    <!-- Auto Partition Content -->
+                    <div id="auto-partition-content" class="hidden">
+                        <div class="mb-4">
+                            <p class="text-gray-600 mb-4">Automatically create recommended partitions for Ubuntu installation:</p>
+                            <div class="bg-gray-50 rounded-lg p-4 space-y-2">
+                                <div class="flex justify-between">
+                                    <span>🗂️ Boot partition (/boot)</span>
+                                    <span class="font-semibold">1 GB</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>🏠 Root partition (/)</span>
+                                    <span class="font-semibold">450 GB</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>💾 Swap partition</span>
+                                    <span class="font-semibold">8 GB</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>📁 Home partition (/home)</span>
+                                    <span class="font-semibold">41 GB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button onclick="hidePartitionPopup()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
+                            <button onclick="createAutoPartitions()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Create Auto Partitions</button>
+                        </div>
+                    </div>
+
+                    <!-- Manual Partition Content -->
+                    <div id="manual-partition-content">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Partition Type:</label>
+                                <select id="partition-type" onchange="updatePartitionOptions()" class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                    <option value="primary">Primary Partition</option>
+                                    <option value="logical">Logical Partition</option>
+                                    <option value="extended">Extended Partition</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Size:</label>
+                                <div class="flex gap-2">
+                                    <input type="number" id="partition-size" value="25" min="1" max="500" class="flex-1 border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                    <select id="size-unit" class="border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                        <option value="GB">GB</option>
+                                        <option value="MB">MB</option>
+                                        <option value="TB">TB</option>
+                                    </select>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">Available space: <span id="available-space">500 GB</span></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">File System:</label>
+                                <select id="filesystem-type" onchange="updateMountOptions()" class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                    <option value="ext4">ext4 (Recommended for Linux)</option>
+                                    <option value="ext3">ext3 (Legacy Linux)</option>
+                                    <option value="btrfs">Btrfs (Advanced features)</option>
+                                    <option value="xfs">XFS (High performance)</option>
+                                    <option value="ntfs">NTFS (Windows compatibility)</option>
+                                    <option value="fat32">FAT32 (Universal compatibility)</option>
+                                    <option value="swap">Linux Swap</option>
+                                    <option value="unformatted">Leave unformatted</option>
+                                </select>
+                            </div>
+                            
+                            <div id="mount-point-section">
+                                <label class="block text-sm font-semibold mb-2">Mount Point:</label>
+                                <select id="mount-point" class="w-full border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                    <option value="/">/ (Root)</option>
+                                    <option value="/boot">/boot (Boot loader)</option>
+                                    <option value="/home">/home (User files)</option>
+                                    <option value="/var">/var (Variable data)</option>
+                                    <option value="/tmp">/tmp (Temporary files)</option>
+                                    <option value="/usr">/usr (User programs)</option>
+                                    <option value="/opt">/opt (Optional software)</option>
+                                    <option value="custom">Custom...</option>
+                                </select>
+                                <input type="text" id="custom-mount" placeholder="Enter custom mount point" class="hidden w-full border rounded-lg p-3 mt-2 focus:border-orange-500 focus:outline-none">
+                            </div>
+                            
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                <div class="text-sm text-blue-800">
+                                    <div class="font-semibold mb-1">💡 Partition Tips:</div>
+                                    <ul class="text-xs space-y-1">
+                                        <li>• Root (/) partition needs at least 25 GB</li>
+                                        <li>• Swap should be 1-2x your RAM size</li>
+                                        <li>• /boot partition helps with dual-boot setups</li>
+                                        <li>• /home partition keeps user data separate</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end gap-2 mt-6">
+                            <button onclick="hidePartitionPopup()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
+                            <button onclick="createPartition()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Create Partition</button>
+                        </div>
+                    </div>
+
+                    <!-- Resize Partition Content -->
+                    <div id="resize-partition-content" class="hidden">
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="font-semibold mb-2">Partition: <span id="resize-partition-name"></span></div>
+                                <div class="text-sm text-gray-600">Current Size: <span id="current-size"></span></div>
+                                <div class="text-sm text-gray-600">File System: <span id="current-filesystem"></span></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">New Size:</label>
+                                <div class="flex gap-2">
+                                    <input type="number" id="new-size" min="1" class="flex-1 border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                    <select class="border rounded-lg p-3 focus:border-orange-500 focus:outline-none">
+                                        <option value="GB">GB</option>
+                                        <option value="MB">MB</option>
+                                    </select>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">Maximum size: <span id="max-resize-size"></span></div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                <div class="text-sm text-yellow-800">
+                                    <div class="font-semibold mb-1">⚠️ Warning:</div>
+                                    <div class="text-xs">Resizing partitions can be dangerous. Make sure you have backups of important data.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end gap-2 mt-6">
+                            <button onclick="hidePartitionPopup()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
+                            <button onclick="resizePartition()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Resize Partition</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 rounded-b-lg p-4 text-center text-sm text-gray-600">
+            <p>📚 Interactive Ubuntu 25.04 Installation Simulator</p>
+            <p>Alur logika lengkap dengan navigasi back/forward untuk pembelajaran</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let installationTimer;
+
+        function updateProgress() {
+            const progress = (currentPage / 9) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('current-step').textContent = currentPage;
+        }
+
+        function navigateTo(page) {
+            // Hide current page
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.add('hidden');
+            });
+
+            // Show target page
+            if (typeof page === 'number') {
+                document.getElementById(`page-${page}`).classList.remove('hidden');
+                currentPage = page;
+                updateProgress();
+                
+                // Special handling for installation page
+                if (page === 8) {
+                    startInstallation();
+                }
+            } else {
+                document.getElementById(page).classList.remove('hidden');
+            }
+
+            // Update time display
+            if (page === 4) {
+                updateTime();
+            }
+        }
+
+        function startInstallation() {
+            const progressBar = document.getElementById('install-progress');
+            const progressPercent = document.getElementById('progress-percent');
+            const progressText = document.getElementById('progress-text');
+            const continueBtn = document.getElementById('continue-btn');
+            
+            const steps = [
+                { percent: 0, text: "Preparing installation..." },
+                { percent: 15, text: "Copying files..." },
+                { percent: 35, text: "Installing system packages..." },
+                { percent: 55, text: "Configuring system..." },
+                { percent: 75, text: "Installing desktop environment..." },
+                { percent: 90, text: "Finalizing installation..." },
+                { percent: 100, text: "Installation complete!" }
+            ];
+            
+            let currentStep = 0;
+            
+            function updateInstallProgress() {
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    progressBar.style.width = step.percent + '%';
+                    progressPercent.textContent = step.percent + '%';
+                    progressText.textContent = step.text;
+                    currentStep++;
+                    
+                    if (currentStep < steps.length) {
+                        setTimeout(updateInstallProgress, 800);
+                    } else {
+                        setTimeout(() => {
+                            continueBtn.classList.remove('hidden');
+                        }, 1000);
+                    }
+                }
+            }
+            
+            updateInstallProgress();
+        }
+
+        function connectNetwork(button) {
+            button.textContent = 'Connecting...';
+            button.disabled = true;
+            setTimeout(() => {
+                button.textContent = '✓ Connected';
+                button.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                button.classList.add('bg-green-500');
+                button.parentElement.parentElement.parentElement.classList.add('bg-green-50', 'border-green-300');
+            }, 1500);
+        }
+
+        // Timezone data
+        const timezoneData = {
+            'Asia': {
+                'Asia/Jakarta': { name: 'Jakarta', offset: 7, coords: [650, 170] },
+                'Asia/Tokyo': { name: 'Tokyo', offset: 9, coords: [720, 120] },
+                'Asia/Shanghai': { name: 'Shanghai', offset: 8, coords: [680, 130] },
+                'Asia/Bangkok': { name: 'Bangkok', offset: 7, coords: [620, 160] },
+                'Asia/Singapore': { name: 'Singapore', offset: 8, coords: [640, 180] },
+                'Asia/Dubai': { name: 'Dubai', offset: 4, coords: [520, 140] },
+                'Asia/Kolkata': { name: 'Mumbai', offset: 5.5, coords: [580, 150] }
+            },
+            'Europe': {
+                'Europe/London': { name: 'London', offset: 0, coords: [400, 90] },
+                'Europe/Paris': { name: 'Paris', offset: 1, coords: [420, 85] },
+                'Europe/Berlin': { name: 'Berlin', offset: 1, coords: [440, 80] },
+                'Europe/Rome': { name: 'Rome', offset: 1, coords: [430, 95] },
+                'Europe/Moscow': { name: 'Moscow', offset: 3, coords: [480, 70] }
+            },
+            'America': {
+                'America/New_York': { name: 'New York', offset: -5, coords: [200, 100] },
+                'America/Los_Angeles': { name: 'Los Angeles', offset: -8, coords: [120, 110] },
+                'America/Chicago': { name: 'Chicago', offset: -6, coords: [160, 105] },
+                'America/Sao_Paulo': { name: 'São Paulo', offset: -3, coords: [280, 280] },
+                'America/Mexico_City': { name: 'Mexico City', offset: -6, coords: [140, 140] }
+            },
+            'Africa': {
+                'Africa/Cairo': { name: 'Cairo', offset: 2, coords: [450, 130] },
+                'Africa/Lagos': { name: 'Lagos', offset: 1, coords: [420, 160] },
+                'Africa/Johannesburg': { name: 'Johannesburg', offset: 2, coords: [460, 320] }
+            },
+            'Australia': {
+                'Australia/Sydney': { name: 'Sydney', offset: 11, coords: [720, 320] },
+                'Australia/Melbourne': { name: 'Melbourne', offset: 11, coords: [710, 330] },
+                'Australia/Perth': { name: 'Perth', offset: 8, coords: [650, 310] }
+            }
+        };
+
+        let currentTimezone = 'Asia/Jakarta';
+        let currentOffset = 7;
+
+        function selectTimezone(timezone, cityName, offset) {
+            currentTimezone = timezone;
+            currentOffset = offset;
+            
+            // Update marker position
+            const region = timezone.split('/')[0];
+            const data = timezoneData[region] && timezoneData[region][timezone];
+            
+            if (data) {
+                const marker = document.getElementById('location-marker');
+                marker.setAttribute('cx', data.coords[0]);
+                marker.setAttribute('cy', data.coords[1]);
+            }
+            
+            // Update displays with new IDs
+            const locationName = getLocationName(timezone, cityName);
+            document.getElementById('selected-location').textContent = locationName;
+            document.getElementById('timezone-display').textContent = `UTC${offset >= 0 ? '+' : ''}${offset}`;
+            
+            // Update dropdowns
+            document.getElementById('region-select').value = region;
+            updateCities();
+            document.getElementById('city-select').value = timezone;
+            
+            updateTime();
+        }
+
+        function getLocationName(timezone, cityName) {
+            const locationMap = {
+                'Asia/Jakarta': 'Jakarta, Indonesia',
+                'Asia/Tokyo': 'Tokyo, Japan',
+                'Asia/Shanghai': 'Shanghai, China',
+                'Asia/Bangkok': 'Bangkok, Thailand',
+                'Asia/Singapore': 'Singapore',
+                'Europe/London': 'London, United Kingdom',
+                'Europe/Paris': 'Paris, France',
+                'Europe/Berlin': 'Berlin, Germany',
+                'America/New_York': 'New York, United States',
+                'America/Los_Angeles': 'Los Angeles, United States',
+                'America/Sao_Paulo': 'São Paulo, Brazil',
+                'Africa/Cairo': 'Cairo, Egypt',
+                'Australia/Sydney': 'Sydney, Australia'
+            };
+            
+            return locationMap[timezone] || `${cityName}, ${timezone.split('/')[0]}`;
+        }
+
+        function selectRegion(regionName) {
+            document.getElementById('region-select').value = regionName;
+            updateCities();
+            
+            // Select first city in the region
+            const citySelect = document.getElementById('city-select');
+            if (citySelect.options.length > 0) {
+                citySelect.selectedIndex = 0;
+                selectTimezoneFromDropdown();
+            }
+        }
+
+        function updateCities() {
+            const region = document.getElementById('region-select').value;
+            const citySelect = document.getElementById('city-select');
+            
+            citySelect.innerHTML = '';
+            
+            if (timezoneData[region]) {
+                Object.keys(timezoneData[region]).forEach(timezone => {
+                    const option = document.createElement('option');
+                    option.value = timezone;
+                    option.textContent = timezoneData[region][timezone].name;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        function selectTimezoneFromDropdown() {
+            const timezone = document.getElementById('city-select').value;
+            const region = timezone.split('/')[0];
+            const data = timezoneData[region][timezone];
+            
+            if (data) {
+                selectTimezone(timezone, data.name, data.offset);
+            }
+        }
+
+        function updateTime() {
+            const timeElement = document.getElementById('current-time-display');
+            if (!timeElement) return;
+            
+            const now = new Date();
+            
+            // Calculate time in selected timezone
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const targetTime = new Date(utc + (currentOffset * 3600000));
+            
+            const timeString = targetTime.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            
+            timeElement.textContent = timeString;
+        }
+
+        // Partition management system
+        let partitions = [];
+        let totalDiskSize = 500; // GB
+        let selectedPartitionIndex = -1;
+
+        function showPartitionPopup(type, partitionIndex = -1) {
+            const popup = document.getElementById('partition-popup');
+            const title = document.getElementById('popup-title');
+            const autoContent = document.getElementById('auto-partition-content');
+            const manualContent = document.getElementById('manual-partition-content');
+            const resizeContent = document.getElementById('resize-partition-content');
+            
+            // Hide all content sections
+            autoContent.classList.add('hidden');
+            manualContent.classList.add('hidden');
+            resizeContent.classList.add('hidden');
+            
+            selectedPartitionIndex = partitionIndex;
+            
+            if (type === 'auto') {
+                title.textContent = 'Auto Partition Disk';
+                autoContent.classList.remove('hidden');
+            } else if (type === 'resize' && partitionIndex >= 0) {
+                title.textContent = 'Resize Partition';
+                resizeContent.classList.remove('hidden');
+                setupResizeDialog(partitionIndex);
+            } else {
+                title.textContent = 'Create New Partition';
+                manualContent.classList.remove('hidden');
+                updateAvailableSpace();
+            }
+            
+            popup.classList.remove('hidden');
+        }
+
+        function hidePartitionPopup() {
+            document.getElementById('partition-popup').classList.add('hidden');
+            selectedPartitionIndex = -1;
+        }
+
+        function updateAvailableSpace() {
+            const usedSpace = partitions.reduce((total, p) => total + p.size, 0);
+            const available = totalDiskSize - usedSpace;
+            document.getElementById('available-space').textContent = available.toFixed(1) + ' GB';
+            document.getElementById('partition-size').max = available;
+        }
+
+        function updatePartitionOptions() {
+            // Update UI based on partition type selection
+            const type = document.getElementById('partition-type').value;
+            // Could add specific logic for different partition types
+        }
+
+        function updateMountOptions() {
+            const filesystem = document.getElementById('filesystem-type').value;
+            const mountSection = document.getElementById('mount-point-section');
+            const mountSelect = document.getElementById('mount-point');
+            
+            if (filesystem === 'swap') {
+                mountSection.style.display = 'none';
+            } else {
+                mountSection.style.display = 'block';
+            }
+        }
+
+        function createPartition() {
+            const size = parseFloat(document.getElementById('partition-size').value);
+            const unit = document.getElementById('size-unit').value;
+            const filesystem = document.getElementById('filesystem-type').value;
+            const mountPoint = document.getElementById('mount-point').value;
+            const customMount = document.getElementById('custom-mount').value;
+            
+            // Convert size to GB
+            let sizeInGB = size;
+            if (unit === 'MB') sizeInGB = size / 1024;
+            if (unit === 'TB') sizeInGB = size * 1024;
+            
+            // Validate
+            const usedSpace = partitions.reduce((total, p) => total + p.size, 0);
+            if (usedSpace + sizeInGB > totalDiskSize) {
+                alert('Not enough free space on disk!');
+                return;
+            }
+            
+            // Check for duplicate mount points
+            const finalMountPoint = mountPoint === 'custom' ? customMount : mountPoint;
+            if (filesystem !== 'swap' && partitions.some(p => p.mountPoint === finalMountPoint)) {
+                alert('Mount point already exists!');
+                return;
+            }
+            
+            // Create partition
+            const partition = {
+                id: partitions.length + 1,
+                device: `/dev/sda${partitions.length + 1}`,
+                size: sizeInGB,
+                type: 'Primary',
+                mountPoint: filesystem === 'swap' ? 'swap' : finalMountPoint,
+                filesystem: filesystem,
+                color: getPartitionColor(filesystem, finalMountPoint)
+            };
+            
+            partitions.push(partition);
+            updatePartitionDisplay();
+            hidePartitionPopup();
+        }
+
+        function createAutoPartitions() {
+            partitions = [
+                {
+                    id: 1,
+                    device: '/dev/sda1',
+                    size: 1,
+                    type: 'Primary',
+                    mountPoint: '/boot',
+                    filesystem: 'ext4',
+                    color: '#10B981'
+                },
+                {
+                    id: 2,
+                    device: '/dev/sda2',
+                    size: 450,
+                    type: 'Primary',
+                    mountPoint: '/',
+                    filesystem: 'ext4',
+                    color: '#3B82F6'
+                },
+                {
+                    id: 3,
+                    device: '/dev/sda3',
+                    size: 8,
+                    type: 'Primary',
+                    mountPoint: 'swap',
+                    filesystem: 'swap',
+                    color: '#F59E0B'
+                },
+                {
+                    id: 4,
+                    device: '/dev/sda4',
+                    size: 41,
+                    type: 'Primary',
+                    mountPoint: '/home',
+                    filesystem: 'ext4',
+                    color: '#8B5CF6'
+                }
+            ];
+            
+            updatePartitionDisplay();
+            hidePartitionPopup();
+        }
+
+        function getPartitionColor(filesystem, mountPoint) {
+            if (filesystem === 'swap') return '#F59E0B';
+            if (mountPoint === '/') return '#3B82F6';
+            if (mountPoint === '/boot') return '#10B981';
+            if (mountPoint === '/home') return '#8B5CF6';
+            return '#6B7280';
+        }
+
+        function updatePartitionDisplay() {
+            updateDiskVisual();
+            updatePartitionTable();
+            updateSpaceSummary();
+            checkInstallationRequirements();
+        }
+
+        function updateDiskVisual() {
+            const diskVisual = document.getElementById('disk-visual');
+            diskVisual.innerHTML = '';
+            
+            let currentPosition = 0;
+            
+            partitions.forEach(partition => {
+                const percentage = (partition.size / totalDiskSize) * 100;
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-center text-white text-xs font-semibold border-r border-gray-400';
+                div.style.backgroundColor = partition.color;
+                div.style.width = percentage + '%';
+                div.textContent = `${partition.mountPoint} (${partition.size}GB)`;
+                div.title = `${partition.device}: ${partition.size} GB ${partition.filesystem}`;
+                diskVisual.appendChild(div);
+                currentPosition += partition.size;
+            });
+            
+            // Add unallocated space
+            const unallocated = totalDiskSize - currentPosition;
+            if (unallocated > 0) {
+                const percentage = (unallocated / totalDiskSize) * 100;
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-center text-gray-600 text-xs border-r border-gray-400';
+                div.style.backgroundColor = '#D1D5DB';
+                div.style.width = percentage + '%';
+                div.textContent = `Unallocated (${unallocated.toFixed(1)}GB)`;
+                diskVisual.appendChild(div);
+            }
+        }
+
+        function updatePartitionTable() {
+            const tbody = document.getElementById('partition-table-body');
+            
+            if (partitions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center p-8 text-gray-500 border">
+                            <div class="text-4xl mb-2">📁</div>
+                            <div>No partitions created yet</div>
+                            <div class="text-xs">Click "New Partition" to create your first partition</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = partitions.map((partition, index) => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-2 border font-mono">${partition.device}</td>
+                    <td class="p-2 border">${partition.size} GB</td>
+                    <td class="p-2 border">${partition.type}</td>
+                    <td class="p-2 border font-mono">${partition.mountPoint}</td>
+                    <td class="p-2 border">${partition.filesystem}</td>
+                    <td class="p-2 border">
+                        <div class="flex gap-1">
+                            <button onclick="handleResizeClick(${index})" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs" title="Resize partition">
+                                📏 Resize
+                            </button>
+                            <button onclick="confirmDeletePartition(${index})" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs" title="Delete partition">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Wrapper functions for better error handling
+        function handleResizeClick(index) {
+            try {
+                if (index >= 0 && index < partitions.length) {
+                    showPartitionPopup('resize', index);
+                } else {
+                    alert('Error: Invalid partition selected for resize');
+                }
+            } catch (error) {
+                console.error('Error in resize click:', error);
+                alert('Error: Could not open resize dialog');
+            }
+        }
+
+        function confirmDeletePartition(index) {
+            console.log('Delete button clicked for partition index:', index);
+            console.log('Current partitions array:', partitions);
+            console.log('Partitions length:', partitions.length);
+            
+            try {
+                if (index >= 0 && index < partitions.length) {
+                    showDeleteConfirmationPopup(index);
+                } else {
+                    console.error('Invalid index for deletion:', index);
+                    alert('Error: Invalid partition selected for deletion');
+                }
+            } catch (error) {
+                console.error('Error in confirmDeletePartition:', error);
+                alert('Error: Could not delete partition - ' + error.message);
+            }
+        }
+
+        function showDeleteConfirmationPopup(index) {
+            const partition = partitions[index];
+            const popup = document.getElementById('delete-confirmation-popup');
+            
+            // Update popup content with partition details
+            document.getElementById('delete-device-name').textContent = partition.device;
+            document.getElementById('delete-partition-size').textContent = partition.size + ' GB';
+            document.getElementById('delete-mount-point').textContent = partition.mountPoint;
+            document.getElementById('delete-filesystem').textContent = partition.filesystem;
+            
+            // Set up delete button action
+            const confirmBtn = document.getElementById('confirm-delete-btn');
+            confirmBtn.onclick = () => {
+                hideDeleteConfirmationPopup();
+                deletePartition(index);
+            };
+            
+            // Show popup
+            popup.classList.remove('hidden');
+        }
+
+        function hideDeleteConfirmationPopup() {
+            document.getElementById('delete-confirmation-popup').classList.add('hidden');
+        }
+
+        function updateSpaceSummary() {
+            const usedSpace = partitions.reduce((total, p) => total + p.size, 0);
+            const freeSpace = totalDiskSize - usedSpace;
+            
+            document.getElementById('used-space').textContent = usedSpace.toFixed(1) + ' GB';
+            document.getElementById('free-space').textContent = freeSpace.toFixed(1) + ' GB';
+        }
+
+        function checkInstallationRequirements() {
+            const hasRoot = partitions.some(p => p.mountPoint === '/');
+            const rootSize = partitions.find(p => p.mountPoint === '/')?.size || 0;
+            const hasSwap = partitions.some(p => p.filesystem === 'swap');
+            
+            const warning = document.getElementById('requirements-warning');
+            const nextBtn = document.getElementById('partition-next-btn');
+            
+            if (hasRoot && rootSize >= 25) {
+                warning.classList.add('hidden');
+                nextBtn.disabled = false;
+                nextBtn.className = 'ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg';
+                nextBtn.textContent = 'Next →';
+            } else {
+                warning.classList.remove('hidden');
+                nextBtn.disabled = true;
+                nextBtn.className = 'bg-gray-400 text-gray-600 py-2 px-6 rounded-lg cursor-not-allowed';
+                nextBtn.textContent = 'Next → (Create partitions first)';
+            }
+        }
+
+        function deletePartition(index) {
+            try {
+                // Validate index
+                if (index < 0 || index >= partitions.length) {
+                    console.error('Invalid partition index:', index, 'Array length:', partitions.length);
+                    alert('Error: Invalid partition index');
+                    return;
+                }
+                
+                const partition = partitions[index];
+                console.log('Deleting partition:', partition);
+                
+                // Store info for success message
+                const deletedDevice = partition.device;
+                const deletedSize = partition.size;
+                const deletedMountPoint = partition.mountPoint;
+                
+                // Remove partition from array
+                partitions.splice(index, 1);
+                console.log('Partition removed. Remaining partitions:', partitions.length);
+                
+                // Renumber remaining partitions to maintain sequential device names
+                partitions.forEach((p, i) => {
+                    p.id = i + 1;
+                    p.device = `/dev/sda${i + 1}`;
+                });
+                
+                // Update all displays
+                updatePartitionDisplay();
+                
+                // Show success message
+                const remainingCount = partitions.length;
+                alert(`✅ Partisi berhasil dihapus!\n\n` +
+                    `Dihapus: ${deletedDevice} (${deletedSize} GB)\n` +
+                    `Mount Point: ${deletedMountPoint}\n` +
+                    `Partisi tersisa: ${remainingCount}`);
+                
+                console.log('Delete operation completed successfully');
+            } catch (error) {
+                console.error('Error in deletePartition:', error);
+                alert('Error: Gagal menghapus partisi. Silakan coba lagi.');
+            }
+        }
+
+        function setupResizeDialog(index) {
+            if (index < 0 || index >= partitions.length) {
+                alert('Error: Invalid partition index for resize');
+                hidePartitionPopup();
+                return;
+            }
+            
+            const partition = partitions[index];
+            
+            // Update dialog fields
+            document.getElementById('resize-partition-name').textContent = partition.device;
+            document.getElementById('current-size').textContent = partition.size + ' GB';
+            document.getElementById('current-filesystem').textContent = partition.filesystem;
+            document.getElementById('new-size').value = partition.size;
+            
+            // Calculate maximum allowed size (excluding current partition)
+            const otherPartitionsSize = partitions.reduce((total, p, i) => 
+                i === index ? total : total + p.size, 0);
+            const maxSize = totalDiskSize - otherPartitionsSize;
+            
+            document.getElementById('max-resize-size').textContent = maxSize.toFixed(1) + ' GB';
+            document.getElementById('new-size').max = maxSize;
+            
+            // Set minimum size based on partition type
+            let minSize = 0.1;
+            if (partition.mountPoint === '/') minSize = 25;
+            else if (partition.mountPoint === '/boot') minSize = 0.5;
+            else if (partition.filesystem === 'swap') minSize = 0.5;
+            
+            document.getElementById('new-size').min = minSize;
+            
+            // Add helpful text about minimum requirements
+            const currentSizeElement = document.getElementById('current-size');
+            let helpText = '';
+            if (partition.mountPoint === '/') {
+                helpText = ' (Root partition minimum: 25 GB)';
+            } else if (partition.mountPoint === '/boot') {
+                helpText = ' (Boot partition minimum: 0.5 GB)';
+            } else if (partition.filesystem === 'swap') {
+                helpText = ' (Swap minimum: 0.5 GB, recommended: 2-8 GB)';
+            }
+            
+            currentSizeElement.textContent = partition.size + ' GB' + helpText;
+        }
+
+        function resizePartition() {
+            if (selectedPartitionIndex < 0 || selectedPartitionIndex >= partitions.length) {
+                alert('Error: Invalid partition selected');
+                return;
+            }
+            
+            const newSize = parseFloat(document.getElementById('new-size').value);
+            const partition = partitions[selectedPartitionIndex];
+            
+            // Validate minimum size
+            if (newSize < 0.1) {
+                alert('Partition size must be at least 0.1 GB');
+                return;
+            }
+            
+            // Calculate available space (excluding current partition)
+            const otherPartitionsSize = partitions.reduce((total, p, i) => 
+                i === selectedPartitionIndex ? total : total + p.size, 0);
+            const maxAllowedSize = totalDiskSize - otherPartitionsSize;
+            
+            if (newSize > maxAllowedSize) {
+                alert(`Not enough space! Maximum size: ${maxAllowedSize.toFixed(1)} GB`);
+                return;
+            }
+            
+            // Check specific requirements
+            if (partition.mountPoint === '/' && newSize < 25) {
+                alert('Root partition (/) must be at least 25 GB');
+                return;
+            }
+            
+            if (partition.mountPoint === '/boot' && newSize < 0.5) {
+                alert('Boot partition (/boot) must be at least 0.5 GB');
+                return;
+            }
+            
+            if (partition.filesystem === 'swap' && newSize > 32) {
+                if (!confirm(`Swap partition larger than 32 GB is unusual. Continue?`)) {
+                    return;
+                }
+            }
+            
+            // Store old size for confirmation
+            const oldSize = partition.size;
+            
+            // Update partition size
+            partition.size = newSize;
+            
+            // Update display
+            updatePartitionDisplay();
+            hidePartitionPopup();
+            
+            // Show success message
+            alert(`✅ Partition ${partition.device} resized successfully!\n\nOld size: ${oldSize} GB\nNew size: ${newSize} GB`);
+        }
+
+        // Handle custom mount point
+        document.getElementById('mount-point').addEventListener('change', function() {
+            const customInput = document.getElementById('custom-mount');
+            if (this.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+            }
+        });
+
+        // Keyboard layout data
+        const keyboardLayouts = {
+            'us': {
+                name: 'English (US)',
+                type: 'QWERTY',
+                language: 'English',
+                keys: {
+                    row1: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                    row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                    row3: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+                }
+            },
+            'id': {
+                name: 'Bahasa Indonesia',
+                type: 'QWERTY',
+                language: 'Indonesian',
+                keys: {
+                    row1: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                    row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                    row3: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+                }
+            },
+            'uk': {
+                name: 'English (UK)',
+                type: 'QWERTY',
+                language: 'English',
+                keys: {
+                    row1: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                    row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                    row3: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+                }
+            },
+            'de': {
+                name: 'Deutsch (German)',
+                type: 'QWERTZ',
+                language: 'German',
+                keys: {
+                    row1: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],
+                    row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                    row3: ['Y', 'X', 'C', 'V', 'B', 'N', 'M']
+                }
+            },
+            'fr': {
+                name: 'Français (French)',
+                type: 'AZERTY',
+                language: 'French',
+                keys: {
+                    row1: ['A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                    row2: ['Q', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                    row3: ['W', 'X', 'C', 'V', 'B', 'N', 'M']
+                }
+            },
+            'es': {
+                name: 'Español (Spanish)',
+                type: 'QWERTY',
+                language: 'Spanish',
+                keys: {
+                    row1: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                    row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                    row3: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+                }
+            },
+            'ru': {
+                name: 'Русский (Russian)',
+                type: 'ЙЦУКЕН',
+                language: 'Russian',
+                keys: {
+                    row1: ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З'],
+                    row2: ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д'],
+                    row3: ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь']
+                }
+            }
+        };
+
+        let currentKeyboardLayout = 'us';
+
+        function selectKeyboardLayout(layoutCode, element) {
+            // Remove selection from all layout options
+            document.querySelectorAll('.layout-option').forEach(option => {
+                option.classList.remove('bg-orange-50', 'border-orange-300');
+                option.classList.add('hover:bg-gray-50');
+                // Remove checkmark
+                const titleDiv = option.querySelector('.font-semibold');
+                if (titleDiv) {
+                    titleDiv.textContent = titleDiv.textContent.replace(' ✓', '');
+                }
+            });
+
+            // Add selection to clicked element
+            element.classList.add('bg-orange-50', 'border-orange-300');
+            element.classList.remove('hover:bg-gray-50');
+            
+            // Add checkmark
+            const titleDiv = element.querySelector('.font-semibold');
+            if (titleDiv && !titleDiv.textContent.includes('✓')) {
+                titleDiv.textContent += ' ✓';
+            }
+
+            // Update current layout
+            currentKeyboardLayout = layoutCode;
+            
+            // Update keyboard preview
+            updateKeyboardPreview(layoutCode);
+            
+            // Update layout info
+            updateLayoutInfo(layoutCode);
+            
+            // Clear test input
+            const testInput = document.getElementById('keyboard-test-input');
+            if (testInput) {
+                testInput.value = '';
+                testInput.placeholder = `Type here to test ${keyboardLayouts[layoutCode].name}...`;
+            }
+        }
+
+        function updateKeyboardPreview(layoutCode) {
+            const layout = keyboardLayouts[layoutCode];
+            if (!layout) return;
+
+            // Update each row
+            const row1 = document.getElementById('keyboard-row-1');
+            const row2 = document.getElementById('keyboard-row-2');
+            const row3 = document.getElementById('keyboard-row-3');
+
+            // Update row 1
+            const row1Keys = row1.querySelectorAll('.key');
+            layout.keys.row1.forEach((key, index) => {
+                if (row1Keys[index]) {
+                    row1Keys[index].textContent = key;
+                }
+            });
+
+            // Update row 2
+            const row2Keys = row2.querySelectorAll('.key');
+            layout.keys.row2.forEach((key, index) => {
+                if (row2Keys[index]) {
+                    row2Keys[index].textContent = key;
+                }
+            });
+
+            // Update row 3
+            const row3Keys = row3.querySelectorAll('.key');
+            layout.keys.row3.forEach((key, index) => {
+                if (row3Keys[index]) {
+                    row3Keys[index].textContent = key;
+                }
+            });
+
+            // Add animation effect
+            document.querySelectorAll('.key').forEach((key, index) => {
+                key.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    key.style.transform = 'scale(1)';
+                }, index * 20);
+            });
+        }
+
+        function updateLayoutInfo(layoutCode) {
+            const layout = keyboardLayouts[layoutCode];
+            if (!layout) return;
+
+            document.getElementById('selected-layout-name').textContent = layout.name;
+            document.getElementById('selected-layout-type').textContent = layout.type;
+            document.getElementById('selected-layout-lang').textContent = layout.language;
+        }
+
+        // Add keyboard test functionality
+        function setupKeyboardTest() {
+            const testInput = document.getElementById('keyboard-test-input');
+            if (!testInput) return;
+
+            testInput.addEventListener('input', function(e) {
+                // Add visual feedback when typing
+                const keys = document.querySelectorAll('.key');
+                const typedChar = e.data;
+                
+                if (typedChar) {
+                    keys.forEach(key => {
+                        if (key.textContent.toLowerCase() === typedChar.toLowerCase()) {
+                            key.style.backgroundColor = '#FED7AA';
+                            key.style.transform = 'scale(1.1)';
+                            setTimeout(() => {
+                                key.style.backgroundColor = '#ffffff';
+                                key.style.transform = 'scale(1)';
+                            }, 200);
+                        }
+                    });
+                }
+            });
+
+            testInput.addEventListener('keydown', function(e) {
+                // Show special keys feedback
+                if (e.key === 'Backspace' || e.key === 'Delete' || e.key === 'Enter' || e.key === ' ') {
+                    const allKeys = document.querySelectorAll('.key');
+                    allKeys.forEach(key => {
+                        key.style.backgroundColor = '#E5E7EB';
+                    });
+                    setTimeout(() => {
+                        allKeys.forEach(key => {
+                            key.style.backgroundColor = '#ffffff';
+                        });
+                    }, 100);
+                }
+            });
+        }
+
+        // Computer name auto-generation
+        let computerNameManuallyEdited = false;
+
+        function handleUsernameInput() {
+            const username = document.getElementById('username').value.trim();
+            
+            // Auto-generate computer name if not manually edited
+            if (!computerNameManuallyEdited && username) {
+                const computerName = username + '-desktop';
+                document.getElementById('computer-name').value = computerName;
+            }
+            
+            validateUserForm();
+        }
+
+        function enableComputerNameEdit() {
+            const computerNameField = document.getElementById('computer-name');
+            computerNameField.readOnly = false;
+            computerNameField.classList.remove('bg-gray-50');
+            computerNameField.classList.add('bg-white');
+            computerNameField.focus();
+            computerNameManuallyEdited = true;
+            
+            // Hide the edit button
+            event.target.style.display = 'none';
+        }
+
+        // User form validation
+        function validateUserForm() {
+            const fullName = document.getElementById('full-name').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const computerName = document.getElementById('computer-name').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Validate each field
+            const isFullNameValid = validateFullName(fullName);
+            const isUsernameValid = validateUsernameField(username);
+            const isComputerNameValid = validateComputerNameField(computerName);
+            const isPasswordValid = validatePassword(password);
+            const isConfirmPasswordValid = validateConfirmPassword(password, confirmPassword);
+            
+            // Update validation status
+            updateValidationStatus(isFullNameValid, isUsernameValid, isComputerNameValid, isPasswordValid, isConfirmPasswordValid);
+            
+            // Update form summary if all valid
+            if (isFullNameValid && isUsernameValid && isComputerNameValid && isPasswordValid && isConfirmPasswordValid) {
+                updateFormSummary(fullName, username, computerName);
+            }
+            
+            // Enable/disable next button
+            const allValid = isFullNameValid && isUsernameValid && isComputerNameValid && isPasswordValid && isConfirmPasswordValid;
+            const nextBtn = document.getElementById('user-next-btn');
+            
+            if (allValid) {
+                nextBtn.disabled = false;
+                nextBtn.className = 'ubuntu-orange hover:bg-orange-600 text-white py-2 px-6 rounded-lg transition-colors cursor-pointer';
+                nextBtn.textContent = 'Next →';
+                nextBtn.onclick = function() { navigateTo(8); }; // Direct navigation
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.className = 'bg-gray-400 text-gray-600 py-2 px-6 rounded-lg cursor-not-allowed';
+                nextBtn.textContent = 'Next → (Lengkapi form dulu)';
+                nextBtn.onclick = null;
+            }
+        }
+
+        function validateFullName(fullName) {
+            const isValid = fullName.length >= 2;
+            const errorElement = document.getElementById('full-name-error');
+            
+            if (fullName.length > 0 && !isValid) {
+                errorElement.textContent = 'Nama lengkap minimal 2 karakter';
+                errorElement.classList.remove('hidden');
+            } else {
+                errorElement.classList.add('hidden');
+            }
+            
+            return isValid;
+        }
+
+        function validateUsernameField(username) {
+            const usernameRegex = /^[a-z][a-z0-9_-]*$/;
+            const isValid = username.length >= 3 && usernameRegex.test(username);
+            const errorElement = document.getElementById('username-error');
+            
+            if (username.length > 0 && !isValid) {
+                if (username.length < 3) {
+                    errorElement.textContent = 'Nama pengguna minimal 3 karakter';
+                } else if (!/^[a-z]/.test(username)) {
+                    errorElement.textContent = 'Harus dimulai dengan huruf kecil';
+                } else {
+                    errorElement.textContent = 'Hanya boleh huruf kecil, angka, - dan _';
+                }
+                errorElement.classList.remove('hidden');
+            } else {
+                errorElement.classList.add('hidden');
+            }
+            
+            return isValid;
+        }
+
+        function validateComputerNameField(computerName) {
+            const computerNameRegex = /^[a-z][a-z0-9-]*$/;
+            const isValid = computerName.length >= 2 && computerName.length <= 63 && computerNameRegex.test(computerName) && !computerName.endsWith('-');
+            const errorElement = document.getElementById('computer-name-error');
+            
+            if (computerName.length > 0 && !isValid) {
+                if (computerName.length < 2) {
+                    errorElement.textContent = 'Nama komputer minimal 2 karakter';
+                } else if (computerName.length > 63) {
+                    errorElement.textContent = 'Nama komputer maksimal 63 karakter';
+                } else if (!/^[a-z]/.test(computerName)) {
+                    errorElement.textContent = 'Harus dimulai dengan huruf kecil';
+                } else if (computerName.endsWith('-')) {
+                    errorElement.textContent = 'Tidak boleh diakhiri dengan tanda -';
+                } else {
+                    errorElement.textContent = 'Hanya boleh huruf kecil, angka, dan tanda -';
+                }
+                errorElement.classList.remove('hidden');
+            } else {
+                errorElement.classList.add('hidden');
+            }
+            
+            return isValid;
+        }
+
+        function validatePassword(password) {
+            const isValid = password.length >= 6;
+            const errorElement = document.getElementById('password-error');
+            const strengthElement = document.getElementById('password-strength');
+            
+            if (password.length > 0) {
+                strengthElement.classList.remove('hidden');
+                updatePasswordStrength(password);
+                
+                if (!isValid) {
+                    errorElement.classList.remove('hidden');
+                } else {
+                    errorElement.classList.add('hidden');
+                }
+            } else {
+                strengthElement.classList.add('hidden');
+                errorElement.classList.add('hidden');
+            }
+            
+            return isValid;
+        }
+
+        function validateConfirmPassword(password, confirmPassword) {
+            const isValid = confirmPassword.length > 0 && password === confirmPassword && password.length >= 6;
+            const errorElement = document.getElementById('confirm-password-error');
+            const successElement = document.getElementById('confirm-password-success');
+            
+            if (confirmPassword.length > 0) {
+                if (password.length < 6) {
+                    errorElement.textContent = 'Password utama harus minimal 6 karakter dulu';
+                    errorElement.classList.remove('hidden');
+                    successElement.classList.add('hidden');
+                } else if (password !== confirmPassword) {
+                    errorElement.textContent = 'Password tidak cocok';
+                    errorElement.classList.remove('hidden');
+                    successElement.classList.add('hidden');
+                } else {
+                    errorElement.classList.add('hidden');
+                    successElement.classList.remove('hidden');
+                }
+            } else {
+                errorElement.classList.add('hidden');
+                successElement.classList.add('hidden');
+            }
+            
+            return isValid;
+        }
+
+        function updatePasswordStrength(password) {
+            let strength = 0;
+            let strengthText = 'Sangat Lemah';
+            let strengthColor = '#EF4444';
+            
+            // Length check
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            
+            // Character variety checks
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            // Determine strength level
+            if (strength >= 6) {
+                strengthText = 'Sangat Kuat';
+                strengthColor = '#10B981';
+            } else if (strength >= 4) {
+                strengthText = 'Kuat';
+                strengthColor = '#059669';
+            } else if (strength >= 3) {
+                strengthText = 'Sedang';
+                strengthColor = '#F59E0B';
+            } else if (strength >= 2) {
+                strengthText = 'Lemah';
+                strengthColor = '#F97316';
+            }
+            
+            // Update strength bars
+            for (let i = 1; i <= 4; i++) {
+                const bar = document.getElementById(`strength-bar-${i}`);
+                if (i <= Math.min(strength, 4)) {
+                    bar.style.backgroundColor = strengthColor;
+                } else {
+                    bar.style.backgroundColor = '#E5E7EB';
+                }
+            }
+            
+            document.getElementById('strength-text').textContent = strengthText;
+            document.getElementById('strength-text').style.color = strengthColor;
+        }
+
+        function updateValidationStatus(fullName, username, computer, password, confirm) {
+            const checks = [
+                { id: 'check-fullname', valid: fullName },
+                { id: 'check-username', valid: username },
+                { id: 'check-computer', valid: computer },
+                { id: 'check-password', valid: password },
+                { id: 'check-confirm', valid: confirm }
+            ];
+            
+            checks.forEach(check => {
+                const element = document.getElementById(check.id);
+                const icon = element.querySelector('span');
+                
+                if (check.valid) {
+                    element.className = 'flex items-center gap-2 text-green-600';
+                    icon.textContent = '✅';
+                } else {
+                    element.className = 'flex items-center gap-2 text-red-600';
+                    icon.textContent = '❌';
+                }
+            });
+            
+            // Update validation status box
+            const allValid = fullName && username && computer && password && confirm;
+            const statusBox = document.getElementById('validation-status');
+            
+            if (allValid) {
+                statusBox.innerHTML = `
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="text-green-600">✅</div>
+                            <div class="font-semibold text-green-800">Semua field sudah terisi dengan benar!</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateFormSummary(fullName, username, computerName) {
+            const autoLogin = document.getElementById('auto-login').checked;
+            
+            document.getElementById('summary-name').textContent = fullName;
+            document.getElementById('summary-username').textContent = username;
+            document.getElementById('summary-computer').textContent = computerName;
+            document.getElementById('summary-autologin').textContent = autoLogin ? 'Ya' : 'Tidak';
+            
+            document.getElementById('form-summary').classList.remove('hidden');
+        }
+
+        function validateUsername() {
+            const username = document.getElementById('username').value.trim();
+            if (username) {
+                // Auto-convert to lowercase and replace invalid characters
+                const cleanUsername = username.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+                if (cleanUsername !== username) {
+                    document.getElementById('username').value = cleanUsername;
+                    validateUserForm();
+                }
+            }
+        }
+
+        function validateComputerName() {
+            const computerName = document.getElementById('computer-name').value.trim();
+            if (computerName) {
+                // Auto-convert to lowercase and replace invalid characters
+                const cleanComputerName = computerName.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                if (cleanComputerName !== computerName) {
+                    document.getElementById('computer-name').value = cleanComputerName;
+                    validateUserForm();
+                }
+            }
+        }
+
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            const eyeIcon = document.getElementById(fieldId + '-eye');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                field.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+
+
+        // Initialize
+        navigateTo(1);
+        
+        // Setup keyboard test when page loads
+        setTimeout(() => {
+            setupKeyboardTest();
+        }, 100);
+        
+        // Update time every second when on timezone page
+        setInterval(() => {
+            if (currentPage === 4) {
+                updateTime();
+            }
+        }, 1000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f9a1eb508944af',t:'MTc1NTI3MDc3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
