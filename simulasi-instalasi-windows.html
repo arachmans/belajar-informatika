@@ -460,6 +460,7 @@
         nextPartitionId = 1;
         
         showScreen(screens[currentScreenIndex]);
+        startBootSequence();
     }
     
     /**
@@ -481,6 +482,19 @@
         } else if (type === 'keyboard') {
             selectedKeyboard = itemElement.textContent;
         }
+    }
+    
+    /**
+     * Memulai urutan booting awal untuk menjalankan simulasi.
+     * Fungsi ini sekarang dapat dipanggil lagi untuk mengulang simulasi.
+     */
+    function startBootSequence() {
+        setTimeout(() => {
+            nextScreen();
+            setTimeout(() => {
+                nextScreen();
+            }, 2000);
+        }, 3000);
     }
 
     // =================================================================
@@ -750,13 +764,8 @@
 
     // --- INITIALIZATION & EVENT LISTENERS ---
     window.onload = () => {
-        // Initial boot sequence
-        setTimeout(() => {
-            nextScreen();
-            setTimeout(() => {
-                nextScreen();
-            }, 2000);
-        }, 3000);
+        // Panggil urutan booting saat halaman dimuat pertama kali
+        startBootSequence();
         
         // Add event listeners for OOBE lists
         const regionList = document.getElementById('region-list');
