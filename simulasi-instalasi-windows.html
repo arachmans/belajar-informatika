@@ -79,13 +79,29 @@
         .modal.show {
             display: flex;
         }
+        .oobe-list-item {
+            cursor: pointer;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: background-color 0.2s ease-in-out;
+            border: 2px solid transparent;
+        }
+        .oobe-list-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        .oobe-list-item.selected {
+            border-color: #0078d4;
+            background-color: rgba(0, 120, 212, 0.2);
+        }
     </style>
 </head>
 <body class="bg-black text-white">
 
     <!-- Screen: Booting -->
     <div id="screen-boot" class="screen active h-screen w-screen flex-col items-center justify-center gap-8">
-        <h1 class="text-5xl font-semibold text-gray-300">AB CREATIVE</h1>
+        <h1 class="text-5xl font-semibold text-gray-300">AB-CREATIVE</h1>
         <div class="spinner"></div>
         <p class="text-gray-400">Press any key to boot from CD or DVD...</p>
     </div>
@@ -265,7 +281,19 @@
     <div id="screen-oobe-region" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
         <div class="w-full max-w-md text-left">
             <h1 class="text-4xl font-semibold mb-6">Is this the right country or region?</h1>
-            <div class="bg-white/10 p-4 rounded cursor-pointer" onclick="nextScreen()">Indonesia</div>
+            <div id="region-list" class="h-64 overflow-y-auto mb-4">
+                <div class="oobe-list-item">Indonesia</div>
+                <div class="oobe-list-item">United States</div>
+                <div class="oobe-list-item">Singapore</div>
+                <div class="oobe-list-item">Malaysia</div>
+                <div class="oobe-list-item">Germany</div>
+                <div class="oobe-list-item">Japan</div>
+                <div class="oobe-list-item">South Korea</div>
+                <div class="oobe-list-item">China</div>
+                <div class="oobe-list-item">Australia</div>
+                <div class="oobe-list-item">United Kingdom</div>
+            </div>
+            <button id="region-next-btn" onclick="nextScreen()" class="w-full bg-blue-600 p-3 rounded text-lg">Yes</button>
         </div>
     </div>
 
@@ -273,27 +301,81 @@
     <div id="screen-oobe-keyboard" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
         <div class="w-full max-w-md text-left">
             <h1 class="text-4xl font-semibold mb-6">Is this the right keyboard layout?</h1>
-            <div class="bg-white/10 p-4 rounded mb-4">US</div>
-            <button onclick="nextScreen()" class="w-full bg-blue-600 p-3 rounded text-lg">Yes</button>
+            <div id="keyboard-list" class="h-64 overflow-y-auto mb-4">
+                <div class="oobe-list-item">US QWERTY</div>
+                <div class="oobe-list-item">UK</div>
+                <div class="oobe-list-item">French AZERTY</div>
+                <div class="oobe-list-item">German QWERTZ</div>
+                <div class="oobe-list-item">Japanese</div>
+                <div class="oobe-list-item">Korean</div>
+                <div class="oobe-list-item">Spanish</div>
+                <div class="oobe-list-item">Dvorak</div>
+            </div>
+            <button id="keyboard-next-btn" onclick="nextScreen()" class="w-full bg-blue-600 p-3 rounded text-lg">Yes</button>
         </div>
     </div>
 
-    <!-- OOBE: Account Creation -->
-    <div id="screen-oobe-account" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
-        <div class="w-full max-w-md text-left">
-            <h1 class="text-4xl font-semibold mb-6">Let's create an account</h1>
-            <div class="space-y-4">
-                <div>
-                    <label for="username" class="block mb-2 text-gray-300">Who's going to use this PC?</label>
-                    <input type="text" id="username" placeholder="Enter your name" class="w-full p-3 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
+    <!-- OOBE: Account Name -->
+    <div id="screen-oobe-account-name" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
+        <div class="w-full max-w-md text-center">
+            <h1 class="text-4xl font-semibold mb-4">Let's create an account</h1>
+            <!-- Large user icon -->
+            <svg class="h-24 w-24 text-white mb-8 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.98 5.98 0 0010 16a5.979 5.979 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+            </svg>
+            <div class="relative text-left">
+                <label for="username" class="block mb-2 text-gray-300">Who's going to use this PC?</label>
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    <input type="text" id="username" placeholder="Enter your name" class="w-full p-3 pl-10 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
                 </div>
-                <div>
-                    <label for="password" class="block mb-2 text-gray-300">Create a password</label>
-                    <input type="password" id="password" placeholder="Password" class="w-full p-3 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen()" class="w-40 bg-blue-600 p-3 rounded text-lg">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OOBE: Create Password -->
+    <div id="screen-oobe-password" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
+        <div class="w-full max-w-md text-center">
+            <h1 class="text-4xl font-semibold mb-4">Create a password</h1>
+            <!-- Large lock icon -->
+            <svg class="h-24 w-24 text-white mb-8 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            <div class="relative text-left">
+                <label for="password" class="block mb-2 text-gray-300">Create a password</label>
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 1a4 4 0 00-4 4v2H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zM8 5a2 2 0 012-2 2 2 0 012 2v2H8V5z" clip-rule="evenodd" />
+                    </svg>
+                    <input type="password" id="password" placeholder="Password" class="w-full p-3 pl-10 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
                 </div>
-                <div>
-                    <label for="password-confirm" class="block mb-2 text-gray-300">Confirm password</label>
-                    <input type="password" id="password-confirm" placeholder="Confirm password" class="w-full p-3 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="nextScreen()" class="w-40 bg-blue-600 p-3 rounded text-lg">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OOBE: Confirm Password -->
+    <div id="screen-oobe-password-confirm" class="screen h-screen w-screen flex-col items-center justify-center oobe-bg text-white">
+        <div class="w-full max-w-md text-center">
+            <h1 class="text-4xl font-semibold mb-4">Confirm your password</h1>
+            <!-- Large lock icon -->
+            <svg class="h-24 w-24 text-white mb-8 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            <div class="relative text-left">
+                <label for="password-confirm" class="block mb-2 text-gray-300">Confirm password</label>
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 1a4 4 0 00-4 4v2H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zM8 5a2 2 0 012-2 2 2 0 012 2v2H8V5z" clip-rule="evenodd" />
+                    </svg>
+                    <input type="password" id="password-confirm" placeholder="Confirm password" class="w-full p-3 pl-10 bg-white/10 border border-white/30 rounded text-white placeholder-gray-300">
                 </div>
             </div>
             <div class="mt-8 flex justify-end">
@@ -309,11 +391,12 @@
         <p>Don't turn off your PC</p>
     </div>
     
-    <!-- Screen: Desktop (Updated to show completion message) -->
+    <!-- Screen: Desktop (Updated to show completion message and restart button) -->
     <div id="screen-desktop" class="screen h-screen w-screen flex-col items-center justify-center desktop-bg">
         <div class="bg-gray-900/50 backdrop-blur-xl p-8 rounded-lg text-white text-center">
             <h1 class="text-5xl font-semibold text-blue-400">Simulasi Selesai</h1>
             <p class="mt-4 text-xl">Anda telah berhasil menyelesaikan instalasi Windows 11.</p>
+            <button onclick="restartSimulation()" class="mt-8 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 text-lg rounded">Coba Lagi</button>
         </div>
     </div>
 
@@ -324,7 +407,7 @@
         'screen-boot', 'screen-win-logo', 'screen-language', 'screen-install-now',
         'screen-product-key', 'screen-select-os', 'screen-eula', 'screen-install-type',
         'screen-partition', 'screen-installing', 'screen-win-logo', // This is the restart screen
-        'screen-oobe-region', 'screen-oobe-keyboard', 'screen-oobe-account', 'screen-oobe-final',
+        'screen-oobe-region', 'screen-oobe-keyboard', 'screen-oobe-account-name', 'screen-oobe-password', 'screen-oobe-password-confirm', 'screen-oobe-final',
         'screen-desktop'
     ];
     let currentScreenIndex = 0;
@@ -334,6 +417,10 @@
     let partitions = [{ id: 0, name: 'Drive 0 Unallocated Space', size: totalDiskSize, type: 'Unallocated' }];
     let selectedPartitionId = null;
     let nextPartitionId = 1;
+    
+    // OOBE state
+    let selectedRegion = null;
+    let selectedKeyboard = null;
 
     // --- UTILITY FUNCTIONS ---
     function showScreen(screenId) {
@@ -360,6 +447,39 @@
         if (currentScreenIndex < screens.length - 1) {
             currentScreenIndex++;
             showScreen(screens[currentScreenIndex]);
+        }
+    }
+    
+    function restartSimulation() {
+        currentScreenIndex = 0;
+        selectedRegion = null;
+        selectedKeyboard = null;
+        // Reset partitions to initial state
+        partitions = [{ id: 0, name: 'Drive 0 Unallocated Space', size: totalDiskSize, type: 'Unallocated' }];
+        selectedPartitionId = null;
+        nextPartitionId = 1;
+        
+        showScreen(screens[currentScreenIndex]);
+    }
+    
+    /**
+     * Handles the selection of an item in the OOBE list.
+     * @param {HTMLElement} listElement - The parent element of the list items.
+     * @param {HTMLElement} itemElement - The list item that was clicked.
+     * @param {string} type - 'region' or 'keyboard' to update the state.
+     */
+    function selectOOBEItem(listElement, itemElement, type) {
+        // Deselect all items
+        Array.from(listElement.children).forEach(child => {
+            child.classList.remove('selected');
+        });
+        // Select the clicked item
+        itemElement.classList.add('selected');
+        
+        if (type === 'region') {
+            selectedRegion = itemElement.textContent;
+        } else if (type === 'keyboard') {
+            selectedKeyboard = itemElement.textContent;
         }
     }
 
@@ -628,14 +748,35 @@
         }, 3000);
     }
 
-    // --- INITIALIZATION ---
+    // --- INITIALIZATION & EVENT LISTENERS ---
     window.onload = () => {
+        // Initial boot sequence
         setTimeout(() => {
             nextScreen();
             setTimeout(() => {
                 nextScreen();
             }, 2000);
         }, 3000);
+        
+        // Add event listeners for OOBE lists
+        const regionList = document.getElementById('region-list');
+        const keyboardList = document.getElementById('keyboard-list');
+        
+        if (regionList) {
+            regionList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('oobe-list-item')) {
+                    selectOOBEItem(regionList, e.target, 'region');
+                }
+            });
+        }
+        
+        if (keyboardList) {
+            keyboardList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('oobe-list-item')) {
+                    selectOOBEItem(keyboardList, e.target, 'keyboard');
+                }
+            });
+        }
     };
 </script>
 
