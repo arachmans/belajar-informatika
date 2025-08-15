@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager Learning App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .hidden { display: none !important; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .nav-active { 
+            color: #2563eb !important; 
+            background-color: #dbeafe !important; 
+        }
+    </style>
+</head>
+<body class="bg-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <h1 class="text-2xl font-bold text-gray-800 text-center">📁 File Manager Learning</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6 pb-32">
+        <!-- Materi Section -->
+        <div id="materi" class="tab-content active">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 mb-6 text-white">
+                <div class="text-center">
+                    <div class="text-4xl mb-3">🎓</div>
+                    <h2 class="text-2xl font-bold mb-2">Materi Pembelajaran</h2>
+                    <p class="text-blue-100">Pelajari konsep dasar file management dengan mudah</p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Materi 1 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="bg-blue-500 rounded-full p-3">
+                            <span class="text-2xl text-white">📄</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Apa itu File?</h3>
+                            <p class="text-gray-600">Pengertian dasar tentang file</p>
+                        </div>
+                    </div>
+                    <p class="mb-4">File adalah kumpulan data atau informasi yang disimpan dalam komputer dengan nama tertentu. File bisa berupa teks, gambar, video, musik, atau program.</p>
+                    
+                    <h4 class="font-bold mb-3">💡 Contoh File:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-pink-50 border border-pink-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">📸</span>
+                                <div>
+                                    <div class="font-semibold">Foto Selfie</div>
+                                    <div class="text-sm text-gray-600">selfie_pantai.jpg</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">🎵</span>
+                                <div>
+                                    <div class="font-semibold">Lagu Favorit</div>
+                                    <div class="text-sm text-gray-600">lagu_hits_2024.mp3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">📝</span>
+                                <div>
+                                    <div class="font-semibold">Tugas Kuliah</div>
+                                    <div class="text-sm text-gray-600">tugas_bahasa.docx</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">💼</span>
+                                <div>
+                                    <div class="font-semibold">CV/Resume</div>
+                                    <div class="text-sm text-gray-600">CV_Ahmad_2024.pdf</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materi 2 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="bg-green-500 rounded-full p-3">
+                            <span class="text-2xl text-white">🗂️</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">File Manager</h3>
+                            <p class="text-gray-600">Tools untuk mengelola file</p>
+                        </div>
+                    </div>
+                    <p class="mb-4">File manager adalah aplikasi yang membantu Anda mengatur, mencari, dan mengelola file di komputer atau smartphone.</p>
+                    
+                    <h4 class="font-bold mb-3">File Manager Populer:</h4>
+                    <div class="space-y-3">
+                        <div class="border-l-4 border-blue-500 pl-3">
+                            <strong>Windows Explorer (Windows)</strong><br>
+                            <span class="text-sm text-gray-600">Aplikasi bawaan Windows</span>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-3">
+                            <strong>Finder (Mac)</strong><br>
+                            <span class="text-sm text-gray-600">File manager default di Mac</span>
+                        </div>
+                        <div class="border-l-4 border-orange-500 pl-3">
+                            <strong>Files by Google (Android)</strong><br>
+                            <span class="text-sm text-gray-600">Aplikasi gratis untuk Android</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materi 3 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="bg-purple-500 rounded-full p-3">
+                            <span class="text-2xl text-white">📁</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Mengelola File dengan Folder</h3>
+                            <p class="text-gray-600">Cara mengorganisir file</p>
+                        </div>
+                    </div>
+                    <p class="mb-4">Folder adalah wadah untuk mengelompokkan file-file yang sejenis atau berkaitan.</p>
+                    
+                    <h4 class="font-bold mb-3">Contoh Struktur Folder:</h4>
+                    <div class="bg-gray-50 p-4 rounded-lg font-mono text-sm">
+                        📁 Dokumen/<br>
+                        &nbsp;&nbsp;📁 Kuliah/<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;📁 Semester_1/<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;📁 Semester_2/<br>
+                        &nbsp;&nbsp;📁 Pribadi/<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;📁 Foto/<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;📁 Dokumen_Penting/<br>
+                        &nbsp;&nbsp;📁 Pekerjaan/
+                    </div>
+                </div>
+
+                <!-- Materi 4 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="bg-orange-500 rounded-full p-3">
+                            <span class="text-2xl text-white">🏷️</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Ekstensi File</h3>
+                            <p class="text-gray-600">Jenis-jenis file dan ekstensinya</p>
+                        </div>
+                    </div>
+                    <p class="mb-4">Ekstensi file adalah akhiran nama file yang menunjukkan jenis atau format file tersebut.</p>
+                    
+                    <h4 class="font-bold mb-3">📋 Tabel Ekstensi File yang Sering Digunakan:</h4>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full text-sm border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-3 py-2 text-left font-bold">Kategori</th>
+                                    <th class="border border-gray-300 px-3 py-2 text-left font-bold">Ekstensi</th>
+                                    <th class="border border-gray-300 px-3 py-2 text-left font-bold">Penjelasan</th>
+                                    <th class="border border-gray-300 px-3 py-2 text-left font-bold">Aplikasi Pembuka</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2 font-medium text-blue-700">📄 Dokumen</td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.docx</td>
+                                    <td class="border border-gray-300 px-3 py-2">Dokumen Microsoft Word</td>
+                                    <td class="border border-gray-300 px-3 py-2">Word, Google Docs</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.pdf</td>
+                                    <td class="border border-gray-300 px-3 py-2">Portable Document Format</td>
+                                    <td class="border border-gray-300 px-3 py-2">Adobe Reader, Browser</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.txt</td>
+                                    <td class="border border-gray-300 px-3 py-2">File teks sederhana</td>
+                                    <td class="border border-gray-300 px-3 py-2">Notepad, TextEdit</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.xlsx</td>
+                                    <td class="border border-gray-300 px-3 py-2">Spreadsheet Excel</td>
+                                    <td class="border border-gray-300 px-3 py-2">Excel, Google Sheets</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.pptx</td>
+                                    <td class="border border-gray-300 px-3 py-2">Presentasi PowerPoint</td>
+                                    <td class="border border-gray-300 px-3 py-2">PowerPoint, Google Slides</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2 font-medium text-green-700">🖼️ Gambar</td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.jpg/.jpeg</td>
+                                    <td class="border border-gray-300 px-3 py-2">Format gambar terkompresi</td>
+                                    <td class="border border-gray-300 px-3 py-2">Photos, Gallery, Browser</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.png</td>
+                                    <td class="border border-gray-300 px-3 py-2">Gambar dengan transparansi</td>
+                                    <td class="border border-gray-300 px-3 py-2">Photos, Paint, Photoshop</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.gif</td>
+                                    <td class="border border-gray-300 px-3 py-2">Gambar animasi sederhana</td>
+                                    <td class="border border-gray-300 px-3 py-2">Browser, Image Viewer</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.svg</td>
+                                    <td class="border border-gray-300 px-3 py-2">Gambar vektor scalable</td>
+                                    <td class="border border-gray-300 px-3 py-2">Browser, Illustrator</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2 font-medium text-purple-700">🎵 Audio</td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.mp3</td>
+                                    <td class="border border-gray-300 px-3 py-2">Format audio terkompresi</td>
+                                    <td class="border border-gray-300 px-3 py-2">Music Player, Spotify</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.wav</td>
+                                    <td class="border border-gray-300 px-3 py-2">Audio kualitas tinggi</td>
+                                    <td class="border border-gray-300 px-3 py-2">Media Player, Audacity</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.m4a</td>
+                                    <td class="border border-gray-300 px-3 py-2">Format audio Apple</td>
+                                    <td class="border border-gray-300 px-3 py-2">iTunes, Music Player</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.flac</td>
+                                    <td class="border border-gray-300 px-3 py-2">Audio lossless compression</td>
+                                    <td class="border border-gray-300 px-3 py-2">VLC, Foobar2000</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2 font-medium text-red-700">🎬 Video</td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.mp4</td>
+                                    <td class="border border-gray-300 px-3 py-2">Format video universal</td>
+                                    <td class="border border-gray-300 px-3 py-2">VLC, Media Player</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.avi</td>
+                                    <td class="border border-gray-300 px-3 py-2">Audio Video Interleave</td>
+                                    <td class="border border-gray-300 px-3 py-2">VLC, Windows Media</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.mkv</td>
+                                    <td class="border border-gray-300 px-3 py-2">Matroska Video</td>
+                                    <td class="border border-gray-300 px-3 py-2">VLC, KMPlayer</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.mov</td>
+                                    <td class="border border-gray-300 px-3 py-2">QuickTime Movie</td>
+                                    <td class="border border-gray-300 px-3 py-2">QuickTime, VLC</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2 font-medium text-orange-700">📦 Arsip</td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.zip</td>
+                                    <td class="border border-gray-300 px-3 py-2">File terkompresi</td>
+                                    <td class="border border-gray-300 px-3 py-2">WinRAR, 7-Zip</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.rar</td>
+                                    <td class="border border-gray-300 px-3 py-2">WinRAR Archive</td>
+                                    <td class="border border-gray-300 px-3 py-2">WinRAR, 7-Zip</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.7z</td>
+                                    <td class="border border-gray-300 px-3 py-2">7-Zip Archive</td>
+                                    <td class="border border-gray-300 px-3 py-2">7-Zip, WinRAR</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2 font-medium text-indigo-700">💻 Program</td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.exe</td>
+                                    <td class="border border-gray-300 px-3 py-2">Executable Windows</td>
+                                    <td class="border border-gray-300 px-3 py-2">Windows System</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.apk</td>
+                                    <td class="border border-gray-300 px-3 py-2">Android Package</td>
+                                    <td class="border border-gray-300 px-3 py-2">Android System</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-mono">.dmg</td>
+                                    <td class="border border-gray-300 px-3 py-2">Disk Image macOS</td>
+                                    <td class="border border-gray-300 px-3 py-2">macOS System</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 class="font-bold mb-3">🌟 Contoh dalam Kehidupan Sehari-hari:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-blue-500 rounded-lg p-2">
+                                    <span class="text-white font-mono text-sm">.docx</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Tugas_Matematika.docx</div>
+                                    <div class="text-sm text-gray-600">File tugas dalam format Word</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-green-500 rounded-lg p-2">
+                                    <span class="text-white font-mono text-sm">.jpg</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Foto_Wisuda.jpg</div>
+                                    <div class="text-sm text-gray-600">Foto kenangan dalam format JPEG</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-purple-500 rounded-lg p-2">
+                                    <span class="text-white font-mono text-sm">.mp3</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Lagu_Favorit.mp3</div>
+                                    <div class="text-sm text-gray-600">File musik dalam format MP3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-red-500 rounded-lg p-2">
+                                    <span class="text-white font-mono text-sm">.mp4</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">Video_Tutorial.mp4</div>
+                                    <div class="text-sm text-gray-600">Video pembelajaran dalam format MP4</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mt-4">
+                        <p class="text-sm"><strong>💡 Tips:</strong> Jangan mengubah ekstensi file sembarangan! Ini bisa membuat file tidak bisa dibuka. Ekstensi menentukan aplikasi mana yang akan membuka file tersebut.</p>
+                    </div>
+                </div>
+
+                <!-- Materi 5 -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="bg-red-500 rounded-full p-3">
+                            <span class="text-2xl text-white">✂️</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Copy, Cut, dan Paste</h3>
+                            <p class="text-gray-600">Operasi dasar untuk mengelola file</p>
+                        </div>
+                    </div>
+                    <p class="mb-4">Copy, Cut, dan Paste adalah tiga operasi dasar yang sangat penting dalam mengelola file dan folder di komputer.</p>
+                    
+                    <h4 class="font-bold mb-3">🔧 Penjelasan Operasi:</h4>
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="bg-blue-500 rounded-full p-2">
+                                    <span class="text-white text-lg">📋</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-blue-800">COPY (Salin)</h5>
+                                    <p class="text-sm text-blue-600">Membuat salinan file tanpa menghapus file asli</p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-blue-100">
+                                <p class="text-sm text-gray-700 mb-2"><strong>Cara kerja:</strong> File asli tetap di tempat semula, dan salinan baru dibuat di lokasi tujuan.</p>
+                                <p class="text-sm text-gray-700"><strong>Contoh:</strong> Menyalin foto dari folder "Download" ke folder "Foto Keluarga"</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="bg-orange-500 rounded-full p-2">
+                                    <span class="text-white text-lg">✂️</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-orange-800">CUT (Potong)</h5>
+                                    <p class="text-sm text-orange-600">Memindahkan file dari satu lokasi ke lokasi lain</p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-orange-100">
+                                <p class="text-sm text-gray-700 mb-2"><strong>Cara kerja:</strong> File dipindahkan dari lokasi asli ke lokasi baru (file asli hilang dari tempat semula).</p>
+                                <p class="text-sm text-gray-700"><strong>Contoh:</strong> Memindahkan dokumen dari "Desktop" ke folder "Tugas Kuliah"</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="bg-green-500 rounded-full p-2">
+                                    <span class="text-white text-lg">📌</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-green-800">PASTE (Tempel)</h5>
+                                    <p class="text-sm text-green-600">Menyelesaikan operasi copy atau cut</p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-green-100">
+                                <p class="text-sm text-gray-700 mb-2"><strong>Cara kerja:</strong> Menempatkan file yang sudah di-copy atau di-cut ke lokasi yang dipilih.</p>
+                                <p class="text-sm text-gray-700"><strong>Contoh:</strong> Setelah copy/cut, klik kanan di folder tujuan lalu pilih "Paste"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold mb-3">⌨️ Shortcut Keyboard:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">📋</div>
+                            <div class="font-bold text-gray-800 mb-1">COPY</div>
+                            <div class="bg-blue-100 rounded-lg px-3 py-1 text-sm font-mono text-blue-800">Ctrl + C</div>
+                            <div class="text-xs text-gray-600 mt-1">(Mac: Cmd + C)</div>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">✂️</div>
+                            <div class="font-bold text-gray-800 mb-1">CUT</div>
+                            <div class="bg-orange-100 rounded-lg px-3 py-1 text-sm font-mono text-orange-800">Ctrl + X</div>
+                            <div class="text-xs text-gray-600 mt-1">(Mac: Cmd + X)</div>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">📌</div>
+                            <div class="font-bold text-gray-800 mb-1">PASTE</div>
+                            <div class="bg-green-100 rounded-lg px-3 py-1 text-sm font-mono text-green-800">Ctrl + V</div>
+                            <div class="text-xs text-gray-600 mt-1">(Mac: Cmd + V)</div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold mb-3">📱 Cara Menggunakan (Step by Step):</h4>
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+                            <h5 class="font-bold text-gray-800 mb-3">🖱️ Menggunakan Mouse (Klik Kanan):</h5>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</div>
+                                    <span>Klik kanan pada file yang ingin di-copy/cut</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</div>
+                                    <span>Pilih "Copy" atau "Cut" dari menu yang muncul</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</div>
+                                    <span>Buka folder tujuan</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">4</div>
+                                    <span>Klik kanan di area kosong, lalu pilih "Paste"</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+                            <h5 class="font-bold text-gray-800 mb-3">⌨️ Menggunakan Keyboard:</h5>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</div>
+                                    <span>Pilih file dengan klik sekali</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</div>
+                                    <span>Tekan <strong>Ctrl + C</strong> (copy) atau <strong>Ctrl + X</strong> (cut)</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</div>
+                                    <span>Buka folder tujuan</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">4</div>
+                                    <span>Tekan <strong>Ctrl + V</strong> untuk paste</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold mb-3">🎯 Contoh Praktis dalam Kehidupan Sehari-hari:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-2xl">📸</span>
+                                <div>
+                                    <div class="font-bold text-pink-800">Mengatur Foto</div>
+                                    <div class="text-sm text-pink-600">Memindahkan foto dari HP ke laptop</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-700">
+                                <strong>Skenario:</strong> Anda ingin memindahkan foto liburan dari folder "Download" ke folder "Foto 2024"<br>
+                                <strong>Solusi:</strong> Cut foto dari "Download", lalu Paste ke "Foto 2024"
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-2xl">📄</span>
+                                <div>
+                                    <div class="font-bold text-yellow-800">Backup Dokumen</div>
+                                    <div class="text-sm text-yellow-600">Membuat salinan file penting</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-700">
+                                <strong>Skenario:</strong> Anda ingin membuat backup CV sebelum mengeditnya<br>
+                                <strong>Solusi:</strong> Copy file "CV.docx", lalu Paste dengan nama "CV_Backup.docx"
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-2xl">🎵</span>
+                                <div>
+                                    <div class="font-bold text-purple-800">Organisir Musik</div>
+                                    <div class="text-sm text-purple-600">Mengelompokkan lagu berdasarkan genre</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-700">
+                                <strong>Skenario:</strong> Memindahkan lagu pop ke folder "Musik Pop"<br>
+                                <strong>Solusi:</strong> Pilih beberapa lagu, Cut, lalu Paste ke folder yang sesuai
+                            </div>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <span class="text-2xl">📚</span>
+                                <div>
+                                    <div class="font-bold text-green-800">Tugas Kuliah</div>
+                                    <div class="text-sm text-green-600">Mengumpulkan file tugas</div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-700">
+                                <strong>Skenario:</strong> Mengumpulkan semua tugas semester ke satu folder<br>
+                                <strong>Solusi:</strong> Copy file tugas dari berbagai folder, Paste ke "Tugas Semester 1"
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold mb-3">⚠️ Tips dan Peringatan Penting:</h4>
+                    <div class="space-y-3">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-green-600 text-lg">✅</span>
+                                <div>
+                                    <div class="font-bold text-green-800">Tips Berguna:</div>
+                                    <ul class="text-sm text-green-700 mt-1 space-y-1">
+                                        <li>• Gunakan <strong>Copy</strong> jika ingin file tetap ada di tempat asli</li>
+                                        <li>• Gunakan <strong>Cut</strong> jika ingin memindahkan file sepenuhnya</li>
+                                        <li>• Bisa copy/cut beberapa file sekaligus dengan Ctrl+klik</li>
+                                        <li>• Shortcut keyboard lebih cepat daripada klik kanan</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-red-600 text-lg">⚠️</span>
+                                <div>
+                                    <div class="font-bold text-red-800">Hati-hati:</div>
+                                    <ul class="text-sm text-red-700 mt-1 space-y-1">
+                                        <li>• Jangan cut file penting tanpa memastikan paste berhasil</li>
+                                        <li>• Periksa ruang penyimpanan cukup sebelum paste file besar</li>
+                                        <li>• Hati-hati saat cut file sistem atau program</li>
+                                        <li>• Selalu buat backup file penting sebelum memindahkan</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-blue-600 text-lg">💡</span>
+                                <div>
+                                    <div class="font-bold text-blue-800">Tahukah Anda?</div>
+                                    <ul class="text-sm text-blue-700 mt-1 space-y-1">
+                                        <li>• File yang di-cut akan "menghilang sementara" sampai di-paste</li>
+                                        <li>• Bisa paste file yang sama berkali-kali setelah copy</li>
+                                        <li>• Operasi ini juga bisa digunakan untuk teks di dalam dokumen</li>
+                                        <li>• Drag & drop adalah alternatif lain untuk memindahkan file</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Section -->
+        <div id="game" class="tab-content">
+            <!-- Game Header -->
+            <div class="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-2xl p-6 mb-6 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                <div class="absolute top-4 left-4 w-16 h-16 bg-yellow-300 opacity-20 rounded-full animate-pulse"></div>
+                <div class="absolute bottom-4 right-4 w-12 h-12 bg-blue-300 opacity-20 rounded-full animate-bounce"></div>
+                
+                <div class="text-center relative z-10">
+                    <div class="text-5xl mb-3 animate-bounce">🎮</div>
+                    <h2 class="text-3xl font-bold mb-2">File Organization Challenge</h2>
+                    <p class="text-purple-100 mb-4 text-lg">Drag & drop files ke folder yang tepat!</p>
+                    
+                    <!-- Game Stats -->
+                    <div class="flex justify-center space-x-6 mt-4">
+                        <div class="bg-white bg-opacity-20 rounded-xl px-4 py-2 backdrop-blur-sm">
+                            <div class="text-2xl">⏱️</div>
+                            <div class="font-bold" id="game-timer">00:00</div>
+                            <div class="text-xs text-purple-100">Waktu</div>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-xl px-4 py-2 backdrop-blur-sm">
+                            <div class="text-2xl">🎯</div>
+                            <div class="font-bold" id="game-progress">0/8</div>
+                            <div class="text-xs text-purple-100">Progress</div>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-xl px-4 py-2 backdrop-blur-sm">
+                            <div class="text-2xl">⭐</div>
+                            <div class="font-bold" id="game-score">0</div>
+                            <div class="text-xs text-purple-100">Skor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Instructions -->
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 mb-6 border border-blue-200">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-500 rounded-full p-2">
+                        <span class="text-white text-lg">💡</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800">Cara Bermain:</h3>
+                        <p class="text-sm text-gray-600">Klik file dan drag ke folder yang sesuai. Semakin cepat, semakin tinggi skormu!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Area -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <!-- Drop Zones (Folders) -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">📁</span>
+                        Target Folders
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="folder-zone border-3 border-dashed border-blue-300 rounded-xl p-6 text-center min-h-[140px] transition-all duration-300 hover:border-blue-500 hover:bg-blue-50 hover:scale-105 cursor-pointer" data-type="dokumen">
+                            <div class="text-4xl mb-3 animate-pulse">📄</div>
+                            <div class="font-bold text-blue-800 text-lg">Dokumen</div>
+                            <div class="text-sm text-blue-600 mt-2">.pdf, .docx, .txt</div>
+                            <div class="text-xs text-gray-500 mt-2 font-medium" id="dokumen-count">0 files</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500 transition-all duration-500" id="dokumen-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="folder-zone border-3 border-dashed border-green-300 rounded-xl p-6 text-center min-h-[140px] transition-all duration-300 hover:border-green-500 hover:bg-green-50 hover:scale-105 cursor-pointer" data-type="gambar">
+                            <div class="text-4xl mb-3 animate-pulse">🖼️</div>
+                            <div class="font-bold text-green-800 text-lg">Gambar</div>
+                            <div class="text-sm text-green-600 mt-2">.jpg, .png, .gif</div>
+                            <div class="text-xs text-gray-500 mt-2 font-medium" id="gambar-count">0 files</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 transition-all duration-500" id="gambar-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="folder-zone border-3 border-dashed border-purple-300 rounded-xl p-6 text-center min-h-[140px] transition-all duration-300 hover:border-purple-500 hover:bg-purple-50 hover:scale-105 cursor-pointer" data-type="musik">
+                            <div class="text-4xl mb-3 animate-pulse">🎵</div>
+                            <div class="font-bold text-purple-800 text-lg">Musik</div>
+                            <div class="text-sm text-purple-600 mt-2">.mp3, .wav, .m4a</div>
+                            <div class="text-xs text-gray-500 mt-2 font-medium" id="musik-count">0 files</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-purple-500 transition-all duration-500" id="musik-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="folder-zone border-3 border-dashed border-red-300 rounded-xl p-6 text-center min-h-[140px] transition-all duration-300 hover:border-red-500 hover:bg-red-50 hover:scale-105 cursor-pointer" data-type="video">
+                            <div class="text-4xl mb-3 animate-pulse">🎬</div>
+                            <div class="font-bold text-red-800 text-lg">Video</div>
+                            <div class="text-sm text-red-600 mt-2">.mp4, .avi, .mkv</div>
+                            <div class="text-xs text-gray-500 mt-2 font-medium" id="video-count">0 files</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 transition-all duration-500" id="video-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files to Organize -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">📋</span>
+                        Files to Organize
+                        <span class="ml-auto text-sm bg-orange-100 text-orange-800 px-3 py-1 rounded-full font-medium">Drag me!</span>
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="game-files">
+                        <div class="file-item bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-blue-200 hover:border-blue-400" data-file="CV_Terbaru.pdf" data-type="dokumen" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">📄</div>
+                                <div class="text-sm font-bold text-blue-800">CV_Terbaru.pdf</div>
+                                <div class="text-xs text-blue-600 mt-1">Document</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-green-100 to-green-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-green-200 hover:border-green-400" data-file="Foto_Wisuda.jpg" data-type="gambar" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🖼️</div>
+                                <div class="text-sm font-bold text-green-800">Foto_Wisuda.jpg</div>
+                                <div class="text-xs text-green-600 mt-1">Image</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-purple-200 hover:border-purple-400" data-file="Lagu_Hits.mp3" data-type="musik" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🎵</div>
+                                <div class="text-sm font-bold text-purple-800">Lagu_Hits.mp3</div>
+                                <div class="text-xs text-purple-600 mt-1">Audio</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-red-100 to-red-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-red-200 hover:border-red-400" data-file="Tutorial_Coding.mp4" data-type="video" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🎬</div>
+                                <div class="text-sm font-bold text-red-800">Tutorial_Coding.mp4</div>
+                                <div class="text-xs text-red-600 mt-1">Video</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-blue-200 hover:border-blue-400" data-file="Tugas_Akhir.docx" data-type="dokumen" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">📄</div>
+                                <div class="text-sm font-bold text-blue-800">Tugas_Akhir.docx</div>
+                                <div class="text-xs text-blue-600 mt-1">Document</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-green-100 to-green-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-green-200 hover:border-green-400" data-file="Screenshot_Game.png" data-type="gambar" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🖼️</div>
+                                <div class="text-sm font-bold text-green-800">Screenshot_Game.png</div>
+                                <div class="text-xs text-green-600 mt-1">Image</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-purple-200 hover:border-purple-400" data-file="Podcast_Tech.mp3" data-type="musik" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🎵</div>
+                                <div class="text-sm font-bold text-purple-800">Podcast_Tech.mp3</div>
+                                <div class="text-xs text-purple-600 mt-1">Audio</div>
+                            </div>
+                        </div>
+                        
+                        <div class="file-item bg-gradient-to-br from-red-100 to-red-200 rounded-xl p-4 cursor-grab active:cursor-grabbing hover:shadow-lg transform hover:scale-105 transition-all duration-200 border-2 border-red-200 hover:border-red-400" data-file="Vlog_Liburan.mp4" data-type="video" draggable="true">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🎬</div>
+                                <div class="text-sm font-bold text-red-800">Vlog_Liburan.mp4</div>
+                                <div class="text-xs text-red-600 mt-1">Video</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Controls -->
+                <div class="flex justify-center space-x-4">
+                    <button onclick="startGame()" id="start-game-btn" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-8 py-3 rounded-xl font-bold hover:from-green-600 hover:to-blue-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                        🚀 Mulai Game
+                    </button>
+                    <button onclick="resetGame()" class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-red-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                        🔄 Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Completion -->
+            <div id="game-completed" class="bg-gradient-to-r from-green-400 to-blue-500 rounded-2xl p-8 text-white text-center hidden relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                
+                <div class="relative z-10">
+                    <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                    <h3 class="text-3xl font-bold mb-3">Fantastic!</h3>
+                    <p class="text-xl mb-4">Semua file berhasil diorganisir dengan sempurna!</p>
+                    
+                    <div class="flex justify-center space-x-6 mb-6">
+                        <div class="bg-white bg-opacity-20 rounded-xl px-4 py-3 backdrop-blur-sm">
+                            <div class="text-2xl">⏱️</div>
+                            <div class="font-bold text-lg" id="final-time">00:00</div>
+                            <div class="text-sm text-green-100">Waktu</div>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-xl px-4 py-3 backdrop-blur-sm">
+                            <div class="text-2xl">⭐</div>
+                            <div class="font-bold text-lg" id="final-score">0</div>
+                            <div class="text-sm text-green-100">Skor</div>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-xl px-4 py-3 backdrop-blur-sm">
+                            <div class="text-2xl">🎯</div>
+                            <div class="font-bold text-lg">100%</div>
+                            <div class="text-sm text-green-100">Akurasi</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <button onclick="resetGame()" class="bg-white text-green-600 px-8 py-3 rounded-xl font-bold hover:bg-green-50 transform hover:scale-105 transition-all duration-200 shadow-lg mr-4">
+                            🎮 Main Lagi
+                        </button>
+                        <button onclick="showTab('quiz')" class="bg-yellow-400 text-yellow-900 px-8 py-3 rounded-xl font-bold hover:bg-yellow-300 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                            📝 Lanjut ke Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz" class="tab-content">
+            <!-- Quiz Start Screen -->
+            <div id="quiz-start">
+                <div class="bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 rounded-2xl p-8 mb-6 text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                    
+                    <div class="text-center relative z-10">
+                        <div class="text-6xl mb-4 animate-bounce">🧠</div>
+                        <h2 class="text-3xl font-bold mb-3">Kuis Pemahaman</h2>
+                        <p class="text-purple-100 mb-6 text-lg">Uji seberapa paham Anda tentang file management!</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                            <div class="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                                <div class="text-2xl mb-2">📊</div>
+                                <div class="font-bold text-lg">20 Soal</div>
+                                <div class="text-sm text-purple-100">Pilihan Ganda</div>
+                            </div>
+                            <div class="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                                <div class="text-2xl mb-2">⏱️</div>
+                                <div class="font-bold text-lg">Tanpa Batas</div>
+                                <div class="text-sm text-purple-100">Waktu Fleksibel</div>
+                            </div>
+                            <div class="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                                <div class="text-2xl mb-2">🏆</div>
+                                <div class="font-bold text-lg">Skor Max</div>
+                                <div class="text-sm text-purple-100">100 Poin</div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="startQuiz()" class="bg-white text-purple-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-purple-50 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                            🚀 Mulai Kuis Sekarang!
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Tips -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-3">💡</span>
+                        Tips Sukses Kuis
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-2 flex-shrink-0">
+                                <span class="text-green-600">✓</span>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Baca Materi Dulu</div>
+                                <div class="text-sm text-gray-600">Pastikan sudah memahami semua materi</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-blue-100 rounded-full p-2 flex-shrink-0">
+                                <span class="text-blue-600">📖</span>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Baca Soal Teliti</div>
+                                <div class="text-sm text-gray-600">Pahami pertanyaan sebelum menjawab</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-purple-100 rounded-full p-2 flex-shrink-0">
+                                <span class="text-purple-600">🎯</span>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Fokus & Tenang</div>
+                                <div class="text-sm text-gray-600">Tidak ada batasan waktu, santai saja</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-orange-100 rounded-full p-2 flex-shrink-0">
+                                <span class="text-orange-600">🔄</span>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Bisa Diulang</div>
+                                <div class="text-sm text-gray-600">Kuis bisa diulang kapan saja</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <!-- Quiz Question Screen -->
+            <div id="quiz-question" class="hidden">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <!-- Progress Header -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-purple-100 rounded-full p-2">
+                                    <span class="text-purple-600 font-bold" id="question-number">1</span>
+                                </div>
+                                <span id="question-counter" class="font-medium text-gray-700"></span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🏆</span>
+                                <span id="quiz-score" class="font-bold text-purple-600">Skor: 0</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div id="progress-bar" class="bg-gradient-to-r from-purple-500 to-blue-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6 border border-blue-100">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-blue-500 rounded-full p-3 flex-shrink-0">
+                                <span class="text-white text-xl">❓</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 id="current-question" class="text-xl font-bold text-gray-800 leading-relaxed"></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Answer Options -->
+                    <div id="quiz-options" class="space-y-3 mb-8"></div>
+
+                    <!-- Navigation Button -->
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-500">
+                            💡 Pilih jawaban yang paling tepat
+                        </div>
+                        <button id="next-button" onclick="nextQuestion()" disabled
+                                class="px-8 py-3 rounded-xl font-bold transition-all duration-200 bg-gray-300 text-gray-500 cursor-not-allowed">
+                            Lanjut →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Result Screen -->
+            <div id="quiz-result" class="hidden">
+                <div class="text-center">
+                    <!-- Result Header -->
+                    <div id="result-card" class="bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl p-8 mb-6 text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                        
+                        <div class="relative z-10">
+                            <div id="result-emoji" class="text-6xl mb-4 animate-bounce">🎉</div>
+                            <h3 class="text-3xl font-bold mb-3">Kuis Selesai!</h3>
+                            <p id="final-score" class="text-xl mb-4 font-bold">Skor Anda: 0/100</p>
+                            
+                            <!-- Score Progress -->
+                            <div class="mb-6">
+                                <div class="w-full bg-white bg-opacity-30 rounded-full h-4 overflow-hidden">
+                                    <div id="final-progress" class="bg-white h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <p id="result-message" class="text-lg mb-6 text-green-100"></p>
+                        </div>
+                    </div>
+
+                    <!-- Achievement Badges -->
+                    <div id="achievement-badges" class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h4 class="font-bold text-gray-800 mb-4">🏅 Pencapaian Anda</h4>
+                        <div id="badges-container" class="flex justify-center space-x-4"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button onclick="resetQuiz()" class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 font-bold transition-all duration-200 transform hover:scale-105">
+                                🔄 Ulangi Kuis
+                            </button>
+                            <button onclick="showTab('materi')" class="bg-purple-600 text-white px-8 py-3 rounded-xl hover:bg-purple-700 font-bold transition-all duration-200 transform hover:scale-105">
+                                📚 Pelajari Lagi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="tab-content">
+            <!-- Practice Header -->
+            <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-6 mb-6 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                <div class="absolute top-4 left-4 w-16 h-16 bg-yellow-300 opacity-20 rounded-full animate-pulse"></div>
+                <div class="absolute bottom-4 right-4 w-12 h-12 bg-blue-300 opacity-20 rounded-full animate-bounce"></div>
+                
+                <div class="text-center relative z-10">
+                    <div class="text-5xl mb-3 animate-bounce">💼</div>
+                    <h2 class="text-3xl font-bold mb-2">Studi Kasus Praktis</h2>
+                    <p class="text-purple-100 text-lg">Terapkan ilmu file management dalam skenario nyata!</p>
+                </div>
+            </div>
+
+            <!-- Scenario Card -->
+            <div class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-2xl p-6 mb-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-orange-200 opacity-30 rounded-full -mr-10 -mt-10"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="bg-orange-500 rounded-full p-3">
+                            <span class="text-white text-2xl">🎭</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-orange-800">Skenario Challenge</h3>
+                            <p class="text-orange-600">Situasi yang sering dialami mahasiswa</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 border border-orange-200">
+                        <p class="text-gray-700 leading-relaxed">
+                            🎓 <strong>Anda adalah mahasiswa semester 3</strong> yang baru saja membeli laptop baru. 
+                            Laptop lama Anda rusak dan semua file tersebar tidak teratur di berbagai tempat. 
+                            Sekarang saatnya mengorganisir semua file dengan sistem yang rapi dan mudah diakses!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Files to Organize -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="bg-blue-500 rounded-full p-3">
+                        <span class="text-white text-2xl">📋</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">File yang Perlu Diorganisir</h3>
+                        <p class="text-gray-600">15 file dengan berbagai jenis dan kepentingan</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Academic Files -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="bg-blue-500 rounded-lg p-2">
+                                <span class="text-white text-lg">🎓</span>
+                            </div>
+                            <div class="font-bold text-blue-800">File Akademik</div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-blue-100">
+                                <span>📄</span><span class="font-medium">Tugas_Matematika.docx</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-blue-100">
+                                <span>📊</span><span class="font-medium">Laporan_Praktikum.xlsx</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-blue-100">
+                                <span>📑</span><span class="font-medium">Presentasi_Skripsi.pptx</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-blue-100">
+                                <span>📄</span><span class="font-medium">Jurnal_Referensi.pdf</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-blue-100">
+                                <span>📝</span><span class="font-medium">Catatan_Kuliah.txt</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Files -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-200">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="bg-green-500 rounded-lg p-2">
+                                <span class="text-white text-lg">👤</span>
+                            </div>
+                            <div class="font-bold text-green-800">File Pribadi</div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-green-100">
+                                <span>📸</span><span class="font-medium">Foto_Keluarga.jpg</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-green-100">
+                                <span>🎵</span><span class="font-medium">Lagu_Favorit.mp3</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-green-100">
+                                <span>🎬</span><span class="font-medium">Video_Liburan.mp4</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-green-100">
+                                <span>📱</span><span class="font-medium">Screenshot_Chat.png</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-green-100">
+                                <span>📖</span><span class="font-medium">Diary_Harian.docx</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Important Documents -->
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="bg-purple-500 rounded-lg p-2">
+                                <span class="text-white text-lg">⭐</span>
+                            </div>
+                            <div class="font-bold text-purple-800">Dokumen Penting</div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-purple-100">
+                                <span>📄</span><span class="font-medium">CV_Terbaru.pdf</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-purple-100">
+                                <span>🏆</span><span class="font-medium">Sertifikat_Kursus.pdf</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-purple-100">
+                                <span>🆔</span><span class="font-medium">KTP_Scan.jpg</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-purple-100">
+                                <span>🎓</span><span class="font-medium">Transkrip_Nilai.pdf</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-lg p-2 border border-purple-100">
+                                <span>💼</span><span class="font-medium">Surat_Lamaran.docx</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Folder Structure Builder -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="bg-indigo-500 rounded-full p-3">
+                        <span class="text-white text-2xl">🗂️</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Rancang Struktur Folder Anda</h3>
+                        <p class="text-gray-600">Buat hierarki folder yang logis dan mudah diakses</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 mb-6 border border-indigo-200">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <span class="text-2xl">💡</span>
+                        <div class="font-bold text-indigo-800">Tips Membuat Struktur Folder:</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-gray-700">Gunakan nama yang jelas dan deskriptif</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-gray-700">Kelompokkan berdasarkan kategori atau kepentingan</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-gray-700">Buat subfolder untuk organisasi yang lebih detail</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-gray-700">Pertimbangkan frekuensi akses file</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="practice-folders">
+                    <div class="flex items-center space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300">
+                        <div class="bg-blue-500 rounded-lg p-2">
+                            <span class="text-white">📁</span>
+                        </div>
+                        <input type="text" placeholder="Contoh: Kuliah_Semester_3" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+                
+                <button onclick="addPracticeFolder()" class="w-full py-4 border-2 border-dashed border-indigo-300 rounded-xl text-indigo-600 hover:border-indigo-500 hover:bg-indigo-50 font-medium transition-all duration-200 mt-4 flex items-center justify-center space-x-2">
+                    <span class="text-xl">➕</span>
+                    <span>Tambah Folder Baru</span>
+                </button>
+            </div>
+
+            <!-- Explanation Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-orange-500 rounded-full p-3">
+                        <span class="text-white text-2xl">💭</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Jelaskan Strategi Anda</h3>
+                        <p class="text-gray-600">Mengapa Anda memilih struktur folder tersebut?</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl p-4 mb-4 border border-orange-200">
+                    <div class="text-sm text-orange-800 mb-2 font-medium">💡 Pertanyaan panduan:</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-orange-700">
+                        <div>• Bagaimana Anda mengelompokkan file?</div>
+                        <div>• Mengapa struktur ini efisien?</div>
+                        <div>• Bagaimana kemudahan akses file?</div>
+                        <div>• Apakah ada backup strategy?</div>
+                    </div>
+                </div>
+                
+                <textarea id="practice-explanation" 
+                          placeholder="Contoh: Saya membuat folder 'Kuliah_Semester_3' untuk semua file akademik karena mudah diakses dan terorganisir berdasarkan waktu. Folder 'Dokumen_Penting' terpisah agar mudah ditemukan saat dibutuhkan..."
+                          class="w-full px-4 py-3 border border-gray-300 rounded-xl h-32 resize-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"></textarea>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white text-center">
+                <div class="text-4xl mb-3">🚀</div>
+                <h3 class="text-xl font-bold mb-2">Siap Submit Solusi Anda?</h3>
+                <p class="text-green-100 mb-4">Dapatkan feedback dan contoh struktur folder terbaik!</p>
+                <button onclick="submitPractice()" class="bg-white text-green-600 px-8 py-3 rounded-xl hover:bg-green-50 font-bold text-lg transform hover:scale-105 transition-all duration-200 shadow-lg">
+                    📤 Submit Jawaban
+                </button>
+            </div>
+
+            <!-- Result Section -->
+            <div id="practice-result" class="bg-white rounded-xl shadow-lg p-6 mt-6 hidden">
+                <div class="text-center mb-6">
+                    <div class="text-5xl mb-3 animate-bounce">🎉</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Jawaban Berhasil Dikirim!</h3>
+                    <p class="text-gray-600">Berikut adalah analisis dan contoh struktur folder yang optimal</p>
+                </div>
+
+                <!-- Analysis -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6 border border-blue-200">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-blue-500 rounded-full p-2">
+                            <span class="text-white text-lg">📊</span>
+                        </div>
+                        <h4 class="font-bold text-blue-800 text-lg">Analisis Solusi Anda</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-lg p-4 border border-blue-100">
+                            <div class="text-2xl mb-2">⭐</div>
+                            <div class="font-bold text-gray-800">Kreativitas</div>
+                            <div class="text-sm text-gray-600">Pendekatan unik dalam organisasi</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 border border-blue-100">
+                            <div class="text-2xl mb-2">🎯</div>
+                            <div class="font-bold text-gray-800">Praktikalitas</div>
+                            <div class="text-sm text-gray-600">Mudah digunakan sehari-hari</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 border border-blue-100">
+                            <div class="text-2xl mb-2">🔍</div>
+                            <div class="font-bold text-gray-800">Aksesibilitas</div>
+                            <div class="text-sm text-gray-600">Cepat menemukan file</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Practice Example -->
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-green-500 rounded-full p-2">
+                            <span class="text-white text-lg">🏆</span>
+                        </div>
+                        <h4 class="font-bold text-green-800 text-lg">Contoh Struktur Folder Optimal</h4>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 border border-green-100">
+                        <div class="font-mono text-sm space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-blue-600">📁</span>
+                                <span class="font-bold">01_Kuliah_Aktif/</span>
+                            </div>
+                            <div class="ml-6 space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-blue-500">📁</span>
+                                    <span>Semester_3/</span>
+                                </div>
+                                <div class="ml-6 space-y-1">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-gray-500">📄</span>
+                                        <span>Tugas_Matematika.docx</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-gray-500">📊</span>
+                                        <span>Laporan_Praktikum.xlsx</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-blue-500">📁</span>
+                                    <span>Referensi_Jurnal/</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 mt-3">
+                                <span class="text-purple-600">📁</span>
+                                <span class="font-bold">02_Dokumen_Penting/</span>
+                            </div>
+                            <div class="ml-6 space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-purple-500">📁</span>
+                                    <span>Identitas/</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-purple-500">📁</span>
+                                    <span>Sertifikat/</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-purple-500">📁</span>
+                                    <span>CV_Portfolio/</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 mt-3">
+                                <span class="text-green-600">📁</span>
+                                <span class="font-bold">03_Media_Pribadi/</span>
+                            </div>
+                            <div class="ml-6 space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500">📁</span>
+                                    <span>Foto_Keluarga/</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500">📁</span>
+                                    <span>Musik_Favorit/</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500">📁</span>
+                                    <span>Video_Pribadi/</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2 mt-3">
+                                <span class="text-orange-600">📁</span>
+                                <span class="font-bold">04_Backup_Archive/</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-green-100 rounded-lg border border-green-200">
+                        <div class="font-bold text-green-800 mb-2">🌟 Keunggulan Struktur Ini:</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-green-700">
+                            <div>• Menggunakan prefix angka untuk urutan prioritas</div>
+                            <div>• Pemisahan jelas antara akademik dan pribadi</div>
+                            <div>• Subfolder untuk organisasi detail</div>
+                            <div>• Folder backup untuk keamanan data</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                    <button onclick="resetPractice()" class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 font-bold transition-all duration-200 transform hover:scale-105">
+                        🔄 Coba Lagi
+                    </button>
+                    <button onclick="showTab('quiz')" class="bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 font-bold transition-all duration-200 transform hover:scale-105">
+                        📝 Lanjut ke Kuis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex justify-around py-4">
+                <button onclick="showTab('materi')" class="nav-btn flex flex-col items-center py-3 px-4 rounded-lg nav-active transition-all duration-200 hover:scale-105">
+                    <div class="text-2xl mb-2">📚</div>
+                    <span class="text-sm font-medium">Materi</span>
+                </button>
+                <button onclick="showTab('game')" class="nav-btn flex flex-col items-center py-3 px-4 rounded-lg text-gray-600 transition-all duration-200 hover:scale-105">
+                    <div class="text-2xl mb-2">🎮</div>
+                    <span class="text-sm font-medium">Game</span>
+                </button>
+                <button onclick="showTab('quiz')" class="nav-btn flex flex-col items-center py-3 px-4 rounded-lg text-gray-600 transition-all duration-200 hover:scale-105">
+                    <div class="text-2xl mb-2">📝</div>
+                    <span class="text-sm font-medium">Kuis</span>
+                </button>
+                <button onclick="showTab('practice')" class="nav-btn flex flex-col items-center py-3 px-4 rounded-lg text-gray-600 transition-all duration-200 hover:scale-105">
+                    <div class="text-2xl mb-2">💼</div>
+                    <span class="text-sm font-medium">Latihan</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // Global variables - explicitly declared
+        let currentQuestion = 0;
+        let quizScore = 0;
+        let selectedAnswer = null;
+        
+        // Ensure global scope access
+        window.currentQuestion = 0;
+        window.quizScore = 0;
+        window.selectedAnswer = null;
+        let gameCompleted = false;
+        let placedFiles = 0;
+        let gameStartTime = 0;
+        let gameTimer = null;
+        let gameScore = 0;
+        let totalFiles = 8;
+        let gameStarted = false;
+
+        // Quiz questions
+        const questions = [
+            {
+                question: "Apa yang dimaksud dengan file?",
+                options: [
+                    "Aplikasi untuk mengedit foto",
+                    "Kumpulan data yang disimpan dengan nama tertentu",
+                    "Folder kosong di komputer",
+                    "Program antivirus"
+                ],
+                correct: 1
+            },
+            {
+                question: "Ekstensi file .jpg biasanya digunakan untuk:",
+                options: [
+                    "File musik",
+                    "File video", 
+                    "File gambar",
+                    "File dokumen"
+                ],
+                correct: 2
+            },
+            {
+                question: "File manager bawaan Windows adalah:",
+                options: [
+                    "Finder",
+                    "Files by Google",
+                    "Windows Explorer", 
+                    "Chrome"
+                ],
+                correct: 2
+            },
+            {
+                question: "File dengan ekstensi .mp3 adalah:",
+                options: [
+                    "File gambar",
+                    "File video",
+                    "File audio",
+                    "File dokumen"
+                ],
+                correct: 2
+            },
+            {
+                question: "Kegunaan utama folder adalah:",
+                options: [
+                    "Mempercepat komputer",
+                    "Mengelompokkan file sejenis",
+                    "Menghemat listrik", 
+                    "Menghapus virus"
+                ],
+                correct: 1
+            },
+            {
+                question: "File manager default di Mac adalah:",
+                options: [
+                    "Windows Explorer",
+                    "Finder",
+                    "Files by Google",
+                    "Chrome OS Files"
+                ],
+                correct: 1
+            },
+            {
+                question: "Ekstensi file .docx digunakan untuk:",
+                options: [
+                    "File gambar",
+                    "File musik",
+                    "Dokumen Microsoft Word",
+                    "File video"
+                ],
+                correct: 2
+            },
+            {
+                question: "Format file .pdf singkatan dari:",
+                options: [
+                    "Personal Data File",
+                    "Portable Document Format",
+                    "Picture Data Format",
+                    "Program Data File"
+                ],
+                correct: 1
+            },
+            {
+                question: "File dengan ekstensi .png biasanya digunakan untuk:",
+                options: [
+                    "Gambar dengan transparansi",
+                    "File musik",
+                    "File video",
+                    "Dokumen teks"
+                ],
+                correct: 0
+            },
+            {
+                question: "Ekstensi file .xlsx digunakan untuk:",
+                options: [
+                    "Presentasi PowerPoint",
+                    "Dokumen Word",
+                    "Spreadsheet Excel",
+                    "File gambar"
+                ],
+                correct: 2
+            },
+            {
+                question: "File dengan ekstensi .mp4 adalah:",
+                options: [
+                    "File audio",
+                    "File gambar",
+                    "File dokumen",
+                    "File video"
+                ],
+                correct: 3
+            },
+            {
+                question: "Shortcut keyboard untuk Copy adalah:",
+                options: [
+                    "Ctrl + V",
+                    "Ctrl + C",
+                    "Ctrl + X",
+                    "Ctrl + Z"
+                ],
+                correct: 1
+            },
+            {
+                question: "Shortcut keyboard untuk Cut adalah:",
+                options: [
+                    "Ctrl + C",
+                    "Ctrl + V",
+                    "Ctrl + X",
+                    "Ctrl + A"
+                ],
+                correct: 2
+            },
+            {
+                question: "Shortcut keyboard untuk Paste adalah:",
+                options: [
+                    "Ctrl + C",
+                    "Ctrl + X",
+                    "Ctrl + V",
+                    "Ctrl + S"
+                ],
+                correct: 2
+            },
+            {
+                question: "Perbedaan utama antara Copy dan Cut adalah:",
+                options: [
+                    "Copy lebih cepat dari Cut",
+                    "Copy membuat salinan, Cut memindahkan file",
+                    "Cut lebih aman dari Copy",
+                    "Tidak ada perbedaan"
+                ],
+                correct: 1
+            },
+            {
+                question: "File dengan ekstensi .gif biasanya digunakan untuk:",
+                options: [
+                    "Dokumen teks",
+                    "File musik",
+                    "Gambar animasi sederhana",
+                    "File video HD"
+                ],
+                correct: 2
+            },
+            {
+                question: "Ekstensi file .wav digunakan untuk:",
+                options: [
+                    "File video",
+                    "Audio kualitas tinggi",
+                    "File gambar",
+                    "Dokumen PDF"
+                ],
+                correct: 1
+            },
+            {
+                question: "File dengan ekstensi .zip adalah:",
+                options: [
+                    "File gambar",
+                    "File musik",
+                    "File terkompresi/arsip",
+                    "File video"
+                ],
+                correct: 2
+            },
+            {
+                question: "Aplikasi file manager untuk Android yang populer adalah:",
+                options: [
+                    "Windows Explorer",
+                    "Finder",
+                    "Files by Google",
+                    "iTunes"
+                ],
+                correct: 2
+            },
+            {
+                question: "Mengapa tidak boleh mengubah ekstensi file sembarangan?",
+                options: [
+                    "Akan membuat komputer rusak",
+                    "File bisa tidak bisa dibuka",
+                    "File akan terhapus otomatis",
+                    "Tidak ada masalah mengubah ekstensi"
+                ],
+                correct: 1
+            }
+        ];
+
+        // Tab navigation
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('nav-active');
+                btn.classList.add('text-gray-600');
+            });
+            
+            event.target.closest('.nav-btn').classList.add('nav-active');
+            event.target.closest('.nav-btn').classList.remove('text-gray-600');
+        }
+
+        // Game functions
+        function startGame() {
+            if (gameStarted) return;
+            
+            gameStarted = true;
+            gameStartTime = Date.now();
+            placedFiles = 0;
+            gameScore = 0;
+            
+            // Start timer
+            gameTimer = setInterval(updateTimer, 1000);
+            
+            // Enable drag and drop
+            initDragAndDrop();
+            
+            // Update UI
+            document.getElementById('start-game-btn').textContent = '🎮 Game Berjalan...';
+            document.getElementById('start-game-btn').disabled = true;
+            document.getElementById('start-game-btn').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        function initDragAndDrop() {
+            // Add drag events to files
+            document.querySelectorAll('.file-item').forEach(file => {
+                file.addEventListener('dragstart', handleDragStart);
+                file.addEventListener('click', handleFileClick);
+            });
+            
+            // Add drop events to folders
+            document.querySelectorAll('.folder-zone').forEach(folder => {
+                folder.addEventListener('dragover', handleDragOver);
+                folder.addEventListener('drop', handleDrop);
+                folder.addEventListener('dragenter', handleDragEnter);
+                folder.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+
+        function handleDragStart(e) {
+            if (!gameStarted) return;
+            e.dataTransfer.setData('text/plain', e.target.dataset.type);
+            e.dataTransfer.setData('file-element', e.target.outerHTML);
+            e.target.classList.add('opacity-50');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.target.closest('.folder-zone').classList.add('ring-4', 'ring-blue-300', 'scale-105');
+        }
+
+        function handleDragLeave(e) {
+            e.target.closest('.folder-zone').classList.remove('ring-4', 'ring-blue-300', 'scale-105');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const folder = e.target.closest('.folder-zone');
+            folder.classList.remove('ring-4', 'ring-blue-300', 'scale-105');
+            
+            const fileType = e.dataTransfer.getData('text/plain');
+            const folderType = folder.dataset.type;
+            
+            // Find the dragged file element
+            const draggedFile = document.querySelector(`.file-item[data-type="${fileType}"]`);
+            
+            if (fileType === folderType && draggedFile) {
+                handleCorrectDrop(draggedFile, folder, folderType);
+            } else {
+                handleIncorrectDrop(draggedFile);
+            }
+        }
+
+        function handleFileClick(e) {
+            if (!gameStarted) return;
+            
+            const fileType = e.currentTarget.dataset.type;
+            const folder = document.querySelector(`.folder-zone[data-type="${fileType}"]`);
+            
+            if (folder) {
+                handleCorrectDrop(e.currentTarget, folder, fileType);
+            }
+        }
+
+        function handleCorrectDrop(fileElement, folder, fileType) {
+            // Hide file with animation
+            fileElement.style.transform = 'scale(0)';
+            fileElement.style.opacity = '0';
+            
+            setTimeout(() => {
+                fileElement.style.display = 'none';
+            }, 300);
+            
+            // Update folder
+            folder.classList.add('border-green-500', 'bg-green-50');
+            
+            // Update counter and progress
+            const counter = document.getElementById(fileType + '-count');
+            const progress = document.getElementById(fileType + '-progress');
+            const currentCount = parseInt(counter.textContent.split(' ')[0]) + 1;
+            const maxFiles = getMaxFilesForType(fileType);
+            
+            counter.textContent = currentCount + ' files';
+            progress.style.width = (currentCount / maxFiles * 100) + '%';
+            
+            // Update game stats
+            placedFiles++;
+            gameScore += calculateScore();
+            updateGameStats();
+            
+            // Show success animation
+            showSuccessAnimation(folder);
+            
+            // Check if game completed
+            if (placedFiles === totalFiles) {
+                completeGame();
+            }
+        }
+
+        function handleIncorrectDrop(fileElement) {
+            // Show error animation
+            fileElement.classList.add('animate-pulse', 'bg-red-200');
+            setTimeout(() => {
+                fileElement.classList.remove('animate-pulse', 'bg-red-200', 'opacity-50');
+            }, 1000);
+        }
+
+        function getMaxFilesForType(type) {
+            const counts = { dokumen: 2, gambar: 2, musik: 2, video: 2 };
+            return counts[type] || 1;
+        }
+
+        function calculateScore() {
+            const timeElapsed = (Date.now() - gameStartTime) / 1000;
+            const baseScore = 100;
+            const timeBonus = Math.max(0, 50 - timeElapsed);
+            return Math.round(baseScore + timeBonus);
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('game-timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateGameStats() {
+            document.getElementById('game-progress').textContent = `${placedFiles}/${totalFiles}`;
+            document.getElementById('game-score').textContent = gameScore;
+        }
+
+        function showSuccessAnimation(folder) {
+            const icon = folder.querySelector('div:first-child');
+            icon.classList.add('animate-bounce');
+            setTimeout(() => {
+                icon.classList.remove('animate-bounce');
+            }, 1000);
+        }
+
+        function completeGame() {
+            gameStarted = false;
+            clearInterval(gameTimer);
+            
+            // Update final stats
+            const finalTime = document.getElementById('game-timer').textContent;
+            document.getElementById('final-time').textContent = finalTime;
+            document.getElementById('final-score').textContent = gameScore;
+            
+            // Show completion screen
+            setTimeout(() => {
+                document.getElementById('game-completed').classList.remove('hidden');
+            }, 1000);
+        }
+
+        function resetGame() {
+            // Reset game state
+            gameStarted = false;
+            placedFiles = 0;
+            gameScore = 0;
+            clearInterval(gameTimer);
+            
+            // Reset UI elements
+            document.getElementById('game-timer').textContent = '00:00';
+            document.getElementById('game-progress').textContent = '0/8';
+            document.getElementById('game-score').textContent = '0';
+            
+            // Show all files
+            document.querySelectorAll('.file-item').forEach(file => {
+                file.style.display = 'block';
+                file.style.transform = 'scale(1)';
+                file.style.opacity = '1';
+                file.classList.remove('opacity-50');
+            });
+            
+            // Reset folders
+            document.querySelectorAll('.folder-zone').forEach(folder => {
+                folder.classList.remove('border-green-500', 'bg-green-50', 'ring-4', 'ring-blue-300', 'scale-105');
+            });
+            
+            // Reset counters and progress bars
+            ['dokumen', 'gambar', 'musik', 'video'].forEach(type => {
+                document.getElementById(type + '-count').textContent = '0 files';
+                document.getElementById(type + '-progress').style.width = '0%';
+            });
+            
+            // Reset start button
+            document.getElementById('start-game-btn').textContent = '🚀 Mulai Game';
+            document.getElementById('start-game-btn').disabled = false;
+            document.getElementById('start-game-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            // Hide completion message
+            document.getElementById('game-completed').classList.add('hidden');
+        }
+
+        // Quiz functions
+        function startQuiz() {
+            // Reset all quiz variables at start with explicit initialization
+            currentQuestion = 0;
+            quizScore = 0;
+            selectedAnswer = null;
+            
+            // Force reset the global variable
+            window.quizScore = 0;
+            
+            console.log('Starting quiz - score initialized to 0');
+            console.log('Verified quizScore value:', quizScore);
+            
+            document.getElementById('quiz-start').classList.add('hidden');
+            document.getElementById('quiz-question').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            
+            // Ensure we display the current score correctly
+            const currentScore = window.quizScore || quizScore;
+            
+            document.getElementById('question-number').textContent = currentQuestion + 1;
+            document.getElementById('question-counter').textContent = `Soal ${currentQuestion + 1} dari ${questions.length}`;
+            document.getElementById('quiz-score').textContent = `Skor: ${currentScore}/100`;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('current-question').textContent = question.question;
+            
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            const optionsHtml = question.options.map((option, index) => 
+                `<button onclick="selectAnswer(${index})" class="quiz-option w-full text-left p-5 rounded-xl border-2 border-gray-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-200 transform hover:scale-[1.02] min-h-[70px] flex items-center">
+                    <div class="flex items-center space-x-4 w-full">
+                        <div class="bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center font-bold text-gray-600 flex-shrink-0">
+                            ${optionLabels[index]}
+                        </div>
+                        <span class="font-medium text-gray-800 flex-1 leading-relaxed">${option}</span>
+                    </div>
+                </button>`
+            ).join('');
+            
+            document.getElementById('quiz-options').innerHTML = optionsHtml;
+            selectedAnswer = null;
+            updateNextButton();
+        }
+
+        function selectAnswer(index) {
+            selectedAnswer = index;
+            
+            document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+                btn.classList.remove('border-purple-500', 'bg-purple-100', 'shadow-lg', 'ring-2', 'ring-purple-300');
+                const circle = btn.querySelector('.flex-shrink-0');
+                circle.classList.remove('bg-purple-500', 'text-white');
+                circle.classList.add('bg-gray-100', 'text-gray-600');
+                
+                if (i === index) {
+                    btn.classList.add('border-purple-500', 'bg-purple-100', 'shadow-lg', 'ring-2', 'ring-purple-300');
+                    circle.classList.remove('bg-gray-100', 'text-gray-600');
+                    circle.classList.add('bg-purple-500', 'text-white');
+                }
+            });
+            
+            updateNextButton();
+        }
+
+        function updateNextButton() {
+            const nextBtn = document.getElementById('next-button');
+            if (selectedAnswer !== null) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                nextBtn.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-blue-600', 'text-white', 'hover:from-purple-700', 'hover:to-blue-700', 'shadow-lg', 'transform', 'hover:scale-105');
+                nextBtn.textContent = currentQuestion === questions.length - 1 ? '🏁 Selesai' : 'Lanjut →';
+            }
+        }
+
+        function nextQuestion() {
+            // Check if answer is correct and add points BEFORE showing feedback
+            const isCorrect = selectedAnswer === questions[currentQuestion].correct;
+            if (isCorrect) {
+                quizScore += 5; // Each correct answer = 5 points (20 questions × 5 = 100 max)
+                window.quizScore = quizScore; // Ensure global variable is updated
+                console.log(`Question ${currentQuestion + 1}: CORRECT! Score now: ${quizScore}`);
+            } else {
+                console.log(`Question ${currentQuestion + 1}: Wrong. Score remains: ${quizScore}`);
+            }
+            
+            // Update score display immediately with force refresh
+            const scoreElement = document.getElementById('quiz-score');
+            scoreElement.textContent = `Skor: ${quizScore}/100`;
+            scoreElement.style.color = '#7c3aed'; // Purple color to show it updated
+            
+            // Show brief feedback
+            showAnswerFeedback(isCorrect);
+            
+            // Move to next question or show results after delay
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    console.log(`Final score before showing result: ${quizScore}`);
+                    showQuizResult();
+                }
+            }, 1500);
+        }
+        
+        function showAnswerFeedback(isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            const correctIndex = questions[currentQuestion].correct;
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Show correct answer in green
+            options[correctIndex].classList.add('border-green-500', 'bg-green-100', 'ring-2', 'ring-green-300');
+            const correctCircle = options[correctIndex].querySelector('.flex-shrink-0');
+            correctCircle.classList.remove('bg-gray-100', 'text-gray-600', 'bg-purple-500');
+            correctCircle.classList.add('bg-green-500', 'text-white');
+            
+            // If wrong answer was selected, show it in red
+            if (!isCorrect && selectedAnswer !== null) {
+                options[selectedAnswer].classList.remove('border-purple-500', 'bg-purple-100', 'ring-purple-300');
+                options[selectedAnswer].classList.add('border-red-500', 'bg-red-100', 'ring-2', 'ring-red-300');
+                const wrongCircle = options[selectedAnswer].querySelector('.flex-shrink-0');
+                wrongCircle.classList.remove('bg-purple-500');
+                wrongCircle.classList.add('bg-red-500', 'text-white');
+            }
+            
+            // Update next button
+            const nextBtn = document.getElementById('next-button');
+            nextBtn.textContent = isCorrect ? '✅ Benar! Lanjut...' : '❌ Salah! Lanjut...';
+            nextBtn.disabled = true;
+            nextBtn.classList.add('opacity-75');
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-question').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            
+            // Get the final score with multiple fallbacks
+            const finalScore = Math.max(quizScore, window.quizScore || 0);
+            console.log(`Final quiz score: ${finalScore}`);
+            
+            // Update the main score display to show percentage and correct count
+            const finalScoreElement = document.getElementById('final-score');
+            const percentage = Math.round((finalScore / 100) * 100);
+            const correctCount = Math.round(finalScore / 5); // 5 points per correct answer, 20 questions
+            
+            finalScoreElement.innerHTML = `
+                <div class="text-4xl font-extrabold mb-1 animate-pulse text-white">
+                    ${percentage}%
+                </div>
+                <div class="text-sm opacity-90 text-white">
+                    Persentase jawaban benar
+                </div>
+                <div class="mt-1 text-xs opacity-80 text-white">
+                    Benar: <span class="font-semibold">${correctCount}</span> dari 20
+                </div>
+            `;
+            
+            // Update result card styling based on performance
+            const resultCard = document.getElementById('result-card');
+            const resultEmoji = document.getElementById('result-emoji');
+            
+            if (finalScore >= 85) {
+                resultCard.className = 'bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
+                resultEmoji.textContent = '🏆';
+                resultEmoji.classList.add('animate-bounce');
+            } else if (finalScore >= 70) {
+                resultCard.className = 'bg-gradient-to-br from-blue-400 via-purple-500 to-indigo-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
+                resultEmoji.textContent = '🎉';
+                resultEmoji.classList.add('animate-pulse');
+            } else if (finalScore >= 50) {
+                resultCard.className = 'bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
+                resultEmoji.textContent = '👍';
+            } else {
+                resultCard.className = 'bg-gradient-to-br from-red-400 via-pink-500 to-rose-600 rounded-2xl p-8 mb-6 text-white relative overflow-hidden shadow-2xl';
+                resultEmoji.textContent = '💪';
+            }
+            
+            // Animate the progress bar
+            setTimeout(() => {
+                const progressBar = document.getElementById('final-progress');
+                progressBar.style.width = finalScore + '%';
+                progressBar.style.transition = 'width 2s ease-in-out';
+            }, 300);
+            
+            // Set encouraging message based on score
+            let message = '';
+            if (finalScore >= 85) {
+                message = '🌟 EXCELLENT! Anda menguasai file management dengan sempurna!';
+            } else if (finalScore >= 70) {
+                message = '🎯 GREAT JOB! Pemahaman Anda sangat baik tentang file management!';
+            } else if (finalScore >= 50) {
+                message = '👍 GOOD EFFORT! Anda sudah memahami dasar-dasar file management!';
+            } else {
+                message = '💪 KEEP LEARNING! Mari pelajari materi lagi untuk hasil yang lebih baik!';
+            }
+            document.getElementById('result-message').textContent = message;
+            
+            // Show achievement badges
+            showAchievementBadges(finalScore);
+            
+            // Add confetti effect for high scores
+            if (finalScore >= 80) {
+                setTimeout(() => {
+                    createConfettiEffect();
+                }, 1000);
+            }
+        }
+
+        function showAchievementBadges(currentScore = null) {
+            const badgesContainer = document.getElementById('badges-container');
+            const scoreToUse = currentScore || window.quizScore || quizScore;
+            let badges = [];
+            
+            if (scoreToUse >= 100) {
+                badges.push({ emoji: '🏆', title: 'Perfect Score!', desc: 'Skor sempurna 100!', color: 'from-yellow-400 to-orange-500' });
+            }
+            if (scoreToUse >= 85) {
+                badges.push({ emoji: '⭐', title: 'Expert Level', desc: 'Menguasai materi', color: 'from-green-400 to-emerald-500' });
+            }
+            if (scoreToUse >= 70) {
+                badges.push({ emoji: '🎯', title: 'Great Job', desc: 'Pemahaman baik', color: 'from-blue-400 to-purple-500' });
+            }
+            if (scoreToUse >= 50) {
+                badges.push({ emoji: '📈', title: 'Good Progress', desc: 'Terus belajar', color: 'from-orange-400 to-yellow-500' });
+            } else if (scoreToUse < 50) {
+                badges.push({ emoji: '💪', title: 'Keep Trying', desc: 'Jangan menyerah', color: 'from-red-400 to-pink-500' });
+            }
+            
+            // Always add participation badge
+            badges.push({ emoji: '🎓', title: 'Quiz Completed', desc: 'Menyelesaikan kuis', color: 'from-indigo-400 to-purple-500' });
+            
+            const badgesHtml = badges.map((badge, index) => 
+                `<div class="text-center p-4 bg-gradient-to-br ${badge.color} rounded-xl border-2 border-white shadow-lg transform hover:scale-110 transition-all duration-300 text-white" style="animation-delay: ${index * 0.2}s">
+                    <div class="text-4xl mb-2 animate-bounce">${badge.emoji}</div>
+                    <div class="font-bold text-sm">${badge.title}</div>
+                    <div class="text-xs opacity-90 mt-1">${badge.desc}</div>
+                </div>`
+            ).join('');
+            
+            badgesContainer.innerHTML = badgesHtml;
+            
+            // Add staggered animation to badges
+            setTimeout(() => {
+                const badgeElements = badgesContainer.querySelectorAll('div');
+                badgeElements.forEach((badge, index) => {
+                    setTimeout(() => {
+                        badge.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            badge.style.transform = 'scale(1)';
+                        }, 200);
+                    }, index * 300);
+                });
+            }, 500);
+        }
+
+        function createConfettiEffect() {
+            // Create confetti container
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'fixed';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '9999';
+            document.body.appendChild(confettiContainer);
+            
+            // Create confetti pieces
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'];
+            const emojis = ['🎉', '🎊', '⭐', '🏆', '🎯', '✨', '🌟'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                const isEmoji = Math.random() > 0.7;
+                
+                if (isEmoji) {
+                    confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    confetti.style.fontSize = '20px';
+                } else {
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                }
+                
+                confetti.style.position = 'absolute';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.borderRadius = '50%';
+                confetti.style.animation = `confettiFall ${2 + Math.random() * 3}s linear forwards`;
+                
+                confettiContainer.appendChild(confetti);
+            }
+            
+            // Remove confetti after animation
+            setTimeout(() => {
+                document.body.removeChild(confettiContainer);
+            }, 5000);
+        }
+        
+        // Add CSS animation for confetti
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                0% {
+                    transform: translateY(-10px) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function resetQuiz() {
+            // Reset all quiz variables
+            currentQuestion = 0;
+            quizScore = 0;
+            selectedAnswer = null;
+            
+            // Hide result and show start screen
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-start').classList.remove('hidden');
+            
+            console.log('Quiz reset - score back to 0');
+        }
+
+        // Practice functions
+        function addPracticeFolder() {
+            const container = document.getElementById('practice-folders');
+            const newFolder = document.createElement('div');
+            newFolder.className = 'flex items-center space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300';
+            newFolder.innerHTML = `
+                <div class="bg-blue-500 rounded-lg p-2">
+                    <span class="text-white">📁</span>
+                </div>
+                <input type="text" placeholder="Nama folder..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200">
+                    🗑️
+                </button>
+            `;
+            container.appendChild(newFolder);
+        }
+
+        function removePracticeFolder(button) {
+            const folders = document.querySelectorAll('#practice-folders .flex');
+            if (folders.length > 1) {
+                button.parentElement.remove();
+            }
+        }
+
+        function submitPractice() {
+            document.getElementById('practice-result').classList.remove('hidden');
+        }
+
+        function resetPractice() {
+            // Hide result section
+            document.getElementById('practice-result').classList.add('hidden');
+            
+            // Clear all folder inputs
+            const folderInputs = document.querySelectorAll('#practice-folders input');
+            folderInputs.forEach(input => input.value = '');
+            
+            // Clear explanation textarea
+            document.getElementById('practice-explanation').value = '';
+            
+            // Reset to single folder input
+            const container = document.getElementById('practice-folders');
+            container.innerHTML = `
+                <div class="flex items-center space-x-3 bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300">
+                    <div class="bg-blue-500 rounded-lg p-2">
+                        <span class="text-white">📁</span>
+                    </div>
+                    <input type="text" placeholder="Contoh: Kuliah_Semester_3" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <button onclick="removePracticeFolder(this)" class="bg-red-100 text-red-600 hover:bg-red-200 rounded-lg p-2 transition-colors duration-200">
+                        🗑️
+                    </button>
+                </div>
+            `;
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game will be initialized when start button is clicked
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f5efb413e25f6e',t:'MTc1NTIzMjAxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
