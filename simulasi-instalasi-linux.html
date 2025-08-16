@@ -260,61 +260,67 @@
                     <!-- World Map -->
                     <div class="bg-gray-50 border rounded-lg p-4">
                         <div class="relative">
-                            <!-- Simplified world map with timezone regions -->
+                            <!-- Simplified rectangular world map with timezone regions -->
                             <svg id="world-map" viewBox="0 0 800 400" class="w-full h-80 cursor-pointer">
                                 <!-- Ocean Background -->
-                                <rect width="800" height="400" fill="#E6F3FF"/>
+                                <rect width="800" height="400" fill="#4A90E2"/>
                                 
                                 <!-- Timezone vertical lines -->
                                 <defs>
                                     <pattern id="timezone-lines" patternUnits="userSpaceOnUse" width="66.67" height="400">
-                                        <path d="M 66.67 0 L 66.67 400" stroke="#B0C4DE" stroke-width="1" opacity="0.5"/>
+                                        <path d="M 66.67 0 L 66.67 400" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
                                     </pattern>
                                 </defs>
                                 <rect width="800" height="400" fill="url(#timezone-lines)"/>
                                 
-                                <!-- Continents with more realistic shapes -->
-                                <!-- North America -->
-                                <path d="M50 100 L80 90 L120 95 L160 100 L200 110 L240 120 L280 130 L320 140 L360 150 L400 160 L440 170 L480 180 L520 190 L560 200 L600 210 L640 220 L680 230 L720 240 L760 250 L800 260 L800 0 L0 0 L0 100 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('America')"/>
+                                <!-- Regional boxes with labels -->
                                 
-                                <!-- South America -->
-                                <path d="M200 260 L240 270 L280 280 L320 290 L360 300 L400 310 L440 320 L480 330 L520 340 L560 350 L600 360 L640 370 L680 380 L720 390 L760 400 L800 400 L800 260 L200 260 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('America')"/>
+                                <!-- America Region (Left side) -->
+                                <rect x="50" y="80" width="200" height="240" fill="#228B22" stroke="#ffffff" stroke-width="2" 
+                                      class="continent hover:fill-green-400 transition-colors cursor-pointer" onclick="selectRegion('America')"/>
+                                <text x="150" y="200" class="text-lg fill-white font-bold" text-anchor="middle">AMERICA</text>
+                                <text x="150" y="220" class="text-sm fill-white" text-anchor="middle">UTC -8 to -3</text>
                                 
-                                <!-- Europe -->
-                                <path d="M350 80 L390 75 L430 80 L470 85 L510 90 L550 95 L590 100 L630 105 L670 110 L710 115 L750 120 L790 125 L800 130 L800 0 L350 0 L350 80 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Europe')"/>
+                                <!-- Europe Region -->
+                                <rect x="300" y="60" width="150" height="120" fill="#228B22" stroke="#ffffff" stroke-width="2" 
+                                      class="continent hover:fill-green-400 transition-colors cursor-pointer" onclick="selectRegion('Europe')"/>
+                                <text x="375" y="120" class="text-lg fill-white font-bold" text-anchor="middle">EUROPE</text>
+                                <text x="375" y="140" class="text-sm fill-white" text-anchor="middle">UTC 0 to +3</text>
                                 
-                                <!-- Africa -->
-                                <path d="M380 130 L420 135 L460 140 L500 145 L540 150 L580 155 L620 160 L660 165 L700 170 L740 175 L780 180 L800 185 L800 350 L780 355 L740 360 L700 365 L660 370 L620 375 L580 380 L540 385 L500 390 L460 395 L420 400 L380 400 L380 130 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Africa')"/>
+                                <!-- Africa Region -->
+                                <rect x="320" y="200" width="130" height="160" fill="#228B22" stroke="#ffffff" stroke-width="2" 
+                                      class="continent hover:fill-green-400 transition-colors cursor-pointer" onclick="selectRegion('Africa')"/>
+                                <text x="385" y="280" class="text-lg fill-white font-bold" text-anchor="middle">AFRICA</text>
+                                <text x="385" y="300" class="text-sm fill-white" text-anchor="middle">UTC 0 to +3</text>
                                 
-                                <!-- Asia -->
-                                <path d="M450 60 L490 55 L530 60 L570 65 L610 70 L650 75 L690 80 L730 85 L770 90 L800 95 L800 0 L450 0 L450 60 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Asia')"/>
+                                <!-- Asia Region -->
+                                <rect x="500" y="50" width="220" height="200" fill="#228B22" stroke="#ffffff" stroke-width="2" 
+                                      class="continent hover:fill-green-400 transition-colors cursor-pointer" onclick="selectRegion('Asia')"/>
+                                <text x="610" y="150" class="text-lg fill-white font-bold" text-anchor="middle">ASIA</text>
+                                <text x="610" y="170" class="text-sm fill-white" text-anchor="middle">UTC +3 to +12</text>
                                 
-                                <!-- Southeast Asia & Indonesia -->
-                                <path d="M550 130 L590 135 L630 140 L670 145 L710 150 L750 155 L790 160 L800 165 L800 280 L790 285 L750 290 L710 295 L670 300 L630 305 L590 310 L550 315 L550 130 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Asia')"/>
-                                
-                                <!-- Australia -->
-                                <path d="M580 320 L620 325 L660 330 L700 335 L740 340 L780 345 L800 350 L800 400 L580 400 L580 320 Z" 
-                                      fill="#90EE90" stroke="#228B22" stroke-width="1" class="continent hover:fill-green-300 transition-colors" onclick="selectRegion('Australia')"/>
+                                <!-- Australia Region -->
+                                <rect x="580" y="280" width="160" height="100" fill="#228B22" stroke="#ffffff" stroke-width="2" 
+                                      class="continent hover:fill-green-400 transition-colors cursor-pointer" onclick="selectRegion('Australia')"/>
+                                <text x="660" y="330" class="text-lg fill-white font-bold" text-anchor="middle">AUSTRALIA</text>
+                                <text x="660" y="350" class="text-sm fill-white" text-anchor="middle">UTC +8 to +12</text>
                                 
                                 <!-- Selected location marker -->
-                                <circle id="location-marker" cx="650" cy="155" r="6" fill="#E95420" stroke="#ffffff" stroke-width="2" class="pulse-icon"/>
+                                <circle id="location-marker" cx="610" cy="150" r="8" fill="#E95420" stroke="#ffffff" stroke-width="3" class="pulse-icon"/>
                                 
-                                <!-- Timezone labels -->
-                                <text x="67" y="20" class="text-xs fill-gray-600" text-anchor="middle">-12</text>
-                                <text x="133" y="20" class="text-xs fill-gray-600" text-anchor="middle">-9</text>
-                                <text x="200" y="20" class="text-xs fill-gray-600" text-anchor="middle">-6</text>
-                                <text x="267" y="20" class="text-xs fill-gray-600" text-anchor="middle">-3</text>
-                                <text x="333" y="20" class="text-xs fill-gray-600" text-anchor="middle">0</text>
-                                <text x="400" y="20" class="text-xs fill-gray-600" text-anchor="middle">+3</text>
-                                <text x="467" y="20" class="text-xs fill-gray-600" text-anchor="middle">+6</text>
-                                <text x="533" y="20" class="text-xs fill-gray-600" text-anchor="middle">+9</text>
-                                <text x="600" y="20" class="text-xs fill-gray-600" text-anchor="middle">+12</text>
+                                <!-- Timezone labels at top -->
+                                <text x="67" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">-12</text>
+                                <text x="133" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">-9</text>
+                                <text x="200" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">-6</text>
+                                <text x="267" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">-3</text>
+                                <text x="333" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">0</text>
+                                <text x="400" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">+3</text>
+                                <text x="467" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">+6</text>
+                                <text x="533" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">+9</text>
+                                <text x="600" y="25" class="text-sm fill-white font-semibold" text-anchor="middle">+12</text>
+                                
+                                <!-- Grid lines for better visual separation -->
+                                <line x1="0" y1="40" x2="800" y2="40" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
                             </svg>
                         </div>
                     </div>
@@ -1156,40 +1162,40 @@
             }, 1500);
         }
 
-        // Timezone data
+        // Timezone data with updated coordinates for rectangular regions
         const timezoneData = {
             'Asia': {
-                'Asia/Jakarta': { name: 'Jakarta', offset: 7, coords: [650, 170] },
-                'Asia/Tokyo': { name: 'Tokyo', offset: 9, coords: [720, 120] },
-                'Asia/Shanghai': { name: 'Shanghai', offset: 8, coords: [680, 130] },
-                'Asia/Bangkok': { name: 'Bangkok', offset: 7, coords: [620, 160] },
-                'Asia/Singapore': { name: 'Singapore', offset: 8, coords: [640, 180] },
-                'Asia/Dubai': { name: 'Dubai', offset: 4, coords: [520, 140] },
-                'Asia/Kolkata': { name: 'Mumbai', offset: 5.5, coords: [580, 150] }
+                'Asia/Jakarta': { name: 'Jakarta', offset: 7, coords: [610, 150] },
+                'Asia/Tokyo': { name: 'Tokyo', offset: 9, coords: [650, 120] },
+                'Asia/Shanghai': { name: 'Shanghai', offset: 8, coords: [630, 130] },
+                'Asia/Bangkok': { name: 'Bangkok', offset: 7, coords: [590, 160] },
+                'Asia/Singapore': { name: 'Singapore', offset: 8, coords: [600, 180] },
+                'Asia/Dubai': { name: 'Dubai', offset: 4, coords: [550, 140] },
+                'Asia/Kolkata': { name: 'Mumbai', offset: 5.5, coords: [570, 170] }
             },
             'Europe': {
-                'Europe/London': { name: 'London', offset: 0, coords: [400, 90] },
-                'Europe/Paris': { name: 'Paris', offset: 1, coords: [420, 85] },
-                'Europe/Berlin': { name: 'Berlin', offset: 1, coords: [440, 80] },
-                'Europe/Rome': { name: 'Rome', offset: 1, coords: [430, 95] },
-                'Europe/Moscow': { name: 'Moscow', offset: 3, coords: [480, 70] }
+                'Europe/London': { name: 'London', offset: 0, coords: [350, 120] },
+                'Europe/Paris': { name: 'Paris', offset: 1, coords: [375, 110] },
+                'Europe/Berlin': { name: 'Berlin', offset: 1, coords: [390, 100] },
+                'Europe/Rome': { name: 'Rome', offset: 1, coords: [380, 140] },
+                'Europe/Moscow': { name: 'Moscow', offset: 3, coords: [420, 90] }
             },
             'America': {
-                'America/New_York': { name: 'New York', offset: -5, coords: [200, 100] },
-                'America/Los_Angeles': { name: 'Los Angeles', offset: -8, coords: [120, 110] },
-                'America/Chicago': { name: 'Chicago', offset: -6, coords: [160, 105] },
-                'America/Sao_Paulo': { name: 'São Paulo', offset: -3, coords: [280, 280] },
-                'America/Mexico_City': { name: 'Mexico City', offset: -6, coords: [140, 140] }
+                'America/New_York': { name: 'New York', offset: -5, coords: [180, 160] },
+                'America/Los_Angeles': { name: 'Los Angeles', offset: -8, coords: [120, 180] },
+                'America/Chicago': { name: 'Chicago', offset: -6, coords: [150, 170] },
+                'America/Sao_Paulo': { name: 'São Paulo', offset: -3, coords: [200, 250] },
+                'America/Mexico_City': { name: 'Mexico City', offset: -6, coords: [130, 200] }
             },
             'Africa': {
-                'Africa/Cairo': { name: 'Cairo', offset: 2, coords: [450, 130] },
-                'Africa/Lagos': { name: 'Lagos', offset: 1, coords: [420, 160] },
-                'Africa/Johannesburg': { name: 'Johannesburg', offset: 2, coords: [460, 320] }
+                'Africa/Cairo': { name: 'Cairo', offset: 2, coords: [385, 230] },
+                'Africa/Lagos': { name: 'Lagos', offset: 1, coords: [360, 280] },
+                'Africa/Johannesburg': { name: 'Johannesburg', offset: 2, coords: [400, 330] }
             },
             'Australia': {
-                'Australia/Sydney': { name: 'Sydney', offset: 11, coords: [720, 320] },
-                'Australia/Melbourne': { name: 'Melbourne', offset: 11, coords: [710, 330] },
-                'Australia/Perth': { name: 'Perth', offset: 8, coords: [650, 310] }
+                'Australia/Sydney': { name: 'Sydney', offset: 11, coords: [680, 320] },
+                'Australia/Melbourne': { name: 'Melbourne', offset: 11, coords: [660, 340] },
+                'Australia/Perth': { name: 'Perth', offset: 8, coords: [620, 330] }
             }
         };
 
@@ -2305,5 +2311,5 @@
             }
         }, 1000);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f9b21724a9f924',t:'MTc1NTI3MTQzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96fd29c12783ff7e',t:'MTc1NTMwNzc5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
