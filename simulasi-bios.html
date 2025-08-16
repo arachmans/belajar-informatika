@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi BIOS Lengkap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .blinking-cursor {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* --- UEFI BIOS Styles (Modern) --- */
+        .uefi-ui .bios-input {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: 80px;
+            text-align: center;
+        }
+        .uefi-ui .bios-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .uefi-ui .nav-tab {
+            color: #cbd5e1;
+        }
+        .uefi-ui .nav-tab.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        /* --- Legacy BIOS Styles (Classic) --- */
+        .legacy-ui {
+            background-color: #000080; /* Navy Blue */
+            color: #C0C0C0; /* Silver */
+            border: 2px solid #C0C0C0;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .legacy-ui .title-bar {
+            background-color: #0000A0; /* Blue */
+            color: #FFFFFF; /* White */
+        }
+        .legacy-ui .nav-tab {
+            padding: 8px 16px;
+            text-align: center;
+            border: 1px solid #000080;
+        }
+        .legacy-ui .nav-tab.active {
+            background-color: #800080; /* Purple */
+            color: #FFFF00; /* Yellow */
+        }
+        .legacy-ui .option {
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        .legacy-ui .option.active {
+            background-color: #808080; /* Gray */
+            color: #FFFFFF; /* White */
+        }
+        .legacy-input {
+            background-color: #000000;
+            border: 1px solid #FFFFFF;
+            color: #FFFF00;
+            padding: 1px 4px;
+            text-align: center;
+            width: 40px;
+        }
+        .legacy-input:focus {
+            outline: none;
+            border-color: #FFFF00;
+        }
+    </style>
+</head>
+<body class="bg-black text-white h-screen flex items-center justify-center p-4 md:p-8">
+
+    <!-- Boot Screen -->
+    <div id="boot-screen" class="font-mono text-lg w-full h-full p-8 hidden">
+        <div id="boot-log"></div>
+        <div id="boot-prompt" class="mt-8 hidden">
+            <p>Press <span class="bg-white text-black px-2 rounded">DEL</span> or <span class="bg-white text-black px-2 rounded">F2</span> to enter <span id="uefi-link" class="text-blue-500 cursor-pointer hover:underline">UEFI BIOS Setup</span>.</p>
+            <p>Press <span class="bg-white text-black px-2 rounded">F11</span> for <span id="legacy-link" class="text-red-500 cursor-pointer hover:underline">Legacy BIOS Setup</span>.</p>
+        </div>
+    </div>
+
+    <!-- UEFI BIOS UI -->
+    <div id="uefi-bios-ui" class="uefi-ui hidden w-full h-full max-w-6xl max-h-[700px] bg-slate-900 border-4 border-slate-700 rounded-lg shadow-2xl flex-col p-2">
+        <!-- Header -->
+        <header class="flex justify-between items-center px-6 py-3 border-b-2 border-slate-700">
+            <h1 class="text-2xl font-bold text-sky-400">Gemini UEFI BIOS Utility v2.23</h1>
+            <div class="text-right">
+                <p id="uefi-date" class="text-lg"></p>
+                <p id="uefi-time" class="text-xl font-semibold"></p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow flex mt-2">
+            <!-- Navigation Tabs -->
+            <nav class="w-48 border-r-2 border-slate-700 pr-2">
+                <ul class="space-y-1">
+                    <li><button data-tab="main" class="nav-tab w-full text-left text-lg p-3 rounded-md transition-colors duration-200">▶ Main</button></li>
+                    <li><button data-tab="boot" class="nav-tab w-full text-left text-lg p-3 rounded-md transition-colors duration-200">Boot</button></li>
+                    <li><button data-tab="save_exit" class="nav-tab w-full text-left text-lg p-3 rounded-md transition-colors duration-200">Save & Exit</button></li>
+                </ul>
+            </nav>
+
+            <!-- Content Area -->
+            <div id="uefi-content-area" class="flex-grow p-6">
+                <!-- Content will be injected here by JavaScript -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="px-6 py-3 border-t-2 border-slate-700 text-slate-400 flex justify-between items-center">
+            <div>
+                <span class="font-bold text-white">↑↓</span>: Select Item &nbsp;&nbsp;
+                <span class="font-bold text-white">Enter</span>: Select &nbsp;&nbsp;
+                <span class="font-bold text-white">+/-</span>: Change Opt.
+            </div>
+            <div>
+                <span class="font-bold text-white">F1</span>: General Help &nbsp;&nbsp;
+                <span class="font-bold text-white">F10</span>: Save and Exit &nbsp;&nbsp;
+                <span class="font-bold text-white">ESC</span>: Exit
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Legacy BIOS UI -->
+    <div id="legacy-bios-ui" class="legacy-ui hidden w-full h-full max-w-[800px] max-h-[600px] shadow-2xl flex-col p-1">
+        <!-- Header -->
+        <div class="title-bar text-center font-bold text-xl py-1">PHOENIX BIOS SETUP UTILITY</div>
+        
+        <!-- Navigation Tabs -->
+        <div class="flex justify-between w-full px-2 mt-1">
+            <button data-tab="main" class="nav-tab active">Main</button>
+            <button data-tab="advanced" class="nav-tab">Advanced</button>
+            <button data-tab="boot" class="nav-tab">Boot</button>
+            <button data-tab="security" class="nav-tab">Security</button>
+            <button data-tab="exit" class="nav-tab">Exit</button>
+        </div>
+        
+        <!-- Main Content -->
+        <div id="legacy-content-area" class="flex-grow flex p-4 mt-2">
+            <!-- Content will be injected here by JavaScript -->
+        </div>
+
+        <!-- Footer -->
+        <div class="text-xs p-2 mt-auto">
+            <span class="bg-gray-700 text-yellow-300 px-1">F1</span> Help&nbsp;&nbsp;&nbsp;
+            <span class="bg-gray-700 text-yellow-300 px-1">↑↓</span> Select&nbsp;&nbsp;&nbsp;
+            <span class="bg-gray-700 text-yellow-300 px-1">+-</span> Change Value&nbsp;&nbsp;&nbsp;
+            <span class="bg-gray-700 text-yellow-300 px-1">F9</span> Setup Defaults&nbsp;&nbsp;&nbsp;
+            <span class="bg-gray-700 text-yellow-300 px-1">F10</span> Save and Exit&nbsp;&nbsp;&nbsp;
+            <span class="bg-gray-700 text-yellow-300 px-1">ESC</span> Exit
+        </div>
+    </div>
+    
+    <!-- Modal Dialog -->
+    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-slate-800 border-2 border-blue-500 rounded-lg shadow-xl p-8 max-w-lg text-center">
+            <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+            <p id="modal-body" class="text-slate-300 mb-6"></p>
+            <div id="modal-buttons" class="flex justify-center gap-4">
+                <!-- Buttons will be injected here -->
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM ELEMENTS ---
+    const bootScreen = document.getElementById('boot-screen');
+    const bootLog = document.getElementById('boot-log');
+    const bootPrompt = document.getElementById('boot-prompt');
+    const uefiBiosUI = document.getElementById('uefi-bios-ui');
+    const uefiContentArea = document.getElementById('uefi-content-area');
+    const uefiNavTabs = uefiBiosUI.querySelectorAll('.nav-tab');
+    const uefiDateEl = document.getElementById('uefi-date');
+    const uefiTimeEl = document.getElementById('uefi-time');
+    
+    const legacyBiosUI = document.getElementById('legacy-bios-ui');
+    const legacyContentArea = document.getElementById('legacy-content-area');
+    const legacyNavTabs = legacyBiosUI.querySelectorAll('.nav-tab');
+    
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const modalButtons = document.getElementById('modal-buttons');
+
+    const uefiLink = document.getElementById('uefi-link');
+    const legacyLink = document.getElementById('legacy-link');
+
+    // --- UTILITY FUNCTIONS ---
+    /**
+     * Deep clones a settings object, ensuring the date property is a Date object.
+     * @param {object} settings - The settings object to clone.
+     * @returns {object} A new, deep-cloned settings object.
+     */
+    function cloneSettings(settings) {
+        const newSettings = JSON.parse(JSON.stringify(settings));
+        if (newSettings.date) {
+            newSettings.date = new Date(newSettings.date);
+        }
+        return newSettings;
+    }
+
+    // --- STATE MANAGEMENT ---
+    let currentState = 'booting'; // booting, uefi, legacy
+    let uefiActiveTab = 'main';
+    let legacyActiveTab = 'main';
+    // New state variable to track the active option index within the legacy menu
+    let legacyActiveOptionIndex = 0;
+    let clockInterval;
+    let bootTimeout;
+
+    // Default BIOS settings
+    let uefiSettings = {
+        date: new Date(),
+        bootOrder: [
+            { id: 'nvme', name: 'NVMe SSD: Kingston SNV2S1000G', icon: '💾' },
+            { id: 'usb', name: 'USB: Sandisk Cruzer Blade', icon: '🔌' },
+            { id: 'pxe', name: 'PXE Network Boot: Realtek PXE B02 D00', icon: '🌐' }
+        ]
+    };
+    
+    let legacySettings = {
+        date: new Date(),
+        bootOrder: [
+            { name: 'Hard Drive (C:)', enabled: true },
+            { name: 'USB-HDD', enabled: true },
+            { name: 'CD-ROM Drive', enabled: true },
+            { name: 'Floppy Drive', enabled: false },
+        ]
+    };
+
+    // Temporary settings for changes that are not yet saved
+    let tempUefiSettings = cloneSettings(uefiSettings);
+    let tempLegacySettings = cloneSettings(legacySettings);
+
+    // --- BOOT SEQUENCE ---
+    const bootSteps = [
+        "Gemini BIOS v2.23",
+        "Copyright (C) 2024 Gemini Corp.",
+        "Main Processor: Quantum Core 16-Core Processor (4.8GHz)",
+        "Memory Testing: 32768MB OK",
+        "",
+        "Initializing USB Controllers .. Done",
+        "Detecting AHCI Port 0.. NVMe SSD: Kingston SNV2S1000G",
+        "Detecting USB Devices.. Sandisk Cruzer Blade",
+        "Initializing Network Controller.. Done",
+        "",
+    ];
+
+    function runBootSequence() {
+        bootScreen.classList.remove('hidden');
+        let i = 0;
+        function nextStep() {
+            if (i < bootSteps.length) {
+                const p = document.createElement('p');
+                p.textContent = bootSteps[i];
+                bootLog.appendChild(p);
+                i++;
+                setTimeout(nextStep, Math.random() * 150 + 50);
+            } else {
+                const cursor = document.createElement('span');
+                cursor.className = 'blinking-cursor';
+                cursor.textContent = '_';
+                bootLog.appendChild(cursor);
+                bootPrompt.classList.remove('hidden');
+                // Set timeout to automatically "boot" if no key is pressed
+                bootTimeout = setTimeout(() => {
+                    bootLog.innerHTML += `<p class="mt-4">No bootable device found. Please insert a boot disk and press any key.</p>`;
+                    bootPrompt.classList.add('hidden');
+                }, 5000);
+            }
+        }
+        nextStep();
+    }
+
+    // --- UEFI BIOS LOGIC ---
+    function enterUefiBios() {
+        clearTimeout(bootTimeout); // Stop the automatic boot
+        currentState = 'uefi';
+        bootScreen.classList.add('hidden');
+        uefiBiosUI.classList.remove('hidden');
+        uefiBiosUI.classList.add('flex');
+        startClock('uefi');
+        setUefiActiveTab(uefiActiveTab);
+    }
+    
+    function setUefiActiveTab(tabId) {
+        uefiActiveTab = tabId;
+        uefiNavTabs.forEach(tab => {
+            if (tab.dataset.tab === tabId) {
+                tab.classList.add('active', 'bg-blue-600', 'text-white');
+                if(!tab.textContent.startsWith('▶')) {
+                   tab.textContent = '▶ ' + tab.textContent;
+                }
+            } else {
+                tab.classList.remove('active', 'bg-blue-600', 'text-white');
+                tab.textContent = tab.textContent.replace('▶ ', '');
+            }
+        });
+        renderUefiContent();
+    }
+    
+    function renderUefiContent() {
+        uefiContentArea.innerHTML = ''; // Clear previous content
+        switch (uefiActiveTab) {
+            case 'main':
+                renderUefiMainTab();
+                break;
+            case 'boot':
+                renderUefiBootTab();
+                break;
+            case 'save_exit':
+                renderUefiSaveExitTab();
+                break;
+        }
+    }
+    
+    function renderUefiMainTab() {
+        const date = tempUefiSettings.date;
+        uefiContentArea.innerHTML = `
+            <h2 class="text-2xl font-semibold text-sky-300 border-b-2 border-slate-700 pb-2 mb-6">System Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-lg">
+                <div class="flex justify-between"><span class="text-slate-400">BIOS Version:</span><span>2.23</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Build Date:</span><span>07/26/2024</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Processor Type:</span><span>Quantum Core 16-Core</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Processor Speed:</span><span>4800MHz</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Total Memory:</span><span>32768 MB</span></div>
+            </div>
+            
+            <h2 class="text-2xl font-semibold text-sky-300 border-b-2 border-slate-700 pb-2 mb-6 mt-10">System Time & Date</h2>
+            <div class="space-y-4 text-lg">
+                <div class="flex items-center gap-4">
+                    <label class="w-32 text-slate-400">System Time:</label>
+                    <input type="number" id="uefi-hour" min="0" max="23" value="${String(date.getHours()).padStart(2, '0')}" class="bios-input"> :
+                    <input type="number" id="uefi-minute" min="0" max="59" value="${String(date.getMinutes()).padStart(2, '0')}" class="bios-input"> :
+                    <input type="number" id="uefi-second" min="0" max="59" value="${String(date.getSeconds()).padStart(2, '0')}" class="bios-input">
+                </div>
+                <div class="flex items-center gap-4">
+                    <label class="w-32 text-slate-400">System Date:</label>
+                    <input type="number" id="uefi-month" min="1" max="12" value="${date.getMonth() + 1}" class="bios-input"> /
+                    <input type="number" id="uefi-day" min="1" max="31" value="${date.getDate()}" class="bios-input"> /
+                    <input type="number" id="uefi-year" min="1970" max="2099" value="${date.getFullYear()}" class="bios-input w-24">
+                </div>
+            </div>
+        `;
+        document.getElementById('uefi-hour').addEventListener('change', updateUefiDateTime);
+        document.getElementById('uefi-minute').addEventListener('change', updateUefiDateTime);
+        document.getElementById('uefi-second').addEventListener('change', updateUefiDateTime);
+        document.getElementById('uefi-month').addEventListener('change', updateUefiDateTime);
+        document.getElementById('uefi-day').addEventListener('change', updateUefiDateTime);
+        document.getElementById('uefi-year').addEventListener('change', updateUefiDateTime);
+    }
+    
+    function renderUefiBootTab() {
+        let bootItemsHtml = tempUefiSettings.bootOrder.map((item, index) => `
+            <div class="flex items-center justify-between p-3 rounded-md border border-slate-700 hover:bg-slate-700" data-index="${index}">
+                <div class="flex items-center gap-4">
+                    <span class="text-2xl">${item.icon}</span>
+                    <span class="text-lg">${index + 1}. ${item.name}</span>
+                </div>
+                <div class="flex gap-2">
+                    <button class="boot-up bg-slate-600 hover:bg-blue-600 px-3 py-1 rounded" data-index="${index}">▲</button>
+                    <button class="boot-down bg-slate-600 hover:bg-blue-600 px-3 py-1 rounded" data-index="${index}">▼</button>
+                </div>
+            </div>
+        `).join('');
+
+        uefiContentArea.innerHTML = `
+            <h2 class="text-2xl font-semibold text-sky-300 border-b-2 border-slate-700 pb-2 mb-6">Boot Option Priorities</h2>
+            <p class="text-slate-400 mb-4">Set the order of devices to boot from.</p>
+            <div class="space-y-2">
+                ${bootItemsHtml}
+            </div>
+        `;
+        document.querySelectorAll('.boot-up').forEach(btn => btn.addEventListener('click', (e) => moveUefiBootItem(parseInt(e.currentTarget.dataset.index), -1)));
+        document.querySelectorAll('.boot-down').forEach(btn => btn.addEventListener('click', (e) => moveUefiBootItem(parseInt(e.currentTarget.dataset.index), 1)));
+    }
+    
+    function renderUefiSaveExitTab() {
+        uefiContentArea.innerHTML = `
+            <h2 class="text-2xl font-semibold text-sky-300 border-b-2 border-slate-700 pb-2 mb-6">Save & Exit</h2>
+            <div class="space-y-4 text-lg">
+                <div class="p-4 border border-slate-700 rounded-lg hover:bg-slate-800 cursor-pointer" id="uefi-save-and-exit">
+                    <h3 class="font-bold text-white">Save Changes and Reset</h3>
+                    <p class="text-slate-400">Exit setup and reboot the system after saving your changes.</p>
+                </div>
+                <div class="p-4 border border-slate-700 rounded-lg hover:bg-slate-800 cursor-pointer" id="uefi-discard-and-exit">
+                    <h3 class="font-bold text-white">Discard Changes and Exit</h3>
+                    <p class="text-slate-400">Exit setup without saving any changes.</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('uefi-save-and-exit').addEventListener('click', () => handleUefiSaveAndExit());
+        document.getElementById('uefi-discard-and-exit').addEventListener('click', () => handleUefiDiscardAndExit());
+    }
+
+    // --- LEGACY BIOS LOGIC ---
+    function enterLegacyBios() {
+        clearTimeout(bootTimeout); // Stop the automatic boot
+        currentState = 'legacy';
+        bootScreen.classList.add('hidden');
+        legacyBiosUI.classList.remove('hidden');
+        legacyBiosUI.classList.add('flex');
+        startClock('legacy');
+        setLegacyActiveTab(legacyActiveTab);
+    }
+    
+    function setLegacyActiveTab(tabId) {
+        legacyActiveTab = tabId;
+        legacyNavTabs.forEach(tab => {
+            if (tab.dataset.tab === tabId) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        // Reset option index when changing tabs
+        legacyActiveOptionIndex = 0;
+        renderLegacyContent();
+    }
+    
+    function renderLegacyContent() {
+        legacyContentArea.innerHTML = '';
+        switch (legacyActiveTab) {
+            case 'main':
+                renderLegacyMainTab();
+                break;
+            case 'advanced':
+                renderLegacyAdvancedTab();
+                break;
+            case 'boot':
+                renderLegacyBootTab();
+                break;
+            case 'security':
+                renderLegacySecurityTab();
+                break;
+            case 'exit':
+                renderLegacyExitTab();
+                break;
+        }
+        // Set the active class on the first option after rendering content
+        if (legacyContentArea.querySelector('.option')) {
+            legacyContentArea.querySelector('.option').classList.add('active');
+        }
+    }
+    
+    function renderLegacyMainTab() {
+        const date = tempLegacySettings.date;
+        legacyContentArea.innerHTML = `
+            <div class="w-full h-full flex flex-col justify-between">
+                <div class="flex-grow">
+                    <div class="flex justify-between">
+                        <div class="w-1/2 p-2 text-sm space-y-2">
+                            <h3 class="font-bold text-yellow-300">Standard CMOS Features</h3>
+                            <div class="flex items-center">
+                                <span class="w-24">System Date:</span>
+                                [<input type="number" id="legacy-month" min="1" max="12" value="${date.getMonth() + 1}" class="legacy-input"> /
+                                <input type="number" id="legacy-day" min="1" max="31" value="${date.getDate()}" class="legacy-input"> /
+                                <input type="number" id="legacy-year" min="1970" max="2099" value="${date.getFullYear()}" class="legacy-input w-24">]
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-24">System Time:</span>
+                                [<input type="number" id="legacy-hour" min="0" max="23" value="${String(date.getHours()).padStart(2, '0')}" class="legacy-input"> :
+                                <input type="number" id="legacy-minute" min="0" max="59" value="${String(date.getMinutes()).padStart(2, '0')}" class="legacy-input"> :
+                                <input type="number" id="legacy-second" min="0" max="59" value="${String(date.getSeconds()).padStart(2, '0')}" class="legacy-input">]
+                            </div>
+                            
+                            <p class="py-1 mt-4">IDE Primary Master: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="text-white">Auto</span>]</p>
+                            <p class="py-1">IDE Primary Slave: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="text-white">Auto</span>]</p>
+                            <p class="py-1">IDE Secondary Master: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="text-white">Auto</span>]</p>
+                            <p class="py-1">IDE Secondary Slave: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="text-white">Auto</span>]</p>
+                        </div>
+                        <div class="w-1/2 p-2 text-xs space-y-1">
+                            <h3 class="font-bold text-yellow-300">System Information</h3>
+                            <p>BIOS Version: 1.0.1</p>
+                            <p>Build Date: 07/15/2005</p>
+                            <p>CPU Type: Intel(R) Pentium(R) 4</p>
+                            <p>CPU Speed: 3.20 GHz</p>
+                            <p>Total Memory: 1024 MB (DDR SDRAM)</p>
+                            <p>L2 Cache: 512 KB</p>
+                            <p class="mt-4">Video Adapter: NVIDIA GeForce FX 5200</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full text-xs p-2 bg-gray-700 text-yellow-300">
+                    <p class="font-bold">ITEM HELP</p>
+                    <p class="mt-1">Use the arrow keys to navigate and select options. The date and time fields can be changed with +/- keys. The IDE devices will be auto-detected.</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('legacy-hour').addEventListener('change', updateLegacyDateTime);
+        document.getElementById('legacy-minute').addEventListener('change', updateLegacyDateTime);
+        document.getElementById('legacy-second').addEventListener('change', updateLegacyDateTime);
+        document.getElementById('legacy-month').addEventListener('change', updateLegacyDateTime);
+        document.getElementById('legacy-day').addEventListener('change', updateLegacyDateTime);
+        document.getElementById('legacy-year').addEventListener('change', updateLegacyDateTime);
+    }
+    
+    function renderLegacyAdvancedTab() {
+        legacyContentArea.innerHTML = `
+            <div class="w-full">
+                <div class="p-2">
+                    <h3 class="font-bold text-yellow-300">Advanced BIOS Features</h3>
+                    <p class="option">Legacy USB Support &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Enabled]</p>
+                    <p class="option">Power On by Mouse &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Disabled]</p>
+                    <p class="option">System Cacheable &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Disabled]</p>
+                </div>
+                <div class="p-2 mt-4">
+                    <h3 class="font-bold text-yellow-300">IDE Configuration</h3>
+                    <p class="option">SATA Mode &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[IDE]</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    function renderLegacyBootTab() {
+        let bootItemsHtml = tempLegacySettings.bootOrder.map((item, index) => `
+            <div class="option flex justify-between items-center" data-index="${index}">
+                <span>${index + 1}. ${item.name}</span>
+                <span class="text-xs font-bold">[${item.enabled ? 'Enabled' : 'Disabled'}]</span>
+            </div>
+        `).join('');
+
+        legacyContentArea.innerHTML = `
+            <div class="w-full">
+                <h3 class="font-bold text-yellow-300 p-2">Boot Device Priority</h3>
+                <div class="space-y-1">
+                    ${bootItemsHtml}
+                </div>
+                <p class="text-xs mt-4">Use +/- keys to move items up/down. Press Enter to toggle enabled/disabled.</p>
+            </div>
+        `;
+    }
+    
+    function renderLegacySecurityTab() {
+        legacyContentArea.innerHTML = `
+            <div class="w-full">
+                <h3 class="font-bold text-yellow-300 p-2">Security Settings</h3>
+                <div class="space-y-1">
+                    <p class="option">Set Supervisor Password</p>
+                    <p class="option">Set User Password</p>
+                    <p class="option">Power-On Password &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Disabled]</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    function renderLegacyExitTab() {
+        legacyContentArea.innerHTML = `
+            <div class="w-full">
+                <div class="p-2">
+                    <p class="option" id="legacy-save-and-exit">Save Changes and Exit Setup</p>
+                    <p class="option" id="legacy-discard-and-exit">Exit Without Saving</p>
+                    <p class="option" id="legacy-restore-defaults">Load Setup Defaults</p>
+                    <p class="option">Discard Changes</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('legacy-save-and-exit').addEventListener('click', () => handleLegacySaveAndExit());
+        document.getElementById('legacy-discard-and-exit').addEventListener('click', () => handleLegacyDiscardAndExit());
+        document.getElementById('legacy-restore-defaults').addEventListener('click', () => handleLegacyRestoreDefaults());
+    }
+    
+    // --- LEGACY HELPER FUNCTIONS ---
+    /**
+     * Updates the active option highlight.
+     * @param {number} direction - The direction to move (1 for down, -1 for up).
+     */
+    function updateActiveOption(direction) {
+        const options = legacyContentArea.querySelectorAll('.option');
+        if (options.length === 0) return;
+        
+        // Remove active class from current option
+        if (options[legacyActiveOptionIndex]) {
+            options[legacyActiveOptionIndex].classList.remove('active');
+        }
+
+        // Calculate new index
+        legacyActiveOptionIndex = (legacyActiveOptionIndex + direction + options.length) % options.length;
+
+        // Add active class to new option
+        if (options[legacyActiveOptionIndex]) {
+            options[legacyActiveOptionIndex].classList.add('active');
+        }
+    }
+    
+    /**
+     * Toggles the enabled/disabled state of the selected boot item.
+     */
+    function toggleBootItemEnabledState() {
+        if (legacyActiveTab === 'boot') {
+            const index = legacyActiveOptionIndex;
+            if (tempLegacySettings.bootOrder[index]) {
+                tempLegacySettings.bootOrder[index].enabled = !tempLegacySettings.bootOrder[index].enabled;
+                renderLegacyBootTab();
+                // Re-apply the active class after re-rendering
+                const options = legacyContentArea.querySelectorAll('.option');
+                if (options[index]) {
+                    options[index].classList.add('active');
+                }
+            }
+        }
+    }
+
+    // --- ACTION HANDLERS ---
+    function startClock(mode) {
+        if (clockInterval) clearInterval(clockInterval);
+        clockInterval = setInterval(() => {
+            const settings = (mode === 'uefi') ? tempUefiSettings : tempLegacySettings;
+            const dateEl = (mode === 'uefi') ? uefiDateEl : null; // Legacy doesn't have a specific date display outside the menu
+            const timeEl = (mode === 'uefi') ? uefiTimeEl : null;
+
+            const now = settings.date;
+            if (dateEl) {
+                dateEl.textContent = now.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' });
+            }
+            if (timeEl) {
+                timeEl.textContent = now.toLocaleTimeString('en-GB');
+            }
+            // Update the date object itself to keep time ticking
+            settings.date.setSeconds(settings.date.getSeconds() + 1);
+        }, 1000);
+    }
+    
+    function updateUefiDateTime() {
+        const year = parseInt(document.getElementById('uefi-year').value);
+        const month = parseInt(document.getElementById('uefi-month').value) - 1;
+        const day = parseInt(document.getElementById('uefi-day').value);
+        const hour = parseInt(document.getElementById('uefi-hour').value);
+        const minute = parseInt(document.getElementById('uefi-minute').value);
+        const second = parseInt(document.getElementById('uefi-second').value);
+        
+        if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hour) || isNaN(minute) || isNaN(second)) return;
+        tempUefiSettings.date = new Date(year, month, day, hour, minute, second);
+    }
+    
+    function updateLegacyDateTime() {
+        const year = parseInt(document.getElementById('legacy-year').value);
+        const month = parseInt(document.getElementById('legacy-month').value) - 1;
+        const day = parseInt(document.getElementById('legacy-day').value);
+        const hour = parseInt(document.getElementById('legacy-hour').value);
+        const minute = parseInt(document.getElementById('legacy-minute').value);
+        const second = parseInt(document.getElementById('legacy-second').value);
+        
+        if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hour) || isNaN(minute) || isNaN(second)) return;
+        tempLegacySettings.date = new Date(year, month, day, hour, minute, second);
+    }
+    
+    function moveUefiBootItem(index, direction) {
+        const newIndex = index + direction;
+        if (newIndex < 0 || newIndex >= tempUefiSettings.bootOrder.length) return;
+        
+        const [item] = tempUefiSettings.bootOrder.splice(index, 1);
+        tempUefiSettings.bootOrder.splice(newIndex, 0, item);
+        
+        renderUefiBootTab(); // Re-render the tab to show the new order
+    }
+    
+    function moveLegacyBootItem(index, direction) {
+        const newIndex = index + direction;
+        if (newIndex < 0 || newIndex >= tempLegacySettings.bootOrder.length) return;
+        
+        const [item] = tempLegacySettings.bootOrder.splice(index, 1);
+        tempLegacySettings.bootOrder.splice(newIndex, 0, item);
+        
+        // Re-render the tab to show the new order and update the active option index
+        renderLegacyBootTab();
+        legacyActiveOptionIndex = newIndex;
+        const options = legacyContentArea.querySelectorAll('.option');
+        if (options[newIndex]) {
+            options[newIndex].classList.add('active');
+        }
+    }
+    
+    function handleUefiSaveAndExit() {
+        showModal(
+            "Save configuration?",
+            "Save configuration changes and exit setup?",
+            [
+                { text: "Yes", class: "bg-blue-600 hover:bg-blue-700", action: () => {
+                    uefiSettings = cloneSettings(tempUefiSettings);
+                    rebootSystem("Saving changes and rebooting...");
+                }},
+                { text: "No", class: "bg-slate-600 hover:bg-slate-700", action: hideModal }
+            ]
+        );
+    }
+    
+    function handleUefiDiscardAndExit() {
+        showModal(
+            "Quit without saving?",
+            "Are you sure you want to quit without saving?",
+            [
+                { text: "Yes", class: "bg-red-600 hover:bg-red-700", action: () => {
+                    tempUefiSettings = cloneSettings(uefiSettings);
+                    rebootSystem("Rebooting without saving changes...");
+                }},
+                { text: "No", class: "bg-slate-600 hover:bg-slate-700", action: hideModal }
+            ]
+        );
+    }
+    
+    function handleLegacySaveAndExit() {
+        showModal(
+            "Save Changes and Exit?",
+            "Are you sure you want to save changes and exit?",
+            [
+                { text: "Yes", class: "bg-blue-600 hover:bg-blue-700", action: () => {
+                    legacySettings = cloneSettings(tempLegacySettings);
+                    rebootSystem("Saving changes and rebooting...");
+                }},
+                { text: "No", class: "bg-slate-600 hover:bg-slate-700", action: hideModal }
+            ]
+        );
+    }
+    
+    function handleLegacyDiscardAndExit() {
+        showModal(
+            "Exit Without Saving?",
+            "Exit system setup without saving any changes?",
+            [
+                { text: "Yes", class: "bg-red-600 hover:bg-red-700", action: () => {
+                    tempLegacySettings = cloneSettings(legacySettings);
+                    rebootSystem("Rebooting without saving changes...");
+                }},
+                { text: "No", class: "bg-slate-600 hover:bg-slate-700", action: hideModal }
+            ]
+        );
+    }
+    
+    function handleLegacyRestoreDefaults() {
+        showModal(
+            "Load Setup Defaults?",
+            "Load default configuration values?",
+            [
+                { text: "Yes", class: "bg-yellow-600 hover:bg-yellow-700", action: () => {
+                    tempLegacySettings = {
+                        date: new Date(),
+                        bootOrder: [
+                            { name: 'Hard Drive (C:)', enabled: true },
+                            { name: 'USB-HDD', enabled: true },
+                            { name: 'CD-ROM Drive', enabled: true },
+                            { name: 'Floppy Drive', enabled: false },
+                        ]
+                    };
+                    hideModal();
+                    setLegacyActiveTab('main');
+                }},
+                { text: "No", class: "bg-slate-600 hover:bg-slate-700", action: hideModal }
+            ]
+        );
+    }
+
+    function rebootSystem(message) {
+        hideModal();
+        clearInterval(clockInterval);
+        uefiBiosUI.classList.add('hidden');
+        uefiBiosUI.classList.remove('flex');
+        legacyBiosUI.classList.add('hidden');
+        legacyBiosUI.classList.remove('flex');
+        bootScreen.classList.remove('hidden');
+        bootLog.innerHTML = `<p class="text-yellow-400">${message}</p>`;
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    }
+    
+    // --- MODAL DIALOG ---
+    function showModal(title, body, buttons) {
+        modalTitle.textContent = title;
+        modalBody.textContent = body;
+        modalButtons.innerHTML = '';
+        buttons.forEach(btnInfo => {
+            const button = document.createElement('button');
+            button.textContent = btnInfo.text;
+            button.className = `px-6 py-2 rounded-md text-white font-semibold ${btnInfo.class}`;
+            button.onclick = btnInfo.action;
+            modalButtons.appendChild(button);
+        });
+        modal.classList.remove('hidden');
+    }
+
+    function hideModal() {
+        modal.classList.add('hidden');
+    }
+
+    // --- EVENT LISTENERS ---
+    window.addEventListener('keydown', (e) => {
+        if (modal.classList.contains('hidden')) { // Only handle keys if modal is not open
+            if (currentState === 'booting') {
+                if (e.key === 'Delete' || e.key === 'F2') {
+                    e.preventDefault();
+                    enterUefiBios();
+                } else if (e.key === 'F11') {
+                    e.preventDefault();
+                    enterLegacyBios();
+                }
+            } else if (currentState === 'uefi') {
+                switch (e.key) {
+                    case 'F10':
+                        e.preventDefault();
+                        handleUefiSaveAndExit();
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        handleUefiDiscardAndExit();
+                        break;
+                    case 'ArrowUp':
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        const tabs = Array.from(uefiNavTabs);
+                        const currentIndex = tabs.findIndex(tab => tab.dataset.tab === uefiActiveTab);
+                        let nextIndex = currentIndex;
+                        if (e.key === 'ArrowUp') {
+                            nextIndex = (currentIndex > 0) ? currentIndex - 1 : tabs.length - 1;
+                        } else {
+                            nextIndex = (currentIndex < tabs.length - 1) ? currentIndex + 1 : 0;
+                        }
+                        setUefiActiveTab(tabs[nextIndex].dataset.tab);
+                        break;
+                }
+            } else if (currentState === 'legacy') {
+                // If it's a tab with selectable options (e.g., Boot tab)
+                const isTabWithOption = ['boot', 'advanced', 'security', 'exit'].includes(legacyActiveTab);
+                
+                if (isTabWithOption) {
+                    const options = legacyContentArea.querySelectorAll('.option');
+                    if (options.length > 0) {
+                        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            const direction = (e.key === 'ArrowUp') ? -1 : 1;
+                            updateActiveOption(direction);
+                            return; // Don't process other keys if we are navigating options
+                        }
+                    }
+                }
+                
+                // Handling actions based on current tab
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        if (legacyActiveTab === 'boot') {
+                            toggleBootItemEnabledState();
+                        }
+                        break;
+                    case 'F10':
+                        e.preventDefault();
+                        handleLegacySaveAndExit();
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        handleLegacyDiscardAndExit();
+                        break;
+                    case 'F9':
+                        e.preventDefault();
+                        handleLegacyRestoreDefaults();
+                        break;
+                    case 'ArrowRight': // Navigate tabs using left/right arrows for legacy
+                        e.preventDefault();
+                        const tabsRight = Array.from(legacyNavTabs);
+                        const currentIndexRight = tabsRight.findIndex(tab => tab.dataset.tab === legacyActiveTab);
+                        let nextIndexRight = (currentIndexRight < tabsRight.length - 1) ? currentIndexRight + 1 : 0;
+                        setLegacyActiveTab(tabsRight[nextIndexRight].dataset.tab);
+                        break;
+                    case 'ArrowLeft': // Navigate tabs using left/right arrows for legacy
+                        e.preventDefault();
+                        const tabsLeft = Array.from(legacyNavTabs);
+                        const currentIndexLeft = tabsLeft.findIndex(tab => tab.dataset.tab === legacyActiveTab);
+                        let nextIndexLeft = (currentIndexLeft > 0) ? currentIndexLeft - 1 : tabsLeft.length - 1;
+                        setLegacyActiveTab(tabsLeft[nextIndexLeft].dataset.tab);
+                        break;
+                    case '+':
+                    case '-':
+                        if (legacyActiveTab === 'boot') {
+                            const index = legacyActiveOptionIndex;
+                            if (index !== -1) {
+                                if (e.key === '+') {
+                                    moveLegacyBootItem(index, -1);
+                                } else {
+                                    moveLegacyBootItem(index, 1);
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+    });
+
+    uefiNavTabs.forEach(tab => tab.addEventListener('click', () => setUefiActiveTab(tab.dataset.tab)));
+    legacyNavTabs.forEach(tab => tab.addEventListener('click', () => setLegacyActiveTab(tab.dataset.tab)));
+    
+    // Add click listeners for the boot screen links
+    if (uefiLink) uefiLink.addEventListener('click', enterUefiBios);
+    if (legacyLink) legacyLink.addEventListener('click', enterLegacyBios);
+
+    // Initial call
+    runBootSequence();
+});
+</script>
+
+</body>
+</html>
