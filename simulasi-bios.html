@@ -90,6 +90,25 @@
             outline: none;
             border-color: #FFFF00;
         }
+
+        /* --- New Modal Styles for Boot Device Selection --- */
+        .select-modal .modal-content {
+            background-color: #1f2937; /* slate-800 */
+            border-color: #4a5568; /* gray-700 */
+        }
+        .select-modal .option-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .select-modal .option-item:hover {
+            background-color: #374151; /* gray-700 */
+        }
+        .select-modal .option-item.selected {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+        }
+
     </style>
 </head>
 <body class="bg-black text-white h-screen flex items-center justify-center p-4 md:p-8">
@@ -176,7 +195,7 @@
         </div>
     </div>
     
-    <!-- Modal Dialog -->
+    <!-- General Modal Dialog -->
     <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
         <div class="bg-slate-800 border-2 border-blue-500 rounded-lg shadow-xl p-8 max-w-lg text-center">
             <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
@@ -186,6 +205,17 @@
             </div>
         </div>
     </div>
+
+    <!-- New Boot Device Selection Modal -->
+    <div id="boot-select-modal" class="select-modal hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="modal-content w-full max-w-sm border border-gray-700 rounded-lg shadow-lg">
+            <div class="bg-gray-700 text-white font-bold p-3 rounded-t-lg">Boot Device Selection</div>
+            <ul id="boot-select-list" class="p-2 space-y-1">
+                <!-- Options will be injected here -->
+            </ul>
+        </div>
+    </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -207,6 +237,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     const modalButtons = document.getElementById('modal-buttons');
+
+    const bootSelectModal = document.getElementById('boot-select-modal');
+    const bootSelectList = document.getElementById('boot-select-list');
 
     const uefiLink = document.getElementById('uefi-link');
     const legacyLink = document.getElementById('legacy-link');
@@ -240,17 +273,32 @@ document.addEventListener('DOMContentLoaded', () => {
         bootOrder: [
             { id: 'nvme', name: 'NVMe SSD: Kingston SNV2S1000G', icon: '💾' },
             { id: 'usb', name: 'USB: Sandisk Cruzer Blade', icon: '🔌' },
+            { id: 'sata', name: 'SATA HDD: Seagate Barracuda 1TB', icon: '💿' },
             { id: 'pxe', name: 'PXE Network Boot: Realtek PXE B02 D00', icon: '🌐' }
+        ],
+        availableDevices: [
+            { id: 'nvme', name: 'NVMe SSD: Kingston SNV2S1000G', icon: '💾' },
+            { id: 'usb', name: 'USB: Sandisk Cruzer Blade', icon: '🔌' },
+            { id: 'pxe', name: 'PXE Network Boot: Realtek PXE B02 D00', icon: '🌐' },
+            { id: 'sata', name: 'SATA HDD: Seagate Barracuda 1TB', icon: '💿' }
         ]
     };
     
     let legacySettings = {
         date: new Date(),
         bootOrder: [
-            { name: 'Hard Drive (C:)', enabled: true },
-            { name: 'USB-HDD', enabled: true },
-            { name: 'CD-ROM Drive', enabled: true },
-            { name: 'Floppy Drive', enabled: false },
+            { id: 'hdd', name: 'Hard Drive (C:)', enabled: true },
+            { id: 'usb', name: 'USB-HDD', enabled: true },
+            { id: 'cdrom', name: 'CD-ROM Drive', enabled: true },
+            { id: 'floppy', name: 'Floppy Drive', enabled: false },
+        ],
+        availableDevices: [
+            { id: 'hdd', name: 'Hard Drive (C:)' },
+            { id: 'usb', name: 'USB-HDD' },
+            { id: 'cdrom', name: 'CD-ROM Drive' },
+            { id: 'floppy', name: 'Floppy Drive' },
+            { id: 'lan', name: 'LAN Boot' },
+            { id: 'scsi', name: 'SCSI Device' },
         ]
     };
 
@@ -378,14 +426,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function renderUefiBootTab() {
         let bootItemsHtml = tempUefiSettings.bootOrder.map((item, index) => `
-            <div class="flex items-center justify-between p-3 rounded-md border border-slate-700 hover:bg-slate-700" data-index="${index}">
+            <div class="boot-item flex items-center justify-between p-3 rounded-md border border-slate-700 hover:bg-slate-700 cursor-pointer" data-index="${index}" data-id="${item.id}">
                 <div class="flex items-center gap-4">
                     <span class="text-2xl">${item.icon}</span>
                     <span class="text-lg">${index + 1}. ${item.name}</span>
                 </div>
                 <div class="flex gap-2">
-                    <button class="boot-up bg-slate-600 hover:bg-blue-600 px-3 py-1 rounded" data-index="${index}">▲</button>
-                    <button class="boot-down bg-slate-600 hover:bg-blue-600 px-3 py-1 rounded" data-index="${index}">▼</button>
+                    <button class="boot-up bg-slate-600 hover:bg-blue-600 px-3 py-1 rounded" data-index="${index}" onclick="event.stopPropagation()">▲</button>
+                    <button class="boot-down bg-slate-600 hover:bg-blue-600 px-3 py-1 rounded" data-index="${index}" onclick="event.stopPropagation()">▼</button>
                 </div>
             </div>
         `).join('');
@@ -399,6 +447,10 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.querySelectorAll('.boot-up').forEach(btn => btn.addEventListener('click', (e) => moveUefiBootItem(parseInt(e.currentTarget.dataset.index), -1)));
         document.querySelectorAll('.boot-down').forEach(btn => btn.addEventListener('click', (e) => moveUefiBootItem(parseInt(e.currentTarget.dataset.index), 1)));
+        document.querySelectorAll('.boot-item').forEach(item => item.addEventListener('click', (e) => {
+            const index = parseInt(e.currentTarget.dataset.index);
+            showBootSelectModal('uefi', index);
+        }));
     }
     
     function renderUefiSaveExitTab() {
@@ -540,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function renderLegacyBootTab() {
         let bootItemsHtml = tempLegacySettings.bootOrder.map((item, index) => `
-            <div class="option flex justify-between items-center" data-index="${index}">
+            <div class="boot-item option flex justify-between items-center" data-index="${index}" data-id="${item.id}">
                 <span>${index + 1}. ${item.name}</span>
                 <span class="text-xs font-bold">[${item.enabled ? 'Enabled' : 'Disabled'}]</span>
             </div>
@@ -552,9 +604,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="space-y-1">
                     ${bootItemsHtml}
                 </div>
-                <p class="text-xs mt-4">Use +/- keys to move items up/down. Press Enter to toggle enabled/disabled.</p>
+                <p class="text-xs mt-4">Use +/- keys to move items up/down. Press Enter to toggle enabled/disabled. Click an item to change it.</p>
             </div>
         `;
+        document.querySelectorAll('.boot-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const index = parseInt(e.currentTarget.dataset.index);
+                showBootSelectModal('legacy', index);
+            });
+        });
     }
     
     function renderLegacySecurityTab() {
@@ -762,11 +820,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     tempLegacySettings = {
                         date: new Date(),
                         bootOrder: [
-                            { name: 'Hard Drive (C:)', enabled: true },
-                            { name: 'USB-HDD', enabled: true },
-                            { name: 'CD-ROM Drive', enabled: true },
-                            { name: 'Floppy Drive', enabled: false },
-                        ]
+                            { id: 'hdd', name: 'Hard Drive (C:)', enabled: true },
+                            { id: 'usb', name: 'USB-HDD', enabled: true },
+                            { id: 'cdrom', name: 'CD-ROM Drive', enabled: true },
+                            { id: 'floppy', name: 'Floppy Drive', enabled: false },
+                        ],
+                        availableDevices: legacySettings.availableDevices
                     };
                     hideModal();
                     setLegacyActiveTab('main');
@@ -790,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
     }
     
-    // --- MODAL DIALOG ---
+    // --- MODAL DIALOGS ---
     function showModal(title, body, buttons) {
         modalTitle.textContent = title;
         modalBody.textContent = body;
@@ -808,10 +867,69 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideModal() {
         modal.classList.add('hidden');
     }
+    
+    /**
+     * Shows the boot device selection modal for either UEFI or Legacy.
+     * @param {string} mode - 'uefi' or 'legacy'.
+     * @param {number} currentIndex - The index of the item that was clicked.
+     */
+    function showBootSelectModal(mode, currentIndex) {
+        bootSelectList.innerHTML = '';
+        const devices = (mode === 'uefi') ? tempUefiSettings.availableDevices : tempLegacySettings.availableDevices;
+        const currentOrder = (mode === 'uefi') ? tempUefiSettings.bootOrder : tempLegacySettings.bootOrder;
+        
+        devices.forEach(device => {
+            const li = document.createElement('li');
+            li.className = 'option-item text-white';
+            // Mark the currently selected device with 'selected' class
+            const isSelected = currentOrder[currentIndex].id === device.id;
+            if (isSelected) {
+                li.classList.add('selected');
+            }
+            li.textContent = (device.icon || '') + ' ' + device.name;
+            li.dataset.id = device.id;
+            
+            li.onclick = () => {
+                // Find the device object and its current index in the boot order
+                const oldDevice = currentOrder[currentIndex];
+                const newDevice = devices.find(d => d.id === device.id);
+                const newDeviceCurrentIndex = currentOrder.findIndex(d => d.id === newDevice.id);
+
+                if (newDeviceCurrentIndex !== -1) {
+                    // Case 1: The new device is already in the boot order. SWAP them.
+                    currentOrder[currentIndex] = newDevice;
+                    currentOrder[newDeviceCurrentIndex] = oldDevice;
+                } else {
+                    // Case 2: The new device is not in the boot order. REPLACE the old one.
+                    currentOrder[currentIndex] = newDevice;
+                }
+                
+                // Hide the modal and re-render the appropriate menu
+                hideBootSelectModal();
+                if (mode === 'uefi') {
+                    renderUefiBootTab();
+                } else {
+                    renderLegacyBootTab();
+                    // Ensure the correct option stays active after re-render
+                    const options = legacyContentArea.querySelectorAll('.option');
+                    if (options[currentIndex]) {
+                        options[currentIndex].classList.add('active');
+                    }
+                }
+            };
+            bootSelectList.appendChild(li);
+        });
+        
+        bootSelectModal.classList.remove('hidden');
+    }
+    
+    function hideBootSelectModal() {
+        bootSelectModal.classList.add('hidden');
+    }
 
     // --- EVENT LISTENERS ---
     window.addEventListener('keydown', (e) => {
-        if (modal.classList.contains('hidden')) { // Only handle keys if modal is not open
+        if (modal.classList.contains('hidden') && bootSelectModal.classList.contains('hidden')) { // Only handle keys if modals are not open
             if (currentState === 'booting') {
                 if (e.key === 'Delete' || e.key === 'F2') {
                     e.preventDefault();
@@ -909,6 +1027,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         break;
                 }
             }
+        } else if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            hideModal();
+        } else if (e.key === 'Escape' && !bootSelectModal.classList.contains('hidden')) {
+            hideBootSelectModal();
         }
     });
 
