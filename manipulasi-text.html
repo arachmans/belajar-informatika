@@ -230,6 +230,96 @@
                         </div>
                     </div>
 
+                    <!-- Menghitung Panjang Teks -->
+                    <div class="bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50 p-8 rounded-2xl border-2 border-sky-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-sky-200 opacity-20 rounded-full -mr-16 -mt-16"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-sky-400 to-blue-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">📏</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-sky-800 mb-1">Menghitung Panjang Teks</h4>
+                                    <p class="text-sky-600 text-sm">Hitung jumlah karakter dalam teks dengan presisi</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-8 rounded-2xl shadow-xl border border-sky-100">
+                                <div class="flex items-center mb-6">
+                                    <div class="bg-gradient-to-r from-sky-100 to-blue-100 p-4 rounded-xl mr-4">
+                                        <span class="text-sky-600 font-bold text-2xl">LEN</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold text-sky-700 text-xl mb-1">LEN Function</h5>
+                                        <p class="text-gray-600 text-sm">Penghitung karakter yang akurat</p>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-700 mb-4 leading-relaxed">
+                                    Menghitung jumlah total karakter dalam teks, termasuk spasi dan simbol.
+                                    <br><strong>Sintaks:</strong> LEN(text)
+                                </p>
+                                
+                                <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl mb-4">
+                                    <code class="text-sky-800 font-mono text-lg">=LEN("Excel 2024")</code>
+                                </div>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-sky-50 p-4 rounded-xl">
+                                        <h6 class="font-semibold text-sky-700 mb-3">🎯 Contoh Praktis</h6>
+                                        <div class="space-y-3 text-sm">
+                                            <div>
+                                                <span class="text-gray-600">Input:</span><br>
+                                                <span class="bg-white px-2 py-1 rounded font-mono">"Excel 2024"</span>
+                                            </div>
+                                            <div class="text-center text-gray-400">↓</div>
+                                            <div>
+                                                <span class="text-gray-600">Output:</span><br>
+                                                <span class="bg-white px-2 py-1 rounded font-mono text-green-600">10</span>
+                                            </div>
+                                            <div class="text-xs text-sky-600 mt-2">
+                                                <strong>Penjelasan:</strong> E-x-c-e-l-[spasi]-2-0-2-4 = 10 karakter
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+                                        <h6 class="font-semibold text-blue-700 mb-3">💡 Kegunaan LEN</h6>
+                                        <ul class="text-sm text-blue-700 space-y-1">
+                                            <li>• Validasi panjang password</li>
+                                            <li>• Cek batas karakter tweet/SMS</li>
+                                            <li>• Analisis data teks</li>
+                                            <li>• Kontrol kualitas input data</li>
+                                            <li>• Kombinasi dengan fungsi lain</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200">
+                                    <h6 class="font-semibold text-yellow-700 mb-3">🔥 Contoh Kombinasi Advanced</h6>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div class="bg-white p-3 rounded-lg border">
+                                            <div class="font-semibold text-gray-700 mb-2">Validasi Email:</div>
+                                            <code class="text-xs text-blue-600">=IF(LEN(A1)>5,"Valid","Terlalu Pendek")</code>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg border">
+                                            <div class="font-semibold text-gray-700 mb-2">Ambil Karakter Tengah:</div>
+                                            <code class="text-xs text-blue-600">=MID(A1,LEN(A1)/2,1)</code>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg border">
+                                            <div class="font-semibold text-gray-700 mb-2">Cek Panjang Password:</div>
+                                            <code class="text-xs text-blue-600">=LEN(A1)>=8</code>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg border">
+                                            <div class="font-semibold text-gray-700 mb-2">Hitung Sisa Karakter:</div>
+                                            <code class="text-xs text-blue-600">=280-LEN(A1)</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Mengambil Bagian Teks -->
                     <div class="bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 p-8 rounded-2xl border-2 border-violet-200 card-hover bounce-in relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-24 h-24 bg-violet-200 opacity-20 rounded-full -ml-12 -mt-12"></div>
