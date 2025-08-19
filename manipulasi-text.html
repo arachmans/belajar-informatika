@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Text Manipulation Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .quiz-option:hover {
+            transform: translateX(4px);
+            transition: transform 0.2s ease;
+        }
+        .correct-answer {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .wrong-answer {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen pb-20">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <h1 class="text-2xl font-bold text-primary text-center">📊 Excel Text Master</h1>
+            <p class="text-gray-600 text-center text-sm mt-1">Kuasai Manipulasi Teks Excel</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Materi Section -->
+        <section id="materi" class="fade-in">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-10 rounded-full -ml-12 -mb-12"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-center mb-4">
+                        <span class="text-6xl icon-float">📊</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-center mb-3">
+                        Materi Pembelajaran Excel
+                    </h2>
+                    <p class="text-center text-blue-100 text-lg mb-6">
+                        Kuasai seni manipulasi teks dengan rumus-rumus Excel yang powerful
+                    </p>
+                    <div class="flex justify-center space-x-6 text-sm">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                            6 Kategori Rumus
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-400 rounded-full mr-2"></span>
+                            15+ Fungsi Excel
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-pink-400 rounded-full mr-2"></span>
+                            Contoh Praktis
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                
+                <!-- Mengapa Penting -->
+                <div class="mb-8 p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border border-amber-200 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gradient-to-r from-amber-400 to-orange-500 p-3 rounded-full mr-4">
+                            <span class="text-2xl">🎯</span>
+                        </div>
+                        <h3 class="text-xl font-bold gradient-text">Mengapa Harus Menguasai Manipulasi Teks Excel?</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="flex items-center p-3 bg-white rounded-lg shadow-sm slide-in-left">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <span class="text-green-600">⚡</span>
+                            </div>
+                            <span class="text-gray-700 font-medium">Menghemat waktu dalam pengolahan data teks</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-white rounded-lg shadow-sm slide-in-right">
+                            <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                <span class="text-blue-600">📈</span>
+                            </div>
+                            <span class="text-gray-700 font-medium">Meningkatkan produktivitas kerja</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-white rounded-lg shadow-sm slide-in-left">
+                            <div class="bg-purple-100 p-2 rounded-full mr-3">
+                                <span class="text-purple-600">✅</span>
+                            </div>
+                            <span class="text-gray-700 font-medium">Mengurangi kesalahan manual</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-white rounded-lg shadow-sm slide-in-right">
+                            <div class="bg-pink-100 p-2 rounded-full mr-3">
+                                <span class="text-pink-600">🧠</span>
+                            </div>
+                            <span class="text-gray-700 font-medium">Memudahkan analisis data yang kompleks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rumus-rumus -->
+                <div class="space-y-6">
+                    <!-- Penggabungan Teks -->
+                    <div class="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 p-8 rounded-2xl border-2 border-emerald-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-200 opacity-20 rounded-full -mr-10 -mt-10"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-emerald-400 to-green-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">🔗</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-emerald-800 mb-1">Penggabungan Teks</h4>
+                                    <p class="text-emerald-600 text-sm">Satukan beberapa teks menjadi satu kesatuan</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-emerald-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-emerald-100 p-2 rounded-lg mr-3">
+                                            <span class="text-emerald-600 font-bold">CONCAT</span>
+                                        </div>
+                                        <h5 class="font-bold text-emerald-700">CONCATENATE Function</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Menggabungkan beberapa teks menjadi satu. Sintaks: CONCATENATE(text1, text2, ...)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-emerald-800 font-mono text-sm">=CONCATENATE(A1," ",B1)</code>
+                                    </div>
+                                    <div class="bg-emerald-50 p-3 rounded-lg">
+                                        <p class="text-xs text-emerald-700">
+                                            <strong>💡 Contoh:</strong> Jika A1="John" dan B1="Doe"<br>
+                                            <strong>Hasil:</strong> <span class="bg-white px-2 py-1 rounded font-mono">"John Doe"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-emerald-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-emerald-100 p-2 rounded-lg mr-3">
+                                            <span class="text-emerald-600 font-bold">&</span>
+                                        </div>
+                                        <h5 class="font-bold text-emerald-700">Operator & (Ampersand)</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Cara lebih sederhana untuk menggabungkan teks menggunakan simbol &</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-emerald-800 font-mono text-sm">=A1&" "&B1&" - "&C1</code>
+                                    </div>
+                                    <div class="bg-emerald-50 p-3 rounded-lg">
+                                        <p class="text-xs text-emerald-700">
+                                            <strong>💡 Contoh:</strong> Menggabungkan nama dan jabatan<br>
+                                            <strong>Hasil:</strong> <span class="bg-white px-2 py-1 rounded font-mono">"John Doe - Manager"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mengambil Bagian Teks -->
+                    <div class="bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 p-8 rounded-2xl border-2 border-violet-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-24 h-24 bg-violet-200 opacity-20 rounded-full -ml-12 -mt-12"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-violet-400 to-purple-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">✂️</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-violet-800 mb-1">Mengambil Bagian Teks</h4>
+                                    <p class="text-violet-600 text-sm">Ekstrak bagian tertentu dari teks dengan presisi</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-violet-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-blue-100 to-violet-100 p-3 rounded-lg mr-3">
+                                            <span class="text-violet-600 font-bold text-lg">←</span>
+                                        </div>
+                                        <h5 class="font-bold text-violet-700 text-lg">LEFT Function</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Mengambil sejumlah karakter dari sebelah kiri teks. Sintaks: LEFT(text, num_chars)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-violet-800 font-mono text-sm">=LEFT("Excel2024",5)</code>
+                                    </div>
+                                    <div class="bg-violet-50 p-4 rounded-lg">
+                                        <p class="text-sm text-violet-700">
+                                            <strong>🎯 Contoh Praktis:</strong> Mengambil kode produk<br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"PRD001-Laptop"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">"PRD00"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-violet-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-3 rounded-lg mr-3">
+                                            <span class="text-violet-600 font-bold text-lg">→</span>
+                                        </div>
+                                        <h5 class="font-bold text-violet-700 text-lg">RIGHT Function</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Mengambil sejumlah karakter dari sebelah kanan teks. Sintaks: RIGHT(text, num_chars)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-violet-800 font-mono text-sm">=RIGHT("Excel2024",4)</code>
+                                    </div>
+                                    <div class="bg-violet-50 p-4 rounded-lg">
+                                        <p class="text-sm text-violet-700">
+                                            <strong>🎯 Contoh Praktis:</strong> Mengambil tahun dari laporan<br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"Laporan2024"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">"2024"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-violet-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-indigo-100 to-purple-100 p-3 rounded-lg mr-3">
+                                            <span class="text-violet-600 font-bold text-lg">↔</span>
+                                        </div>
+                                        <h5 class="font-bold text-violet-700 text-lg">MID Function</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Mengambil karakter dari posisi tertentu. Sintaks: MID(text, start_num, num_chars)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-violet-800 font-mono text-sm">=MID("ID123456789",3,6)</code>
+                                    </div>
+                                    <div class="bg-violet-50 p-4 rounded-lg">
+                                        <p class="text-sm text-violet-700">
+                                            <strong>🎯 Contoh Praktis:</strong> Mengambil nomor ID<br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"ID123456789"</span><br>
+                                            <span class="text-gray-600">Mulai posisi 3, ambil 6 karakter</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">"123456"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mengubah Format Huruf -->
+                    <div class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-8 rounded-2xl border-2 border-amber-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute bottom-0 right-0 w-28 h-28 bg-amber-200 opacity-20 rounded-full -mr-14 -mb-14"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-amber-400 to-orange-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">🔤</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-amber-800 mb-1">Mengubah Format Huruf</h4>
+                                    <p class="text-amber-600 text-sm">Kontrol format huruf sesuai kebutuhan</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-amber-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-red-100 to-orange-100 p-3 rounded-lg mr-3">
+                                            <span class="text-amber-600 font-bold text-lg">ABC</span>
+                                        </div>
+                                        <h5 class="font-bold text-amber-700">UPPER</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 text-sm leading-relaxed">Mengubah semua huruf menjadi huruf kapital/besar</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-amber-800 font-mono text-xs">=UPPER("john doe")</code>
+                                    </div>
+                                    <div class="bg-amber-50 p-3 rounded-lg">
+                                        <p class="text-xs text-amber-700">
+                                            <strong>📝 Header Laporan</strong><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-1 rounded font-mono">"john doe"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-1 rounded font-mono text-red-600">"JOHN DOE"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-amber-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-blue-100 to-indigo-100 p-3 rounded-lg mr-3">
+                                            <span class="text-amber-600 font-bold text-lg">abc</span>
+                                        </div>
+                                        <h5 class="font-bold text-amber-700">LOWER</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 text-sm leading-relaxed">Mengubah semua huruf menjadi huruf kecil</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-amber-800 font-mono text-xs">=LOWER("JOHN@EMAIL.COM")</code>
+                                    </div>
+                                    <div class="bg-amber-50 p-3 rounded-lg">
+                                        <p class="text-xs text-amber-700">
+                                            <strong>📧 Format Email</strong><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-1 rounded font-mono">"JOHN@EMAIL.COM"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-1 rounded font-mono text-blue-600">"john@email.com"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-amber-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-green-100 to-teal-100 p-3 rounded-lg mr-3">
+                                            <span class="text-amber-600 font-bold text-lg">Abc</span>
+                                        </div>
+                                        <h5 class="font-bold text-amber-700">PROPER</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 text-sm leading-relaxed">Mengubah huruf pertama setiap kata menjadi kapital (Title Case)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-amber-800 font-mono text-xs">=PROPER("john doe smith")</code>
+                                    </div>
+                                    <div class="bg-amber-50 p-3 rounded-lg">
+                                        <p class="text-xs text-amber-700">
+                                            <strong>👤 Nama Proper</strong><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-1 rounded font-mono">"john doe smith"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-1 rounded font-mono text-green-600">"John Doe Smith"</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Membersihkan Spasi -->
+                    <div class="bg-gradient-to-br from-rose-50 via-red-50 to-pink-50 p-8 rounded-2xl border-2 border-rose-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-rose-200 opacity-20 rounded-full -mr-16 -mt-16"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-rose-400 to-red-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">🧹</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-rose-800 mb-1">Membersihkan Spasi</h4>
+                                    <p class="text-rose-600 text-sm">Rapikan data dengan menghilangkan spasi berlebih</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-8 rounded-2xl shadow-xl border border-rose-100">
+                                <div class="flex items-center mb-6">
+                                    <div class="bg-gradient-to-r from-rose-100 to-pink-100 p-4 rounded-xl mr-4">
+                                        <span class="text-rose-600 font-bold text-2xl">TRIM</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold text-rose-700 text-xl mb-1">TRIM Function</h5>
+                                        <p class="text-gray-600 text-sm">Pembersih spasi yang powerful</p>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-700 mb-4 leading-relaxed">
+                                    Menghapus spasi berlebih di awal, akhir, dan tengah teks (menyisakan 1 spasi antar kata). 
+                                    <br><strong>Sintaks:</strong> TRIM(text)
+                                </p>
+                                
+                                <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl mb-4">
+                                    <code class="text-rose-800 font-mono text-lg">=TRIM("  John   Doe  ")</code>
+                                </div>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-rose-50 p-4 rounded-xl">
+                                        <h6 class="font-semibold text-rose-700 mb-3">🎯 Contoh Praktis</h6>
+                                        <div class="space-y-2 text-sm">
+                                            <div>
+                                                <span class="text-gray-600">Input:</span><br>
+                                                <span class="bg-white px-2 py-1 rounded font-mono text-red-600">"  John   Doe  "</span>
+                                            </div>
+                                            <div class="text-center text-gray-400">↓</div>
+                                            <div>
+                                                <span class="text-gray-600">Output:</span><br>
+                                                <span class="bg-white px-2 py-1 rounded font-mono text-green-600">"John Doe"</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+                                        <h6 class="font-semibold text-blue-700 mb-3">💡 Tips Pro</h6>
+                                        <ul class="text-sm text-blue-700 space-y-1">
+                                            <li>• Sangat berguna untuk data copy-paste</li>
+                                            <li>• Membersihkan data import dari sistem lain</li>
+                                            <li>• Merapikan input form yang tidak konsisten</li>
+                                            <li>• Persiapan data sebelum analisis</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mencari Teks -->
+                    <div class="bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 p-8 rounded-2xl border-2 border-cyan-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-cyan-200 opacity-20 rounded-full -ml-12 -mb-12"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-cyan-400 to-teal-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">🔍</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-cyan-800 mb-1">Mencari Posisi Teks</h4>
+                                    <p class="text-cyan-600 text-sm">Temukan lokasi karakter atau kata dalam teks</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-cyan-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-cyan-100 to-blue-100 p-3 rounded-lg mr-3">
+                                            <span class="text-cyan-600 font-bold text-lg">🎯</span>
+                                        </div>
+                                        <h5 class="font-bold text-cyan-700 text-lg">FIND Function</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Mencari posisi karakter/teks tertentu (case-sensitive). Sintaks: FIND(find_text, within_text, start_num)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-cyan-800 font-mono text-sm">=FIND("@","john.doe@company.com")</code>
+                                    </div>
+                                    <div class="bg-cyan-50 p-4 rounded-lg">
+                                        <p class="text-sm text-cyan-700">
+                                            <strong>📧 Memisahkan Email</strong><br>
+                                            <span class="text-gray-600">Cari posisi @ untuk split username/domain</span><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"john.doe@company.com"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">posisi 9</span>
+                                        </p>
+                                    </div>
+                                    <div class="mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                                        <p class="text-xs text-red-700">
+                                            <strong>⚠️ Case-Sensitive:</strong> Membedakan huruf besar/kecil
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-cyan-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-teal-100 to-green-100 p-3 rounded-lg mr-3">
+                                            <span class="text-cyan-600 font-bold text-lg">🔎</span>
+                                        </div>
+                                        <h5 class="font-bold text-cyan-700 text-lg">SEARCH Function</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Sama seperti FIND tapi tidak case-sensitive dan mendukung wildcard. Sintaks: SEARCH(find_text, within_text, start_num)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-cyan-800 font-mono text-sm">=SEARCH("excel","Microsoft Excel 2024")</code>
+                                    </div>
+                                    <div class="bg-cyan-50 p-4 rounded-lg">
+                                        <p class="text-sm text-cyan-700">
+                                            <strong>📝 Pencarian Fleksibel</strong><br>
+                                            <span class="text-gray-600">Cari kata tanpa peduli besar/kecil</span><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"Microsoft Excel 2024"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">posisi 11</span>
+                                        </p>
+                                    </div>
+                                    <div class="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                        <p class="text-xs text-green-700">
+                                            <strong>✅ Case-Insensitive:</strong> Tidak membedakan huruf besar/kecil
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mengganti Teks -->
+                    <div class="bg-gradient-to-br from-fuchsia-50 via-pink-50 to-rose-50 p-8 rounded-2xl border-2 border-fuchsia-200 card-hover bounce-in relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-28 h-28 bg-fuchsia-200 opacity-20 rounded-full -ml-14 -mt-14"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-gradient-to-r from-fuchsia-400 to-pink-500 p-4 rounded-2xl mr-4 pulse-animation">
+                                    <span class="text-3xl">🔄</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-fuchsia-800 mb-1">Mengganti Teks</h4>
+                                    <p class="text-fuchsia-600 text-sm">Ubah atau ganti bagian teks dengan mudah</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-fuchsia-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-fuchsia-100 to-pink-100 p-3 rounded-lg mr-3">
+                                            <span class="text-fuchsia-600 font-bold text-lg">🎯</span>
+                                        </div>
+                                        <h5 class="font-bold text-fuchsia-700 text-lg">SUBSTITUTE</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Mengganti teks tertentu dengan teks baru. Sintaks: SUBSTITUTE(text, old_text, new_text, instance_num)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-fuchsia-800 font-mono text-sm">=SUBSTITUTE("081-234-567-890","-","")</code>
+                                    </div>
+                                    <div class="bg-fuchsia-50 p-4 rounded-lg">
+                                        <p class="text-sm text-fuchsia-700">
+                                            <strong>📱 Format Nomor Telepon</strong><br>
+                                            <span class="text-gray-600">Menghapus tanda hubung</span><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"081-234-567-890"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">"081234567890"</span>
+                                        </p>
+                                    </div>
+                                    <div class="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                        <p class="text-xs text-blue-700">
+                                            <strong>💡 Tip:</strong> Bisa mengganti semua kemunculan atau hanya yang ke-n
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-6 rounded-xl shadow-lg border border-fuchsia-100 card-hover">
+                                    <div class="flex items-center mb-4">
+                                        <div class="bg-gradient-to-r from-pink-100 to-rose-100 p-3 rounded-lg mr-3">
+                                            <span class="text-fuchsia-600 font-bold text-lg">📍</span>
+                                        </div>
+                                        <h5 class="font-bold text-fuchsia-700 text-lg">REPLACE</h5>
+                                    </div>
+                                    <p class="text-gray-700 mb-3 leading-relaxed">Mengganti karakter pada posisi tertentu. Sintaks: REPLACE(old_text, start_num, num_chars, new_text)</p>
+                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg mb-3">
+                                        <code class="text-fuchsia-800 font-mono text-sm">=REPLACE("ID001234",3,3,"999")</code>
+                                    </div>
+                                    <div class="bg-fuchsia-50 p-4 rounded-lg">
+                                        <p class="text-sm text-fuchsia-700">
+                                            <strong>🆔 Update Kode ID</strong><br>
+                                            <span class="text-gray-600">Ganti 3 karakter mulai posisi 3</span><br>
+                                            <span class="text-gray-600">Input:</span> <span class="bg-white px-2 py-1 rounded font-mono">"ID001234"</span><br>
+                                            <span class="text-gray-600">Output:</span> <span class="bg-white px-2 py-1 rounded font-mono text-green-600">"ID999234"</span>
+                                        </p>
+                                    </div>
+                                    <div class="mt-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                                        <p class="text-xs text-orange-700">
+                                            <strong>⚡ Presisi:</strong> Ganti berdasarkan posisi, bukan isi teks
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
+                                <h6 class="font-semibold text-purple-700 mb-2">🤔 Kapan Menggunakan Mana?</h6>
+                                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <strong class="text-fuchsia-600">SUBSTITUTE:</strong>
+                                        <ul class="text-gray-600 mt-1 space-y-1">
+                                            <li>• Ketika tahu teks yang ingin diganti</li>
+                                            <li>• Menghapus karakter tertentu</li>
+                                            <li>• Standardisasi format data</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <strong class="text-fuchsia-600">REPLACE:</strong>
+                                        <ul class="text-gray-600 mt-1 space-y-1">
+                                            <li>• Ketika tahu posisi yang ingin diganti</li>
+                                            <li>• Update bagian tertentu dari kode</li>
+                                            <li>• Ganti karakter di posisi tetap</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mencoba Section -->
+        <section id="mencoba" class="fade-in hidden">
+            <!-- Hero Section for Practice -->
+            <div class="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-20 -mt-20"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-white opacity-10 rounded-full -ml-16 -mb-16"></div>
+                <div class="relative z-10 text-center">
+                    <div class="flex items-center justify-center mb-4">
+                        <span class="text-6xl icon-float">🎮</span>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-3">
+                        Excel Formula Playground
+                    </h2>
+                    <p class="text-purple-100 text-lg mb-6">
+                        Eksperimen dengan rumus Excel secara interaktif dan lihat hasilnya langsung!
+                    </p>
+                    <div class="flex justify-center space-x-6 text-sm">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-400 rounded-full mr-2"></span>
+                            Real-time Preview
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                            Interactive Learning
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                            Instant Results
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full -mr-12 -mt-12 opacity-50"></div>
+                
+                <!-- Formula Selector Cards -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                        <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            Pilih Rumus untuk Dipraktikkan
+                        </span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <button onclick="selectFormula('concat')" class="formula-card bg-gradient-to-br from-emerald-50 to-green-100 border-2 border-emerald-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="concat">
+                            <div class="text-3xl mb-2">🔗</div>
+                            <div class="font-semibold text-emerald-700 text-sm">CONCAT</div>
+                            <div class="text-xs text-emerald-600">Gabung Teks</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('left')" class="formula-card bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="left">
+                            <div class="text-3xl mb-2">⬅️</div>
+                            <div class="font-semibold text-blue-700 text-sm">LEFT</div>
+                            <div class="text-xs text-blue-600">Ambil Kiri</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('right')" class="formula-card bg-gradient-to-br from-purple-50 to-violet-100 border-2 border-purple-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="right">
+                            <div class="text-3xl mb-2">➡️</div>
+                            <div class="font-semibold text-purple-700 text-sm">RIGHT</div>
+                            <div class="text-xs text-purple-600">Ambil Kanan</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('mid')" class="formula-card bg-gradient-to-br from-amber-50 to-orange-100 border-2 border-amber-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="mid">
+                            <div class="text-3xl mb-2">↔️</div>
+                            <div class="font-semibold text-amber-700 text-sm">MID</div>
+                            <div class="text-xs text-amber-600">Ambil Tengah</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('upper')" class="formula-card bg-gradient-to-br from-red-50 to-pink-100 border-2 border-red-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="upper">
+                            <div class="text-3xl mb-2">🔤</div>
+                            <div class="font-semibold text-red-700 text-sm">UPPER</div>
+                            <div class="text-xs text-red-600">Huruf Besar</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('lower')" class="formula-card bg-gradient-to-br from-teal-50 to-cyan-100 border-2 border-teal-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="lower">
+                            <div class="text-3xl mb-2">🔡</div>
+                            <div class="font-semibold text-teal-700 text-sm">LOWER</div>
+                            <div class="text-xs text-teal-600">Huruf Kecil</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('proper')" class="formula-card bg-gradient-to-br from-indigo-50 to-blue-100 border-2 border-indigo-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="proper">
+                            <div class="text-3xl mb-2">📝</div>
+                            <div class="font-semibold text-indigo-700 text-sm">PROPER</div>
+                            <div class="text-xs text-indigo-600">Title Case</div>
+                        </button>
+                        
+                        <button onclick="selectFormula('trim')" class="formula-card bg-gradient-to-br from-rose-50 to-pink-100 border-2 border-rose-200 p-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105" data-formula="trim">
+                            <div class="text-3xl mb-2">🧹</div>
+                            <div class="font-semibold text-rose-700 text-sm">TRIM</div>
+                            <div class="text-xs text-rose-600">Bersih Spasi</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Practice Area -->
+                <div id="practiceArea" class="bg-gradient-to-br from-gray-50 to-blue-50 p-8 rounded-2xl border-2 border-gray-200 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-blue-200 opacity-20 rounded-full -mr-10 -mt-10"></div>
+                    <div class="relative z-10">
+                        <div class="text-center py-12">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <h3 class="text-xl font-semibold text-gray-600 mb-2">Pilih Rumus untuk Memulai</h3>
+                            <p class="text-gray-500">Klik salah satu kartu rumus di atas untuk mulai bereksperimen!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Area -->
+                <div id="result" class="mt-6 hidden">
+                    <div class="bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 p-6 rounded-2xl border-2 border-green-200 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-16 h-16 bg-green-200 opacity-30 rounded-full -ml-8 -mt-8"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-gradient-to-r from-green-400 to-emerald-500 p-3 rounded-full mr-4">
+                                    <span class="text-white text-xl">✨</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-green-800">Hasil Formula</h4>
+                            </div>
+                            <div id="resultText" class="bg-white p-4 rounded-xl border-2 border-green-100 font-mono text-lg text-center shadow-inner"></div>
+                            <div class="mt-4 flex items-center justify-center space-x-4 text-sm text-green-700">
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                                    Real-time calculation
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
+                                    Instant preview
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Section -->
+                <div id="tipsSection" class="mt-6 hidden">
+                    <div class="bg-gradient-to-r from-yellow-50 via-amber-50 to-orange-50 p-6 rounded-2xl border-2 border-yellow-200">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-3 rounded-full mr-4">
+                                <span class="text-white text-xl">💡</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-yellow-800">Tips & Trik</h4>
+                        </div>
+                        <div id="tipsContent" class="text-yellow-700"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kuis Section -->
+        <section id="kuis" class="fade-in hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-primary mb-4 flex items-center">
+                    🧠 Kuis Pemahaman
+                </h2>
+                
+                <div id="quizContainer">
+                    <div class="mb-4 flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Soal <span id="currentQuestion">1</span> dari 20</span>
+                        <span class="text-sm font-semibold text-primary">Skor: <span id="score">0</span></span>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+                        </div>
+                    </div>
+
+                    <div id="questionArea">
+                        <!-- Questions will be dynamically loaded -->
+                    </div>
+                </div>
+
+                <div id="quizResult" class="hidden text-center">
+                    <div class="mb-4">
+                        <div class="text-6xl mb-4">🎉</div>
+                        <h3 class="text-2xl font-bold text-primary mb-2">Kuis Selesai!</h3>
+                        <p class="text-lg">Skor Anda: <span id="finalScore" class="font-bold text-accent"></span>/20</p>
+                        <p id="scoreMessage" class="text-gray-600 mt-2"></p>
+                    </div>
+                    <button onclick="restartQuiz()" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        Ulangi Kuis
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latihan Section -->
+        <section id="latihan" class="fade-in hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-primary mb-4 flex items-center">
+                    💼 Studi Kasus
+                </h2>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-2">📋 Skenario:</h3>
+                    <p class="text-gray-700">
+                        Anda bekerja di departemen HR dan memiliki data karyawan yang perlu dirapikan. 
+                        Data berisi nama lengkap, email, dan nomor telepon yang formatnya tidak konsisten.
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold text-gray-800 mb-3">📊 Data Mentah:</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border border-gray-300 p-2">ID Karyawan</th>
+                                    <th class="border border-gray-300 p-2">Nama Lengkap</th>
+                                    <th class="border border-gray-300 p-2">Email</th>
+                                    <th class="border border-gray-300 p-2">Telepon</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">EMP001234</td>
+                                    <td class="border border-gray-300 p-2">  JOHN DOE  </td>
+                                    <td class="border border-gray-300 p-2">john.doe@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62-812-3456-7890</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">EMP002567</td>
+                                    <td class="border border-gray-300 p-2">jane smith</td>
+                                    <td class="border border-gray-300 p-2">JANE.SMITH@COMPANY.COM</td>
+                                    <td class="border border-gray-300 p-2">08123456789</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">EMP003890</td>
+                                    <td class="border border-gray-300 p-2">Bob Johnson  </td>
+                                    <td class="border border-gray-300 p-2">bob.johnson@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62 812 3456 7891</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">MGR004123</td>
+                                    <td class="border border-gray-300 p-2">  ALICE BROWN</td>
+                                    <td class="border border-gray-300 p-2">alice.brown@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62-813-4567-8901</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">EMP005456</td>
+                                    <td class="border border-gray-300 p-2">charlie davis  </td>
+                                    <td class="border border-gray-300 p-2">CHARLIE.DAVIS@COMPANY.COM</td>
+                                    <td class="border border-gray-300 p-2">081345678902</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">SUP006789</td>
+                                    <td class="border border-gray-300 p-2">EVA WILSON</td>
+                                    <td class="border border-gray-300 p-2">eva.wilson@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62 814 5678 9012</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">EMP007012</td>
+                                    <td class="border border-gray-300 p-2">  frank miller  </td>
+                                    <td class="border border-gray-300 p-2">frank.miller@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62-815-6789-0123</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">MGR008345</td>
+                                    <td class="border border-gray-300 p-2">GRACE TAYLOR</td>
+                                    <td class="border border-gray-300 p-2">GRACE.TAYLOR@COMPANY.COM</td>
+                                    <td class="border border-gray-300 p-2">081567890123</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">EMP009678</td>
+                                    <td class="border border-gray-300 p-2">henry anderson  </td>
+                                    <td class="border border-gray-300 p-2">henry.anderson@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62 816 7890 1234</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 p-2">SUP010901</td>
+                                    <td class="border border-gray-300 p-2">  IVY THOMAS  </td>
+                                    <td class="border border-gray-300 p-2">ivy.thomas@company.com</td>
+                                    <td class="border border-gray-300 p-2">+62-817-8901-2345</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-3">🎯 Tugas Anda:</h4>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                            <li>Rapikan nama (hilangkan spasi berlebih, gunakan Title Case)</li>
+                            <li>Buat kolom "Nama Depan" dan "Nama Belakang"</li>
+                            <li>Standardkan format email (huruf kecil semua)</li>
+                            <li>Buat kolom "Domain Email" (ambil bagian setelah @)</li>
+                            <li>Standardkan format nomor telepon (format: +62-XXX-XXXX-XXXX)</li>
+                            <li>Buat kolom "Inisial" (huruf pertama nama depan + belakang)</li>
+                            <li><strong>Buat kolom "Jabatan" berdasarkan ID:</strong> Jika 3 karakter pertama ID adalah "MGR" maka "Manager", jika "SUP" maka "Supervisor", selain itu "Employee"</li>
+                            <li><strong>Buat kolom "Nomor Urut":</strong> Ambil 3 digit terakhir dari ID Karyawan</li>
+                        </ol>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-3">💡 Rumus yang Dibutuhkan:</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="bg-blue-50 p-2 rounded">
+                                <strong>TRIM & PROPER:</strong> Rapikan nama
+                            </div>
+                            <div class="bg-green-50 p-2 rounded">
+                                <strong>LEFT & FIND:</strong> Ambil nama depan
+                            </div>
+                            <div class="bg-purple-50 p-2 rounded">
+                                <strong>RIGHT & LEN:</strong> Ambil nama belakang
+                            </div>
+                            <div class="bg-orange-50 p-2 rounded">
+                                <strong>LOWER:</strong> Standardkan email
+                            </div>
+                            <div class="bg-red-50 p-2 rounded">
+                                <strong>MID & FIND:</strong> Ambil domain
+                            </div>
+                            <div class="bg-teal-50 p-2 rounded">
+                                <strong>SUBSTITUTE:</strong> Format telepon
+                            </div>
+                            <div class="bg-yellow-50 p-2 rounded">
+                                <strong>IF & LEFT:</strong> Tentukan jabatan
+                            </div>
+                            <div class="bg-pink-50 p-2 rounded">
+                                <strong>RIGHT:</strong> Ambil nomor urut
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                    <h4 class="font-semibold text-indigo-800 mb-3">📋 Tabel yang Harus Dibuat:</h4>
+                    <p class="text-sm text-indigo-700 mb-4">Buat tabel dengan kolom-kolom berikut dan isi dengan rumus yang sesuai:</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-indigo-300 text-xs bg-white">
+                            <thead class="bg-indigo-100">
+                                <tr>
+                                    <th class="border border-indigo-300 p-2">ID Asli</th>
+                                    <th class="border border-indigo-300 p-2">Nama Rapi</th>
+                                    <th class="border border-indigo-300 p-2">Nama Depan</th>
+                                    <th class="border border-indigo-300 p-2">Nama Belakang</th>
+                                    <th class="border border-indigo-300 p-2">Email Rapi</th>
+                                    <th class="border border-indigo-300 p-2">Domain</th>
+                                    <th class="border border-indigo-300 p-2">Telepon Rapi</th>
+                                    <th class="border border-indigo-300 p-2">Inisial</th>
+                                    <th class="border border-indigo-300 p-2">Jabatan</th>
+                                    <th class="border border-indigo-300 p-2">No. Urut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-indigo-300 p-2">EMP001234</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus TRIM+PROPER]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LEFT+FIND]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus RIGHT+LEN]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LOWER]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus MID+FIND]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus SUBSTITUTE]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LEFT+&]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus IF+LEFT]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus RIGHT]</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-indigo-300 p-2">EMP002567</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus TRIM+PROPER]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LEFT+FIND]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus RIGHT+LEN]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LOWER]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus MID+FIND]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus SUBSTITUTE]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LEFT+&]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus IF+LEFT]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus RIGHT]</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-indigo-300 p-2">MGR004123</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus TRIM+PROPER]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LEFT+FIND]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus RIGHT+LEN]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LOWER]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus MID+FIND]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus SUBSTITUTE]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus LEFT+&]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus IF+LEFT]</td>
+                                    <td class="border border-indigo-300 p-2 bg-yellow-50 italic">[Rumus RIGHT]</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                    <td class="border border-indigo-300 p-2 text-center text-gray-500">...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <h5 class="font-semibold text-blue-800 mb-2">🎯 Contoh Hasil yang Diharapkan:</h5>
+                        <div class="text-sm text-blue-700 space-y-1">
+                            <p><strong>Nama Rapi:</strong> "John Doe" (dari "  JOHN DOE  ")</p>
+                            <p><strong>Jabatan:</strong> "Manager" (dari ID "MGR004123"), "Employee" (dari ID "EMP001234")</p>
+                            <p><strong>Domain:</strong> "company.com" (dari email)</p>
+                            <p><strong>No. Urut:</strong> "234" (dari ID "EMP001234")</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-green-50 rounded-lg">
+                    <h4 class="font-semibold text-green-800 mb-2">✅ Hasil yang Diharapkan:</h4>
+                    <p class="text-sm text-gray-700">
+                        Setelah menyelesaikan tugas ini, Anda akan memiliki data yang rapi dan terstruktur 
+                        yang siap digunakan untuk analisis lebih lanjut atau laporan.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex justify-around py-2">
+                <button onclick="showSection('materi')" class="nav-btn flex flex-col items-center py-2 px-3 text-xs transition-colors" data-section="materi">
+                    <span class="text-xl mb-1">📚</span>
+                    <span>Materi</span>
+                </button>
+                <button onclick="showSection('mencoba')" class="nav-btn flex flex-col items-center py-2 px-3 text-xs transition-colors" data-section="mencoba">
+                    <span class="text-xl mb-1">🎮</span>
+                    <span>Mencoba</span>
+                </button>
+                <button onclick="showSection('kuis')" class="nav-btn flex flex-col items-center py-2 px-3 text-xs transition-colors" data-section="kuis">
+                    <span class="text-xl mb-1">🧠</span>
+                    <span>Kuis</span>
+                </button>
+                <button onclick="showSection('latihan')" class="nav-btn flex flex-col items-center py-2 px-3 text-xs transition-colors" data-section="latihan">
+                    <span class="text-xl mb-1">💼</span>
+                    <span>Latihan</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // Global variables
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
+        let quizQuestions = [
+            {
+                question: "Rumus mana yang digunakan untuk menggabungkan teks di Excel?",
+                options: ["CONCATENATE atau &", "JOIN", "MERGE", "COMBINE"],
+                correct: 0
+            },
+            {
+                question: "Fungsi LEFT(A1,3) akan menghasilkan:",
+                options: ["3 karakter terakhir", "3 karakter pertama", "Karakter ke-3", "3 karakter tengah"],
+                correct: 1
+            },
+            {
+                question: "Untuk mengubah teks menjadi huruf kapital semua, gunakan:",
+                options: ["LOWER", "PROPER", "UPPER", "CAPITAL"],
+                correct: 2
+            },
+            {
+                question: "Fungsi TRIM digunakan untuk:",
+                options: ["Memotong teks", "Menghapus spasi berlebih", "Mengubah huruf", "Mencari teks"],
+                correct: 1
+            },
+            {
+                question: "Rumus =PROPER('john doe') akan menghasilkan:",
+                options: ["john doe", "JOHN DOE", "John Doe", "John doe"],
+                correct: 2
+            },
+            {
+                question: "Untuk mencari posisi karakter '@' dalam email, gunakan:",
+                options: ["SEARCH('@',A1)", "FIND('@',A1)", "LOCATE('@',A1)", "Semua benar"],
+                correct: 3
+            },
+            {
+                question: "Fungsi RIGHT(A1,5) akan:",
+                options: ["Mengambil 5 karakter dari kanan", "Mengambil 5 karakter dari kiri", "Memindahkan teks ke kanan", "Menghapus 5 karakter"],
+                correct: 0
+            },
+            {
+                question: "Untuk mengganti kata 'lama' dengan 'baru' dalam teks, gunakan:",
+                options: ["CHANGE", "REPLACE", "SUBSTITUTE", "SWITCH"],
+                correct: 2
+            },
+            {
+                question: "Rumus =LEN(A1) berfungsi untuk:",
+                options: ["Menghitung jumlah kata", "Menghitung jumlah karakter", "Mengukur panjang sel", "Menghitung angka"],
+                correct: 1
+            },
+            {
+                question: "Simbol & dalam Excel digunakan untuk:",
+                options: ["Operasi matematika", "Menggabungkan teks", "Membandingkan nilai", "Membuat referensi"],
+                correct: 1
+            },
+            {
+                question: "Fungsi MID(A1,3,2) akan:",
+                options: ["Mengambil 2 karakter mulai posisi ke-3", "Mengambil 3 karakter mulai posisi ke-2", "Mengambil karakter ke-3 dan ke-2", "Menghapus 2 karakter dari posisi ke-3"],
+                correct: 0
+            },
+            {
+                question: "Untuk mengubah 'EXCEL' menjadi 'excel', gunakan:",
+                options: ["LOWER('EXCEL')", "SMALL('EXCEL')", "DOWN('EXCEL')", "MINI('EXCEL')"],
+                correct: 0
+            },
+            {
+                question: "Rumus =A1&' '&B1 akan:",
+                options: ["Menambahkan A1 dan B1", "Menggabungkan A1 dan B1 dengan spasi", "Membandingkan A1 dan B1", "Mengurangi A1 dari B1"],
+                correct: 1
+            },
+            {
+                question: "Fungsi SEARCH berbeda dengan FIND karena:",
+                options: ["SEARCH case-sensitive", "FIND case-sensitive", "Tidak ada perbedaan", "SEARCH lebih cepat"],
+                correct: 1
+            },
+            {
+                question: "Untuk mengambil 3 karakter terakhir dari teks, gunakan:",
+                options: ["LEFT(A1,3)", "RIGHT(A1,3)", "LAST(A1,3)", "END(A1,3)"],
+                correct: 1
+            },
+            {
+                question: "Rumus =SUBSTITUTE(A1,'a','A') akan:",
+                options: ["Mengganti semua 'a' dengan 'A'", "Mengganti 'a' pertama dengan 'A'", "Menghapus semua 'a'", "Mencari posisi 'a'"],
+                correct: 0
+            },
+            {
+                question: "Untuk menghitung jumlah karakter dalam sel A1:",
+                options: ["COUNT(A1)", "LENGTH(A1)", "LEN(A1)", "SIZE(A1)"],
+                correct: 2
+            },
+            {
+                question: "Fungsi PROPER akan mengubah 'mARIA' menjadi:",
+                options: ["maria", "MARIA", "Maria", "mAria"],
+                correct: 2
+            },
+            {
+                question: "Rumus =FIND(' ',A1) akan:",
+                options: ["Mencari spasi pertama", "Menghapus spasi", "Menambah spasi", "Menghitung spasi"],
+                correct: 0
+            },
+            {
+                question: "Untuk menggabungkan 3 sel (A1, B1, C1) dengan koma:",
+                options: ["A1,B1,C1", "A1&','&B1&','&C1", "CONCAT(A1,B1,C1)", "JOIN(A1,B1,C1)"],
+                correct: 1
+            }
+        ];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('materi');
+            setupPracticeArea();
+            loadQuizQuestion();
+        });
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = ['materi', 'mencoba', 'kuis', 'latihan'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            document.getElementById(sectionName).classList.add('fade-in');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-primary', 'font-semibold');
+                btn.classList.add('text-gray-500');
+            });
+            
+            const activeBtn = document.querySelector(`[data-section="${sectionName}"]`);
+            activeBtn.classList.remove('text-gray-500');
+            activeBtn.classList.add('text-primary', 'font-semibold');
+        }
+
+        // Practice Area Setup
+        function setupPracticeArea() {
+            // Initialize with default empty state
+            updatePracticeArea('');
+        }
+
+        function selectFormula(formula) {
+            // Update active state of formula cards
+            document.querySelectorAll('.formula-card').forEach(card => {
+                card.classList.remove('ring-4', 'ring-purple-300', 'bg-gradient-to-br');
+                card.classList.add('bg-gradient-to-br');
+            });
+            
+            const selectedCard = document.querySelector(`[data-formula="${formula}"]`);
+            selectedCard.classList.add('ring-4', 'ring-purple-300');
+            
+            updatePracticeArea(formula);
+        }
+
+        function updatePracticeArea(formula) {
+            if (!formula) {
+                // Show default state
+                return;
+            }
+            const practiceArea = document.getElementById('practiceArea');
+            
+            const practices = {
+                concat: {
+                    title: "Penggabungan Teks",
+                    description: "Gabungkan nama depan dan belakang dengan spasi",
+                    icon: "🔗",
+                    color: "emerald",
+                    inputs: [
+                        { label: "Nama Depan", id: "firstName", placeholder: "John", icon: "👤" },
+                        { label: "Nama Belakang", id: "lastName", placeholder: "Doe", icon: "👥" }
+                    ],
+                    formula: "=A1&\" \"&B1",
+                    tips: [
+                        "Gunakan operator & untuk menggabungkan teks dengan cepat",
+                        "Jangan lupa tambahkan spasi dengan \" \" di antara teks",
+                        "Bisa menggabungkan lebih dari 2 teks sekaligus"
+                    ]
+                },
+                left: {
+                    title: "Mengambil Teks Kiri",
+                    description: "Ambil beberapa karakter pertama dari teks",
+                    icon: "⬅️",
+                    color: "blue",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "Excel2024", icon: "📝" },
+                        { label: "Jumlah Karakter", id: "count", placeholder: "3", icon: "🔢" }
+                    ],
+                    formula: "=LEFT(A1,B1)",
+                    tips: [
+                        "Berguna untuk mengambil kode produk atau prefix",
+                        "Jumlah karakter harus berupa angka positif",
+                        "Jika jumlah melebihi panjang teks, akan mengambil semua"
+                    ]
+                },
+                right: {
+                    title: "Mengambil Teks Kanan",
+                    description: "Ambil beberapa karakter terakhir dari teks",
+                    icon: "➡️",
+                    color: "purple",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "Excel2024", icon: "📝" },
+                        { label: "Jumlah Karakter", id: "count", placeholder: "4", icon: "🔢" }
+                    ],
+                    formula: "=RIGHT(A1,B1)",
+                    tips: [
+                        "Cocok untuk mengambil tahun atau suffix",
+                        "Menghitung dari karakter terakhir ke kiri",
+                        "Sering digunakan untuk ekstraksi data tanggal"
+                    ]
+                },
+                mid: {
+                    title: "Mengambil Teks Tengah",
+                    description: "Ambil karakter dari posisi tertentu",
+                    icon: "↔️",
+                    color: "amber",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "Excel2024", icon: "📝" },
+                        { label: "Posisi Mulai", id: "start", placeholder: "2", icon: "📍" },
+                        { label: "Jumlah Karakter", id: "count", placeholder: "3", icon: "🔢" }
+                    ],
+                    formula: "=MID(A1,B1,C1)",
+                    tips: [
+                        "Posisi dimulai dari 1 (bukan 0)",
+                        "Sangat berguna untuk mengambil bagian tengah ID",
+                        "Kombinasikan dengan FIND untuk posisi dinamis"
+                    ]
+                },
+                upper: {
+                    title: "Huruf Besar",
+                    description: "Ubah semua huruf menjadi kapital",
+                    icon: "🔤",
+                    color: "red",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "hello world", icon: "📝" }
+                    ],
+                    formula: "=UPPER(A1)",
+                    tips: [
+                        "Berguna untuk standardisasi nama atau kode",
+                        "Tidak mempengaruhi angka dan simbol",
+                        "Cocok untuk header atau judul laporan"
+                    ]
+                },
+                lower: {
+                    title: "Huruf Kecil",
+                    description: "Ubah semua huruf menjadi kecil",
+                    icon: "🔡",
+                    color: "teal",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "HELLO WORLD", icon: "📝" }
+                    ],
+                    formula: "=LOWER(A1)",
+                    tips: [
+                        "Ideal untuk format email atau username",
+                        "Membantu konsistensi data input",
+                        "Sering digunakan sebelum perbandingan teks"
+                    ]
+                },
+                proper: {
+                    title: "Title Case",
+                    description: "Ubah huruf pertama setiap kata menjadi kapital",
+                    icon: "📝",
+                    color: "indigo",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "hello world", icon: "📝" }
+                    ],
+                    formula: "=PROPER(A1)",
+                    tips: [
+                        "Perfect untuk nama orang atau tempat",
+                        "Mengubah setiap kata menjadi Title Case",
+                        "Berguna untuk merapikan data nama"
+                    ]
+                },
+                trim: {
+                    title: "Hapus Spasi Berlebih",
+                    description: "Hilangkan spasi di awal, akhir, dan berlebih di tengah",
+                    icon: "🧹",
+                    color: "rose",
+                    inputs: [
+                        { label: "Teks", id: "text", placeholder: "  hello   world  ", icon: "📝" }
+                    ],
+                    formula: "=TRIM(A1)",
+                    tips: [
+                        "Wajib digunakan untuk data copy-paste",
+                        "Membersihkan spasi yang tidak terlihat",
+                        "Sangat penting sebelum analisis data"
+                    ]
+                }
+            };
+
+            const practice = practices[formula];
+            
+            let html = `
+                <div class="relative z-10">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-gradient-to-r from-${practice.color}-400 to-${practice.color}-500 p-4 rounded-2xl mr-4 pulse-animation">
+                            <span class="text-3xl">${practice.icon}</span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-${practice.color}-800 mb-1">${practice.title}</h3>
+                            <p class="text-${practice.color}-600">${practice.description}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <span class="text-xl mr-2">⚙️</span>
+                                Input Parameters
+                            </h4>
+            `;
+            
+            practice.inputs.forEach((input, index) => {
+                html += `
+                    <div class="bg-white p-4 rounded-xl border-2 border-${practice.color}-100 hover:border-${practice.color}-200 transition-colors">
+                        <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                            <span class="text-lg mr-2">${input.icon}</span>
+                            ${input.label}:
+                        </label>
+                        <input type="text" id="${input.id}" placeholder="${input.placeholder}" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${practice.color}-500 focus:border-transparent transition-all"
+                               oninput="calculateResult('${formula}')">
+                    </div>
+                `;
+            });
+            
+            html += `
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <span class="text-xl mr-2">📋</span>
+                                Formula Excel
+                            </h4>
+                            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-4 rounded-xl text-white">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-green-400 mr-2">fx</span>
+                                    <span class="text-gray-300 text-sm">Excel Formula</span>
+                                </div>
+                                <code class="text-lg font-mono text-green-300">${practice.formula}</code>
+                            </div>
+                            
+                            <button onclick="calculateResult('${formula}')" 
+                                    class="w-full bg-gradient-to-r from-${practice.color}-500 to-${practice.color}-600 text-white px-6 py-3 rounded-xl hover:from-${practice.color}-600 hover:to-${practice.color}-700 transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg">
+                                <span class="mr-2">⚡</span>
+                                Hitung Hasil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            practiceArea.innerHTML = html;
+            
+            // Show tips
+            showTips(practice.tips);
+        }
+
+        function showTips(tips) {
+            const tipsSection = document.getElementById('tipsSection');
+            const tipsContent = document.getElementById('tipsContent');
+            
+            let html = '<ul class="space-y-2">';
+            tips.forEach(tip => {
+                html += `
+                    <li class="flex items-start">
+                        <span class="text-yellow-600 mr-2 mt-1">💡</span>
+                        <span>${tip}</span>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            
+            tipsContent.innerHTML = html;
+            tipsSection.classList.remove('hidden');
+        }
+
+        function calculateResult(formula) {
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('resultText');
+            
+            let result = '';
+            
+            try {
+                switch(formula) {
+                    case 'concat':
+                        const firstName = document.getElementById('firstName').value || 'John';
+                        const lastName = document.getElementById('lastName').value || 'Doe';
+                        result = firstName + ' ' + lastName;
+                        break;
+                    case 'left':
+                        const leftText = document.getElementById('text').value || 'Excel2024';
+                        const leftCount = parseInt(document.getElementById('count').value) || 3;
+                        result = leftText.substring(0, leftCount);
+                        break;
+                    case 'right':
+                        const rightText = document.getElementById('text').value || 'Excel2024';
+                        const rightCount = parseInt(document.getElementById('count').value) || 4;
+                        result = rightText.substring(rightText.length - rightCount);
+                        break;
+                    case 'mid':
+                        const midText = document.getElementById('text').value || 'Excel2024';
+                        const start = parseInt(document.getElementById('start').value) || 2;
+                        const count = parseInt(document.getElementById('count').value) || 3;
+                        result = midText.substring(start - 1, start - 1 + count);
+                        break;
+                    case 'upper':
+                        const upperText = document.getElementById('text').value || 'hello world';
+                        result = upperText.toUpperCase();
+                        break;
+                    case 'lower':
+                        const lowerText = document.getElementById('text').value || 'HELLO WORLD';
+                        result = lowerText.toLowerCase();
+                        break;
+                    case 'proper':
+                        const properText = document.getElementById('text').value || 'hello world';
+                        result = properText.replace(/\w\S*/g, (txt) => 
+                            txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                        break;
+                    case 'trim':
+                        const trimText = document.getElementById('text').value || '  hello   world  ';
+                        result = trimText.trim().replace(/\s+/g, ' ');
+                        break;
+                }
+                
+                resultText.textContent = result;
+                resultDiv.classList.remove('hidden');
+            } catch (error) {
+                resultText.textContent = 'Error dalam perhitungan';
+                resultDiv.classList.remove('hidden');
+            }
+        }
+
+        // Quiz Functions
+        function loadQuizQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showQuizResult();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuestionIndex];
+            const questionArea = document.getElementById('questionArea');
+            
+            let html = `
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">${question.question}</h3>
+                    <div class="space-y-3">
+            `;
+            
+            question.options.forEach((option, index) => {
+                html += `
+                    <button onclick="selectAnswer(${index})" 
+                            class="quiz-option w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all">
+                        ${String.fromCharCode(65 + index)}. ${option}
+                    </button>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            questionArea.innerHTML = html;
+            
+            // Update progress
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            // Disable all options
+            options.forEach(option => option.disabled = true);
+            
+            // Show correct/incorrect
+            options[selectedIndex].classList.add(selectedIndex === question.correct ? 'correct-answer' : 'wrong-answer');
+            if (selectedIndex !== question.correct) {
+                options[question.correct].classList.add('correct-answer');
+            }
+            
+            // Update score
+            if (selectedIndex === question.correct) {
+                quizScore++;
+                document.getElementById('score').textContent = quizScore;
+            }
+            
+            // Next question after delay
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuizQuestion();
+            }, 1500);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('quizResult').classList.remove('hidden');
+            
+            const finalScore = document.getElementById('finalScore');
+            const scoreMessage = document.getElementById('scoreMessage');
+            
+            finalScore.textContent = quizScore;
+            
+            let message = '';
+            if (quizScore >= 18) {
+                message = '🌟 Luar biasa! Anda sangat menguasai materi!';
+            } else if (quizScore >= 15) {
+                message = '👍 Bagus! Pemahaman Anda sudah baik!';
+            } else if (quizScore >= 12) {
+                message = '📚 Cukup baik, tapi masih perlu belajar lagi!';
+            } else {
+                message = '💪 Jangan menyerah! Pelajari materi sekali lagi!';
+            }
+            
+            scoreMessage.textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'971b69c1839d3df5',t:'MTc1NTYyNDk4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
