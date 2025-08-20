@@ -31,6 +31,10 @@
         .hover-scale:hover {
             transform: scale(1.02);
         }
+        .quiz-option.selected .flex {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen pb-20">
@@ -339,319 +343,11 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Memadukan Fungsi - Enhanced Version -->
-                <div class="mb-8">
-                    <div class="text-center mb-8">
-                        <div class="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full shadow-lg mb-4">
-                            <span class="text-2xl mr-3">🔗</span>
-                            <h3 class="text-2xl font-bold">Memadukan Beberapa Fungsi</h3>
-                        </div>
-                        <p class="text-gray-700 text-lg max-w-3xl mx-auto">
-                            Tingkatkan kemampuan analisis data Anda dengan menggabungkan beberapa fungsi Excel untuk mendapatkan insight yang lebih mendalam dan komprehensif!
-                        </p>
-                    </div>
-
-                    <!-- Interactive Formula Cards -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <!-- Card 1: Manual Average -->
-                        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-l-4 border-blue-500 overflow-hidden group hover-scale">
-                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4">
-                                <div class="flex items-center text-white">
-                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                        <span class="text-2xl">🧮</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-xl font-bold">Rata-rata Manual</h4>
-                                        <p class="text-blue-100 text-sm">Menghitung rata-rata tanpa fungsi AVERAGE</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="bg-gray-50 p-4 rounded-xl mb-4 border-2 border-dashed border-gray-300 group-hover:border-blue-300 transition-colors">
-                                    <code class="text-blue-600 font-mono text-lg font-bold">=SUM(A1:A10)/COUNT(A1:A10)</code>
-                                </div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-blue-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>SUM(A1:A10)</strong> - Menjumlahkan semua nilai</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>COUNT(A1:A10)</strong> - Menghitung jumlah data</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>Hasil:</strong> Total ÷ Jumlah Data = Rata-rata</span>
-                                    </div>
-                                </div>
-                                <div class="mt-4 p-3 bg-blue-50 rounded-lg">
-                                    <p class="text-blue-800 text-sm"><strong>💡 Kegunaan:</strong> Memahami konsep rata-rata dan verifikasi hasil AVERAGE</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2: Range Analysis -->
-                        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-l-4 border-red-500 overflow-hidden group hover-scale">
-                            <div class="bg-gradient-to-r from-red-500 to-red-600 p-4">
-                                <div class="flex items-center text-white">
-                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                        <span class="text-2xl">📏</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-xl font-bold">Analisis Rentang</h4>
-                                        <p class="text-red-100 text-sm">Mengetahui jangkauan data</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="bg-gray-50 p-4 rounded-xl mb-4 border-2 border-dashed border-gray-300 group-hover:border-red-300 transition-colors">
-                                    <code class="text-red-600 font-mono text-lg font-bold">=MAX(A1:A10)-MIN(A1:A10)</code>
-                                </div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-red-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>MAX(A1:A10)</strong> - Nilai tertinggi</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-orange-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>MIN(A1:A10)</strong> - Nilai terendah</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>Hasil:</strong> Selisih = Rentang Data</span>
-                                    </div>
-                                </div>
-                                <div class="mt-4 p-3 bg-red-50 rounded-lg">
-                                    <p class="text-red-800 text-sm"><strong>💡 Kegunaan:</strong> Mengukur variabilitas dan sebaran data</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3: Combined Average -->
-                        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-l-4 border-purple-500 overflow-hidden group hover-scale">
-                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4">
-                                <div class="flex items-center text-white">
-                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                        <span class="text-2xl">📊</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-xl font-bold">Rata-rata Gabungan</h4>
-                                        <p class="text-purple-100 text-sm">Menggabungkan beberapa kolom</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="bg-gray-50 p-4 rounded-xl mb-4 border-2 border-dashed border-gray-300 group-hover:border-purple-300 transition-colors">
-                                    <code class="text-purple-600 font-mono text-sm font-bold">=(SUM(B2:B6)+SUM(C2:C6))/COUNT(A2:A6)</code>
-                                </div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-blue-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>SUM(B2:B6)</strong> - Total kolom B</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>SUM(C2:C6)</strong> - Total kolom C</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>COUNT(A2:A6)</strong> - Jumlah baris data</span>
-                                    </div>
-                                </div>
-                                <div class="mt-4 p-3 bg-purple-50 rounded-lg">
-                                    <p class="text-purple-800 text-sm"><strong>💡 Kegunaan:</strong> Rata-rata dari gabungan beberapa kategori data</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 4: Percentage Analysis -->
-                        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-l-4 border-green-500 overflow-hidden group hover-scale">
-                            <div class="bg-gradient-to-r from-green-500 to-green-600 p-4">
-                                <div class="flex items-center text-white">
-                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                        <span class="text-2xl">📈</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-xl font-bold">Analisis Persentase</h4>
-                                        <p class="text-green-100 text-sm">Kontribusi terhadap total</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="bg-gray-50 p-4 rounded-xl mb-4 border-2 border-dashed border-gray-300 group-hover:border-green-300 transition-colors">
-                                    <code class="text-green-600 font-mono text-lg font-bold">=A2/SUM($A$2:$A$10)*100</code>
-                                </div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>A2</strong> - Nilai individual</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-blue-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>SUM($A$2:$A$10)</strong> - Total keseluruhan</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
-                                        <span class="text-gray-700"><strong>*100</strong> - Konversi ke persentase</span>
-                                    </div>
-                                </div>
-                                <div class="mt-4 p-3 bg-green-50 rounded-lg">
-                                    <p class="text-green-800 text-sm"><strong>💡 Kegunaan:</strong> Mengetahui proporsi setiap item dari total</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Advanced Combinations Section -->
-                    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 mb-8 border border-indigo-200">
-                        <div class="text-center mb-6">
-                            <div class="inline-flex items-center bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full text-lg font-semibold mb-4">
-                                <span class="mr-2">🚀</span>
-                                Kombinasi Lanjutan
-                            </div>
-                            <p class="text-gray-700">Rumus-rumus kompleks untuk analisis data yang lebih mendalam</p>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-indigo-400 hover-scale">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                                        <span class="text-indigo-600 text-xl">📐</span>
-                                    </div>
-                                    <h5 class="font-bold text-gray-800">Analisis Varians</h5>
-                                </div>
-                                <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                                    <code class="text-indigo-600 font-mono text-sm">=SUM((A1:A10-AVERAGE(A1:A10))^2)</code>
-                                </div>
-                                <p class="text-gray-600 text-sm">Mengukur seberapa jauh data tersebar dari rata-rata</p>
-                            </div>
-
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-400 hover-scale">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-pink-100 p-3 rounded-full mr-4">
-                                        <span class="text-pink-600 text-xl">🎯</span>
-                                    </div>
-                                    <h5 class="font-bold text-gray-800">Deviasi Standar</h5>
-                                </div>
-                                <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                                    <code class="text-pink-600 font-mono text-xs">=SQRT(SUM((A1:A10-AVERAGE(A1:A10))^2)/COUNT(A1:A10))</code>
-                                </div>
-                                <p class="text-gray-600 text-sm">Mengukur tingkat variabilitas atau penyebaran data</p>
-                            </div>
-
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-orange-400 hover-scale">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-orange-100 p-3 rounded-full mr-4">
-                                        <span class="text-orange-600 text-xl">⚖️</span>
-                                    </div>
-                                    <h5 class="font-bold text-gray-800">Rata-rata Tertimbang</h5>
-                                </div>
-                                <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                                    <code class="text-orange-600 font-mono text-sm">=SUMPRODUCT(A1:A5,B1:B5)/SUM(B1:B5)</code>
-                                </div>
-                                <p class="text-gray-600 text-sm">Menghitung rata-rata dengan bobot yang berbeda</p>
-                            </div>
-
-                            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-teal-400 hover-scale">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-teal-100 p-3 rounded-full mr-4">
-                                        <span class="text-teal-600 text-xl">📊</span>
-                                    </div>
-                                    <h5 class="font-bold text-gray-800">Koefisien Variasi</h5>
-                                </div>
-                                <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                                    <code class="text-teal-600 font-mono text-sm">=STDEV(A1:A10)/AVERAGE(A1:A10)*100</code>
-                                </div>
-                                <p class="text-gray-600 text-sm">Mengukur variabilitas relatif terhadap rata-rata</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Tips Section -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-gradient-to-r from-yellow-400 to-orange-400">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 rounded-full mr-4">
-                                <span class="text-white text-2xl">💡</span>
-                            </div>
-                            <div>
-                                <h4 class="text-2xl font-bold text-gray-800">Tips & Trik Memadukan Fungsi</h4>
-                                <p class="text-gray-600">Panduan praktis untuk menguasai kombinasi fungsi Excel</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <div class="flex items-start p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-l-4 border-blue-400">
-                                    <div class="bg-blue-400 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">1</div>
-                                    <div>
-                                        <h5 class="font-semibold text-blue-800 mb-1">Urutan Perhitungan</h5>
-                                        <p class="text-blue-700 text-sm">Gunakan tanda kurung <code class="bg-white px-2 py-1 rounded">()</code> untuk mengatur prioritas perhitungan</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border-l-4 border-green-400">
-                                    <div class="bg-green-400 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">2</div>
-                                    <div>
-                                        <h5 class="font-semibold text-green-800 mb-1">Referensi Absolut</h5>
-                                        <p class="text-green-700 text-sm">Gunakan <code class="bg-white px-2 py-1 rounded">$</code> untuk mengunci referensi cell saat copy-paste</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border-l-4 border-purple-400">
-                                    <div class="bg-purple-400 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">3</div>
-                                    <div>
-                                        <h5 class="font-semibold text-purple-800 mb-1">Validasi Hasil</h5>
-                                        <p class="text-purple-700 text-sm">Selalu cek hasil dengan cara manual untuk memastikan rumus benar</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div class="flex items-start p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl border-l-4 border-orange-400">
-                                    <div class="bg-orange-400 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">4</div>
-                                    <div>
-                                        <h5 class="font-semibold text-orange-800 mb-1">Dokumentasi</h5>
-                                        <p class="text-orange-700 text-sm">Beri komentar pada rumus kompleks untuk memudahkan pemahaman</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-xl border-l-4 border-red-400">
-                                    <div class="bg-red-400 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">5</div>
-                                    <div>
-                                        <h5 class="font-semibold text-red-800 mb-1">Error Handling</h5>
-                                        <p class="text-red-700 text-sm">Gunakan fungsi <code class="bg-white px-2 py-1 rounded">IFERROR</code> untuk menangani kesalahan</p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start p-4 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-xl border-l-4 border-indigo-400">
-                                    <div class="bg-indigo-400 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1">6</div>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-800 mb-1">Praktik Rutin</h5>
-                                        <p class="text-indigo-700 text-sm">Latihan kombinasi fungsi secara berkala untuk meningkatkan skill</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Call to Action -->
-                        <div class="mt-8 text-center">
-                            <div class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-6 rounded-xl">
-                                <h5 class="text-xl font-bold mb-2">🎯 Siap Mencoba?</h5>
-                                <p class="mb-4">Gunakan kombinasi fungsi ini dalam latihan praktik untuk menguasai analisis data Excel!</p>
-                                <button onclick="showSection('latihan')" class="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                                    Mulai Latihan Praktik →
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
         <!-- Mencoba Section -->
         <div id="mencoba" class="content-section hidden">
-            <!-- Hero Section -->
             <div class="bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -mr-16 -mt-16"></div>
                 <div class="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -ml-12 -mb-12"></div>
@@ -665,247 +361,138 @@
                             <p class="text-blue-100 text-lg">Asah kemampuan Excel Anda dengan latihan interaktif yang menyenangkan!</p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                        <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
-                            <div class="flex items-center mb-2">
-                                <span class="text-yellow-300 mr-3 text-xl">⚡</span>
-                                <span class="font-semibold">Latihan Interaktif</span>
-                            </div>
-                            <p class="text-blue-100 text-sm">Belajar sambil bermain dengan soal-soal menarik</p>
-                        </div>
-                        <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
-                            <div class="flex items-center mb-2">
-                                <span class="text-green-300 mr-3 text-xl">🎯</span>
-                                <span class="font-semibold">Feedback Langsung</span>
-                            </div>
-                            <p class="text-blue-100 text-sm">Dapatkan koreksi dan penjelasan setiap jawaban</p>
-                        </div>
-                        <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
-                            <div class="flex items-center mb-2">
-                                <span class="text-pink-300 mr-3 text-xl">📈</span>
-                                <span class="font-semibold">Tracking Progress</span>
-                            </div>
-                            <p class="text-blue-100 text-sm">Pantau kemajuan belajar Anda secara real-time</p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div id="game-area">
-                <!-- Function Selection Cards -->
-                <div class="mb-8">
-                    <div class="text-center mb-8">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">🎯 Pilih Mode Latihan</h3>
-                        <p class="text-gray-600">Klik salah satu fungsi di bawah untuk memulai latihan interaktif</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="group cursor-pointer" onclick="startGame('sum')">
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-green-500 overflow-hidden transform hover:-translate-y-2">
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 text-white">
+                                <div class="flex items-center">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <span class="text-2xl">➕</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold">SUM</h4>
+                                        <p class="text-green-100 text-sm">Penjumlahan</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">Latihan menjumlahkan nilai dalam range cell</p>
+                                <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                                    Mulai →
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- SUM Card -->
-                        <div class="group cursor-pointer" onclick="startGame('sum')">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-green-500 overflow-hidden transform hover:-translate-y-2">
-                                <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                                <span class="text-2xl">➕</span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-xl font-bold">SUM</h4>
-                                                <p class="text-green-100 text-sm">Penjumlahan</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-2xl font-bold">3</div>
-                                            <div class="text-green-100 text-xs">Soal</div>
-                                        </div>
+
+                    <div class="group cursor-pointer" onclick="startGame('max')">
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-red-500 overflow-hidden transform hover:-translate-y-2">
+                            <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-white">
+                                <div class="flex items-center">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <span class="text-2xl">⬆️</span>
                                     </div>
-                                </div>
-                                <div class="p-6">
-                                    <p class="text-gray-600 mb-4">Latihan menjumlahkan nilai dalam range cell dengan berbagai variasi soal</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                                            <span>Tingkat: Pemula</span>
-                                        </div>
-                                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                            Mulai →
-                                        </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold">MAX</h4>
+                                        <p class="text-red-100 text-sm">Nilai Maksimum</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- MAX Card -->
-                        <div class="group cursor-pointer" onclick="startGame('max')">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-red-500 overflow-hidden transform hover:-translate-y-2">
-                                <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                                <span class="text-2xl">⬆️</span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-xl font-bold">MAX</h4>
-                                                <p class="text-red-100 text-sm">Nilai Maksimum</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-2xl font-bold">3</div>
-                                            <div class="text-red-100 text-xs">Soal</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-6">
-                                    <p class="text-gray-600 mb-4">Temukan nilai terbesar dari kumpulan data dengan fungsi MAX</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
-                                            <span>Tingkat: Pemula</span>
-                                        </div>
-                                        <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                            Mulai →
-                                        </div>
-                                    </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">Temukan nilai terbesar dari kumpulan data</p>
+                                <div class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                                    Mulai →
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- MIN Card -->
-                        <div class="group cursor-pointer" onclick="startGame('min')">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-orange-500 overflow-hidden transform hover:-translate-y-2">
-                                <div class="bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                                <span class="text-2xl">⬇️</span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-xl font-bold">MIN</h4>
-                                                <p class="text-orange-100 text-sm">Nilai Minimum</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-2xl font-bold">3</div>
-                                            <div class="text-orange-100 text-xs">Soal</div>
-                                        </div>
+                    <div class="group cursor-pointer" onclick="startGame('min')">
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-orange-500 overflow-hidden transform hover:-translate-y-2">
+                            <div class="bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
+                                <div class="flex items-center">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <span class="text-2xl">⬇️</span>
                                     </div>
-                                </div>
-                                <div class="p-6">
-                                    <p class="text-gray-600 mb-4">Cari nilai terkecil dari sekumpulan data menggunakan fungsi MIN</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-orange-400 rounded-full mr-2"></span>
-                                            <span>Tingkat: Pemula</span>
-                                        </div>
-                                        <div class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                            Mulai →
-                                        </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold">MIN</h4>
+                                        <p class="text-orange-100 text-sm">Nilai Minimum</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- AVERAGE Card -->
-                        <div class="group cursor-pointer" onclick="startGame('average')">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-purple-500 overflow-hidden transform hover:-translate-y-2">
-                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                                <span class="text-2xl">📊</span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-xl font-bold">AVERAGE</h4>
-                                                <p class="text-purple-100 text-sm">Rata-rata</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-2xl font-bold">3</div>
-                                            <div class="text-purple-100 text-xs">Soal</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-6">
-                                    <p class="text-gray-600 mb-4">Hitung nilai rata-rata dari kumpulan data dengan fungsi AVERAGE</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
-                                            <span>Tingkat: Pemula</span>
-                                        </div>
-                                        <div class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                            Mulai →
-                                        </div>
-                                    </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">Cari nilai terkecil dari sekumpulan data</p>
+                                <div class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                                    Mulai →
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- COUNT Card -->
-                        <div class="group cursor-pointer" onclick="startGame('count')">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-indigo-500 overflow-hidden transform hover:-translate-y-2">
-                                <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                                <span class="text-2xl">🔢</span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-xl font-bold">COUNT</h4>
-                                                <p class="text-indigo-100 text-sm">Menghitung Data</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-2xl font-bold">3</div>
-                                            <div class="text-indigo-100 text-xs">Soal</div>
-                                        </div>
+                    <div class="group cursor-pointer" onclick="startGame('average')">
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-purple-500 overflow-hidden transform hover:-translate-y-2">
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 text-white">
+                                <div class="flex items-center">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <span class="text-2xl">📊</span>
                                     </div>
-                                </div>
-                                <div class="p-6">
-                                    <p class="text-gray-600 mb-4">Hitung jumlah cell yang berisi angka dengan fungsi COUNT</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>
-                                            <span>Tingkat: Pemula</span>
-                                        </div>
-                                        <div class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                            Mulai →
-                                        </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold">AVERAGE</h4>
+                                        <p class="text-purple-100 text-sm">Rata-rata</p>
                                     </div>
                                 </div>
                             </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">Hitung nilai rata-rata dari kumpulan data</p>
+                                <div class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                                    Mulai →
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <!-- MIXED Card -->
-                        <div class="group cursor-pointer" onclick="startGame('mixed')">
-                            <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-gradient-to-r from-pink-500 to-purple-500 overflow-hidden transform hover:-translate-y-2 border-l-pink-500">
-                                <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-                                                <span class="text-2xl">🔗</span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-xl font-bold">CAMPURAN</h4>
-                                                <p class="text-pink-100 text-sm">Semua Fungsi</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-2xl font-bold">5</div>
-                                            <div class="text-pink-100 text-xs">Soal</div>
-                                        </div>
+                    <div class="group cursor-pointer" onclick="startGame('count')">
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-indigo-500 overflow-hidden transform hover:-translate-y-2">
+                            <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 p-6 text-white">
+                                <div class="flex items-center">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <span class="text-2xl">🔢</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold">COUNT</h4>
+                                        <p class="text-indigo-100 text-sm">Menghitung Data</p>
                                     </div>
                                 </div>
-                                <div class="p-6">
-                                    <p class="text-gray-600 mb-4">Tantangan lengkap dengan campuran semua fungsi Excel</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-pink-400 rounded-full mr-2"></span>
-                                            <span>Tingkat: Menengah</span>
-                                        </div>
-                                        <div class="bg-gradient-to-r from-pink-100 to-purple-100 text-pink-800 px-3 py-1 rounded-full text-xs font-semibold">
-                                            Tantangan →
-                                        </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">Hitung jumlah cell yang berisi angka</p>
+                                <div class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                                    Mulai →
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group cursor-pointer" onclick="startGame('mixed')">
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-l-4 border-pink-500 overflow-hidden transform hover:-translate-y-2">
+                            <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-6 text-white">
+                                <div class="flex items-center">
+                                    <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                                        <span class="text-2xl">🔗</span>
                                     </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold">CAMPURAN</h4>
+                                        <p class="text-pink-100 text-sm">Semua Fungsi</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">Tantangan lengkap dengan campuran semua fungsi</p>
+                                <div class="bg-gradient-to-r from-pink-100 to-purple-100 text-pink-800 px-3 py-1 rounded-full text-xs font-semibold inline-block">
+                                    Tantangan →
                                 </div>
                             </div>
                         </div>
@@ -913,8 +500,7 @@
                 </div>
 
                 <!-- Game Content Area -->
-                <div id="game-content" class="hidden">
-                    <!-- Progress Bar -->
+                <div id="game-content" class="hidden mt-8">
                     <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center">
@@ -936,7 +522,6 @@
                         </div>
                     </div>
 
-                    <!-- Question Card -->
                     <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 border-t-4 border-blue-500">
                         <div class="flex items-center mb-6">
                             <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-full p-4 mr-4">
@@ -948,7 +533,6 @@
                             </div>
                         </div>
                         
-                        <!-- Data Table -->
                         <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 mb-6 border border-gray-200">
                             <div class="flex items-center mb-4">
                                 <span class="text-xl mr-3">📋</span>
@@ -957,7 +541,6 @@
                             <div id="game-table" class="bg-white rounded-lg p-4 shadow-inner"></div>
                         </div>
                         
-                        <!-- Answer Input -->
                         <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
                             <div class="flex items-center mb-4">
                                 <span class="text-xl mr-3">✏️</span>
@@ -978,11 +561,9 @@
                             </div>
                         </div>
                         
-                        <!-- Feedback Area -->
                         <div id="game-feedback" class="mt-6"></div>
                     </div>
                     
-                    <!-- Navigation -->
                     <div class="flex justify-between items-center">
                         <button onclick="resetGame()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl transition-colors flex items-center">
                             <span class="mr-2">🔄</span>
@@ -999,7 +580,6 @@
 
         <!-- Kuis Section -->
         <div id="kuis" class="content-section hidden">
-            <!-- Hero Section -->
             <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-40 h-40 bg-white bg-opacity-10 rounded-full -mr-20 -mt-20"></div>
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -ml-16 -mb-16"></div>
@@ -1014,35 +594,11 @@
                             <p class="text-purple-100 text-lg">Uji pengetahuan Anda dengan 20 soal pilihan ganda yang menantang!</p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                        <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
-                            <div class="flex items-center mb-2">
-                                <span class="text-yellow-300 mr-3 text-xl">⏱️</span>
-                                <span class="font-semibold">Tanpa Batas Waktu</span>
-                            </div>
-                            <p class="text-purple-100 text-sm">Kerjakan dengan santai dan teliti</p>
-                        </div>
-                        <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
-                            <div class="flex items-center mb-2">
-                                <span class="text-green-300 mr-3 text-xl">🎯</span>
-                                <span class="font-semibold">20 Soal Pilihan Ganda</span>
-                            </div>
-                            <p class="text-purple-100 text-sm">Dari tingkat dasar hingga menengah</p>
-                        </div>
-                        <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
-                            <div class="flex items-center mb-2">
-                                <span class="text-pink-300 mr-3 text-xl">📊</span>
-                                <span class="font-semibold">Hasil Langsung</span>
-                            </div>
-                            <p class="text-purple-100 text-sm">Lihat skor dan pembahasan setelah selesai</p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div id="quiz-area">
                 <div class="mb-6">
-                    <!-- Progress Section -->
                     <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
@@ -1062,7 +618,6 @@
                             </div>
                         </div>
                         
-                        <!-- Progress Bar -->
                         <div class="relative">
                             <div class="w-full bg-gray-200 rounded-full h-4 shadow-inner">
                                 <div id="quiz-progress-bar" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-4 rounded-full transition-all duration-500 shadow-lg" style="width: 5%"></div>
@@ -1071,8 +626,7 @@
                         </div>
                     </div>
                     
-                    <!-- Question Card -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 border-l-4 border-gradient-to-b from-blue-500 to-purple-500 border-l-blue-500 relative overflow-hidden">
+                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 border-l-4 border-blue-500 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-purple-50 rounded-full -mr-16 -mt-16 opacity-50"></div>
                         <div class="relative z-10">
                             <div class="flex items-start mb-6">
@@ -1093,7 +647,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Options -->
                             <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
                                 <div class="flex items-center mb-4">
                                     <span class="text-lg mr-3">📝</span>
@@ -1104,7 +657,6 @@
                         </div>
                     </div>
                     
-                    <!-- Navigation -->
                     <div class="flex justify-between items-center">
                         <button onclick="previousQuizQuestion()" id="prev-quiz-btn" 
                                 class="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none disabled:shadow-none flex items-center" disabled>
@@ -1131,137 +683,247 @@
 
         <!-- Latihan Section -->
         <div id="latihan" class="content-section hidden">
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
-                    💼 Latihan Praktik
-                </h2>
-
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Kasus: Analisis Penjualan Toko Buku</h3>
-                    <p class="text-gray-700 mb-4">
-                        Anda adalah manajer toko buku dan perlu menganalisis data penjualan bulan ini. 
-                        Lengkapi tabel di bawah dengan rumus Excel yang tepat untuk mendapatkan informasi yang dibutuhkan.
-                    </p>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h4 class="font-semibold mb-4">Data Penjualan Toko Buku:</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse border border-gray-300">
-                            <thead>
-                                <tr class="bg-gray-200">
-                                    <th class="border border-gray-300 p-2 text-left">A</th>
-                                    <th class="border border-gray-300 p-2 text-left">B</th>
-                                    <th class="border border-gray-300 p-2 text-left">C</th>
-                                    <th class="border border-gray-300 p-2 text-left">D</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="border border-gray-300 p-2 font-semibold">Judul Buku</td>
-                                    <td class="border border-gray-300 p-2 font-semibold">Harga</td>
-                                    <td class="border border-gray-300 p-2 font-semibold">Terjual</td>
-                                    <td class="border border-gray-300 p-2 font-semibold">Total</td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-gray-300 p-2">Matematika Dasar</td>
-                                    <td class="border border-gray-300 p-2">45000</td>
-                                    <td class="border border-gray-300 p-2">12</td>
-                                    <td class="border border-gray-300 p-2">
-                                        <input type="text" id="formula1" placeholder="Masukkan rumus..." 
-                                               class="w-full p-1 border rounded text-sm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-gray-300 p-2">Fisika Modern</td>
-                                    <td class="border border-gray-300 p-2">52000</td>
-                                    <td class="border border-gray-300 p-2">8</td>
-                                    <td class="border border-gray-300 p-2">
-                                        <input type="text" id="formula2" placeholder="Masukkan rumus..." 
-                                               class="w-full p-1 border rounded text-sm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-gray-300 p-2">Kimia Organik</td>
-                                    <td class="border border-gray-300 p-2">48000</td>
-                                    <td class="border border-gray-300 p-2">15</td>
-                                    <td class="border border-gray-300 p-2">
-                                        <input type="text" id="formula3" placeholder="Masukkan rumus..." 
-                                               class="w-full p-1 border rounded text-sm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-gray-300 p-2">Biologi Sel</td>
-                                    <td class="border border-gray-300 p-2">41000</td>
-                                    <td class="border border-gray-300 p-2">20</td>
-                                    <td class="border border-gray-300 p-2">
-                                        <input type="text" id="formula4" placeholder="Masukkan rumus..." 
-                                               class="w-full p-1 border rounded text-sm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="border border-gray-300 p-2">Sejarah Indonesia</td>
-                                    <td class="border border-gray-300 p-2">35000</td>
-                                    <td class="border border-gray-300 p-2">25</td>
-                                    <td class="border border-gray-300 p-2">
-                                        <input type="text" id="formula5" placeholder="Masukkan rumus..." 
-                                               class="w-full p-1 border rounded text-sm">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-white bg-opacity-10 rounded-full -mr-20 -mt-20"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -ml-16 -mb-16"></div>
+                <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-white bg-opacity-5 rounded-full -ml-12 -mt-12"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-white bg-opacity-20 rounded-full p-4 mr-4">
+                            <span class="text-3xl">💼</span>
+                        </div>
+                        <div>
+                            <h2 class="text-4xl font-bold mb-2">Latihan Praktik Excel</h2>
+                            <p class="text-emerald-100 text-lg">Terapkan pengetahuan Excel Anda dalam skenario bisnis nyata!</p>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="bg-blue-50 p-6 rounded-lg mb-6">
-                    <h4 class="font-semibold mb-4">Analisis yang Dibutuhkan:</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Total Pendapatan:</label>
-                            <input type="text" id="total-revenue" placeholder="Masukkan rumus SUM..." 
-                                   class="w-full p-2 border rounded">
+            <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-8 text-white">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-white bg-opacity-20 rounded-full p-3 mr-4">
+                            <span class="text-2xl">📚</span>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2">Pendapatan Tertinggi:</label>
-                            <input type="text" id="max-revenue" placeholder="Masukkan rumus MAX..." 
-                                   class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Pendapatan Terendah:</label>
-                            <input type="text" id="min-revenue" placeholder="Masukkan rumus MIN..." 
-                                   class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Rata-rata Pendapatan:</label>
-                            <input type="text" id="avg-revenue" placeholder="Masukkan rumus AVERAGE..." 
-                                   class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Jumlah Jenis Buku:</label>
-                            <input type="text" id="count-books" placeholder="Masukkan rumus COUNT..." 
-                                   class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Total Buku Terjual:</label>
-                            <input type="text" id="total-sold" placeholder="Masukkan rumus SUM..." 
-                                   class="w-full p-2 border rounded">
+                            <h3 class="text-2xl font-bold">Studi Kasus: Analisis Penjualan Toko Buku</h3>
+                            <p class="text-blue-100 mt-2">Anda adalah manajer toko buku yang perlu menganalisis performa penjualan bulan ini</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-center">
-                    <button onclick="checkExercise()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg transition-colors text-lg font-semibold">
-                        Periksa Jawaban
-                    </button>
-                </div>
+                <div class="p-8">
+                    <div class="mb-8">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-blue-100 rounded-full p-3 mr-4">
+                                <span class="text-blue-600 text-xl">📋</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800">Data Penjualan Bulan Ini</h4>
+                                <p class="text-gray-600">Lengkapi tabel dengan rumus Excel yang tepat untuk setiap perhitungan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border-2 border-blue-200 shadow-inner">
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                                            <th class="border-2 border-blue-400 p-4 text-left font-bold">A</th>
+                                            <th class="border-2 border-blue-400 p-4 text-left font-bold">B</th>
+                                            <th class="border-2 border-blue-400 p-4 text-left font-bold">C</th>
+                                            <th class="border-2 border-blue-400 p-4 text-left font-bold">D</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-blue-100">
+                                            <td class="border-2 border-blue-300 p-4 font-bold text-blue-800">Judul Buku</td>
+                                            <td class="border-2 border-blue-300 p-4 font-bold text-blue-800">Harga (Rp)</td>
+                                            <td class="border-2 border-blue-300 p-4 font-bold text-blue-800">Terjual (Unit)</td>
+                                            <td class="border-2 border-blue-300 p-4 font-bold text-blue-800">Total Pendapatan</td>
+                                        </tr>
+                                        <tr class="bg-white hover:bg-blue-50 transition-colors">
+                                            <td class="border-2 border-gray-300 p-4">Matematika Dasar</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-green-600 font-bold">45,000</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-blue-600 font-bold">12</td>
+                                            <td class="border-2 border-gray-300 p-4">
+                                                <input type="text" id="formula1" placeholder="Masukkan rumus Excel..." 
+                                                       class="w-full p-3 border-2 border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                            <td class="border-2 border-gray-300 p-4">Fisika Modern</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-green-600 font-bold">52,000</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-blue-600 font-bold">8</td>
+                                            <td class="border-2 border-gray-300 p-4">
+                                                <input type="text" id="formula2" placeholder="Masukkan rumus Excel..." 
+                                                       class="w-full p-3 border-2 border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-white hover:bg-blue-50 transition-colors">
+                                            <td class="border-2 border-gray-300 p-4">Kimia Organik</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-green-600 font-bold">48,000</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-blue-600 font-bold">15</td>
+                                            <td class="border-2 border-gray-300 p-4">
+                                                <input type="text" id="formula3" placeholder="Masukkan rumus Excel..." 
+                                                       class="w-full p-3 border-2 border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                            <td class="border-2 border-gray-300 p-4">Biologi Sel</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-green-600 font-bold">41,000</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-blue-600 font-bold">20</td>
+                                            <td class="border-2 border-gray-300 p-4">
+                                                <input type="text" id="formula4" placeholder="Masukkan rumus Excel..." 
+                                                       class="w-full p-3 border-2 border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-white hover:bg-blue-50 transition-colors">
+                                            <td class="border-2 border-gray-300 p-4">Sejarah Indonesia</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-green-600 font-bold">35,000</td>
+                                            <td class="border-2 border-gray-300 p-4 font-mono text-blue-600 font-bold">25</td>
+                                            <td class="border-2 border-gray-300 p-4">
+                                                <input type="text" id="formula5" placeholder="Masukkan rumus Excel..." 
+                                                       class="w-full p-3 border-2 border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-                <div id="exercise-result" class="mt-6 hidden"></div>
+                    <!-- Analisis Data Section -->
+                    <div class="mb-8">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-purple-100 rounded-full p-3 mr-4">
+                                <span class="text-purple-600 text-xl">📊</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800">Analisis Data Penjualan</h4>
+                                <p class="text-gray-600">Gunakan fungsi Excel untuk menganalisis performa penjualan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Analisis Harga -->
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-green-500 rounded-full p-2 mr-3">
+                                        <span class="text-white text-lg">💰</span>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-green-800">Analisis Harga</h5>
+                                </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-green-700 mb-2">Total Semua Harga:</label>
+                                        <input type="text" id="sum_harga" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-green-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-green-700 mb-2">Harga Tertinggi:</label>
+                                        <input type="text" id="max_harga" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-green-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-green-700 mb-2">Harga Terendah:</label>
+                                        <input type="text" id="min_harga" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-green-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-green-700 mb-2">Rata-rata Harga:</label>
+                                        <input type="text" id="avg_harga" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-green-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Analisis Unit Terjual -->
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-blue-500 rounded-full p-2 mr-3">
+                                        <span class="text-white text-lg">📦</span>
+                                    </div>
+                                    <h5 class="text-lg font-bold text-blue-800">Analisis Unit Terjual</h5>
+                                </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-blue-700 mb-2">Total Unit Terjual:</label>
+                                        <input type="text" id="sum_unit" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-blue-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-blue-700 mb-2">Penjualan Tertinggi:</label>
+                                        <input type="text" id="max_unit" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-blue-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-blue-700 mb-2">Penjualan Terendah:</label>
+                                        <input type="text" id="min_unit" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-blue-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-blue-700 mb-2">Rata-rata Unit Terjual:</label>
+                                        <input type="text" id="avg_unit" placeholder="Masukkan rumus Excel..." 
+                                               class="w-full p-3 border-2 border-blue-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ringkasan Bisnis -->
+                    <div class="mb-8">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-orange-100 rounded-full p-3 mr-4">
+                                <span class="text-orange-600 text-xl">📈</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-800">Ringkasan Bisnis</h4>
+                                <p class="text-gray-600">Hitung metrik bisnis penting menggunakan fungsi Excel</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 border-2 border-orange-200">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-orange-700 mb-2">Total Pendapatan Keseluruhan:</label>
+                                    <input type="text" id="total_revenue" placeholder="Masukkan rumus Excel..." 
+                                           class="w-full p-3 border-2 border-orange-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-orange-700 mb-2">Jumlah Produk yang Dijual:</label>
+                                    <input type="text" id="count_products" placeholder="Masukkan rumus Excel..." 
+                                           class="w-full p-3 border-2 border-orange-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-orange-700 mb-2">Rata-rata Pendapatan per Produk:</label>
+                                    <input type="text" id="avg_revenue" placeholder="Masukkan rumus Excel..." 
+                                           class="w-full p-3 border-2 border-orange-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="checkExercise()" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-12 py-4 rounded-xl transition-all text-lg font-bold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center mx-auto">
+                            <span class="mr-3 text-2xl">🔍</span>
+                            <div>
+                                <div>Periksa Semua Jawaban</div>
+                                <div class="text-sm opacity-90">Dapatkan evaluasi lengkap</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div id="exercise-result" class="mt-8 hidden"></div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t">
+    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t z-50">
         <div class="max-w-4xl mx-auto px-4">
             <div class="flex justify-around py-2">
                 <button onclick="showSection('materi')" class="nav-btn flex flex-col items-center py-2 px-4 text-blue-600">
@@ -1287,22 +949,24 @@
     <script>
         // Navigation
         function showSection(sectionName) {
-            // Hide all sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.add('hidden');
             });
             
-            // Show selected section
             document.getElementById(sectionName).classList.remove('hidden');
             document.getElementById(sectionName).classList.add('fade-in');
             
-            // Update navigation buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('text-blue-600');
                 btn.classList.add('text-gray-600');
             });
             event.target.closest('.nav-btn').classList.remove('text-gray-600');
             event.target.closest('.nav-btn').classList.add('text-blue-600');
+            
+            // Initialize quiz when kuis section is shown
+            if (sectionName === 'kuis') {
+                startQuiz();
+            }
         }
 
         // Game functionality
@@ -1345,7 +1009,6 @@
             gameScore = 0;
             
             if (type === 'mixed') {
-                // Mix questions from all types
                 gameData = [];
                 Object.keys(gameQuestions).forEach(key => {
                     gameData.push(...gameQuestions[key]);
@@ -1371,13 +1034,11 @@
             const question = gameData[currentQuestion];
             document.getElementById('game-question').textContent = question.question;
             
-            // Update progress
             document.getElementById('current-question-num').textContent = currentQuestion + 1;
             document.getElementById('total-questions').textContent = gameData.length;
             const progressPercent = ((currentQuestion + 1) / gameData.length) * 100;
             document.getElementById('progress-bar').style.width = progressPercent + '%';
             
-            // Create table
             let tableHTML = '<div class="grid grid-cols-2 gap-2 max-w-sm"><div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 text-center text-sm font-bold rounded-lg">Cell</div><div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 text-center text-sm font-bold rounded-lg">Nilai</div>';
             question.data.forEach((value, index) => {
                 tableHTML += `<div class="bg-gray-50 border-2 border-gray-200 p-3 text-sm rounded-lg hover:bg-gray-100 transition-colors font-semibold">A${index + 1}</div><div class="bg-gray-50 border-2 border-gray-200 p-3 text-sm rounded-lg hover:bg-gray-100 transition-colors font-mono text-blue-600 font-bold">${value}</div>`;
@@ -1472,10 +1133,8 @@
         function showGameResult() {
             const percentage = Math.round((gameScore / gameData.length) * 100);
             
-            // Update progress to 100%
             document.getElementById('progress-bar').style.width = '100%';
             
-            // Hide question elements
             document.querySelector('.bg-white.rounded-2xl.shadow-xl.p-8.mb-6.border-t-4.border-blue-500').innerHTML = `
                 <div class="text-center py-8">
                     <div class="mb-8">
@@ -1483,90 +1142,108 @@
                             <span class="text-white text-4xl">${percentage >= 80 ? '🏆' : percentage >= 60 ? '🎯' : '📚'}</span>
                         </div>
                         <h2 class="text-3xl font-bold text-gray-800 mb-4">Latihan Selesai!</h2>
-                        <p class="text-gray-600 text-lg">Berikut adalah hasil latihan Anda</p>
+                        <div class="text-6xl font-bold text-blue-600 mb-2">${gameScore}/${gameData.length}</div>
+                        <div class="text-2xl text-blue-600 font-semibold mb-6">${percentage}%</div>
+                        <p class="text-gray-600 text-lg">
+                            ${percentage >= 80 ? 'Excellent! Anda menguasai Excel dengan sangat baik!' : 
+                              percentage >= 60 ? 'Good job! Anda sudah memahami dasar-dasar Excel.' : 
+                              'Keep learning! Pelajari kembali materi untuk hasil yang lebih baik.'}
+                        </p>
                     </div>
-
-                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-8 border border-blue-200">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-blue-600 mb-2">${gameScore}</div>
-                                <div class="text-gray-600">Jawaban Benar</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-purple-600 mb-2">${gameData.length}</div>
-                                <div class="text-gray-600">Total Soal</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'} mb-2">${percentage}%</div>
-                                <div class="text-gray-600">Persentase</div>
-                            </div>
-                        </div>
-
-                        <div class="w-full bg-gray-200 rounded-full h-4 mb-6">
-                            <div class="bg-gradient-to-r ${percentage >= 80 ? 'from-green-500 to-emerald-500' : percentage >= 60 ? 'from-yellow-500 to-orange-500' : 'from-red-500 to-pink-500'} h-4 rounded-full transition-all duration-1000" style="width: ${percentage}%"></div>
-                        </div>
-
-                        <div class="text-center">
-                            ${percentage >= 80 ? 
-                                '<div class="bg-green-100 text-green-800 p-4 rounded-xl"><div class="text-2xl mb-2">🎉</div><div class="font-bold text-lg mb-2">Excellent!</div><div>Anda menguasai materi Excel dengan sangat baik! Siap untuk tantangan yang lebih kompleks.</div></div>' :
-                                percentage >= 60 ?
-                                '<div class="bg-yellow-100 text-yellow-800 p-4 rounded-xl"><div class="text-2xl mb-2">👍</div><div class="font-bold text-lg mb-2">Good Job!</div><div>Pemahaman Anda sudah cukup baik. Terus berlatih untuk hasil yang lebih sempurna!</div></div>' :
-                                '<div class="bg-red-100 text-red-800 p-4 rounded-xl"><div class="text-2xl mb-2">📚</div><div class="font-bold text-lg mb-2">Keep Learning!</div><div>Jangan menyerah! Ulangi materi dan coba lagi. Setiap kesalahan adalah langkah menuju kesuksesan.</div></div>'
-                            }
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onclick="resetGame()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                            <span class="mr-2">🔄</span>
-                            Coba Lagi
+                    
+                    <div class="space-y-4">
+                        <button onclick="resetGame()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 mr-4">
+                            🔄 Ulangi Latihan
                         </button>
-                        <button onclick="showSection('kuis')" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                            <span class="mr-2">📝</span>
-                            Lanjut ke Kuis
+                        <button onclick="showSection('materi')" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                            📚 Kembali ke Materi
                         </button>
                     </div>
                 </div>
             `;
-            
-            document.getElementById('next-btn').classList.add('hidden');
         }
 
         // Quiz functionality
-        let currentQuizQuestion = 0;
-        let quizScore = 0;
-        let quizAnswers = [];
-
-        const quizQuestions = [
+        let quizQuestions = [
             {
-                question: "Fungsi Excel manakah yang digunakan untuk menjumlahkan nilai dalam range cell?",
-                options: ["=ADD()", "=SUM()", "=TOTAL()", "=PLUS()"],
+                question: "Apa fungsi dari rumus =SUM(A1:A5) dalam Excel?",
+                options: ["Menghitung rata-rata dari A1 sampai A5", "Menjumlahkan nilai dari A1 sampai A5", "Mencari nilai maksimum dari A1 sampai A5", "Menghitung jumlah cell dari A1 sampai A5"],
                 correct: 1
             },
             {
-                question: "Sintaks yang benar untuk fungsi SUM adalah:",
-                options: ["=SUM[A1:A5]", "=SUM(A1:A5)", "=SUM{A1:A5}", "=SUM A1:A5"],
+                question: "Rumus manakah yang digunakan untuk mencari nilai terbesar dalam range B1:B10?",
+                options: ["=LARGE(B1:B10)", "=MAX(B1:B10)", "=BIG(B1:B10)", "=HIGH(B1:B10)"],
                 correct: 1
             },
             {
-                question: "Fungsi =MAX(A1:A10) akan menghasilkan:",
-                options: ["Jumlah total dari A1 sampai A10", "Nilai terbesar dari A1 sampai A10", "Rata-rata dari A1 sampai A10", "Jumlah cell dari A1 sampai A10"],
+                question: "Bagaimana cara menghitung rata-rata dari data di range C2:C8?",
+                options: ["=AVG(C2:C8)", "=MEAN(C2:C8)", "=AVERAGE(C2:C8)", "=MEDIAN(C2:C8)"],
+                correct: 2
+            },
+            {
+                question: "Fungsi COUNT(D1:D15) akan menghasilkan:",
+                options: ["Jumlah semua nilai dalam range D1:D15", "Jumlah cell yang berisi angka dalam range D1:D15", "Rata-rata dari range D1:D15", "Nilai terbesar dalam range D1:D15"],
                 correct: 1
             },
             {
-                question: "Untuk mencari nilai terkecil dalam range B2:B20, rumus yang tepat adalah:",
-                options: ["=MIN(B2:B20)", "=SMALL(B2:B20)", "=LOW(B2:B20)", "=MINIMUM(B2:B20)"],
+                question: "Rumus =MIN(E1:E20) berfungsi untuk:",
+                options: ["Mencari nilai terkecil dalam range E1:E20", "Menghitung jumlah minimum cell", "Mencari rata-rata minimum", "Mengurangi semua nilai dalam range"],
                 correct: 0
             },
             {
-                question: "Fungsi AVERAGE digunakan untuk:",
-                options: ["Menghitung jumlah data", "Mencari nilai tengah", "Menghitung rata-rata", "Mencari nilai yang sering muncul"],
+                question: "Jika cell A1=10, A2=20, A3=30, maka hasil dari =SUM(A1:A3)/COUNT(A1:A3) adalah:",
+                options: ["60", "20", "3", "10"],
+                correct: 1
+            },
+            {
+                question: "Manakah penulisan rumus Excel yang benar?",
+                options: ["SUM(A1:A5)=", "=SUM(A1:A5)", "SUM=A1:A5", "A1:A5=SUM"],
+                correct: 1
+            },
+            {
+                question: "Untuk menghitung berapa banyak cell yang tidak kosong dalam range F1:F25, rumus yang tepat adalah:",
+                options: ["=COUNT(F1:F25)", "=COUNTA(F1:F25)", "=COUNTBLANK(F1:F25)", "=COUNTNUMBER(F1:F25)"],
+                correct: 1
+            },
+            {
+                question: "Hasil dari rumus =MAX(5,10,3,15,8) adalah:",
+                options: ["41", "15", "8.2", "5"],
+                correct: 1
+            },
+            {
+                question: "Jika ingin menghitung total dari cell A1, C3, dan E5, rumus yang benar adalah:",
+                options: ["=SUM(A1:E5)", "=SUM(A1,C3,E5)", "=ADD(A1,C3,E5)", "=TOTAL(A1,C3,E5)"],
+                correct: 1
+            },
+            {
+                question: "Fungsi AVERAGE akan mengabaikan:",
+                options: ["Angka negatif", "Angka nol", "Cell kosong dan teks", "Angka desimal"],
                 correct: 2
             },
             {
-                question: "Rumus =COUNT(C1:C15) akan menghitung:",
-                options: ["Semua cell dari C1 sampai C15", "Cell yang berisi teks dari C1 sampai C15", "Cell yang berisi angka dari C1 sampai C15", "Cell yang kosong dari C1 sampai C15"],
+                question: "Rumus =SUM(B2:B10)-MIN(B2:B10) akan menghasilkan:",
+                options: ["Rata-rata tanpa nilai minimum", "Total dikurangi nilai terkecil", "Selisih maksimum dan minimum", "Jumlah cell dikurangi 1"],
+                correct: 1
+            },
+            {
+                question: "Untuk mencari nilai tengah (median) dari data, fungsi yang digunakan adalah:",
+                options: ["=MIDDLE()", "=CENTER()", "=MEDIAN()", "=MID()"],
                 correct: 2
+            },
+            {
+                question: "Jika cell berisi teks dan angka, fungsi COUNT akan:",
+                options: ["Menghitung semua cell", "Hanya menghitung cell berisi angka", "Menghasilkan error", "Menghitung cell berisi teks"],
+                correct: 1
+            },
+            {
+                question: "Rumus =MAX(A1:A5,B1:B5) akan:",
+                options: ["Error karena sintaks salah", "Mencari nilai terbesar dari kedua range", "Menjumlahkan kedua range", "Membandingkan dua range"],
+                correct: 1
+            },
+            {
+                question: "Untuk menghitung persentase dari total, rumus yang tepat adalah:",
+                options: ["=A1/SUM($A$1:$A$10)", "=A1/SUM(A1:A10)*100", "=PERCENTAGE(A1,A1:A10)", "Semua jawaban benar"],
+                correct: 1
             },
             {
                 question: "Perbedaan antara COUNT dan COUNTA adalah:",
@@ -1574,120 +1251,80 @@
                 correct: 1
             },
             {
-                question: "Untuk menghitung rata-rata dari cell A1, A3, dan A5, rumus yang benar adalah:",
-                options: ["=AVERAGE(A1:A5)", "=AVERAGE(A1,A3,A5)", "=AVERAGE(A1+A3+A5)", "=AVERAGE[A1,A3,A5]"],
+                question: "Rumus =AVERAGE(MAX(A1:A5),MIN(A1:A5)) akan:",
+                options: ["Error", "Menghitung rata-rata dari nilai maksimum dan minimum", "Menghitung median", "Menghitung range"],
                 correct: 1
             },
             {
-                question: "Simbol apa yang harus digunakan di awal setiap rumus Excel?",
-                options: ["#", "@", "=", "$"],
-                correct: 2
-            },
-            {
-                question: "Range A1:C3 mencakup berapa cell?",
-                options: ["6 cell", "9 cell", "3 cell", "12 cell"],
+                question: "Jika ingin mengunci referensi cell saat copy rumus, gunakan:",
+                options: ["Tanda kurung ()", "Tanda dollar $", "Tanda persen %", "Tanda hash #"],
                 correct: 1
             },
             {
-                question: "Fungsi manakah yang TIDAK termasuk fungsi statistik dasar?",
-                options: ["SUM", "MAX", "CONCATENATE", "AVERAGE"],
-                correct: 2
-            },
-            {
-                question: "Untuk menjumlahkan seluruh kolom A, rumus yang paling efisien adalah:",
-                options: ["=SUM(A:A)", "=SUM(A1:A1000)", "=SUM(A1:A100)", "=SUM(A*)"],
-                correct: 0
-            },
-            {
-                question: "Hasil dari =SUM(10,20,30) adalah:",
-                options: ["102030", "60", "Error", "10+20+30"],
-                correct: 1
-            },
-            {
-                question: "Jika cell A1=5, A2=10, A3=15, maka =AVERAGE(A1:A3) menghasilkan:",
-                options: ["30", "15", "10", "5"],
-                correct: 2
-            },
-            {
-                question: "Fungsi COUNT akan mengabaikan:",
-                options: ["Angka negatif", "Angka desimal", "Teks dan cell kosong", "Angka nol"],
-                correct: 2
-            },
-            {
-                question: "Untuk mencari nilai terbesar dari beberapa range terpisah, gunakan:",
-                options: ["=MAX(A1:A5,C1:C5)", "=MAX(A1:A5)+MAX(C1:C5)", "=MAXIMUM(A1:A5,C1:C5)", "=MAX(A1:A5;C1:C5)"],
-                correct: 0
-            },
-            {
-                question: "Referensi cell B$5 artinya:",
-                options: ["Kolom B dan baris 5 keduanya absolut", "Kolom B relatif, baris 5 absolut", "Kolom B absolut, baris 5 relatif", "Error dalam penulisan"],
-                correct: 1
-            },
-            {
-                question: "Jika ingin menghitung berapa banyak cell yang tidak kosong dalam range A1:A10, gunakan:",
-                options: ["=COUNT(A1:A10)", "=COUNTA(A1:A10)", "=COUNTBLANK(A1:A10)", "=COUNTNOT(A1:A10)"],
-                correct: 1
-            },
-            {
-                question: "Rumus =MIN(MAX(A1:A5),100) akan menghasilkan:",
-                options: ["Error", "Nilai terkecil antara nilai maksimum A1:A5 dengan 100", "100", "Nilai maksimum dari A1:A5"],
-                correct: 1
-            },
-            {
-                question: "Untuk analisis data yang lengkap, kombinasi fungsi yang paling umum digunakan adalah:",
-                options: ["SUM, COUNT, MAX", "SUM, AVERAGE, MAX, MIN, COUNT", "AVERAGE, COUNT", "MAX, MIN saja"],
+                question: "Rumus =SUM(A:A) akan:",
+                options: ["Error", "Menjumlahkan seluruh kolom A", "Menjumlahkan A1 saja", "Menjumlahkan 10 cell pertama"],
                 correct: 1
             }
         ];
 
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+        let userAnswers = [];
+
+        function startQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            userAnswers = new Array(quizQuestions.length).fill(-1);
+            showQuizQuestion();
+        }
+
         function showQuizQuestion() {
             const question = quizQuestions[currentQuizQuestion];
+            
             document.getElementById('quiz-number').textContent = currentQuizQuestion + 1;
             document.getElementById('quiz-question-number').textContent = currentQuizQuestion + 1;
             document.getElementById('quiz-question').textContent = question.question;
             
-            // Update progress bar
             const progressPercent = ((currentQuizQuestion + 1) / quizQuestions.length) * 100;
             document.getElementById('quiz-progress-bar').style.width = progressPercent + '%';
             document.getElementById('quiz-progress-text').textContent = Math.round(progressPercent) + '%';
             
-            const optionsDiv = document.getElementById('quiz-options');
-            optionsDiv.innerHTML = '';
-            
-            const optionLabels = ['A', 'B', 'C', 'D'];
-            const optionColors = ['border-blue-300 hover:bg-blue-50', 'border-green-300 hover:bg-green-50', 'border-purple-300 hover:bg-purple-50', 'border-orange-300 hover:bg-orange-50'];
-            
+            let optionsHTML = '';
             question.options.forEach((option, index) => {
-                const isSelected = quizAnswers[currentQuizQuestion] === index;
-                const selectedClass = isSelected ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white border-blue-500 shadow-lg transform scale-105' : 'bg-white hover:shadow-md';
-                
-                optionsDiv.innerHTML += `
-                    <label class="group flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${selectedClass} ${!isSelected ? optionColors[index] : ''} hover:transform hover:scale-102">
-                        <div class="flex items-center justify-center w-8 h-8 rounded-full mr-4 flex-shrink-0 ${isSelected ? 'bg-white bg-opacity-20' : 'bg-gradient-to-r from-blue-500 to-purple-500'} text-white font-bold text-sm">
-                            ${optionLabels[index]}
+                const isSelected = userAnswers[currentQuizQuestion] === index;
+                optionsHTML += `
+                    <div class="quiz-option ${isSelected ? 'selected' : ''}" onclick="selectQuizAnswer(${index})">
+                        <div class="flex items-center p-4 border-2 border-gray-300 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer">
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center mr-4 text-sm font-bold ${isSelected ? 'bg-blue-500 text-white border-blue-500' : ''}">
+                                ${String.fromCharCode(65 + index)}
+                            </div>
+                            <span class="text-gray-700 flex-1">${option}</span>
                         </div>
-                        <input type="radio" name="quiz-option" value="${index}" ${isSelected ? 'checked' : ''} 
-                               onchange="selectQuizAnswer(${index})" class="hidden">
-                        <span class="flex-1 text-left ${isSelected ? 'text-white font-semibold' : 'text-gray-700 group-hover:text-gray-900'}">${option}</span>
-                        <div class="ml-4 ${isSelected ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'}">
-                            ${isSelected ? '✓' : '○'}
-                        </div>
-                    </label>
+                    </div>
                 `;
             });
             
-            // Update navigation buttons
+            document.getElementById('quiz-options').innerHTML = optionsHTML;
+            
             document.getElementById('prev-quiz-btn').disabled = currentQuizQuestion === 0;
-            const nextBtn = document.getElementById('next-quiz-btn');
-            if (currentQuizQuestion === quizQuestions.length - 1) {
-                nextBtn.innerHTML = '<span class="mr-2">🏁</span>Selesai';
-            } else {
-                nextBtn.innerHTML = '<span class="mr-2">➡️</span>Selanjutnya';
-            }
+            document.getElementById('next-quiz-btn').textContent = currentQuizQuestion === quizQuestions.length - 1 ? 'Selesai' : 'Selanjutnya';
         }
 
         function selectQuizAnswer(answerIndex) {
-            quizAnswers[currentQuizQuestion] = answerIndex;
+            userAnswers[currentQuizQuestion] = answerIndex;
+            
+            document.querySelectorAll('.quiz-option').forEach((option, index) => {
+                const circle = option.querySelector('div div');
+                if (index === answerIndex) {
+                    option.classList.add('selected');
+                    circle.classList.add('bg-blue-500', 'text-white', 'border-blue-500');
+                    circle.classList.remove('border-gray-400');
+                } else {
+                    option.classList.remove('selected');
+                    circle.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
+                    circle.classList.add('border-gray-400');
+                }
+            });
         }
 
         function nextQuizQuestion() {
@@ -1707,9 +1344,8 @@
         }
 
         function finishQuiz() {
-            // Calculate score
             quizScore = 0;
-            quizAnswers.forEach((answer, index) => {
+            userAnswers.forEach((answer, index) => {
                 if (answer === quizQuestions[index].correct) {
                     quizScore++;
                 }
@@ -1717,259 +1353,185 @@
             
             const percentage = Math.round((quizScore / quizQuestions.length) * 100);
             
-            // Show results
-            document.getElementById('quiz-area').innerHTML = `
-                <div class="text-center py-8">
-                    <div class="mb-8">
-                        <div class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-r ${percentage >= 80 ? 'from-green-500 to-emerald-500' : percentage >= 60 ? 'from-yellow-500 to-orange-500' : 'from-red-500 to-pink-500'} rounded-full mb-6 shadow-2xl">
-                            <span class="text-white text-5xl">${percentage >= 80 ? '🏆' : percentage >= 60 ? '🎯' : '📚'}</span>
+            let resultHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl p-8 border-t-4 ${percentage >= 80 ? 'border-green-500' : percentage >= 60 ? 'border-yellow-500' : 'border-red-500'}">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-24 h-24 ${percentage >= 80 ? 'bg-green-500' : percentage >= 60 ? 'bg-yellow-500' : 'bg-red-500'} rounded-full mb-6">
+                            <span class="text-white text-4xl">${percentage >= 80 ? '🏆' : percentage >= 60 ? '🎯' : '📚'}</span>
                         </div>
-                        <h2 class="text-4xl font-bold text-gray-800 mb-4">Kuis Selesai!</h2>
-                        <p class="text-gray-600 text-lg">Berikut adalah hasil kuis pemahaman Excel Anda</p>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Kuis Selesai!</h2>
+                        <div class="text-6xl font-bold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'} mb-2">
+                            ${quizScore}/${quizQuestions.length}
+                        </div>
+                        <div class="text-2xl ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'} font-semibold mb-6">
+                            ${percentage}%
+                        </div>
+                        <p class="text-gray-600 text-lg">
+                            ${percentage >= 80 ? 'Excellent! Anda menguasai Excel dengan sangat baik!' : 
+                              percentage >= 60 ? 'Good job! Anda sudah memahami dasar-dasar Excel.' : 
+                              'Keep learning! Pelajari kembali materi untuk hasil yang lebih baik.'}
+                        </p>
                     </div>
-
-                    <div class="bg-white rounded-2xl shadow-2xl p-8 mb-8 border-t-4 ${percentage >= 80 ? 'border-green-500' : percentage >= 60 ? 'border-yellow-500' : 'border-red-500'}">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                            <div class="text-center">
-                                <div class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">${quizScore}</div>
-                                <div class="text-gray-600 font-semibold">Jawaban Benar</div>
-                                <div class="text-sm text-gray-500 mt-1">dari 20 soal</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-5xl font-bold bg-gradient-to-r ${percentage >= 80 ? 'from-green-600 to-emerald-600' : percentage >= 60 ? 'from-yellow-600 to-orange-600' : 'from-red-600 to-pink-600'} bg-clip-text text-transparent mb-3">${percentage}%</div>
-                                <div class="text-gray-600 font-semibold">Persentase</div>
-                                <div class="text-sm text-gray-500 mt-1">tingkat pemahaman</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">${20 - quizScore}</div>
-                                <div class="text-gray-600 font-semibold">Perlu Dipelajari</div>
-                                <div class="text-sm text-gray-500 mt-1">soal untuk review</div>
-                            </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="text-center p-6 bg-green-50 rounded-xl border border-green-200">
+                            <div class="text-3xl font-bold text-green-600 mb-2">${quizScore}</div>
+                            <div class="text-green-700 font-semibold">Jawaban Benar</div>
                         </div>
-
-                        <div class="mb-8">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm font-medium text-gray-600">Progress Pemahaman</span>
-                                <span class="text-sm font-medium text-gray-600">${percentage}%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-6 shadow-inner">
-                                <div class="bg-gradient-to-r ${percentage >= 80 ? 'from-green-500 to-emerald-500' : percentage >= 60 ? 'from-yellow-500 to-orange-500' : 'from-red-500 to-pink-500'} h-6 rounded-full transition-all duration-1000 shadow-lg flex items-center justify-end pr-3" style="width: ${percentage}%">
-                                    <span class="text-white text-xs font-bold">${percentage}%</span>
-                                </div>
-                            </div>
+                        <div class="text-center p-6 bg-red-50 rounded-xl border border-red-200">
+                            <div class="text-3xl font-bold text-red-600 mb-2">${quizQuestions.length - quizScore}</div>
+                            <div class="text-red-700 font-semibold">Jawaban Salah</div>
                         </div>
-
-                        <div class="text-center mb-8">
-                            ${percentage >= 80 ? 
-                                '<div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-2xl p-6"><div class="text-3xl mb-3">🎉</div><div class="text-2xl font-bold text-green-800 mb-3">Outstanding!</div><div class="text-green-700 text-lg">Anda menguasai Excel dengan sangat baik! Kemampuan analisis data Anda sudah di level mahir. Siap untuk tantangan yang lebih kompleks!</div></div>' :
-                                percentage >= 60 ?
-                                '<div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl p-6"><div class="text-3xl mb-3">👍</div><div class="text-2xl font-bold text-yellow-800 mb-3">Good Job!</div><div class="text-yellow-700 text-lg">Pemahaman Anda sudah cukup solid! Dengan sedikit latihan tambahan, Anda akan menguasai Excel dengan sempurna.</div></div>' :
-                                '<div class="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-300 rounded-2xl p-6"><div class="text-3xl mb-3">📚</div><div class="text-2xl font-bold text-red-800 mb-3">Keep Learning!</div><div class="text-red-700 text-lg">Jangan menyerah! Setiap ahli Excel pernah memulai dari sini. Ulangi materi dan terus berlatih - kesuksesan menanti!</div></div>'
-                            }
-                        </div>
-
-                        <!-- Detailed Analysis -->
-                        <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 mb-6">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                                <span class="mr-3">📊</span>
-                                Analisis Detail
-                            </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                                    <span class="text-gray-600">Fungsi SUM & Aritmatika</span>
-                                    <span class="font-semibold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'}">${percentage >= 80 ? 'Mahir' : percentage >= 60 ? 'Baik' : 'Perlu Latihan'}</span>
-                                </div>
-                                <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                                    <span class="text-gray-600">Fungsi MAX & MIN</span>
-                                    <span class="font-semibold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'}">${percentage >= 80 ? 'Mahir' : percentage >= 60 ? 'Baik' : 'Perlu Latihan'}</span>
-                                </div>
-                                <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                                    <span class="text-gray-600">Fungsi AVERAGE</span>
-                                    <span class="font-semibold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'}">${percentage >= 80 ? 'Mahir' : percentage >= 60 ? 'Baik' : 'Perlu Latihan'}</span>
-                                </div>
-                                <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                                    <span class="text-gray-600">Fungsi COUNT</span>
-                                    <span class="font-semibold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'}">${percentage >= 80 ? 'Mahir' : percentage >= 60 ? 'Baik' : 'Perlu Latihan'}</span>
-                                </div>
-                            </div>
+                        <div class="text-center p-6 bg-blue-50 rounded-xl border border-blue-200">
+                            <div class="text-3xl font-bold text-blue-600 mb-2">${percentage}%</div>
+                            <div class="text-blue-700 font-semibold">Persentase</div>
                         </div>
                     </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onclick="restartQuiz()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-4 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
-                            <span class="mr-3 text-xl">🔄</span>
-                            <div class="text-left">
-                                <div class="font-bold">Ulangi Kuis</div>
-                                <div class="text-sm opacity-90">Coba tingkatkan skor</div>
-                            </div>
+                    
+                    <div class="text-center space-y-4">
+                        <button onclick="restartQuiz()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 mr-4">
+                            🔄 Ulangi Kuis
                         </button>
-                        <button onclick="showSection('latihan')" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-4 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
-                            <span class="mr-3 text-xl">💼</span>
-                            <div class="text-left">
-                                <div class="font-bold">Latihan Praktik</div>
-                                <div class="text-sm opacity-90">Aplikasi real-world</div>
-                            </div>
-                        </button>
-                        <button onclick="showSection('mencoba')" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
-                            <span class="mr-3 text-xl">🎮</span>
-                            <div class="text-left">
-                                <div class="font-bold">Berlatih Lagi</div>
-                                <div class="text-sm opacity-90">Mode interaktif</div>
-                            </div>
+                        <button onclick="showSection('materi')" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                            📚 Kembali ke Materi
                         </button>
                     </div>
                 </div>
             `;
+            
+            document.getElementById('quiz-area').innerHTML = resultHTML;
         }
 
         function restartQuiz() {
-            currentQuizQuestion = 0;
-            quizScore = 0;
-            quizAnswers = [];
-            
-            document.getElementById('quiz-area').innerHTML = `
-                <div class="mb-6">
-                    <!-- Progress Section -->
-                    <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center">
-                                <div class="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full p-3 mr-4">
-                                    <span class="text-white text-xl">📊</span>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-800">Progress Kuis</h3>
-                                    <p class="text-gray-600">Soal <span id="quiz-number" class="font-semibold text-indigo-600">1</span> dari <span class="font-semibold text-indigo-600">20</span></p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                                    <span id="quiz-score">0</span><span class="text-gray-400">/20</span>
-                                </div>
-                                <div class="text-gray-500 text-sm">Skor Sementara</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Progress Bar -->
-                        <div class="relative">
-                            <div class="w-full bg-gray-200 rounded-full h-4 shadow-inner">
-                                <div id="quiz-progress-bar" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-4 rounded-full transition-all duration-500 shadow-lg" style="width: 5%"></div>
-                            </div>
-                            <div class="absolute -top-8 left-0 text-xs text-gray-500" id="quiz-progress-text">5%</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Question Card -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 border-l-4 border-gradient-to-b from-blue-500 to-purple-500 border-l-blue-500 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-purple-50 rounded-full -mr-16 -mt-16 opacity-50"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-start mb-6">
-                                <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-full p-4 mr-4 flex-shrink-0">
-                                    <span class="text-white text-2xl">❓</span>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center mb-3">
-                                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold mr-3">
-                                            Soal <span id="quiz-question-number">1</span>
-                                        </span>
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                                            <span>Pilihan Ganda</span>
-                                        </div>
-                                    </div>
-                                    <h4 id="quiz-question" class="text-xl font-bold text-gray-800 leading-relaxed"></h4>
-                                </div>
-                            </div>
-                            
-                            <!-- Options -->
-                            <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
-                                <div class="flex items-center mb-4">
-                                    <span class="text-lg mr-3">📝</span>
-                                    <h5 class="font-semibold text-gray-800">Pilih jawaban yang paling tepat:</h5>
-                                </div>
-                                <div id="quiz-options" class="space-y-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Navigation -->
-                    <div class="flex justify-between items-center">
-                        <button onclick="previousQuizQuestion()" id="prev-quiz-btn" 
-                                class="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none disabled:shadow-none flex items-center" disabled>
-                            <span class="mr-2">⬅️</span>
-                            Sebelumnya
-                        </button>
-                        
-                        <div class="flex items-center space-x-2 text-sm text-gray-500">
-                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
-                            <span>Navigasi bebas - Anda bisa kembali ke soal sebelumnya</span>
-                        </div>
-                        
-                        <button onclick="nextQuizQuestion()" id="next-quiz-btn" 
-                                class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-6 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center">
-                            <span class="mr-2">➡️</span>
-                            Selanjutnya
-                        </button>
-                    </div>
-                    
-                    <div id="quiz-result" class="hidden mt-6 p-4 rounded-lg"></div>
-                </div>
-            `;
-            
-            showQuizQuestion();
+            location.reload();
         }
 
         // Exercise functionality
         function checkExercise() {
-            const answers = {
-                formula1: '=B2*C2',
-                formula2: '=B3*C3', 
-                formula3: '=B4*C4',
-                formula4: '=B5*C5',
-                formula5: '=B6*C6',
-                'total-revenue': '=SUM(D2:D6)',
-                'max-revenue': '=MAX(D2:D6)',
-                'min-revenue': '=MIN(D2:D6)',
-                'avg-revenue': '=AVERAGE(D2:D6)',
-                'count-books': '=COUNT(D2:D6)',
-                'total-sold': '=SUM(C2:C6)'
-            };
-            
-            let correct = 0;
-            let total = Object.keys(answers).length;
-            let feedback = '<div class="bg-white p-6 rounded-lg"><h4 class="text-lg font-semibold mb-4">Hasil Pemeriksaan:</h4><div class="space-y-2">';
-            
-            Object.keys(answers).forEach(id => {
-                const userAnswer = document.getElementById(id).value.trim().toUpperCase();
-                const correctAnswer = answers[id].toUpperCase();
+            const formulas = [
+                // Perhitungan Total Pendapatan
+                { id: 'formula1', correct: '=B2*C2', expected: 540000, label: 'Total Pendapatan Matematika Dasar' },
+                { id: 'formula2', correct: '=B3*C3', expected: 416000, label: 'Total Pendapatan Fisika Modern' },
+                { id: 'formula3', correct: '=B4*C4', expected: 720000, label: 'Total Pendapatan Kimia Organik' },
+                { id: 'formula4', correct: '=B5*C5', expected: 820000, label: 'Total Pendapatan Biologi Sel' },
+                { id: 'formula5', correct: '=B6*C6', expected: 875000, label: 'Total Pendapatan Sejarah Indonesia' },
                 
-                if (userAnswer === correctAnswer) {
-                    correct++;
-                    feedback += `<div class="flex items-center text-green-600"><span class="mr-2">✅</span> ${id}: Benar</div>`;
-                } else {
-                    feedback += `<div class="flex items-center text-red-600"><span class="mr-2">❌</span> ${id}: Salah (Jawaban: ${answers[id]})</div>`;
-                }
+                // Analisis Harga
+                { id: 'sum_harga', correct: '=SUM(B2:B6)', expected: 221000, label: 'Total Semua Harga' },
+                { id: 'max_harga', correct: '=MAX(B2:B6)', expected: 52000, label: 'Harga Tertinggi' },
+                { id: 'min_harga', correct: '=MIN(B2:B6)', expected: 35000, label: 'Harga Terendah' },
+                { id: 'avg_harga', correct: '=AVERAGE(B2:B6)', expected: 44200, label: 'Rata-rata Harga' },
+                
+                // Analisis Unit Terjual
+                { id: 'sum_unit', correct: '=SUM(C2:C6)', expected: 80, label: 'Total Unit Terjual' },
+                { id: 'max_unit', correct: '=MAX(C2:C6)', expected: 25, label: 'Penjualan Tertinggi' },
+                { id: 'min_unit', correct: '=MIN(C2:C6)', expected: 8, label: 'Penjualan Terendah' },
+                { id: 'avg_unit', correct: '=AVERAGE(C2:C6)', expected: 16, label: 'Rata-rata Unit Terjual' },
+                
+                // Ringkasan Bisnis
+                { id: 'total_revenue', correct: '=SUM(D2:D6)', expected: 3371000, label: 'Total Pendapatan Keseluruhan' },
+                { id: 'count_products', correct: '=COUNT(B2:B6)', expected: 5, label: 'Jumlah Produk yang Dijual' },
+                { id: 'avg_revenue', correct: '=AVERAGE(D2:D6)', expected: 674200, label: 'Rata-rata Pendapatan per Produk' }
+            ];
+            
+            let correctCount = 0;
+            let results = [];
+            
+            formulas.forEach((formula, index) => {
+                const userInput = document.getElementById(formula.id).value.trim().toUpperCase();
+                const isCorrect = userInput === formula.correct.toUpperCase();
+                
+                if (isCorrect) correctCount++;
+                
+                results.push({
+                    label: formula.label,
+                    formula: formula.correct,
+                    userInput: userInput,
+                    isCorrect: isCorrect,
+                    expected: formula.expected
+                });
             });
             
-            const percentage = Math.round((correct / total) * 100);
-            feedback += `</div><div class="mt-6 p-4 rounded-lg ${percentage >= 80 ? 'bg-green-100 text-green-800' : percentage >= 60 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">`;
-            feedback += `<div class="text-center"><div class="text-2xl font-bold">${correct}/${total} (${percentage}%)</div>`;
+            const percentage = Math.round((correctCount / formulas.length) * 100);
             
-            if (percentage >= 80) {
-                feedback += '<div class="mt-2">🎉 Excellent! Anda menguasai penggunaan rumus Excel dengan baik!</div>';
-            } else if (percentage >= 60) {
-                feedback += '<div class="mt-2">👍 Good! Terus berlatih untuk hasil yang lebih sempurna!</div>';
-            } else {
-                feedback += '<div class="mt-2">📚 Perlu belajar lagi. Ulangi materi dan coba sekali lagi!</div>';
-            }
+            let resultHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl p-8 border-t-4 ${percentage >= 80 ? 'border-green-500' : percentage >= 60 ? 'border-yellow-500' : 'border-red-500'}">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-24 h-24 ${percentage >= 80 ? 'bg-green-500' : percentage >= 60 ? 'bg-yellow-500' : 'bg-red-500'} rounded-full mb-6">
+                            <span class="text-white text-4xl">${percentage >= 80 ? '🏆' : percentage >= 60 ? '🎯' : '📚'}</span>
+                        </div>
+                        <h3 class="text-3xl font-bold text-gray-800 mb-4">Hasil Evaluasi Lengkap</h3>
+                        <div class="text-5xl font-bold ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'} mb-2">
+                            ${correctCount}/${formulas.length}
+                        </div>
+                        <div class="text-2xl ${percentage >= 80 ? 'text-green-600' : percentage >= 60 ? 'text-yellow-600' : 'text-red-600'} font-semibold mb-4">
+                            ${percentage}%
+                        </div>
+                        <p class="text-gray-600 text-lg">
+                            ${percentage >= 80 ? 'Excellent! Anda menguasai semua fungsi Excel dengan sangat baik!' : 
+                              percentage >= 60 ? 'Good job! Anda sudah memahami sebagian besar fungsi Excel.' : 
+                              'Keep learning! Pelajari kembali materi untuk hasil yang lebih baik.'}
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="text-center p-6 bg-green-50 rounded-xl border border-green-200">
+                            <div class="text-3xl font-bold text-green-600 mb-2">${correctCount}</div>
+                            <div class="text-green-700 font-semibold">Jawaban Benar</div>
+                        </div>
+                        <div class="text-center p-6 bg-red-50 rounded-xl border border-red-200">
+                            <div class="text-3xl font-bold text-red-600 mb-2">${formulas.length - correctCount}</div>
+                            <div class="text-red-700 font-semibold">Jawaban Salah</div>
+                        </div>
+                        <div class="text-center p-6 bg-blue-50 rounded-xl border border-blue-200">
+                            <div class="text-3xl font-bold text-blue-600 mb-2">${formulas.length}</div>
+                            <div class="text-blue-700 font-semibold">Total Soal</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 max-h-96 overflow-y-auto">
+                        <h4 class="text-xl font-bold text-gray-800 mb-4 sticky top-0 bg-white py-2">📋 Detail Hasil:</h4>
+            `;
             
-            feedback += '</div></div></div>';
+            results.forEach((result, index) => {
+                const isRevenue = result.expected >= 100000;
+                const displayValue = isRevenue ? `Rp ${result.expected.toLocaleString('id-ID')}` : result.expected.toLocaleString('id-ID');
+                
+                resultHTML += `
+                    <div class="p-4 rounded-lg border-2 ${result.isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'} hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold text-gray-800">${result.label}:</span>
+                            <span class="text-2xl">${result.isCorrect ? '✅' : '❌'}</span>
+                        </div>
+                        <div class="text-sm space-y-1">
+                            <div><strong>Rumus Benar:</strong> <code class="bg-white px-2 py-1 rounded font-mono text-blue-600">${result.formula}</code></div>
+                            <div><strong>Jawaban Anda:</strong> <code class="bg-white px-2 py-1 rounded font-mono ${result.isCorrect ? 'text-green-600' : 'text-red-600'}">${result.userInput || 'Kosong'}</code></div>
+                            <div><strong>Hasil:</strong> <span class="font-bold text-gray-700">${displayValue}</span></div>
+                        </div>
+                    </div>
+                `;
+            });
             
-            document.getElementById('exercise-result').innerHTML = feedback;
+            resultHTML += `
+                    </div>
+                    
+                    <div class="text-center mt-8 space-y-4">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button onclick="location.reload()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                                🔄 Coba Lagi
+                            </button>
+                            <button onclick="showSection('materi')" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                                📚 Kembali ke Materi
+                            </button>
+                        </div>
+                        <p class="text-gray-500 text-sm">💡 Tip: Semua rumus Excel dimulai dengan tanda = dan menggunakan referensi cell seperti A1, B2, dll.</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('exercise-result').innerHTML = resultHTML;
             document.getElementById('exercise-result').classList.remove('hidden');
         }
-
-        // Initialize quiz
-        showQuizQuestion();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972141a056bb410c',t:'MTc1NTY4NjI1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9721e89710cbeba1',t:'MTc1NTY5MzA5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
