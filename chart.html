@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Chart Learning App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .quiz-option:hover { transform: translateY(-2px); transition: all 0.3s ease; }
+        .active-nav { background: linear-gradient(135deg, #667eea, #764ba2); }
+    </style>
+</head>
+<body class="bg-gray-50 pb-20">
+    <!-- Header -->
+    <header class="gradient-bg text-white p-6 text-center">
+        <h1 class="text-2xl font-bold">📊 Excel Chart Mastery</h1>
+        <p class="text-blue-100 mt-2">Pelajari Chart Excel dengan Mudah dan Menyenangkan</p>
+    </header>
+
+    <!-- Content Container -->
+    <div class="max-w-4xl mx-auto p-4">
+        <!-- Materi Section -->
+        <div id="materi" class="content-section">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <!-- Animated Background Elements -->
+                <div class="absolute inset-0 opacity-20">
+                    <div class="absolute top-10 left-10 w-20 h-20 bg-white rounded-full animate-pulse"></div>
+                    <div class="absolute top-32 right-16 w-16 h-16 bg-yellow-300 rounded-full animate-bounce"></div>
+                    <div class="absolute bottom-16 left-20 w-12 h-12 bg-pink-300 rounded-full animate-ping"></div>
+                    <div class="absolute bottom-20 right-10 w-24 h-24 bg-blue-300 rounded-full animate-pulse"></div>
+                </div>
+                
+                <div class="relative z-10 text-center">
+                    <div class="text-6xl mb-4 animate-bounce">📊</div>
+                    <h2 class="text-3xl font-bold mb-4">Materi Pembelajaran Excel Chart</h2>
+                    <p class="text-xl text-indigo-100 mb-6">Kuasai seni visualisasi data dengan Excel Chart yang menakjubkan!</p>
+                    <div class="flex justify-center space-x-4">
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <span class="text-sm font-medium">📈 4 Jenis Chart</span>
+                        </div>
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <span class="text-sm font-medium">💡 Tips Profesional</span>
+                        </div>
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <span class="text-sm font-medium">🎯 Praktis & Mudah</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mengapa Menggunakan Chart -->
+            <div class="bg-white rounded-2xl card-shadow p-8 mb-8 transform hover:scale-105 transition-all duration-300">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-white text-2xl mb-4 animate-pulse">
+                        🎯
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Mengapa Harus Menggunakan Chart?</h3>
+                    <p class="text-gray-600">Temukan kekuatan visualisasi data yang mengubah angka menjadi insight</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="benefit-card bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">👁️</div>
+                        <h4 class="font-semibold text-blue-800 mb-2">Visual yang Jelas</h4>
+                        <p class="text-sm text-gray-700">Mengubah data kompleks menjadi visualisasi yang mudah dipahami dalam sekali pandang</p>
+                    </div>
+                    
+                    <div class="benefit-card bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">🔍</div>
+                        <h4 class="font-semibold text-green-800 mb-2">Identifikasi Pola</h4>
+                        <p class="text-sm text-gray-700">Menemukan tren, pola, dan anomali dalam data dengan lebih cepat dan akurat</p>
+                    </div>
+                    
+                    <div class="benefit-card bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">⚡</div>
+                        <h4 class="font-semibold text-purple-800 mb-2">Keputusan Cepat</h4>
+                        <p class="text-sm text-gray-700">Mempercepat proses analisis dan pengambilan keputusan bisnis yang tepat</p>
+                    </div>
+                    
+                    <div class="benefit-card bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">🎨</div>
+                        <h4 class="font-semibold text-orange-800 mb-2">Presentasi Profesional</h4>
+                        <p class="text-sm text-gray-700">Membuat laporan dan presentasi yang lebih menarik dan profesional</p>
+                    </div>
+                    
+                    <div class="benefit-card bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-xl border border-indigo-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">💬</div>
+                        <h4 class="font-semibold text-indigo-800 mb-2">Komunikasi Efektif</h4>
+                        <p class="text-sm text-gray-700">Menyampaikan informasi kompleks dengan cara yang mudah dipahami audiens</p>
+                    </div>
+                    
+                    <div class="benefit-card bg-gradient-to-br from-teal-50 to-cyan-50 p-6 rounded-xl border border-teal-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">⏰</div>
+                        <h4 class="font-semibold text-teal-800 mb-2">Hemat Waktu</h4>
+                        <p class="text-sm text-gray-700">Mengurangi waktu yang dibutuhkan untuk menjelaskan data kepada tim atau klien</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jenis-jenis Chart -->
+            <div class="mb-8">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full text-white text-2xl mb-4 animate-pulse">
+                        📊
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Jenis-jenis Chart di Excel</h3>
+                    <p class="text-gray-600">Pilih chart yang tepat untuk setiap jenis data dan analisis</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Column Chart -->
+                    <div class="chart-card bg-white rounded-2xl card-shadow overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl mb-2">📊</div>
+                                    <h4 class="text-xl font-bold mb-1">Column Chart</h4>
+                                    <p class="text-blue-100 text-sm">Grafik Kolom</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+                                    <span class="text-xs font-medium">Perbandingan</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Perfect untuk membandingkan nilai antar kategori dengan visualisasi vertikal yang jelas</p>
+                            <div class="bg-gradient-to-br from-gray-50 to-blue-50 p-4 rounded-xl mb-4">
+                                <canvas id="columnChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">💡 Contoh: Penjualan per bulan</span>
+                                <div class="flex space-x-1">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart -->
+                    <div class="chart-card bg-white rounded-2xl card-shadow overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                        <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl mb-2">📈</div>
+                                    <h4 class="text-xl font-bold mb-1">Line Chart</h4>
+                                    <p class="text-green-100 text-sm">Grafik Garis</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+                                    <span class="text-xs font-medium">Tren Waktu</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Ideal untuk menunjukkan perubahan data dari waktu ke waktu dan mengidentifikasi tren</p>
+                            <div class="bg-gradient-to-br from-gray-50 to-green-50 p-4 rounded-xl mb-4">
+                                <canvas id="lineChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">💡 Contoh: Pertumbuhan penjualan</span>
+                                <div class="flex space-x-1">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-teal-500 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pie Chart -->
+                    <div class="chart-card bg-white rounded-2xl card-shadow overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl mb-2">🥧</div>
+                                    <h4 class="text-xl font-bold mb-1">Pie Chart</h4>
+                                    <p class="text-purple-100 text-sm">Grafik Lingkaran</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+                                    <span class="text-xs font-medium">Proporsi</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Sempurna untuk menampilkan proporsi atau persentase bagian dari keseluruhan data</p>
+                            <div class="bg-gradient-to-br from-gray-50 to-purple-50 p-4 rounded-xl mb-4 flex justify-center">
+                                <canvas id="pieChart" width="280" height="280"></canvas>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">💡 Contoh: Komposisi produk</span>
+                                <div class="flex space-x-1">
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-rose-500 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart -->
+                    <div class="chart-card bg-white rounded-2xl card-shadow overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                        <div class="bg-gradient-to-r from-orange-500 to-red-600 p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-3xl mb-2">📊</div>
+                                    <h4 class="text-xl font-bold mb-1">Bar Chart</h4>
+                                    <p class="text-orange-100 text-sm">Grafik Batang</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+                                    <span class="text-xs font-medium">Horizontal</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Cocok untuk data dengan label panjang dan perbandingan horizontal yang mudah dibaca</p>
+                            <div class="bg-gradient-to-br from-gray-50 to-orange-50 p-4 rounded-xl mb-4">
+                                <canvas id="barChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">💡 Contoh: Penjualan per wilayah</span>
+                                <div class="flex space-x-1">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="bg-white rounded-2xl card-shadow p-8 mb-8">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full text-white text-2xl mb-4 animate-pulse">
+                        ⚙️
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Tips Membuat Chart yang Menakjubkan</h3>
+                    <p class="text-gray-600">Rahasia membuat visualisasi data yang profesional dan efektif</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="tip-card group">
+                        <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-xl border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-lg">
+                            <div class="text-4xl mb-4 group-hover:animate-bounce">🎨</div>
+                            <h4 class="font-bold text-purple-800 mb-3">Desain & Warna</h4>
+                            <ul class="text-sm text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <span class="text-purple-500 mr-2 mt-1">•</span>
+                                    <span>Pilih warna kontras yang mudah dibaca</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-500 mr-2 mt-1">•</span>
+                                    <span>Batasi maksimal 5-7 warna per chart</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-500 mr-2 mt-1">•</span>
+                                    <span>Gunakan tema warna yang konsisten</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tip-card group">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border-2 border-green-200 hover:border-green-400 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-lg">
+                            <div class="text-4xl mb-4 group-hover:animate-bounce">📝</div>
+                            <h4 class="font-bold text-green-800 mb-3">Label & Judul</h4>
+                            <ul class="text-sm text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Buat judul yang jelas dan deskriptif</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Label sumbu X dan Y dengan tepat</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Tambahkan legend yang informatif</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tip-card group">
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-lg">
+                            <div class="text-4xl mb-4 group-hover:animate-bounce">📊</div>
+                            <h4 class="font-bold text-blue-800 mb-3">Data & Skala</h4>
+                            <ul class="text-sm text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <span class="text-blue-500 mr-2 mt-1">•</span>
+                                    <span>Mulai skala dari 0 untuk akurasi</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-500 mr-2 mt-1">•</span>
+                                    <span>Urutkan data secara logis</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-500 mr-2 mt-1">•</span>
+                                    <span>Fokus pada data yang relevan</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tip-card group">
+                        <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-lg">
+                            <div class="text-4xl mb-4 group-hover:animate-bounce">✨</div>
+                            <h4 class="font-bold text-orange-800 mb-3">Fitur Lanjutan</h4>
+                            <ul class="text-sm text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <span class="text-orange-500 mr-2 mt-1">•</span>
+                                    <span>Tambahkan data labels strategis</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-orange-500 mr-2 mt-1">•</span>
+                                    <span>Atur gridlines yang seimbang</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-orange-500 mr-2 mt-1">•</span>
+                                    <span>Sesuaikan ukuran dengan konteks</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Reference Card -->
+            <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
+                <div class="text-center mb-6">
+                    <div class="text-4xl mb-3">🚀</div>
+                    <h3 class="text-2xl font-bold mb-2">Quick Reference</h3>
+                    <p class="text-gray-300">Panduan cepat memilih chart yang tepat</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
+                        <div class="text-2xl mb-2">📊</div>
+                        <h4 class="font-semibold mb-1">Perbandingan</h4>
+                        <p class="text-sm text-gray-300">Column/Bar Chart</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
+                        <div class="text-2xl mb-2">📈</div>
+                        <h4 class="font-semibold mb-1">Tren Waktu</h4>
+                        <p class="text-sm text-gray-300">Line Chart</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
+                        <div class="text-2xl mb-2">🥧</div>
+                        <h4 class="font-semibold mb-1">Proporsi</h4>
+                        <p class="text-sm text-gray-300">Pie Chart</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm">
+                        <div class="text-2xl mb-2">📋</div>
+                        <h4 class="font-semibold mb-1">Label Panjang</h4>
+                        <p class="text-sm text-gray-300">Horizontal Bar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mencoba Section -->
+        <div id="mencoba" class="content-section hidden">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 rounded-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <!-- Animated Background Elements -->
+                <div class="absolute inset-0 opacity-20">
+                    <div class="absolute top-8 left-12 w-16 h-16 bg-white rounded-full animate-bounce"></div>
+                    <div class="absolute top-20 right-20 w-12 h-12 bg-yellow-300 rounded-full animate-pulse"></div>
+                    <div class="absolute bottom-12 left-16 w-20 h-20 bg-pink-300 rounded-full animate-ping"></div>
+                    <div class="absolute bottom-16 right-12 w-14 h-14 bg-purple-300 rounded-full animate-bounce"></div>
+                </div>
+                
+                <div class="relative z-10 text-center">
+                    <div class="text-6xl mb-4 animate-bounce">🎮</div>
+                    <h2 class="text-3xl font-bold mb-4">Chart Builder Interaktif</h2>
+                    <p class="text-xl text-emerald-100 mb-6">Buat chart Excel sendiri dengan editor visual yang canggih!</p>
+                    <div class="flex justify-center space-x-4">
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <span class="text-sm font-medium">🎨 Real-time Editor</span>
+                        </div>
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <span class="text-sm font-medium">📊 4 Jenis Chart</span>
+                        </div>
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
+                            <span class="text-sm font-medium">⚡ Auto Update</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Controls Panel -->
+            <div class="bg-white rounded-2xl card-shadow p-8 mb-8 transform hover:scale-105 transition-all duration-300">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white text-2xl mb-4 animate-pulse">
+                        ⚙️
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Panel Kontrol Chart</h3>
+                    <p class="text-gray-600">Sesuaikan tampilan dan jenis chart sesuai kebutuhan Anda</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Chart Type Selector -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-3xl mb-3 text-center">📊</div>
+                        <label class="block text-sm font-bold text-blue-800 mb-3 text-center">Jenis Chart</label>
+                        <select id="chartTypeSelect" class="w-full p-3 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white font-medium">
+                            <option value="bar">📊 Column Chart</option>
+                            <option value="line">📈 Line Chart</option>
+                            <option value="pie">🥧 Pie Chart</option>
+                            <option value="horizontalBar">📊 Bar Chart</option>
+                        </select>
+                    </div>
+
+                    <!-- Chart Title -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border-2 border-green-200 hover:border-green-400 transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-3xl mb-3 text-center">📝</div>
+                        <label class="block text-sm font-bold text-green-800 mb-3 text-center">Judul Chart</label>
+                        <input type="text" id="chartTitle" value="Data Penjualan" class="w-full p-3 border-2 border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white font-medium">
+                    </div>
+
+                    <!-- Y-Axis Label -->
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-3xl mb-3 text-center">📏</div>
+                        <label class="block text-sm font-bold text-purple-800 mb-3 text-center">Label Y-Axis</label>
+                        <input type="text" id="yAxisLabel" value="Nilai (Juta Rp)" class="w-full p-3 border-2 border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white font-medium">
+                    </div>
+
+                    <!-- Update Button -->
+                    <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-3xl mb-3 text-center">🚀</div>
+                        <label class="block text-sm font-bold text-orange-800 mb-3 text-center">Update Chart</label>
+                        <button id="updateChartBtn" class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-lg font-bold hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-105 shadow-lg">
+                            Update
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button id="addRowBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-lg flex items-center space-x-2">
+                        <span>➕</span>
+                        <span>Tambah Data</span>
+                    </button>
+                    <button id="autoUpdateBtn" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-600 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg flex items-center space-x-2">
+                        <span>🔄</span>
+                        <span>Auto Update: OFF</span>
+                    </button>
+                    <button id="clearDataBtn" class="bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-3 rounded-xl font-bold hover:from-red-600 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg flex items-center space-x-2">
+                        <span>🗑️</span>
+                        <span>Reset Data</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Data Editor Panel -->
+                <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-3xl mb-2">📝</div>
+                                <h4 class="text-xl font-bold mb-1">Editor Data</h4>
+                                <p class="text-indigo-100 text-sm">Edit data secara real-time</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full">
+                                <span class="text-sm font-medium" id="dataCount">4 Items</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-gray-50 to-indigo-50 rounded-xl overflow-hidden border-2 border-indigo-200">
+                            <table class="w-full">
+                                <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+                                    <tr>
+                                        <th class="px-4 py-4 text-left font-bold">📊 Label</th>
+                                        <th class="px-4 py-4 text-left font-bold">💰 Nilai</th>
+                                        <th class="px-4 py-4 text-center font-bold">⚡ Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataTableBody">
+                                    <tr class="hover:bg-indigo-50 transition-colors">
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="text" value="Produk A" class="w-full p-2 border-2 border-indigo-300 rounded-lg label-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="number" value="45" class="w-full p-2 border-2 border-indigo-300 rounded-lg value-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200 text-center">
+                                            <button class="delete-row bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all transform hover:scale-110 font-bold">❌</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-indigo-50 transition-colors">
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="text" value="Produk B" class="w-full p-2 border-2 border-indigo-300 rounded-lg label-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="number" value="32" class="w-full p-2 border-2 border-indigo-300 rounded-lg value-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200 text-center">
+                                            <button class="delete-row bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all transform hover:scale-110 font-bold">❌</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-indigo-50 transition-colors">
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="text" value="Produk C" class="w-full p-2 border-2 border-indigo-300 rounded-lg label-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="number" value="28" class="w-full p-2 border-2 border-indigo-300 rounded-lg value-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200 text-center">
+                                            <button class="delete-row bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all transform hover:scale-110 font-bold">❌</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-indigo-50 transition-colors">
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="text" value="Produk D" class="w-full p-2 border-2 border-indigo-300 rounded-lg label-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200">
+                                            <input type="number" value="38" class="w-full p-2 border-2 border-indigo-300 rounded-lg value-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                                        </td>
+                                        <td class="px-4 py-3 border-t border-indigo-200 text-center">
+                                            <button class="delete-row bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all transform hover:scale-110 font-bold">❌</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Data Statistics -->
+                        <div class="mt-6 grid grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl text-center border border-blue-200">
+                                <div class="text-2xl font-bold text-blue-600" id="totalItems">4</div>
+                                <div class="text-xs text-blue-700">Total Items</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl text-center border border-green-200">
+                                <div class="text-2xl font-bold text-green-600" id="totalValue">143</div>
+                                <div class="text-xs text-green-700">Total Nilai</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl text-center border border-purple-200">
+                                <div class="text-2xl font-bold text-purple-600" id="avgValue">35.8</div>
+                                <div class="text-xs text-purple-700">Rata-rata</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Preview Panel -->
+                <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-3xl mb-2">📊</div>
+                                <h4 class="text-xl font-bold mb-1">Preview Chart</h4>
+                                <p class="text-emerald-100 text-sm">Lihat hasil chart secara real-time</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full">
+                                <span class="text-sm font-medium" id="chartStatus">Ready</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Display -->
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-gray-50 to-emerald-50 p-6 rounded-xl border-2 border-emerald-200 relative overflow-hidden">
+                            <!-- Chart Loading Animation -->
+                            <div id="chartLoading" class="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center hidden">
+                                <div class="text-center">
+                                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+                                    <p class="text-emerald-600 font-medium">Memperbarui chart...</p>
+                                </div>
+                            </div>
+                            
+                            <canvas id="interactiveChart" width="400" height="300"></canvas>
+                        </div>
+
+                        <!-- Chart Info -->
+                        <div class="mt-6 bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-xl border border-emerald-200">
+                            <div class="flex items-center mb-4">
+                                <div class="text-2xl mr-3">💡</div>
+                                <h5 class="font-bold text-emerald-800">Tips & Panduan</h5>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                <div class="space-y-2">
+                                    <div class="flex items-start">
+                                        <span class="text-emerald-600 mr-2 mt-1">•</span>
+                                        <span class="text-emerald-700">Ubah jenis chart untuk melihat representasi berbeda</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-emerald-600 mr-2 mt-1">•</span>
+                                        <span class="text-emerald-700">Edit data langsung di tabel untuk update real-time</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex items-start">
+                                        <span class="text-emerald-600 mr-2 mt-1">•</span>
+                                        <span class="text-emerald-700">Aktifkan Auto Update untuk perubahan otomatis</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-emerald-600 mr-2 mt-1">•</span>
+                                        <span class="text-emerald-700">Tambah atau hapus data sesuai kebutuhan</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Showcase -->
+            <div class="mt-8 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
+                <div class="text-center mb-6">
+                    <div class="text-4xl mb-3">✨</div>
+                    <h3 class="text-2xl font-bold mb-2">Fitur Unggulan Chart Builder</h3>
+                    <p class="text-gray-300">Rasakan pengalaman membuat chart yang belum pernah ada sebelumnya</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm text-center hover:bg-opacity-20 transition-all transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">⚡</div>
+                        <h4 class="font-bold mb-2">Real-time Update</h4>
+                        <p class="text-sm text-gray-300">Perubahan data langsung terlihat di chart</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm text-center hover:bg-opacity-20 transition-all transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">🎨</div>
+                        <h4 class="font-bold mb-2">Visual Editor</h4>
+                        <p class="text-sm text-gray-300">Interface yang intuitif dan mudah digunakan</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm text-center hover:bg-opacity-20 transition-all transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">📊</div>
+                        <h4 class="font-bold mb-2">Multi Chart Type</h4>
+                        <p class="text-sm text-gray-300">4 jenis chart populer dalam satu tool</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm text-center hover:bg-opacity-20 transition-all transform hover:-translate-y-2">
+                        <div class="text-3xl mb-3">🔧</div>
+                        <h4 class="font-bold mb-2">Customizable</h4>
+                        <p class="text-sm text-gray-300">Sesuaikan judul, label, dan data sesuka hati</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kuis Section -->
+        <div id="kuis" class="content-section hidden">
+            <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    📝 <span class="ml-2">Kuis Pemahaman</span>
+                </h2>
+                
+                <!-- Quiz Header with Progress -->
+                <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white p-6 rounded-xl mb-6 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-white opacity-10 transform -skew-y-6"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">🧠</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold">Test Pemahaman Excel Chart</h3>
+                                    <p class="text-indigo-100 text-sm">Uji kemampuan Anda dengan 10 soal pilihan ganda</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full">
+                                    <span class="text-sm font-medium">Soal <span id="currentQuestion">1</span> dari 10</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Progress</span>
+                                <span id="progressPercent">10%</span>
+                            </div>
+                            <div class="w-full bg-white bg-opacity-20 rounded-full h-3">
+                                <div id="progressBar" class="bg-white h-3 rounded-full transition-all duration-500 ease-out" style="width: 10%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="bg-white bg-opacity-15 rounded-lg p-3">
+                                <div class="text-2xl font-bold" id="quizScore">0</div>
+                                <div class="text-xs text-indigo-100">Skor Benar</div>
+                            </div>
+                            <div class="bg-white bg-opacity-15 rounded-lg p-3">
+                                <div class="text-2xl font-bold" id="timeSpent">0:00</div>
+                                <div class="text-xs text-indigo-100">Waktu</div>
+                            </div>
+                            <div class="bg-white bg-opacity-15 rounded-lg p-3">
+                                <div class="text-2xl font-bold" id="accuracy">0%</div>
+                                <div class="text-xs text-indigo-100">Akurasi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quizArea">
+                    <!-- Question Card -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 mb-6 quiz-question-card">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">
+                                <span id="questionNumber">1</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-lg font-semibold text-gray-800 leading-relaxed" id="questionText"></h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Options Container -->
+                    <div id="optionsContainer" class="space-y-4 mb-8"></div>
+                    
+                    <!-- Answer Feedback -->
+                    <div id="answerFeedback" class="hidden mb-6"></div>
+                    
+                    <!-- Navigation -->
+                    <div class="flex justify-between items-center">
+                        <button id="prevQuizBtn" class="flex items-center space-x-2 bg-gray-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-600 transition-all transform hover:scale-105 disabled:opacity-50 disabled:transform-none" disabled>
+                            <span>←</span>
+                            <span>Sebelumnya</span>
+                        </button>
+                        
+                        <div class="flex space-x-2">
+                            <div id="questionDots" class="flex space-x-2"></div>
+                        </div>
+                        
+                        <button id="nextQuizBtn" class="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105">
+                            <span>Selanjutnya</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Complete -->
+                <div id="quizComplete" class="hidden text-center">
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-8 relative overflow-hidden">
+                        <!-- Decorative elements -->
+                        <div class="absolute top-0 left-0 w-20 h-20 bg-green-200 rounded-full -translate-x-10 -translate-y-10 opacity-50"></div>
+                        <div class="absolute bottom-0 right-0 w-32 h-32 bg-emerald-200 rounded-full translate-x-16 translate-y-16 opacity-30"></div>
+                        
+                        <div class="relative z-10">
+                            <!-- Animated Trophy -->
+                            <div class="text-8xl mb-4 animate-bounce">🏆</div>
+                            
+                            <h3 class="text-3xl font-bold text-green-800 mb-2">Selamat!</h3>
+                            <p class="text-lg text-gray-700 mb-6">Anda telah menyelesaikan kuis Excel Chart</p>
+                            
+                            <!-- Score Display -->
+                            <div class="bg-white rounded-xl p-6 mb-6 shadow-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-green-600" id="finalScore">0</div>
+                                        <div class="text-sm text-gray-600">Jawaban Benar</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-blue-600" id="finalAccuracy">0%</div>
+                                        <div class="text-sm text-gray-600">Tingkat Akurasi</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-purple-600" id="finalTime">0:00</div>
+                                        <div class="text-sm text-gray-600">Total Waktu</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Badge -->
+                            <div id="performanceBadge" class="mb-6"></div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button id="restartQuizBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105">
+                                    🔄 Ulangi Kuis
+                                </button>
+                                <button id="reviewAnswersBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105">
+                                    📋 Review Jawaban
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tugas Section -->
+        <div id="tugas" class="content-section hidden">
+            <div class="bg-white rounded-xl card-shadow p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    📋 <span class="ml-2">Studi Kasus</span>
+                </h2>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-6 rounded-xl mb-6">
+                    <h3 class="text-xl font-bold mb-2">🏢 Analisis Penjualan Toko Online</h3>
+                    <p>Praktikkan pembuatan chart berdasarkan data penjualan berikut</p>
+                </div>
+
+                <!-- Data Table -->
+                <div class="mb-8">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">📊 Data Penjualan (Januari - Juni 2024)</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 rounded-lg">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Bulan</th>
+                                    <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Elektronik</th>
+                                    <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Fashion</th>
+                                    <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Makanan</th>
+                                    <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-3">Januari</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 45.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 32.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 18.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3 font-semibold">Rp 95.000.000</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-3">Februari</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 52.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 38.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 22.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3 font-semibold">Rp 112.000.000</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-3">Maret</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 48.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 42.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 25.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3 font-semibold">Rp 115.000.000</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-3">April</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 55.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 45.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 28.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3 font-semibold">Rp 128.000.000</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-3">Mei</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 62.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 48.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 30.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3 font-semibold">Rp 140.000.000</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-3">Juni</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 58.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 52.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3">Rp 35.000.000</td>
+                                    <td class="border border-gray-300 px-4 py-3 font-semibold">Rp 145.000.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Assignment Tasks -->
+                <div class="space-y-6">
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
+                        <h4 class="font-semibold text-blue-800 mb-3">📈 Tugas 1: Line Chart</h4>
+                        <p class="text-gray-700 mb-3">Buat line chart untuk menunjukkan tren total penjualan dari Januari hingga Juni 2024.</p>
+                        
+                        <!-- Example Chart -->
+                        <div class="bg-white p-4 rounded border mb-4">
+                            <h5 class="font-medium text-gray-700 mb-2">Contoh hasil yang diharapkan:</h5>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <canvas id="assignmentLineChart" width="400" height="250"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded border">
+                            <strong>Langkah-langkah:</strong>
+                            <ol class="list-decimal list-inside mt-2 space-y-1 text-sm">
+                                <li>Pilih data bulan dan total penjualan</li>
+                                <li>Insert → Charts → Line Chart</li>
+                                <li>Tambahkan judul "Tren Penjualan Bulanan 2024"</li>
+                                <li>Beri label sumbu X: "Bulan" dan sumbu Y: "Penjualan (Rupiah)"</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg">
+                        <h4 class="font-semibold text-green-800 mb-3">📊 Tugas 2: Column Chart</h4>
+                        <p class="text-gray-700 mb-3">Buat column chart untuk membandingkan penjualan per kategori di bulan Juni 2024.</p>
+                        
+                        <!-- Example Chart -->
+                        <div class="bg-white p-4 rounded border mb-4">
+                            <h5 class="font-medium text-gray-700 mb-2">Contoh hasil yang diharapkan:</h5>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <canvas id="assignmentColumnChart" width="400" height="250"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded border">
+                            <strong>Langkah-langkah:</strong>
+                            <ol class="list-decimal list-inside mt-2 space-y-1 text-sm">
+                                <li>Pilih data kategori dan penjualan Juni</li>
+                                <li>Insert → Charts → Column Chart</li>
+                                <li>Tambahkan judul "Penjualan per Kategori - Juni 2024"</li>
+                                <li>Gunakan warna yang berbeda untuk setiap kategori</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-50 border-l-4 border-purple-400 p-6 rounded-r-lg">
+                        <h4 class="font-semibold text-purple-800 mb-3">🥧 Tugas 3: Pie Chart</h4>
+                        <p class="text-gray-700 mb-3">Buat pie chart untuk menunjukkan proporsi total penjualan per kategori selama 6 bulan.</p>
+                        
+                        <!-- Example Chart -->
+                        <div class="bg-white p-4 rounded border mb-4">
+                            <h5 class="font-medium text-gray-700 mb-2">Contoh hasil yang diharapkan:</h5>
+                            <div class="bg-gray-50 p-3 rounded flex justify-center">
+                                <canvas id="assignmentPieChart" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded border">
+                            <strong>Langkah-langkah:</strong>
+                            <ol class="list-decimal list-inside mt-2 space-y-1 text-sm">
+                                <li>Hitung total penjualan per kategori (Jan-Jun)</li>
+                                <li>Insert → Charts → Pie Chart</li>
+                                <li>Tambahkan judul "Komposisi Penjualan per Kategori"</li>
+                                <li>Tampilkan persentase pada setiap slice</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="bg-orange-50 border-l-4 border-orange-400 p-6 rounded-r-lg">
+                        <h4 class="font-semibold text-orange-800 mb-3">📋 Tugas 4: Analisis</h4>
+                        <p class="text-gray-700 mb-3">Berdasarkan chart yang telah dibuat, jawab pertanyaan berikut:</p>
+                        <div class="bg-white p-4 rounded border">
+                            <ol class="list-decimal list-inside space-y-2 text-sm">
+                                <li>Kategori mana yang memiliki penjualan tertinggi secara keseluruhan?</li>
+                                <li>Pada bulan apa terjadi peningkatan penjualan paling signifikan?</li>
+                                <li>Berapa persentase kontribusi kategori Fashion terhadap total penjualan?</li>
+                                <li>Apakah ada tren penurunan pada kategori tertentu?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submission Area -->
+                <div class="mt-8 bg-gray-50 p-6 rounded-xl">
+                    <h4 class="font-semibold text-gray-800 mb-4">📤 Area Pengumpulan</h4>
+                    <p class="text-gray-600 mb-4">Setelah menyelesaikan semua tugas di Excel, dokumentasikan hasil Anda:</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Screenshot Chart yang dibuat:</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                                <div class="text-gray-400 text-4xl mb-2">📷</div>
+                                <p class="text-gray-500">Upload screenshot chart Anda di sini</p>
+                                <p class="text-xs text-gray-400 mt-1">(Dalam implementasi nyata, ini akan menjadi file upload)</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jawaban Analisis:</label>
+                            <textarea class="w-full p-3 border border-gray-300 rounded-lg" rows="6" placeholder="Tuliskan jawaban analisis Anda di sini..."></textarea>
+                        </div>
+                        <button class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                            Kumpulkan Tugas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <button class="nav-btn flex flex-col items-center p-2 rounded-lg transition-all active-nav" data-section="materi">
+                <span class="text-xl mb-1">📚</span>
+                <span class="text-xs font-medium text-white">Materi</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center p-2 rounded-lg transition-all" data-section="mencoba">
+                <span class="text-xl mb-1">🎮</span>
+                <span class="text-xs font-medium text-gray-600">Mencoba</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center p-2 rounded-lg transition-all" data-section="kuis">
+                <span class="text-xl mb-1">📝</span>
+                <span class="text-xs font-medium text-gray-600">Kuis</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center p-2 rounded-lg transition-all" data-section="tugas">
+                <span class="text-xl mb-1">📋</span>
+                <span class="text-xs font-medium text-gray-600">Tugas</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // Navigation functionality
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetSection = btn.dataset.section;
+                
+                // Update navigation active state
+                navBtns.forEach(navBtn => {
+                    navBtn.classList.remove('active-nav');
+                    navBtn.querySelector('span:last-child').classList.remove('text-white');
+                    navBtn.querySelector('span:last-child').classList.add('text-gray-600');
+                });
+                
+                btn.classList.add('active-nav');
+                btn.querySelector('span:last-child').classList.remove('text-gray-600');
+                btn.querySelector('span:last-child').classList.add('text-white');
+                
+                // Show target section
+                contentSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById(targetSection).classList.remove('hidden');
+                
+                // Initialize charts when materi section is shown
+                if (targetSection === 'materi') {
+                    setTimeout(initCharts, 100);
+                }
+                
+                // Initialize interactive chart when mencoba section is shown
+                if (targetSection === 'mencoba') {
+                    setTimeout(initInteractiveChart, 100);
+                }
+                
+                // Initialize quiz when kuis section is shown
+                if (targetSection === 'kuis') {
+                    setTimeout(initQuiz, 100);
+                }
+                
+                // Initialize assignment charts when tugas section is shown
+                if (targetSection === 'tugas') {
+                    setTimeout(initAssignmentCharts, 100);
+                }
+            });
+        });
+
+        // Initialize charts for materi section
+        function initCharts() {
+            // Column Chart
+            const columnCtx = document.getElementById('columnChart');
+            if (columnCtx) {
+                new Chart(columnCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                        datasets: [{
+                            label: 'Penjualan (Juta Rp)',
+                            data: [95, 112, 115, 128, 140, 145],
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            // Line Chart
+            const lineCtx = document.getElementById('lineChart');
+            if (lineCtx) {
+                new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                        datasets: [{
+                            label: 'Tren Penjualan',
+                            data: [95, 112, 115, 128, 140, 145],
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart');
+            if (pieCtx) {
+                new Chart(pieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Elektronik', 'Fashion', 'Makanan'],
+                        datasets: [{
+                            data: [320, 257, 158],
+                            backgroundColor: [
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(139, 92, 246, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            // Bar Chart
+            const barCtx = document.getElementById('barChart');
+            if (barCtx) {
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jakarta', 'Surabaya', 'Bandung', 'Medan'],
+                        datasets: [{
+                            label: 'Penjualan per Wilayah',
+                            data: [250, 180, 150, 120],
+                            backgroundColor: 'rgba(168, 85, 247, 0.8)',
+                            borderColor: 'rgba(168, 85, 247, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Interactive Chart Builder functionality
+        let interactiveChart = null;
+        let autoUpdate = false;
+
+        function initInteractiveChart() {
+            const ctx = document.getElementById('interactiveChart');
+            if (ctx) {
+                updateInteractiveChart();
+            }
+        }
+
+        function getTableData() {
+            const rows = document.querySelectorAll('#dataTableBody tr');
+            const labels = [];
+            const data = [];
+            
+            rows.forEach(row => {
+                const labelInput = row.querySelector('.label-input');
+                const valueInput = row.querySelector('.value-input');
+                if (labelInput && valueInput && labelInput.value.trim() && valueInput.value) {
+                    labels.push(labelInput.value.trim());
+                    data.push(parseFloat(valueInput.value) || 0);
+                }
+            });
+            
+            return { labels, data };
+        }
+
+        function updateInteractiveChart() {
+            const ctx = document.getElementById('interactiveChart');
+            if (!ctx) return;
+
+            // Show loading animation
+            showChartLoading();
+
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                const { labels, data } = getTableData();
+                const chartType = document.getElementById('chartTypeSelect').value;
+                const title = document.getElementById('chartTitle').value;
+                const yAxisLabel = document.getElementById('yAxisLabel').value;
+
+                // Destroy existing chart
+                if (interactiveChart) {
+                    interactiveChart.destroy();
+                }
+
+                // Create new chart with enhanced styling
+                const config = {
+                    type: chartType === 'horizontalBar' ? 'bar' : chartType,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: yAxisLabel,
+                            data: data,
+                            backgroundColor: chartType === 'pie' ? [
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(236, 72, 153, 0.8)',
+                                'rgba(168, 85, 247, 0.8)',
+                                'rgba(34, 197, 94, 0.8)'
+                            ] : chartType === 'line' ? 'rgba(16, 185, 129, 0.2)' : [
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(236, 72, 153, 0.8)',
+                                'rgba(168, 85, 247, 0.8)',
+                                'rgba(34, 197, 94, 0.8)'
+                            ],
+                            borderColor: chartType === 'pie' ? [
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(139, 92, 246, 1)',
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(236, 72, 153, 1)',
+                                'rgba(168, 85, 247, 1)',
+                                'rgba(34, 197, 94, 1)'
+                            ] : chartType === 'line' ? 'rgba(16, 185, 129, 1)' : [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(139, 92, 246, 1)',
+                                'rgba(236, 72, 153, 1)',
+                                'rgba(168, 85, 247, 1)',
+                                'rgba(34, 197, 94, 1)'
+                            ],
+                            borderWidth: chartType === 'line' ? 3 : 2,
+                            tension: chartType === 'line' ? 0.4 : 0,
+                            pointBackgroundColor: chartType === 'line' ? 'rgba(16, 185, 129, 1)' : undefined,
+                            pointBorderColor: chartType === 'line' ? '#ffffff' : undefined,
+                            pointBorderWidth: chartType === 'line' ? 2 : undefined,
+                            pointRadius: chartType === 'line' ? 6 : undefined,
+                            pointHoverRadius: chartType === 'line' ? 8 : undefined
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: title,
+                                font: { size: 18, weight: 'bold' },
+                                color: '#374151',
+                                padding: 20
+                            },
+                            legend: {
+                                display: chartType === 'pie',
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    font: { size: 12, weight: '500' }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                borderColor: 'rgba(255, 255, 255, 0.2)',
+                                borderWidth: 1,
+                                cornerRadius: 8,
+                                displayColors: true
+                            }
+                        },
+                        scales: chartType === 'pie' ? {} : {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Kategori',
+                                    font: { size: 14, weight: 'bold' },
+                                    color: '#374151'
+                                },
+                                grid: {
+                                    color: 'rgba(156, 163, 175, 0.2)'
+                                },
+                                ticks: {
+                                    font: { size: 12 },
+                                    color: '#6B7280'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: yAxisLabel,
+                                    font: { size: 14, weight: 'bold' },
+                                    color: '#374151'
+                                },
+                                grid: {
+                                    color: 'rgba(156, 163, 175, 0.2)'
+                                },
+                                ticks: {
+                                    font: { size: 12 },
+                                    color: '#6B7280'
+                                }
+                            }
+                        }
+                    }
+                };
+
+                if (chartType === 'horizontalBar') {
+                    config.options.indexAxis = 'y';
+                }
+
+                interactiveChart = new Chart(ctx, config);
+                
+                // Update statistics
+                updateDataStatistics();
+                
+                // Hide loading animation
+                hideChartLoading();
+            }, 500);
+        }
+
+        function addTableRow() {
+            const tbody = document.getElementById('dataTableBody');
+            const newRow = document.createElement('tr');
+            newRow.className = 'hover:bg-indigo-50 transition-colors';
+            newRow.innerHTML = `
+                <td class="px-4 py-3 border-t border-indigo-200">
+                    <input type="text" value="Item Baru" class="w-full p-2 border-2 border-indigo-300 rounded-lg label-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                </td>
+                <td class="px-4 py-3 border-t border-indigo-200">
+                    <input type="number" value="0" class="w-full p-2 border-2 border-indigo-300 rounded-lg value-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                </td>
+                <td class="px-4 py-3 border-t border-indigo-200 text-center">
+                    <button class="delete-row bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all transform hover:scale-110 font-bold">❌</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+            
+            // Add event listeners to new inputs
+            addInputEventListeners(newRow);
+            
+            // Update statistics
+            updateDataStatistics();
+            
+            if (autoUpdate) {
+                updateInteractiveChart();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua data?')) {
+                const tbody = document.getElementById('dataTableBody');
+                tbody.innerHTML = `
+                    <tr class="hover:bg-indigo-50 transition-colors">
+                        <td class="px-4 py-3 border-t border-indigo-200">
+                            <input type="text" value="Item 1" class="w-full p-2 border-2 border-indigo-300 rounded-lg label-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                        </td>
+                        <td class="px-4 py-3 border-t border-indigo-200">
+                            <input type="number" value="10" class="w-full p-2 border-2 border-indigo-300 rounded-lg value-input focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium">
+                        </td>
+                        <td class="px-4 py-3 border-t border-indigo-200 text-center">
+                            <button class="delete-row bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all transform hover:scale-110 font-bold">❌</button>
+                        </td>
+                    </tr>
+                `;
+                
+                // Re-add event listeners
+                addInputEventListeners();
+                updateDataStatistics();
+                
+                if (autoUpdate) {
+                    updateInteractiveChart();
+                }
+            }
+        }
+
+        function updateDataStatistics() {
+            const { labels, data } = getTableData();
+            const totalItems = labels.length;
+            const totalValue = data.reduce((sum, val) => sum + val, 0);
+            const avgValue = totalItems > 0 ? (totalValue / totalItems).toFixed(1) : 0;
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalValue').textContent = totalValue;
+            document.getElementById('avgValue').textContent = avgValue;
+            document.getElementById('dataCount').textContent = `${totalItems} Items`;
+        }
+
+        function showChartLoading() {
+            document.getElementById('chartLoading').classList.remove('hidden');
+            document.getElementById('chartStatus').textContent = 'Updating...';
+        }
+
+        function hideChartLoading() {
+            document.getElementById('chartLoading').classList.add('hidden');
+            document.getElementById('chartStatus').textContent = 'Ready';
+        }
+
+        function deleteTableRow(button) {
+            const row = button.closest('tr');
+            if (document.querySelectorAll('#dataTableBody tr').length > 1) {
+                row.remove();
+                if (autoUpdate) {
+                    updateInteractiveChart();
+                }
+            } else {
+                alert('Minimal harus ada satu data!');
+            }
+        }
+
+        function toggleAutoUpdate() {
+            autoUpdate = !autoUpdate;
+            const btn = document.getElementById('autoUpdateBtn');
+            btn.textContent = autoUpdate ? '🔄 Auto Update: ON' : '🔄 Auto Update: OFF';
+            btn.classList.toggle('bg-green-600', autoUpdate);
+            btn.classList.toggle('hover:bg-green-700', autoUpdate);
+            btn.classList.toggle('bg-purple-600', !autoUpdate);
+            btn.classList.toggle('hover:bg-purple-700', !autoUpdate);
+        }
+
+        function addInputEventListeners(container = document) {
+            // Add event listeners for auto-update
+            const inputs = container.querySelectorAll('.label-input, .value-input');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (autoUpdate) {
+                        updateInteractiveChart();
+                    }
+                });
+            });
+
+            // Add event listeners for delete buttons
+            const deleteButtons = container.querySelectorAll('.delete-row');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', () => deleteTableRow(button));
+            });
+        }
+
+        // Event listeners for interactive chart
+        document.getElementById('updateChartBtn').addEventListener('click', updateInteractiveChart);
+        document.getElementById('addRowBtn').addEventListener('click', addTableRow);
+        document.getElementById('autoUpdateBtn').addEventListener('click', toggleAutoUpdate);
+        document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+        document.getElementById('chartTypeSelect').addEventListener('change', () => {
+            if (autoUpdate) updateInteractiveChart();
+        });
+        document.getElementById('chartTitle').addEventListener('input', () => {
+            if (autoUpdate) updateInteractiveChart();
+        });
+        document.getElementById('yAxisLabel').addEventListener('input', () => {
+            if (autoUpdate) updateInteractiveChart();
+        });
+
+        // Initialize input event listeners and statistics
+        addInputEventListeners();
+        updateDataStatistics();
+
+        // Quiz functionality
+        const quizQuestions = [
+            {
+                question: "Jenis chart manakah yang paling cocok untuk menunjukkan tren penjualan dari waktu ke waktu?",
+                options: ["Column Chart", "Line Chart", "Pie Chart", "Bar Chart", "Scatter Plot"],
+                correct: 1,
+                explanation: "Line Chart ideal untuk menunjukkan perubahan data dari waktu ke waktu karena garis dapat menampilkan tren naik atau turun dengan jelas."
+            },
+            {
+                question: "Kapan sebaiknya menggunakan Pie Chart dalam presentasi data?",
+                options: ["Membandingkan nilai antar kategori", "Menunjukkan proporsi dari keseluruhan", "Menampilkan tren waktu", "Membandingkan data bertingkat", "Menunjukkan korelasi data"],
+                correct: 1,
+                explanation: "Pie Chart digunakan untuk menunjukkan bagian-bagian dari keseluruhan dalam bentuk persentase atau proporsi."
+            },
+            {
+                question: "Apa keuntungan utama menggunakan chart dibandingkan dengan tabel data mentah?",
+                options: ["Lebih akurat dalam perhitungan", "Lebih mudah dipahami secara visual", "Menghemat ruang penyimpanan", "Lebih detail informasinya", "Lebih cepat dibuat"],
+                correct: 1,
+                explanation: "Chart memvisualisasikan data sehingga pola, tren, dan perbandingan lebih mudah dipahami secara visual dibandingkan angka-angka dalam tabel."
+            },
+            {
+                question: "Jenis chart mana yang paling cocok untuk membandingkan data dengan label kategori yang sangat panjang?",
+                options: ["Column Chart", "Line Chart", "Pie Chart", "Bar Chart (Horizontal)", "Area Chart"],
+                correct: 3,
+                explanation: "Bar Chart dengan orientasi horizontal cocok untuk label yang panjang karena memberikan ruang horizontal yang cukup untuk teks."
+            },
+            {
+                question: "Dalam Excel, bagaimana cara terbaik untuk membuat chart yang mudah dibaca dan profesional?",
+                options: ["Menggunakan warna sebanyak mungkin", "Menambahkan judul dan label sumbu yang jelas", "Membuat chart sekecil mungkin", "Menghilangkan semua gridlines", "Menggunakan efek 3D pada semua chart"],
+                correct: 1,
+                explanation: "Judul yang deskriptif dan label sumbu yang jelas membantu pembaca memahami informasi dalam chart dengan mudah."
+            },
+            {
+                question: "Mengapa dalam membuat chart, skala sumbu Y sebaiknya dimulai dari angka 0?",
+                options: ["Untuk menghemat ruang chart", "Untuk akurasi visual dan mencegah misleading", "Untuk mempercepat proses pembuatan", "Tidak ada alasan khusus", "Untuk membuat chart terlihat lebih menarik"],
+                correct: 1,
+                explanation: "Memulai skala dari 0 mencegah distorsi visual dan memberikan representasi data yang akurat, menghindari interpretasi yang menyesatkan."
+            },
+            {
+                question: "Chart mana yang paling efektif untuk menunjukkan komposisi anggaran perusahaan berdasarkan departemen?",
+                options: ["Line Chart", "Column Chart", "Pie Chart", "Scatter Plot", "Histogram"],
+                correct: 2,
+                explanation: "Pie Chart ideal untuk menunjukkan komposisi atau proporsi bagian dari keseluruhan anggaran, memudahkan melihat kontribusi setiap departemen."
+            },
+            {
+                question: "Apa fungsi utama dari legend (keterangan) dalam sebuah chart Excel?",
+                options: ["Membuat chart terlihat lebih menarik", "Menjelaskan arti warna, simbol, atau pola", "Menghemat ruang dalam chart", "Menambah detail numerik", "Mempercepat loading chart"],
+                correct: 1,
+                explanation: "Legend menjelaskan arti dari warna, simbol, atau pola yang digunakan dalam chart, membantu pembaca memahami data series yang berbeda."
+            },
+            {
+                question: "Dalam situasi apa Column Chart menjadi pilihan terbaik untuk visualisasi data?",
+                options: ["Menunjukkan tren perubahan waktu", "Membandingkan nilai diskrit antar kategori", "Menampilkan proporsi keseluruhan", "Menunjukkan korelasi dua variabel", "Menampilkan distribusi frekuensi"],
+                correct: 1,
+                explanation: "Column Chart sangat efektif untuk membandingkan nilai atau jumlah antar kategori yang berbeda secara side-by-side."
+            },
+            {
+                question: "Prinsip mana yang paling penting dalam memilih skema warna untuk chart Excel?",
+                options: ["Menggunakan warna primer saja", "Memilih warna yang kontras dan mudah dibedakan", "Selalu menggunakan warna merah untuk data negatif", "Warna tidak mempengaruhi interpretasi", "Menggunakan gradasi warna yang sama"],
+                correct: 1,
+                explanation: "Warna yang kontras dan mudah dibedakan membantu pembaca memahami data dengan lebih baik, terutama untuk orang dengan gangguan penglihatan warna."
+            }
+        ];
+
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+        let userAnswers = [];
+        let quizStartTime = null;
+        let quizTimer = null;
+
+        function initQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            userAnswers = [];
+            quizStartTime = Date.now();
+            
+            // Reset displays
+            document.getElementById('quizScore').textContent = quizScore;
+            document.getElementById('currentQuestion').textContent = 1;
+            document.getElementById('timeSpent').textContent = '0:00';
+            document.getElementById('accuracy').textContent = '0%';
+            document.getElementById('progressBar').style.width = '10%';
+            document.getElementById('progressPercent').textContent = '10%';
+            
+            document.getElementById('quizComplete').classList.add('hidden');
+            document.getElementById('quizArea').classList.remove('hidden');
+            
+            // Start timer
+            startQuizTimer();
+            showQuizQuestion();
+        }
+
+        function startQuizTimer() {
+            if (quizTimer) clearInterval(quizTimer);
+            
+            quizTimer = setInterval(() => {
+                if (quizStartTime) {
+                    const elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('timeSpent').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function stopQuizTimer() {
+            if (quizTimer) {
+                clearInterval(quizTimer);
+                quizTimer = null;
+            }
+        }
+
+        function getPerformanceBadge(score, totalTime) {
+            const percentage = (score / quizQuestions.length) * 100;
+            const avgTimePerQuestion = totalTime / quizQuestions.length;
+            
+            let badge = '';
+            let badgeClass = '';
+            
+            if (percentage >= 90 && avgTimePerQuestion <= 30) {
+                badge = '🏆 Excel Chart Master!';
+                badgeClass = 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white';
+            } else if (percentage >= 80) {
+                badge = '🥇 Chart Expert!';
+                badgeClass = 'bg-gradient-to-r from-green-400 to-blue-500 text-white';
+            } else if (percentage >= 70) {
+                badge = '🥈 Chart Specialist!';
+                badgeClass = 'bg-gradient-to-r from-blue-400 to-purple-500 text-white';
+            } else if (percentage >= 60) {
+                badge = '🥉 Chart Learner!';
+                badgeClass = 'bg-gradient-to-r from-purple-400 to-pink-500 text-white';
+            } else {
+                badge = '📚 Keep Learning!';
+                badgeClass = 'bg-gradient-to-r from-gray-400 to-gray-600 text-white';
+            }
+            
+            return `<div class="${badgeClass} px-6 py-3 rounded-full font-bold text-lg">${badge}</div>`;
+        }
+
+        function showQuizQuestion() {
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = currentQuizQuestion + 1;
+            document.getElementById('questionNumber').textContent = currentQuizQuestion + 1;
+            
+            // Update progress
+            const progress = ((currentQuizQuestion + 1) / quizQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+            
+            // Update accuracy
+            const answeredQuestions = userAnswers.filter(answer => answer !== undefined).length;
+            const accuracy = answeredQuestions > 0 ? Math.round((quizScore / answeredQuestions) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option bg-white border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 transition-all transform hover:scale-102 hover:shadow-md';
+                optionDiv.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 border-2 border-gray-300 rounded-full flex items-center justify-center font-bold text-sm bg-gray-50 option-circle">
+                            ${String.fromCharCode(65 + index)}
+                        </div>
+                        <span class="text-gray-700 flex-1 leading-relaxed">${option}</span>
+                        <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center option-check">
+                            <div class="w-3 h-3 bg-indigo-600 rounded-full hidden option-selected"></div>
+                        </div>
+                    </div>
+                `;
+                
+                optionDiv.addEventListener('click', () => selectQuizOption(index));
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Create question dots
+            updateQuestionDots();
+
+            // Update navigation buttons
+            document.getElementById('prevQuizBtn').disabled = currentQuizQuestion === 0;
+            const nextBtn = document.getElementById('nextQuizBtn');
+            if (currentQuizQuestion === quizQuestions.length - 1) {
+                nextBtn.innerHTML = '<span>Selesai</span><span>🏁</span>';
+            } else {
+                nextBtn.innerHTML = '<span>Selanjutnya</span><span>→</span>';
+            }
+            
+            // Show previous answer if exists
+            if (userAnswers[currentQuizQuestion] !== undefined) {
+                selectQuizOption(userAnswers[currentQuizQuestion], false);
+            }
+        }
+
+        function updateQuestionDots() {
+            const dotsContainer = document.getElementById('questionDots');
+            dotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < quizQuestions.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'w-3 h-3 rounded-full transition-all cursor-pointer';
+                
+                if (i === currentQuizQuestion) {
+                    dot.className += ' bg-indigo-600 scale-125';
+                } else if (userAnswers[i] !== undefined) {
+                    dot.className += ' bg-green-500';
+                } else {
+                    dot.className += ' bg-gray-300';
+                }
+                
+                dot.addEventListener('click', () => {
+                    currentQuizQuestion = i;
+                    showQuizQuestion();
+                });
+                
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function selectQuizOption(selectedIndex, updateAnswer = true) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach((option, index) => {
+                const selected = option.querySelector('.option-selected');
+                const circle = option.querySelector('.option-circle');
+                const check = option.querySelector('.option-check');
+                
+                if (index === selectedIndex) {
+                    option.classList.add('border-indigo-500', 'bg-indigo-50', 'shadow-md');
+                    option.classList.remove('border-gray-200');
+                    selected.classList.remove('hidden');
+                    circle.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+                    circle.classList.remove('bg-gray-50', 'border-gray-300');
+                    check.classList.add('border-indigo-500');
+                    check.classList.remove('border-gray-300');
+                } else {
+                    option.classList.remove('border-indigo-500', 'bg-indigo-50', 'shadow-md');
+                    option.classList.add('border-gray-200');
+                    selected.classList.add('hidden');
+                    circle.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+                    circle.classList.add('bg-gray-50', 'border-gray-300');
+                    check.classList.remove('border-indigo-500');
+                    check.classList.add('border-gray-300');
+                }
+            });
+            
+            if (updateAnswer) {
+                userAnswers[currentQuizQuestion] = selectedIndex;
+                updateQuestionDots();
+            }
+        }
+
+        function nextQuizQuestion() {
+            if (userAnswers[currentQuizQuestion] === undefined) {
+                alert('Silakan pilih jawaban terlebih dahulu!');
+                return;
+            }
+            
+            if (currentQuizQuestion === quizQuestions.length - 1) {
+                finishQuiz();
+            } else {
+                currentQuizQuestion++;
+                showQuizQuestion();
+            }
+        }
+
+        function prevQuizQuestion() {
+            if (currentQuizQuestion > 0) {
+                currentQuizQuestion--;
+                showQuizQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            stopQuizTimer();
+            
+            // Calculate score
+            quizScore = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === quizQuestions[index].correct) {
+                    quizScore++;
+                }
+            });
+            
+            const totalTime = Math.floor((Date.now() - quizStartTime) / 1000);
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const accuracy = Math.round((quizScore / quizQuestions.length) * 100);
+            
+            // Update final displays
+            document.getElementById('finalScore').textContent = `${quizScore}/10`;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('finalTime').textContent = timeString;
+            
+            // Show performance badge
+            document.getElementById('performanceBadge').innerHTML = getPerformanceBadge(quizScore, totalTime);
+            
+            document.getElementById('quizArea').classList.add('hidden');
+            document.getElementById('quizComplete').classList.remove('hidden');
+        }
+
+        function showReviewAnswers() {
+            document.getElementById('quizComplete').classList.add('hidden');
+            document.getElementById('quizArea').classList.remove('hidden');
+            
+            // Show all questions with answers
+            currentQuizQuestion = 0;
+            showQuizQuestion();
+            
+            // Disable navigation and show all answers
+            document.getElementById('nextQuizBtn').style.display = 'none';
+            document.getElementById('prevQuizBtn').style.display = 'none';
+            
+            // Show review mode indicator
+            const questionCard = document.querySelector('.quiz-question-card');
+            questionCard.insertAdjacentHTML('afterbegin', 
+                '<div class="bg-blue-100 border border-blue-300 rounded-lg p-3 mb-4 text-center">' +
+                '<span class="text-blue-800 font-semibold">📋 Mode Review - Lihat semua jawaban Anda</span>' +
+                '</div>'
+            );
+        }
+
+        // Event listeners for quiz
+        document.getElementById('nextQuizBtn').addEventListener('click', nextQuizQuestion);
+        document.getElementById('prevQuizBtn').addEventListener('click', prevQuizQuestion);
+        document.getElementById('restartQuizBtn').addEventListener('click', initQuiz);
+        document.getElementById('reviewAnswersBtn').addEventListener('click', showReviewAnswers);
+
+        // Initialize assignment charts
+        function initAssignmentCharts() {
+            // Assignment Line Chart - Total Sales Trend
+            const assignmentLineCtx = document.getElementById('assignmentLineChart');
+            if (assignmentLineCtx) {
+                new Chart(assignmentLineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
+                        datasets: [{
+                            label: 'Total Penjualan (Juta Rp)',
+                            data: [95, 112, 115, 128, 140, 145],
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Tren Penjualan Bulanan 2024',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Bulan',
+                                    font: { weight: 'bold' }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Penjualan (Juta Rupiah)',
+                                    font: { weight: 'bold' }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Assignment Column Chart - June Sales by Category
+            const assignmentColumnCtx = document.getElementById('assignmentColumnChart');
+            if (assignmentColumnCtx) {
+                new Chart(assignmentColumnCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Elektronik', 'Fashion', 'Makanan'],
+                        datasets: [{
+                            label: 'Penjualan Juni 2024 (Juta Rp)',
+                            data: [58, 52, 35],
+                            backgroundColor: [
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(34, 197, 94, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(34, 197, 94, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Penjualan per Kategori - Juni 2024',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Kategori Produk',
+                                    font: { weight: 'bold' }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Penjualan (Juta Rupiah)',
+                                    font: { weight: 'bold' }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Assignment Pie Chart - Total Sales Composition
+            const assignmentPieCtx = document.getElementById('assignmentPieChart');
+            if (assignmentPieCtx) {
+                // Calculate totals: Elektronik: 320, Fashion: 257, Makanan: 158
+                new Chart(assignmentPieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Elektronik', 'Fashion', 'Makanan'],
+                        datasets: [{
+                            data: [320, 257, 158],
+                            backgroundColor: [
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(34, 197, 94, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(34, 197, 94, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Komposisi Penjualan per Kategori (Jan-Jun 2024)',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                        return context.label + ': ' + context.parsed + ' Juta Rp (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize charts on page load
+        setTimeout(initCharts, 500);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97575fd3b6d58365',t:'MTc1NjI1MzcyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
