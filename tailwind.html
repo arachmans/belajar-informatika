@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Tailwind CSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E40AF',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary to-secondary text-white p-6 shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-2xl font-bold mb-2">🎨 Belajar Tailwind CSS</h1>
+            <p class="text-blue-100">Pelajari cara membangun halaman web cantik dengan mudah</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-6">
+        <!-- Materi Section -->
+        <section id="materi" class="space-y-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    📚 Materi Pembelajaran
+                </h2>
+
+                <!-- Kenapa Tailwind CSS -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">🤔 Mengapa Menggunakan Tailwind CSS?</h3>
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Tailwind CSS adalah framework CSS utility-first yang memungkinkan kita membangun desain custom dengan cepat. 
+                            Berbeda dengan framework lain seperti Bootstrap, Tailwind memberikan class-class kecil yang bisa dikombinasikan untuk membuat desain apapun.
+                        </p>
+                        <div class="bg-white p-4 rounded border-l-4 border-blue-500">
+                            <p class="text-sm text-gray-600">
+                                <strong>Filosofi Utility-First:</strong> Alih-alih menulis CSS custom, kita menggunakan class-class kecil yang sudah disediakan. 
+                                Misalnya: <code class="bg-gray-200 px-1 rounded">text-center</code>, <code class="bg-gray-200 px-1 rounded">bg-blue-500</code>, <code class="bg-gray-200 px-1 rounded">p-4</code>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kelebihan dan Kekurangan -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">⚖️ Kelebihan vs CSS Native</h3>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-800 mb-3">✅ Kelebihan Tailwind</h4>
+                            <ul class="text-sm text-green-700 space-y-2">
+                                <li><strong>• Pengembangan lebih cepat:</strong> Tidak perlu menulis CSS dari nol</li>
+                                <li><strong>• Konsistensi desain:</strong> Sistem spacing dan warna yang terstandar</li>
+                                <li><strong>• File CSS lebih kecil:</strong> Hanya class yang digunakan yang di-bundle</li>
+                                <li><strong>• Responsive design mudah:</strong> Built-in breakpoint system</li>
+                                <li><strong>• Maintenance mudah:</strong> Semua styling ada di HTML</li>
+                                <li><strong>• Tidak ada naming conflict:</strong> Tidak perlu memikirkan nama class</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-800 mb-3">❌ Kekurangan</h4>
+                            <ul class="text-sm text-red-700 space-y-2">
+                                <li><strong>• HTML terlihat "kotor":</strong> Banyak class di setiap element</li>
+                                <li><strong>• Learning curve awal:</strong> Harus hafal nama-nama class</li>
+                                <li><strong>• Ketergantungan framework:</strong> Sulit pindah ke CSS lain</li>
+                                <li><strong>• File HTML lebih besar:</strong> Karena banyak class name</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">📊 Perbandingan Kode:</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700 mb-2">CSS Traditional:</p>
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-xs font-mono">
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-700 mb-2">Tailwind CSS:</p>
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-xs font-mono">
+&lt;div class="bg-white p-6 rounded-lg shadow-md"&gt;
+  ...
+&lt;/div&gt;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instalasi -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">🚀 Instalasi dengan CDN</h3>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold text-blue-800 mb-2">Apa itu CDN?</h4>
+                        <p class="text-blue-700 text-sm">
+                            CDN (Content Delivery Network) adalah cara termudah untuk menggunakan Tailwind CSS tanpa instalasi kompleks. 
+                            Cukup tambahkan satu baris script dan langsung bisa digunakan!
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">📝 Langkah Instalasi:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-700 mb-3"><strong>1. Buat file HTML baru</strong></p>
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono mb-3">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="id"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Belajar Tailwind CSS&lt;/title&gt;
+    &lt;!-- Tambahkan CDN Tailwind di sini --&gt;
+    &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Konten Anda --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                                </div>
+                                
+                                <p class="text-sm text-gray-700 mb-3"><strong>2. Test dengan kode sederhana:</strong></p>
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono mb-3">
+&lt;div class="bg-blue-500 text-white p-4 rounded-lg"&gt;
+    Hello Tailwind CSS!
+&lt;/div&gt;
+                                </div>
+                                
+                                <div class="bg-blue-500 text-white p-4 rounded-lg text-center">
+                                    Hello Tailwind CSS!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">✅ Kelebihan CDN</h4>
+                                <ul class="text-sm text-green-700 space-y-1">
+                                    <li>• Setup super cepat (1 menit)</li>
+                                    <li>• Tidak perlu instalasi Node.js</li>
+                                    <li>• Cocok untuk pemula</li>
+                                    <li>• Langsung bisa digunakan</li>
+                                </ul>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800 mb-2">⚠️ Keterbatasan CDN</h4>
+                                <ul class="text-sm text-yellow-700 space-y-1">
+                                    <li>• File size lebih besar</li>
+                                    <li>• Tidak bisa custom config</li>
+                                    <li>• Butuh koneksi internet</li>
+                                    <li>• Tidak optimal untuk produksi</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-purple-800 mb-2">🔧 Konfigurasi Custom (Opsional)</h4>
+                            <p class="text-purple-700 text-sm mb-2">Anda bisa menambahkan konfigurasi custom dengan script tambahan:</p>
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;script&gt;
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'brand-blue': '#1fb6ff',
+                    'brand-purple': '#7e5bef',
+                }
+            }
+        }
+    }
+&lt;/script&gt;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Konsep Dasar -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">🎯 Konsep Dasar & Sintaks</h3>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">💡 Prinsip Dasar Tailwind</h4>
+                        <p class="text-blue-700 text-sm">
+                            Tailwind menggunakan sistem penamaan yang konsisten: <code class="bg-white px-1 rounded">[property]-[value]</code>. 
+                            Contoh: <code class="bg-white px-1 rounded">text-center</code>, <code class="bg-white px-1 rounded">bg-red-500</code>, <code class="bg-white px-1 rounded">p-4</code>
+                        </p>
+                    </div>
+                    
+                    <!-- Layouts & Spacing -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">📐 Layouts & Spacing</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Sistem Spacing (0.25rem = 4px per unit):</h5>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                                    <div class="bg-blue-200 p-1 rounded text-center text-xs">
+                                        <div class="bg-blue-500 text-white p-1 rounded">p-1 (4px)</div>
+                                    </div>
+                                    <div class="bg-blue-200 p-2 rounded text-center text-xs">
+                                        <div class="bg-blue-500 text-white p-2 rounded">p-2 (8px)</div>
+                                    </div>
+                                    <div class="bg-blue-200 p-3 rounded text-center text-xs">
+                                        <div class="bg-blue-500 text-white p-3 rounded">p-3 (12px)</div>
+                                    </div>
+                                    <div class="bg-blue-200 p-4 rounded text-center text-xs">
+                                        <div class="bg-blue-500 text-white p-4 rounded">p-4 (16px)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Jenis-jenis Spacing:</h5>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <div class="bg-green-100 p-2 rounded">
+                                            <code class="text-sm">p-4</code> - Padding semua sisi
+                                        </div>
+                                        <div class="bg-green-100 p-2 rounded">
+                                            <code class="text-sm">px-4</code> - Padding horizontal (kiri-kanan)
+                                        </div>
+                                        <div class="bg-green-100 p-2 rounded">
+                                            <code class="text-sm">py-4</code> - Padding vertikal (atas-bawah)
+                                        </div>
+                                        <div class="bg-green-100 p-2 rounded">
+                                            <code class="text-sm">pt-4</code> - Padding top saja
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="bg-yellow-100 p-2 rounded">
+                                            <code class="text-sm">m-4</code> - Margin semua sisi
+                                        </div>
+                                        <div class="bg-yellow-100 p-2 rounded">
+                                            <code class="text-sm">mx-auto</code> - Margin horizontal auto (center)
+                                        </div>
+                                        <div class="bg-yellow-100 p-2 rounded">
+                                            <code class="text-sm">my-4</code> - Margin vertikal
+                                        </div>
+                                        <div class="bg-yellow-100 p-2 rounded">
+                                            <code class="text-sm">-mt-4</code> - Margin top negatif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="p-6 m-4 mx-auto"&gt;
+    &lt;!-- Padding 24px, margin 16px, horizontal center --&gt;
+&lt;/div&gt;
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warna -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">🎨 Sistem Warna</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Palet Warna (50-900, semakin besar semakin gelap):</h5>
+                                <div class="space-y-2">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="flex space-x-1">
+                                            <div class="bg-blue-100 w-6 h-6 rounded"></div>
+                                            <div class="bg-blue-300 w-6 h-6 rounded"></div>
+                                            <div class="bg-blue-500 w-6 h-6 rounded"></div>
+                                            <div class="bg-blue-700 w-6 h-6 rounded"></div>
+                                            <div class="bg-blue-900 w-6 h-6 rounded"></div>
+                                        </div>
+                                        <span class="text-sm">Blue: 100, 300, 500, 700, 900</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="flex space-x-1">
+                                            <div class="bg-red-100 w-6 h-6 rounded"></div>
+                                            <div class="bg-red-300 w-6 h-6 rounded"></div>
+                                            <div class="bg-red-500 w-6 h-6 rounded"></div>
+                                            <div class="bg-red-700 w-6 h-6 rounded"></div>
+                                            <div class="bg-red-900 w-6 h-6 rounded"></div>
+                                        </div>
+                                        <span class="text-sm">Red: 100, 300, 500, 700, 900</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Jenis Properti Warna:</h5>
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    <div class="bg-blue-500 text-white p-3 rounded text-center">
+                                        <code class="text-sm">bg-blue-500</code><br>
+                                        <span class="text-xs">Background</span>
+                                    </div>
+                                    <div class="bg-white text-red-500 p-3 rounded text-center border-2 border-red-500">
+                                        <code class="text-sm">text-red-500</code><br>
+                                        <span class="text-xs">Text Color</span>
+                                    </div>
+                                    <div class="bg-white p-3 rounded text-center border-2 border-green-500">
+                                        <code class="text-sm">border-green-500</code><br>
+                                        <span class="text-xs">Border</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="bg-blue-500 text-white border-2 border-blue-700"&gt;
+    Kombinasi warna
+&lt;/div&gt;
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ukuran & Tipografi -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">📝 Ukuran & Tipografi</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Ukuran Teks:</h5>
+                                <div class="space-y-2">
+                                    <div class="text-xs">text-xs - Extra Small (12px)</div>
+                                    <div class="text-sm">text-sm - Small (14px)</div>
+                                    <div class="text-base">text-base - Base (16px)</div>
+                                    <div class="text-lg">text-lg - Large (18px)</div>
+                                    <div class="text-xl">text-xl - Extra Large (20px)</div>
+                                    <div class="text-2xl">text-2xl - 2X Large (24px)</div>
+                                    <div class="text-3xl">text-3xl - 3X Large (30px)</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Font Weight & Style:</h5>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <div class="font-thin">font-thin - Thin (100)</div>
+                                        <div class="font-light">font-light - Light (300)</div>
+                                        <div class="font-normal">font-normal - Normal (400)</div>
+                                        <div class="font-medium">font-medium - Medium (500)</div>
+                                        <div class="font-semibold">font-semibold - Semibold (600)</div>
+                                        <div class="font-bold">font-bold - Bold (700)</div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="italic">italic - Miring</div>
+                                        <div class="underline">underline - Garis bawah</div>
+                                        <div class="line-through">line-through - Coret</div>
+                                        <div class="uppercase">uppercase - HURUF BESAR</div>
+                                        <div class="lowercase">lowercase - huruf kecil</div>
+                                        <div class="capitalize">capitalize - Huruf Kapital</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;h1 class="text-3xl font-bold text-center uppercase"&gt;
+    Judul Besar
+&lt;/h1&gt;
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flexbox -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">📦 Flexbox Layout</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Konsep Dasar Flexbox:</h5>
+                                <p class="text-sm text-gray-600 mb-3">
+                                    Flexbox memungkinkan kita mengatur layout secara fleksibel dalam satu dimensi (horizontal atau vertikal).
+                                </p>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Flex Container:</h5>
+                                <div class="space-y-3">
+                                    <div class="flex bg-blue-100 p-3 rounded">
+                                        <div class="bg-blue-500 text-white p-2 rounded mr-2">Item 1</div>
+                                        <div class="bg-blue-500 text-white p-2 rounded mr-2">Item 2</div>
+                                        <div class="bg-blue-500 text-white p-2 rounded">Item 3</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">flex</code> - Membuat flex container
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Justify Content (Horizontal):</h5>
+                                <div class="space-y-3">
+                                    <div class="flex justify-start bg-green-100 p-3 rounded">
+                                        <div class="bg-green-500 text-white p-2 rounded mr-2">A</div>
+                                        <div class="bg-green-500 text-white p-2 rounded mr-2">B</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">justify-start</code>
+                                    
+                                    <div class="flex justify-center bg-green-100 p-3 rounded">
+                                        <div class="bg-green-500 text-white p-2 rounded mr-2">A</div>
+                                        <div class="bg-green-500 text-white p-2 rounded mr-2">B</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">justify-center</code>
+                                    
+                                    <div class="flex justify-between bg-green-100 p-3 rounded">
+                                        <div class="bg-green-500 text-white p-2 rounded">A</div>
+                                        <div class="bg-green-500 text-white p-2 rounded">B</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">justify-between</code>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Align Items (Vertical):</h5>
+                                <div class="space-y-3">
+                                    <div class="flex items-center bg-purple-100 p-3 rounded h-20">
+                                        <div class="bg-purple-500 text-white p-2 rounded mr-2">Center</div>
+                                        <div class="bg-purple-500 text-white p-2 rounded">Vertical</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">items-center</code>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="flex justify-center items-center h-screen"&gt;
+    &lt;div&gt;Centered Content&lt;/div&gt;
+&lt;/div&gt;
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">🔲 Grid Layout</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Grid Columns:</h5>
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="bg-red-200 p-3 rounded text-center">Col 1</div>
+                                        <div class="bg-red-200 p-3 rounded text-center">Col 2</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">grid-cols-2</code>
+                                    
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div class="bg-blue-200 p-3 rounded text-center">1</div>
+                                        <div class="bg-blue-200 p-3 rounded text-center">2</div>
+                                        <div class="bg-blue-200 p-3 rounded text-center">3</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">grid-cols-3</code>
+                                    
+                                    <div class="grid grid-cols-4 gap-2">
+                                        <div class="bg-green-200 p-2 rounded text-center text-sm">1</div>
+                                        <div class="bg-green-200 p-2 rounded text-center text-sm">2</div>
+                                        <div class="bg-green-200 p-2 rounded text-center text-sm">3</div>
+                                        <div class="bg-green-200 p-2 rounded text-center text-sm">4</div>
+                                    </div>
+                                    <code class="text-sm bg-gray-200 px-2 py-1 rounded">grid-cols-4</code>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Gap (Jarak antar item):</h5>
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-3 gap-1">
+                                        <div class="bg-yellow-300 p-2 rounded text-center text-sm">gap-1</div>
+                                        <div class="bg-yellow-300 p-2 rounded text-center text-sm">4px</div>
+                                        <div class="bg-yellow-300 p-2 rounded text-center text-sm">gap</div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="bg-orange-300 p-2 rounded text-center text-sm">gap-4</div>
+                                        <div class="bg-orange-300 p-2 rounded text-center text-sm">16px</div>
+                                        <div class="bg-orange-300 p-2 rounded text-center text-sm">gap</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"&gt;
+    &lt;!-- Responsive grid: 1 col mobile, 2 col tablet, 3 col desktop --&gt;
+&lt;/div&gt;
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Border & Shadows -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">🖼️ Border & Shadows</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Border:</h5>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="space-y-3">
+                                        <div class="border p-3 rounded">border - 1px solid</div>
+                                        <div class="border-2 p-3 rounded">border-2 - 2px solid</div>
+                                        <div class="border-4 border-blue-500 p-3 rounded">border-4 border-blue-500</div>
+                                        <div class="border-dashed border-2 p-3 rounded">border-dashed</div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="rounded p-3 bg-gray-200">rounded - 4px</div>
+                                        <div class="rounded-lg p-3 bg-gray-200">rounded-lg - 8px</div>
+                                        <div class="rounded-xl p-3 bg-gray-200">rounded-xl - 12px</div>
+                                        <div class="rounded-full p-3 bg-gray-200 text-center">rounded-full</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="font-medium text-gray-700 mb-2">Shadows:</h5>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="space-y-4">
+                                        <div class="shadow-sm p-4 bg-white rounded">shadow-sm</div>
+                                        <div class="shadow p-4 bg-white rounded">shadow (default)</div>
+                                        <div class="shadow-md p-4 bg-white rounded">shadow-md</div>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <div class="shadow-lg p-4 bg-white rounded">shadow-lg</div>
+                                        <div class="shadow-xl p-4 bg-white rounded">shadow-xl</div>
+                                        <div class="shadow-2xl p-4 bg-white rounded">shadow-2xl</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="bg-white rounded-lg shadow-lg border border-gray-200 p-6"&gt;
+    Card dengan border dan shadow
+&lt;/div&gt;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Responsive Design -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">📱 Responsive Design</h3>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">🎯 Konsep Mobile-First</h4>
+                        <p class="text-blue-700 text-sm">
+                            Tailwind menggunakan pendekatan mobile-first. Class tanpa prefix berlaku untuk semua ukuran layar, 
+                            sedangkan class dengan prefix (sm:, md:, lg:) hanya berlaku pada ukuran tertentu ke atas.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">📏 Breakpoint System:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                                    <div class="bg-blue-100 p-3 rounded text-center">
+                                        <div class="font-semibold text-blue-800">Default</div>
+                                        <div class="text-sm text-blue-600">0px+</div>
+                                        <div class="text-xs text-blue-500">Mobile</div>
+                                    </div>
+                                    <div class="bg-green-100 p-3 rounded text-center">
+                                        <div class="font-semibold text-green-800">sm:</div>
+                                        <div class="text-sm text-green-600">640px+</div>
+                                        <div class="text-xs text-green-500">Large Mobile</div>
+                                    </div>
+                                    <div class="bg-yellow-100 p-3 rounded text-center">
+                                        <div class="font-semibold text-yellow-800">md:</div>
+                                        <div class="text-sm text-yellow-600">768px+</div>
+                                        <div class="text-xs text-yellow-500">Tablet</div>
+                                    </div>
+                                    <div class="bg-red-100 p-3 rounded text-center">
+                                        <div class="font-semibold text-red-800">lg:</div>
+                                        <div class="text-sm text-red-600">1024px+</div>
+                                        <div class="text-xs text-red-500">Desktop</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-purple-100 p-3 rounded text-center">
+                                    <div class="font-semibold text-purple-800">xl: 1280px+ | 2xl: 1536px+</div>
+                                    <div class="text-xs text-purple-500">Large Desktop & Ultra Wide</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">🔄 Contoh Responsive:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="mb-4">
+                                    <h5 class="font-medium text-gray-700 mb-2">Text Size Responsive:</h5>
+                                    <div class="text-sm md:text-lg lg:text-xl xl:text-2xl bg-blue-100 p-4 rounded mb-3">
+                                        Teks ini berubah ukuran sesuai layar
+                                    </div>
+                                    <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="text-sm md:text-lg lg:text-xl xl:text-2xl"&gt;
+    Responsive Text
+&lt;/div&gt;
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h5 class="font-medium text-gray-700 mb-2">Grid Responsive:</h5>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
+                                        <div class="bg-green-200 p-3 rounded text-center">Item 1</div>
+                                        <div class="bg-green-200 p-3 rounded text-center">Item 2</div>
+                                        <div class="bg-green-200 p-3 rounded text-center">Item 3</div>
+                                    </div>
+                                    <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"&gt;
+    &lt;!-- 1 kolom mobile, 2 kolom tablet, 3 kolom desktop --&gt;
+&lt;/div&gt;
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h5 class="font-medium text-gray-700 mb-2">Hide/Show Elements:</h5>
+                                    <div class="space-y-2 mb-3">
+                                        <div class="block md:hidden bg-red-200 p-3 rounded text-center">
+                                            Hanya terlihat di mobile
+                                        </div>
+                                        <div class="hidden md:block bg-blue-200 p-3 rounded text-center">
+                                            Hanya terlihat di tablet/desktop
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="block md:hidden"&gt;Mobile only&lt;/div&gt;
+&lt;div class="hidden md:block"&gt;Desktop only&lt;/div&gt;
+                                    </div>
+                                </div>
+
+                                <div class="bg-yellow-50 p-4 rounded-lg">
+                                    <h5 class="font-medium text-yellow-800 mb-2">💡 Tips Responsive:</h5>
+                                    <ul class="text-sm text-yellow-700 space-y-1">
+                                        <li>• Mulai dari mobile (tanpa prefix)</li>
+                                        <li>• Tambahkan breakpoint secara bertahap</li>
+                                        <li>• Test di berbagai ukuran layar</li>
+                                        <li>• Gunakan flex dan grid untuk layout fleksibel</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- States -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">✨ States (Hover, Focus, Active)</h3>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">🎭 Apa itu States?</h4>
+                        <p class="text-blue-700 text-sm">
+                            States adalah kondisi interaktif dari element HTML. Tailwind menyediakan prefix untuk berbagai state 
+                            seperti hover (saat mouse di atas), focus (saat element dipilih), active (saat diklik), dll.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">🖱️ Hover Effects:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="space-y-4 mb-4">
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                                        Hover untuk ubah warna
+                                    </button>
+                                    <button class="bg-green-500 hover:bg-green-600 hover:scale-105 text-white px-6 py-3 rounded-lg transition-all">
+                                        Hover untuk scale
+                                    </button>
+                                    <button class="bg-purple-500 hover:shadow-lg text-white px-6 py-3 rounded-lg transition-shadow">
+                                        Hover untuk shadow
+                                    </button>
+                                </div>
+                                
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;button class="bg-blue-500 hover:bg-blue-700 transition-colors"&gt;
+    Hover Button
+&lt;/button&gt;
+
+&lt;div class="hover:scale-105 transition-transform"&gt;
+    Hover to scale
+&lt;/div&gt;
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">🎯 Focus States:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="space-y-4 mb-4">
+                                    <input type="text" placeholder="Klik untuk focus" 
+                                           class="w-full p-3 border-2 border-gray-300 focus:border-blue-500 focus:outline-none rounded-lg transition-colors">
+                                    <input type="text" placeholder="Focus dengan ring" 
+                                           class="w-full p-3 border-2 border-gray-300 focus:ring-4 focus:ring-blue-200 focus:border-blue-500 focus:outline-none rounded-lg transition-all">
+                                </div>
+                                
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;input class="border-2 focus:border-blue-500 focus:outline-none"&gt;
+
+&lt;input class="focus:ring-4 focus:ring-blue-200 focus:border-blue-500"&gt;
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">👆 Active & Other States:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="space-y-4 mb-4">
+                                    <button class="bg-red-500 active:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors">
+                                        Klik dan tahan (active)
+                                    </button>
+                                    <button disabled class="bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed text-gray-500 px-6 py-3 rounded-lg">
+                                        Button Disabled
+                                    </button>
+                                    <div class="group bg-white p-4 rounded-lg border hover:shadow-lg transition-shadow">
+                                        <h5 class="font-semibold group-hover:text-blue-500 transition-colors">Group Hover</h5>
+                                        <p class="text-gray-600 group-hover:text-gray-800 transition-colors">Hover parent untuk ubah child</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;button class="active:bg-red-700"&gt;Active State&lt;/button&gt;
+
+&lt;button class="disabled:opacity-50" disabled&gt;Disabled&lt;/button&gt;
+
+&lt;div class="group hover:shadow-lg"&gt;
+    &lt;h5 class="group-hover:text-blue-500"&gt;Group Hover&lt;/h5&gt;
+&lt;/div&gt;
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-3">🎬 Transitions & Animations:</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="space-y-4 mb-4">
+                                    <div class="bg-blue-500 hover:bg-red-500 w-20 h-20 rounded transition-colors duration-500 cursor-pointer"></div>
+                                    <div class="bg-green-500 hover:rotate-45 w-20 h-20 rounded transition-transform duration-300 cursor-pointer"></div>
+                                    <div class="bg-purple-500 hover:scale-150 w-20 h-20 rounded transition-all duration-700 ease-in-out cursor-pointer"></div>
+                                </div>
+                                
+                                <div class="bg-gray-900 text-green-400 p-3 rounded text-sm font-mono">
+&lt;div class="transition-colors duration-500 hover:bg-red-500"&gt;&lt;/div&gt;
+
+&lt;div class="transition-transform hover:rotate-45"&gt;&lt;/div&gt;
+
+&lt;div class="transition-all duration-700 ease-in-out hover:scale-150"&gt;&lt;/div&gt;
+                                </div>
+                                
+                                <div class="bg-yellow-50 p-4 rounded-lg mt-4">
+                                    <h5 class="font-medium text-yellow-800 mb-2">⏱️ Duration Options:</h5>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                                        <code class="bg-white p-2 rounded text-center">duration-75</code>
+                                        <code class="bg-white p-2 rounded text-center">duration-150</code>
+                                        <code class="bg-white p-2 rounded text-center">duration-300</code>
+                                        <code class="bg-white p-2 rounded text-center">duration-500</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-800 mb-2">🚀 Best Practices States:</h4>
+                            <ul class="text-sm text-green-700 space-y-1">
+                                <li>• Selalu tambahkan transition untuk smooth effect</li>
+                                <li>• Gunakan hover untuk feedback visual</li>
+                                <li>• Focus states penting untuk accessibility</li>
+                                <li>• Jangan berlebihan dengan animasi</li>
+                                <li>• Test di berbagai device dan browser</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mencoba Section -->
+        <section id="mencoba" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    🎮 Playground Interaktif
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- Controls -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold">Coba Properti Tailwind:</h3>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Background Color:</label>
+                                <select id="bgColor" class="w-full p-2 border rounded-lg">
+                                    <option value="bg-blue-500">Blue</option>
+                                    <option value="bg-red-500">Red</option>
+                                    <option value="bg-green-500">Green</option>
+                                    <option value="bg-purple-500">Purple</option>
+                                    <option value="bg-yellow-500">Yellow</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Padding:</label>
+                                <select id="padding" class="w-full p-2 border rounded-lg">
+                                    <option value="p-2">Small (p-2)</option>
+                                    <option value="p-4">Medium (p-4)</option>
+                                    <option value="p-6">Large (p-6)</option>
+                                    <option value="p-8">Extra Large (p-8)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Border Radius:</label>
+                                <select id="borderRadius" class="w-full p-2 border rounded-lg">
+                                    <option value="rounded-none">None</option>
+                                    <option value="rounded">Small</option>
+                                    <option value="rounded-lg">Large</option>
+                                    <option value="rounded-full">Full</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Text Size:</label>
+                                <select id="textSize" class="w-full p-2 border rounded-lg">
+                                    <option value="text-sm">Small</option>
+                                    <option value="text-base">Base</option>
+                                    <option value="text-lg">Large</option>
+                                    <option value="text-xl">Extra Large</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="generatedCode" class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                            <div class="text-gray-400 mb-2">Generated Code:</div>
+                            <code id="codeOutput">class="bg-blue-500 p-2 rounded-none text-sm text-white"</code>
+                        </div>
+                    </div>
+                    
+                    <!-- Preview -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold">Preview:</h3>
+                        <div class="border-2 border-dashed border-gray-300 p-8 rounded-lg min-h-48 flex items-center justify-center">
+                            <div id="previewElement" class="bg-blue-500 p-2 rounded-none text-sm text-white">
+                                Ini adalah preview element
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kuis Section -->
+        <section id="kuis" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    🧠 Kuis Pemahaman
+                </h2>
+                
+                <div id="quizContainer">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-semibold">Pertanyaan <span id="currentQuestion">1</span> dari 10</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                Skor: <span id="score">0</span>/10
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+                            <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="questionCard" class="bg-gray-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold mb-4" id="questionText">
+                            Class mana yang digunakan untuk memberikan padding 16px pada semua sisi?
+                        </h3>
+                        <div class="space-y-3" id="optionsContainer">
+                            <button class="quiz-option w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 transition-colors" data-answer="a">
+                                A. p-4
+                            </button>
+                            <button class="quiz-option w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 transition-colors" data-answer="b">
+                                B. padding-4
+                            </button>
+                            <button class="quiz-option w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 transition-colors" data-answer="c">
+                                C. p-16
+                            </button>
+                            <button class="quiz-option w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 transition-colors" data-answer="d">
+                                D. pad-4
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button id="prevBtn" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors" disabled>
+                            ← Sebelumnya
+                        </button>
+                        <button id="nextBtn" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                            Selanjutnya →
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="quizResult" class="hidden text-center">
+                    <div class="bg-green-50 p-8 rounded-lg">
+                        <h3 class="text-2xl font-bold text-green-800 mb-4">🎉 Kuis Selesai!</h3>
+                        <p class="text-lg text-green-700 mb-4">
+                            Skor Anda: <span id="finalScore" class="font-bold">0</span>/10
+                        </p>
+                        <button id="restartQuiz" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                            Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latihan Section -->
+        <section id="latihan" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+                    💪 Latihan Praktik
+                </h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">📋 Studi Kasus: Kartu Profil</h3>
+                    <p class="text-gray-700 mb-6">
+                        Buatlah sebuah kartu profil yang responsif menggunakan Tailwind CSS dengan spesifikasi berikut:
+                    </p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">Spesifikasi:</h4>
+                        <ul class="text-blue-700 space-y-1 text-sm">
+                            <li>• Background putih dengan shadow</li>
+                            <li>• Border radius medium</li>
+                            <li>• Padding yang sesuai</li>
+                            <li>• Avatar bulat di bagian atas</li>
+                            <li>• Nama dengan font bold dan ukuran besar</li>
+                            <li>• Profesi dengan warna abu-abu</li>
+                            <li>• Tombol "Follow" dengan warna biru</li>
+                            <li>• Responsif untuk mobile dan desktop</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- Target Design -->
+                    <div>
+                        <h4 class="font-semibold mb-4">🎯 Target Design:</h4>
+                        <div class="border-2 border-dashed border-gray-300 p-6 rounded-lg">
+                            <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
+                                <div class="text-center">
+                                    <div class="w-20 h-20 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                                        JD
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-1">John Doe</h3>
+                                    <p class="text-gray-600 mb-4">Frontend Developer</p>
+                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                        Follow
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Editor -->
+                    <div>
+                        <h4 class="font-semibold mb-4">💻 Tulis Kode Anda:</h4>
+                        <textarea 
+                            id="codeEditor" 
+                            class="w-full h-64 p-4 border rounded-lg font-mono text-sm bg-gray-900 text-green-400"
+                            placeholder="Tulis HTML dengan Tailwind CSS di sini..."
+                        >&lt;div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto"&gt;
+  &lt;!-- Tulis kode Anda di sini --&gt;
+&lt;/div&gt;</textarea>
+                        
+                        <div class="mt-4 space-x-4">
+                            <button id="previewCode" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                👁️ Preview
+                            </button>
+                            <button id="resetCode" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
+                                🔄 Reset
+                            </button>
+                        </div>
+                        
+                        <!-- Preview Area -->
+                        <div class="mt-6">
+                            <h4 class="font-semibold mb-2">Preview Anda:</h4>
+                            <div id="codePreview" class="border-2 border-dashed border-gray-300 p-6 rounded-lg min-h-32 bg-gray-50">
+                                <p class="text-gray-500 text-center">Klik "Preview" untuk melihat hasil kode Anda</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+        <div class="flex justify-around max-w-md mx-auto">
+            <button class="nav-btn flex flex-col items-center p-2 text-primary" data-section="materi">
+                <span class="text-xl mb-1">📚</span>
+                <span class="text-xs font-medium">Materi</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center p-2 text-gray-400" data-section="mencoba">
+                <span class="text-xl mb-1">🎮</span>
+                <span class="text-xs font-medium">Mencoba</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center p-2 text-gray-400" data-section="kuis">
+                <span class="text-xl mb-1">🧠</span>
+                <span class="text-xs font-medium">Kuis</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center p-2 text-gray-400" data-section="latihan">
+                <span class="text-xl mb-1">💪</span>
+                <span class="text-xs font-medium">Latihan</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // Navigation functionality
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('main > section');
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetSection = btn.dataset.section;
+                
+                // Update nav buttons
+                navBtns.forEach(b => b.classList.remove('text-primary'));
+                navBtns.forEach(b => b.classList.add('text-gray-400'));
+                btn.classList.remove('text-gray-400');
+                btn.classList.add('text-primary');
+                
+                // Show target section
+                sections.forEach(section => section.classList.add('hidden'));
+                document.getElementById(targetSection).classList.remove('hidden');
+            });
+        });
+
+        // Playground functionality
+        const bgColorSelect = document.getElementById('bgColor');
+        const paddingSelect = document.getElementById('padding');
+        const borderRadiusSelect = document.getElementById('borderRadius');
+        const textSizeSelect = document.getElementById('textSize');
+        const previewElement = document.getElementById('previewElement');
+        const codeOutput = document.getElementById('codeOutput');
+
+        function updatePreview() {
+            const bgColor = bgColorSelect.value;
+            const padding = paddingSelect.value;
+            const borderRadius = borderRadiusSelect.value;
+            const textSize = textSizeSelect.value;
+            
+            const classes = `${bgColor} ${padding} ${borderRadius} ${textSize} text-white`;
+            previewElement.className = classes;
+            codeOutput.textContent = `class="${classes}"`;
+        }
+
+        [bgColorSelect, paddingSelect, borderRadiusSelect, textSizeSelect].forEach(select => {
+            select.addEventListener('change', updatePreview);
+        });
+
+        // Quiz functionality
+        const quizData = [
+            {
+                question: "Class mana yang digunakan untuk memberikan padding 16px pada semua sisi?",
+                options: ["A. p-4", "B. padding-4", "C. p-16", "D. pad-4"],
+                correct: "a"
+            },
+            {
+                question: "Bagaimana cara membuat teks berwarna merah di Tailwind CSS?",
+                options: ["A. color-red", "B. text-red-500", "C. red-text", "D. font-red"],
+                correct: "b"
+            },
+            {
+                question: "Class mana yang digunakan untuk membuat element menjadi flex container?",
+                options: ["A. display-flex", "B. d-flex", "C. flex", "D. flexbox"],
+                correct: "c"
+            },
+            {
+                question: "Bagaimana cara membuat border radius penuh (bulat) di Tailwind?",
+                options: ["A. border-circle", "B. rounded-full", "C. border-round", "D. circle"],
+                correct: "b"
+            },
+            {
+                question: "Class mana untuk mengatur margin top sebesar 8px?",
+                options: ["A. mt-2", "B. margin-top-2", "C. mt-8", "D. top-margin-2"],
+                correct: "a"
+            },
+            {
+                question: "Bagaimana cara membuat background gradient di Tailwind CSS?",
+                options: ["A. bg-gradient", "B. gradient-bg", "C. bg-gradient-to-r", "D. background-gradient"],
+                correct: "c"
+            },
+            {
+                question: "Class mana untuk membuat teks menjadi bold?",
+                options: ["A. text-bold", "B. font-weight-bold", "C. font-bold", "D. bold"],
+                correct: "c"
+            },
+            {
+                question: "Bagaimana cara membuat element tersembunyi di mobile tapi terlihat di desktop?",
+                options: ["A. hidden md:block", "B. mobile-hidden", "C. hide-mobile", "D. display-desktop"],
+                correct: "a"
+            },
+            {
+                question: "Class mana untuk mengatur hover effect pada background?",
+                options: ["A. hover-bg-blue", "B. hover:bg-blue-500", "C. bg-hover-blue", "D. on-hover-bg"],
+                correct: "b"
+            },
+            {
+                question: "Bagaimana cara membuat grid dengan 3 kolom di Tailwind CSS?",
+                options: ["A. grid-3", "B. grid-cols-3", "C. col-3", "D. columns-3"],
+                correct: "b"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswers = [];
+
+        function loadQuestion() {
+            const question = quizData[currentQuestionIndex];
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'quiz-option w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 transition-colors';
+                button.textContent = option;
+                button.dataset.answer = ['a', 'b', 'c', 'd'][index];
+                optionsContainer.appendChild(button);
+            });
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').textContent = currentQuestionIndex === quizData.length - 1 ? 'Selesai' : 'Selanjutnya →';
+        }
+
+        function selectAnswer(answer) {
+            selectedAnswers[currentQuestionIndex] = answer;
+            
+            // Visual feedback
+            document.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-blue-50');
+                if (btn.dataset.answer === answer) {
+                    btn.classList.add('border-blue-500', 'bg-blue-50');
+                }
+            });
+        }
+
+        function calculateScore() {
+            score = 0;
+            selectedAnswers.forEach((answer, index) => {
+                if (answer === quizData[index].correct) {
+                    score++;
+                }
+            });
+            document.getElementById('score').textContent = score;
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('quizResult').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = score;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswers = [];
+            document.getElementById('score').textContent = '0';
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('quizResult').classList.add('hidden');
+            loadQuestion();
+        }
+
+        // Quiz event listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('quiz-option')) {
+                selectAnswer(e.target.dataset.answer);
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                calculateScore();
+                showResult();
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+
+        document.getElementById('restartQuiz').addEventListener('click', restartQuiz);
+
+        // Practice section functionality
+        document.getElementById('previewCode').addEventListener('click', () => {
+            const code = document.getElementById('codeEditor').value;
+            const previewArea = document.getElementById('codePreview');
+            
+            try {
+                previewArea.innerHTML = code;
+            } catch (error) {
+                previewArea.innerHTML = '<p class="text-red-500">Error: Kode tidak valid</p>';
+            }
+        });
+
+        document.getElementById('resetCode').addEventListener('click', () => {
+            document.getElementById('codeEditor').value = `<div class="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
+  <!-- Tulis kode Anda di sini -->
+</div>`;
+            document.getElementById('codePreview').innerHTML = '<p class="text-gray-500 text-center">Klik "Preview" untuk melihat hasil kode Anda</p>';
+        });
+
+        // Initialize
+        loadQuestion();
+        updatePreview();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97606505735c0a12',t:'MTc1NjM0ODMwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
