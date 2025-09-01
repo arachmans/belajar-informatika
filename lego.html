@@ -85,18 +85,18 @@
         <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 <button onclick="showBlocksPopup()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center">
-                    <span class="mr-2">➕</span>Add
+                    <span class="mr-2">➕</span><span class="hidden md:inline">Add</span>
                 </button>
                 <button onclick="showQuickActions()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center">
-                    <span class="mr-2">⚡</span>Quick
+                    <span class="mr-2">⚡</span><span class="hidden md:inline">Quick</span>
                 </button>
             </div>
             <div class="flex items-center space-x-4">
                 <button onclick="runCode()" class="btn-gradient text-white px-6 py-2 rounded-lg font-medium flex items-center">
-                    <span class="mr-2">▶️</span>Run
+                    <span class="mr-2">▶️</span><span class="hidden md:inline">Run</span>
                 </button>
                 <button onclick="clearWorkspace()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                    🗑️ Clear
+                    🗑️ <span class="hidden md:inline">Clear</span>
                 </button>
             </div>
         </div>
