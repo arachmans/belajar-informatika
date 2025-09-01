@@ -80,30 +80,30 @@
     </div>
 
     <!-- Main Content -->
-    <div class="h-screen flex flex-col">
+    <div class="h-screen flex flex-col overflow-hidden">
         <!-- Action Bar -->
-        <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <button onclick="showBlocksPopup()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center">
-                    <span class="mr-2">➕</span><span class="hidden md:inline">Add</span>
+        <div class="bg-white border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0 flex-shrink-0">
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <button onclick="showBlocksPopup()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center text-sm md:text-base">
+                    <span class="mr-1 md:mr-2">➕</span><span class="hidden md:inline">Tambah Blok</span>
                 </button>
-                <button onclick="showQuickActions()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center">
-                    <span class="mr-2">⚡</span><span class="hidden md:inline">Quick</span>
+                <button onclick="showQuickActions()" class="bg-green-500 hover:bg-green-600 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center text-sm md:text-base">
+                    <span class="mr-1 md:mr-2">⚡</span><span class="hidden md:inline">Quick</span>
                 </button>
             </div>
-            <div class="flex items-center space-x-4">
-                <button onclick="runCode()" class="btn-gradient text-white px-6 py-2 rounded-lg font-medium flex items-center">
-                    <span class="mr-2">▶️</span><span class="hidden md:inline">Run</span>
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <button onclick="runCode()" class="btn-gradient text-white px-4 md:px-6 py-2 rounded-lg font-medium flex items-center text-sm md:text-base">
+                    <span class="mr-1 md:mr-2">▶️</span><span class="hidden md:inline">Run</span>
                 </button>
-                <button onclick="clearWorkspace()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <button onclick="clearWorkspace()" class="bg-red-500 hover:bg-red-600 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base">
                     🗑️ <span class="hidden md:inline">Clear</span>
                 </button>
             </div>
         </div>
 
         <!-- Workspace -->
-        <div class="flex-1 p-6">
-            <div class="bg-white rounded-xl card-shadow h-full">
+        <div class="flex-1 p-3 md:p-6 overflow-hidden">
+            <div class="bg-white rounded-xl card-shadow h-full overflow-hidden">
                 <div id="blocklyDiv" class="workspace-container h-full"></div>
             </div>
         </div>
@@ -461,9 +461,9 @@
             </div>
             
             <!-- Content -->
-            <div class="flex-1 flex">
+            <div class="flex-1 flex flex-col md:flex-row">
                 <!-- Code Panel -->
-                <div class="w-1/2 border-r border-gray-300">
+                <div class="w-full md:w-1/2 h-1/2 md:h-full border-b md:border-b-0 md:border-r border-gray-300">
                     <div class="h-full flex flex-col">
                         <div class="bg-gray-100 px-4 py-2 border-b border-gray-300">
                             <h3 class="font-medium text-gray-700">💻 HTML Code</h3>
@@ -477,7 +477,7 @@
                 </div>
                 
                 <!-- Preview Panel -->
-                <div class="w-1/2">
+                <div class="w-full md:w-1/2 h-1/2 md:h-full">
                     <div class="h-full flex flex-col">
                         <div class="bg-gray-100 px-4 py-2 border-b border-gray-300">
                             <h3 class="font-medium text-gray-700">👀 Preview</h3>
@@ -2432,5 +2432,5 @@
             showNotification('🎉 Workspace siap digunakan! Tekan Ctrl+B untuk menambah blok.', 'success');
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97815333576d49f3',t:'MTc1NjY5MzYwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9781ac4b1298f8ee',t:'MTc1NjY5NzI1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
