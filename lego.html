@@ -452,10 +452,10 @@
                 </h2>
                 <div class="flex items-center space-x-4">
                     <button onclick="copyCodeFullscreen()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center text-sm md:text-base">
-                        📋 Copy Code
+                        📋 <span class="hidden md:inline">Copy Code</span>
                     </button>
                     <button onclick="hideOutputFullscreen()" class="bg-red-500 hover:bg-red-600 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center text-sm md:text-base">
-                        ✕ Close
+                        ✕ <span class="hidden md:inline">Close</span>
                     </button>
                 </div>
             </div>
@@ -468,8 +468,8 @@
                         <div class="bg-gray-100 px-4 py-2 border-b border-gray-300">
                             <h3 class="font-medium text-gray-700">💻 HTML Code</h3>
                         </div>
-                        <div class="flex-1 overflow-auto">
-                            <div class="code-display h-full p-4">
+                        <div class="code-display flex-1 overflow-auto">
+                            <div class="h-full p-4">
                                 <pre id="codeOutputFullscreen" class="text-sm whitespace-pre-wrap h-full"></pre>
                             </div>
                         </div>
