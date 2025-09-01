@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar HTML dengan Blockly</title>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .block-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .block-item:hover {
+            background: #f8fafc;
+            border-left-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .code-display {
+            background: #1a202c;
+            color: #68d391;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+        
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .workspace-container {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white p-6">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-3xl font-bold mb-2">🧩 Belajar HTML dengan Blockly</h1>
+            <p class="text-blue-100">Buat halaman web dengan menyusun blok visual</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Toolbox -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🧰</span>Blok HTML
+                    </h2>
+                    
+                    <!-- Search -->
+                    <div class="mb-4">
+                        <input type="text" id="blockSearch" placeholder="🔍 Cari blok..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               oninput="filterBlocks()">
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+                        <h3 class="text-sm font-semibold text-blue-700 mb-3 uppercase tracking-wide">⚡ Aksi Cepat</h3>
+                        <div class="space-y-2">
+                            <button onclick="loadBasicHTML()" class="w-full text-left p-2 rounded-lg bg-white hover:bg-blue-50 border border-blue-200 transition-colors text-sm">
+                                🏗️ Struktur HTML Dasar
+                            </button>
+                            <button onclick="loadFormExample()" class="w-full text-left p-2 rounded-lg bg-white hover:bg-green-50 border border-green-200 transition-colors text-sm">
+                                📝 Contoh Form
+                            </button>
+                            <button onclick="loadTableExample()" class="w-full text-left p-2 rounded-lg bg-white hover:bg-yellow-50 border border-yellow-200 transition-colors text-sm">
+                                📊 Contoh Tabel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Block Categories -->
+                    <div class="space-y-4 max-h-80 overflow-y-auto">
+                        <!-- Struktur Dasar -->
+                        <div class="block-category" data-category="struktur">
+                            <h3 class="text-sm font-semibold text-blue-600 mb-2 uppercase tracking-wide">📄 Struktur</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_document" data-name="html document struktur"
+                                     onclick="addBlock('html_document')">
+                                    📄 HTML Document
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_head" data-name="head kepala"
+                                     onclick="addBlock('html_head')">
+                                    🧠 Head
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_body" data-name="body tubuh"
+                                     onclick="addBlock('html_body')">
+                                    👤 Body
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_title" data-name="title judul"
+                                     onclick="addBlock('html_title')">
+                                    🏷️ Title
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Teks -->
+                        <div class="block-category" data-category="teks">
+                            <h3 class="text-sm font-semibold text-green-600 mb-2 uppercase tracking-wide">📝 Teks</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_heading" data-name="heading judul h1 h2 h3 h4 h5 h6"
+                                     onclick="addBlock('html_heading')">
+                                    📢 Heading (H1-H6)
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_p" data-name="paragraf teks"
+                                     onclick="addBlock('html_p')">
+                                    📝 Paragraf
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_strong" data-name="strong tebal"
+                                     onclick="addBlock('html_strong')">
+                                    💪 Strong
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_em" data-name="em miring italic"
+                                     onclick="addBlock('html_em')">
+                                    📝 Em (Italic)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Link & Media -->
+                        <div class="block-category" data-category="media">
+                            <h3 class="text-sm font-semibold text-red-600 mb-2 uppercase tracking-wide">🔗 Link & Media</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_a" data-name="link tautan"
+                                     onclick="addBlock('html_a')">
+                                    🔗 Link
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_img" data-name="gambar image"
+                                     onclick="addBlock('html_img')">
+                                    🖼️ Gambar
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_br" data-name="break baris"
+                                     onclick="addBlock('html_br')">
+                                    ↩️ Line Break
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_hr" data-name="hr horizontal rule garis"
+                                     onclick="addBlock('html_hr')">
+                                    ➖ Horizontal Rule
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- List -->
+                        <div class="block-category" data-category="list">
+                            <h3 class="text-sm font-semibold text-yellow-600 mb-2 uppercase tracking-wide">📋 List</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_ul" data-name="unordered list daftar"
+                                     onclick="addBlock('html_ul')">
+                                    🔸 Unordered List
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_ol" data-name="ordered list nomor"
+                                     onclick="addBlock('html_ol')">
+                                    🔢 Ordered List
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_li" data-name="list item"
+                                     onclick="addBlock('html_li')">
+                                    • List Item
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="block-category" data-category="table">
+                            <h3 class="text-sm font-semibold text-indigo-600 mb-2 uppercase tracking-wide">📊 Table</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_table" data-name="table tabel"
+                                     onclick="addBlock('html_table')">
+                                    📊 Table
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_tr" data-name="table row baris"
+                                     onclick="addBlock('html_tr')">
+                                    📏 Table Row
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_th" data-name="table header kepala"
+                                     onclick="addBlock('html_th')">
+                                    🏷️ Table Header
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_td" data-name="table data sel"
+                                     onclick="addBlock('html_td')">
+                                    📋 Table Data
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form -->
+                        <div class="block-category" data-category="form">
+                            <h3 class="text-sm font-semibold text-pink-600 mb-2 uppercase tracking-wide">📝 Form</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_form" data-name="form formulir"
+                                     onclick="addBlock('html_form')">
+                                    📝 Form
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_label" data-name="label nama"
+                                     onclick="addBlock('html_label')">
+                                    🏷️ Label
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_input" data-name="input masukan"
+                                     onclick="addBlock('html_input')">
+                                    ⌨️ Input
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_textarea" data-name="textarea area teks"
+                                     onclick="addBlock('html_textarea')">
+                                    📄 Textarea
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_select" data-name="select pilihan dropdown"
+                                     onclick="addBlock('html_select')">
+                                    📋 Select
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_option" data-name="option pilihan"
+                                     onclick="addBlock('html_option')">
+                                    • Option
+                                </div>
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_button" data-name="button tombol"
+                                     onclick="addBlock('html_button')">
+                                    🔘 Button
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Container -->
+                        <div class="block-category" data-category="container">
+                            <h3 class="text-sm font-semibold text-purple-600 mb-2 uppercase tracking-wide">📦 Container</h3>
+                            <div class="space-y-1">
+                                <div class="block-item p-3 rounded-lg cursor-pointer text-sm" 
+                                     data-block="html_div" data-name="div container"
+                                     onclick="addBlock('html_div')">
+                                    📦 Div
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspace -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <span class="mr-2">🎨</span>Workspace
+                        </h2>
+                        <div class="flex gap-3">
+                            <button onclick="generateCode()" class="btn-gradient text-white px-6 py-2 rounded-lg font-medium">
+                                <span class="mr-2">▶️</span>Generate HTML
+                            </button>
+                            <button onclick="clearWorkspace()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                🗑️ Clear
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="blocklyDiv" class="workspace-container" style="height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Code Output -->
+            <div class="bg-white rounded-xl card-shadow p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                        <span class="mr-2">💻</span>Kode HTML
+                    </h3>
+                    <button onclick="copyCode()" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        📋 Copy
+                    </button>
+                </div>
+                <div class="code-display rounded-lg p-4">
+                    <pre id="codeOutput" class="text-sm whitespace-pre-wrap">
+<!-- Susun blok untuk melihat kode HTML -->
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="bg-white rounded-xl card-shadow p-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <span class="mr-2">👀</span>Preview
+                </h3>
+                <div class="border-2 border-gray-200 rounded-lg overflow-hidden" style="height: 300px;">
+                    <iframe id="preview" class="w-full h-full border-0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let workspace;
+
+        // Initialize Blockly workspace
+        function initBlockly() {
+            workspace = Blockly.inject('blocklyDiv', {
+                grid: {
+                    spacing: 20,
+                    length: 3,
+                    colour: '#ccc',
+                    snap: true
+                },
+                zoom: {
+                    controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                },
+                trashcan: true,
+                scrollbars: true,
+                horizontalLayout: false,
+                toolboxPosition: 'start'
+            });
+        }
+
+        // Define custom HTML blocks
+        function defineBlocks() {
+            // HTML Document block
+            Blockly.Blocks['html_document'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📄 HTML Document");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.setColour(230);
+                    this.setTooltip("Dokumen HTML utama");
+                }
+            };
+
+            // Head block
+            Blockly.Blocks['html_head'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🧠 Head");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                    this.setTooltip("Bagian head HTML");
+                }
+            };
+
+            // Body block
+            Blockly.Blocks['html_body'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("👤 Body");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                    this.setTooltip("Bagian body HTML");
+                }
+            };
+
+            // Title block
+            Blockly.Blocks['html_title'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🏷️ Title:")
+                        .appendField(new Blockly.FieldTextInput("Judul Halaman"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                    this.setTooltip("Judul halaman web");
+                }
+            };
+
+            // Heading block with dropdown
+            Blockly.Blocks['html_heading'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📢 Heading:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["H1", "h1"],
+                            ["H2", "h2"],
+                            ["H3", "h3"],
+                            ["H4", "h4"],
+                            ["H5", "h5"],
+                            ["H6", "h6"]
+                        ]), "LEVEL")
+                        .appendField(new Blockly.FieldTextInput("Judul Heading"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Heading dengan level yang dapat dipilih");
+                }
+            };
+
+            // Paragraph block
+            Blockly.Blocks['html_p'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📝 Paragraf:")
+                        .appendField(new Blockly.FieldTextInput("Teks paragraf"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Paragraf teks");
+                }
+            };
+
+            // Strong block
+            Blockly.Blocks['html_strong'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("💪 Strong:")
+                        .appendField(new Blockly.FieldTextInput("teks tebal"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Teks tebal/penting");
+                }
+            };
+
+            // Em block
+            Blockly.Blocks['html_em'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📝 Em:")
+                        .appendField(new Blockly.FieldTextInput("teks miring"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Teks miring/penekanan");
+                }
+            };
+
+            // Link block
+            Blockly.Blocks['html_a'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔗 Link:")
+                        .appendField(new Blockly.FieldTextInput("Teks Link"), "TEXT")
+                        .appendField("URL:")
+                        .appendField(new Blockly.FieldTextInput("https://example.com"), "HREF");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(0);
+                    this.setTooltip("Link/tautan");
+                }
+            };
+
+            // Image block
+            Blockly.Blocks['html_img'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🖼️ Gambar:");
+                    this.appendDummyInput()
+                        .appendField("Src:")
+                        .appendField(new Blockly.FieldTextInput("https://picsum.photos/300/200"), "SRC");
+                    this.appendDummyInput()
+                        .appendField("Alt:")
+                        .appendField(new Blockly.FieldTextInput("Deskripsi gambar"), "ALT");
+                    this.appendDummyInput()
+                        .appendField("Width:")
+                        .appendField(new Blockly.FieldTextInput("300"), "WIDTH")
+                        .appendField("Height:")
+                        .appendField(new Blockly.FieldTextInput("200"), "HEIGHT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(0);
+                    this.setTooltip("Gambar dengan atribut lengkap");
+                }
+            };
+
+            // Break block
+            Blockly.Blocks['html_br'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("↩️ Line Break");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(0);
+                    this.setTooltip("Baris baru");
+                }
+            };
+
+            // Horizontal Rule block
+            Blockly.Blocks['html_hr'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("➖ Horizontal Rule");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(0);
+                    this.setTooltip("Garis horizontal pemisah");
+                }
+            };
+
+            // List blocks
+            Blockly.Blocks['html_ul'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔸 Unordered List:")
+                        .appendField("Type:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["disc", "disc"],
+                            ["circle", "circle"],
+                            ["square", "square"],
+                            ["none", "none"]
+                        ]), "TYPE");
+                    this.appendStatementInput("ITEMS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                    this.setTooltip("List tidak berurutan dengan pilihan tipe bullet");
+                }
+            };
+
+            Blockly.Blocks['html_ol'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔢 Ordered List:")
+                        .appendField("Type:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["1, 2, 3", "1"],
+                            ["A, B, C", "A"],
+                            ["a, b, c", "a"],
+                            ["I, II, III", "I"],
+                            ["i, ii, iii", "i"]
+                        ]), "TYPE");
+                    this.appendStatementInput("ITEMS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                    this.setTooltip("List berurutan dengan pilihan tipe penomoran");
+                }
+            };
+
+            Blockly.Blocks['html_li'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("• List Item:")
+                        .appendField(new Blockly.FieldTextInput("Item list"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                    this.setTooltip("Item dalam list");
+                }
+            };
+
+            // Table blocks
+            Blockly.Blocks['html_table'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📊 Table");
+                    this.appendStatementInput("ROWS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(260);
+                    this.setTooltip("Tabel HTML");
+                }
+            };
+
+            Blockly.Blocks['html_tr'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📏 Table Row");
+                    this.appendStatementInput("CELLS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(260);
+                    this.setTooltip("Baris tabel");
+                }
+            };
+
+            Blockly.Blocks['html_th'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🏷️ Table Header:")
+                        .appendField(new Blockly.FieldTextInput("Header"), "TEXT");
+                    this.appendDummyInput()
+                        .appendField("Colspan:")
+                        .appendField(new Blockly.FieldNumber(1, 1, 10, 1), "COLSPAN")
+                        .appendField("Rowspan:")
+                        .appendField(new Blockly.FieldNumber(1, 1, 10, 1), "ROWSPAN");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(260);
+                    this.setTooltip("Header tabel dengan colspan dan rowspan");
+                }
+            };
+
+            Blockly.Blocks['html_td'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📋 Table Data:")
+                        .appendField(new Blockly.FieldTextInput("Data"), "TEXT");
+                    this.appendDummyInput()
+                        .appendField("Colspan:")
+                        .appendField(new Blockly.FieldNumber(1, 1, 10, 1), "COLSPAN")
+                        .appendField("Rowspan:")
+                        .appendField(new Blockly.FieldNumber(1, 1, 10, 1), "ROWSPAN");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(260);
+                    this.setTooltip("Data tabel dengan colspan dan rowspan");
+                }
+            };
+
+            // Form blocks
+            Blockly.Blocks['html_form'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📝 Form");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Form HTML");
+                }
+            };
+
+            Blockly.Blocks['html_label'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🏷️ Label:")
+                        .appendField(new Blockly.FieldTextInput("Label"), "TEXT")
+                        .appendField("For:")
+                        .appendField(new Blockly.FieldTextInput("input-id"), "FOR");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Label untuk input");
+                }
+            };
+
+            Blockly.Blocks['html_input'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("⌨️ Input:")
+                        .appendField("Type:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["text", "text"],
+                            ["email", "email"],
+                            ["password", "password"],
+                            ["number", "number"],
+                            ["checkbox", "checkbox"],
+                            ["radio", "radio"],
+                            ["submit", "submit"]
+                        ]), "TYPE")
+                        .appendField("Name:")
+                        .appendField(new Blockly.FieldTextInput("input-name"), "NAME");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Input field");
+                }
+            };
+
+            Blockly.Blocks['html_textarea'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📄 Textarea:")
+                        .appendField("Name:")
+                        .appendField(new Blockly.FieldTextInput("textarea-name"), "NAME")
+                        .appendField("Placeholder:")
+                        .appendField(new Blockly.FieldTextInput("Masukkan teks..."), "PLACEHOLDER");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Area teks multi-baris");
+                }
+            };
+
+            Blockly.Blocks['html_select'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📋 Select:")
+                        .appendField("Name:")
+                        .appendField(new Blockly.FieldTextInput("select-name"), "NAME");
+                    this.appendStatementInput("OPTIONS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Dropdown select");
+                }
+            };
+
+            Blockly.Blocks['html_option'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("• Option:")
+                        .appendField(new Blockly.FieldTextInput("Pilihan"), "TEXT")
+                        .appendField("Value:")
+                        .appendField(new Blockly.FieldTextInput("value"), "VALUE");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Opsi dalam select");
+                }
+            };
+
+            Blockly.Blocks['html_button'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔘 Button:")
+                        .appendField(new Blockly.FieldTextInput("Klik Saya"), "TEXT")
+                        .appendField("Type:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["button", "button"],
+                            ["submit", "submit"],
+                            ["reset", "reset"]
+                        ]), "TYPE");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Tombol");
+                }
+            };
+
+            // Container blocks
+            Blockly.Blocks['html_div'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📦 Div");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(290);
+                    this.setTooltip("Container div");
+                }
+            };
+        }
+
+        // Define code generators
+        function defineGenerators() {
+            const htmlGenerator = {
+                statementToCode: function(block, name) {
+                    const targetBlock = block.getInputTargetBlock(name);
+                    if (!targetBlock) return '';
+                    
+                    let code = '';
+                    let currentBlock = targetBlock;
+                    const processedBlocks = new Set();
+                    
+                    while (currentBlock && !processedBlocks.has(currentBlock.id)) {
+                        processedBlocks.add(currentBlock.id);
+                        code += this.generateBlockCode(currentBlock);
+                        currentBlock = currentBlock.getNextBlock();
+                    }
+                    
+                    return code;
+                },
+
+                generateBlockCode: function(block) {
+                    const blockType = block.type;
+                    
+                    switch(blockType) {
+                        case 'html_document':
+                            const docContent = this.getStatementContent(block, 'CONTENT');
+                            return `<!DOCTYPE html>\n<html>\n${docContent}</html>`;
+                        
+                        case 'html_head':
+                            const headContent = this.getStatementContent(block, 'CONTENT');
+                            return `<head>\n${headContent}</head>\n`;
+                        
+                        case 'html_body':
+                            const bodyContent = this.getStatementContent(block, 'CONTENT');
+                            return `<body>\n${bodyContent}</body>\n`;
+                        
+                        case 'html_title':
+                            const titleText = block.getFieldValue('TEXT') || 'Untitled';
+                            return `<title>${titleText}</title>\n`;
+                        
+                        case 'html_heading':
+                            const headingLevel = block.getFieldValue('LEVEL') || 'h1';
+                            const headingText = block.getFieldValue('TEXT') || 'Heading';
+                            return `<${headingLevel}>${headingText}</${headingLevel}>\n`;
+                        
+                        case 'html_p':
+                            const pText = block.getFieldValue('TEXT') || 'Paragraph';
+                            return `<p>${pText}</p>\n`;
+                        
+                        case 'html_strong':
+                            const strongText = block.getFieldValue('TEXT') || 'Strong';
+                            return `<strong>${strongText}</strong>\n`;
+                        
+                        case 'html_em':
+                            const emText = block.getFieldValue('TEXT') || 'Em';
+                            return `<em>${emText}</em>\n`;
+                        
+                        case 'html_a':
+                            const linkText = block.getFieldValue('TEXT') || 'Link';
+                            const href = block.getFieldValue('HREF') || '#';
+                            return `<a href="${href}">${linkText}</a>\n`;
+                        
+                        case 'html_img':
+                            const imgSrc = block.getFieldValue('SRC') || 'https://picsum.photos/300/200';
+                            const alt = block.getFieldValue('ALT') || 'Image';
+                            const width = block.getFieldValue('WIDTH') || '300';
+                            const height = block.getFieldValue('HEIGHT') || '200';
+                            return `<img src="${imgSrc}" alt="${alt}" width="${width}" height="${height}">\n`;
+                        
+                        case 'html_br':
+                            return '<br>\n';
+                        
+                        case 'html_hr':
+                            return '<hr>\n';
+                        
+                        case 'html_ul':
+                            const ulItems = this.getStatementContent(block, 'ITEMS');
+                            const ulType = block.getFieldValue('TYPE') || 'disc';
+                            return `<ul type="${ulType}" style="list-style-type: ${ulType};">\n${ulItems}</ul>\n`;
+                        
+                        case 'html_ol':
+                            const olItems = this.getStatementContent(block, 'ITEMS');
+                            const olType = block.getFieldValue('TYPE') || '1';
+                            return `<ol type="${olType}">\n${olItems}</ol>\n`;
+                        
+                        case 'html_li':
+                            const liText = block.getFieldValue('TEXT') || 'List item';
+                            return `<li>${liText}</li>\n`;
+                        
+                        case 'html_div':
+                            const divContent = this.getStatementContent(block, 'CONTENT');
+                            return `<div>\n${divContent}</div>\n`;
+                        
+                        case 'html_table':
+                            const tableRows = this.getStatementContent(block, 'ROWS');
+                            return `<table border="1" style="border-collapse: collapse; width: 100%;">\n${tableRows}</table>\n`;
+                        
+                        case 'html_tr':
+                            const tableCells = this.getStatementContent(block, 'CELLS');
+                            return `<tr>\n${tableCells}</tr>\n`;
+                        
+                        case 'html_th':
+                            const thText = block.getFieldValue('TEXT') || 'Header';
+                            const thColspan = block.getFieldValue('COLSPAN') || 1;
+                            const thRowspan = block.getFieldValue('ROWSPAN') || 1;
+                            let thAttributes = 'style="padding: 8px; background-color: #f2f2f2;"';
+                            if (thColspan > 1) thAttributes += ` colspan="${thColspan}"`;
+                            if (thRowspan > 1) thAttributes += ` rowspan="${thRowspan}"`;
+                            return `<th ${thAttributes}>${thText}</th>\n`;
+                        
+                        case 'html_td':
+                            const tdText = block.getFieldValue('TEXT') || 'Data';
+                            const tdColspan = block.getFieldValue('COLSPAN') || 1;
+                            const tdRowspan = block.getFieldValue('ROWSPAN') || 1;
+                            let tdAttributes = 'style="padding: 8px;"';
+                            if (tdColspan > 1) tdAttributes += ` colspan="${tdColspan}"`;
+                            if (tdRowspan > 1) tdAttributes += ` rowspan="${tdRowspan}"`;
+                            return `<td ${tdAttributes}>${tdText}</td>\n`;
+                        
+                        case 'html_form':
+                            const formContent = this.getStatementContent(block, 'CONTENT');
+                            return `<form>\n${formContent}</form>\n`;
+                        
+                        case 'html_label':
+                            const labelText = block.getFieldValue('TEXT') || 'Label';
+                            const labelFor = block.getFieldValue('FOR') || '';
+                            return `<label for="${labelFor}">${labelText}</label>\n`;
+                        
+                        case 'html_input':
+                            const inputType = block.getFieldValue('TYPE') || 'text';
+                            const inputName = block.getFieldValue('NAME') || 'input';
+                            return `<input type="${inputType}" name="${inputName}" id="${inputName}">\n`;
+                        
+                        case 'html_textarea':
+                            const textareaName = block.getFieldValue('NAME') || 'textarea';
+                            const placeholder = block.getFieldValue('PLACEHOLDER') || '';
+                            return `<textarea name="${textareaName}" id="${textareaName}" placeholder="${placeholder}" rows="4" cols="50"></textarea>\n`;
+                        
+                        case 'html_select':
+                            const selectName = block.getFieldValue('NAME') || 'select';
+                            const selectOptions = this.getStatementContent(block, 'OPTIONS');
+                            return `<select name="${selectName}" id="${selectName}">\n${selectOptions}</select>\n`;
+                        
+                        case 'html_option':
+                            const optionText = block.getFieldValue('TEXT') || 'Option';
+                            const optionValue = block.getFieldValue('VALUE') || '';
+                            return `<option value="${optionValue}">${optionText}</option>\n`;
+                        
+                        case 'html_button':
+                            const buttonText = block.getFieldValue('TEXT') || 'Button';
+                            const buttonType = block.getFieldValue('TYPE') || 'button';
+                            return `<button type="${buttonType}">${buttonText}</button>\n`;
+                        
+                        default:
+                            return `<!-- Unknown block: ${blockType} -->\n`;
+                    }
+                },
+
+                getStatementContent: function(block, inputName) {
+                    const targetBlock = block.getInputTargetBlock(inputName);
+                    if (!targetBlock) return '';
+                    
+                    let content = '';
+                    let currentBlock = targetBlock;
+                    const processedBlocks = new Set();
+                    
+                    while (currentBlock && !processedBlocks.has(currentBlock.id)) {
+                        processedBlocks.add(currentBlock.id);
+                        content += this.generateBlockCode(currentBlock);
+                        currentBlock = currentBlock.getNextBlock();
+                    }
+                    
+                    return content;
+                },
+
+                workspaceToCode: function(workspace) {
+                    const topBlocks = workspace.getTopBlocks(true);
+                    let code = '';
+                    
+                    for (let block of topBlocks) {
+                        try {
+                            code += this.generateBlockCode(block);
+                        } catch (e) {
+                            console.error(`Error processing block ${block.type}:`, e);
+                            code += `<!-- Error in ${block.type} -->\n`;
+                        }
+                    }
+                    
+                    return code;
+                }
+            };
+
+            window.htmlGenerator = htmlGenerator;
+        }
+
+        // Generate HTML code from blocks
+        function generateCode() {
+            try {
+                const code = window.htmlGenerator ? window.htmlGenerator.workspaceToCode(workspace) : '';
+                const codeOutput = document.getElementById('codeOutput');
+                const preview = document.getElementById('preview');
+                
+                if (code && code.trim()) {
+                    codeOutput.textContent = code;
+                    
+                    const previewDoc = preview.contentDocument || preview.contentWindow.document;
+                    previewDoc.open();
+                    
+                    // Add CSS styling to preview
+                    const styledCode = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body {
+                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                                line-height: 1.6;
+                                color: #333;
+                                max-width: 800px;
+                                margin: 0 auto;
+                                padding: 20px;
+                                background: #f8fafc;
+                            }
+                            h1, h2, h3, h4, h5, h6 {
+                                color: #2d3748;
+                                margin-top: 1.5em;
+                                margin-bottom: 0.5em;
+                                font-weight: 600;
+                            }
+                            h1 {
+                                font-size: 2.25em;
+                                border-bottom: 3px solid #667eea;
+                                padding-bottom: 0.3em;
+                            }
+                            h2 {
+                                font-size: 1.875em;
+                                color: #4a5568;
+                            }
+                            h3 {
+                                font-size: 1.5em;
+                                color: #4a5568;
+                            }
+                            h4 {
+                                font-size: 1.25em;
+                                color: #4a5568;
+                            }
+                            h5 {
+                                font-size: 1.125em;
+                                color: #4a5568;
+                            }
+                            h6 {
+                                font-size: 1em;
+                                color: #4a5568;
+                                font-weight: 600;
+                            }
+                            p {
+                                margin-bottom: 1em;
+                                text-align: justify;
+                            }
+                            strong {
+                                color: #2b6cb0;
+                                font-weight: 600;
+                            }
+                            em {
+                                color: #805ad5;
+                                font-style: italic;
+                            }
+                            a {
+                                color: #667eea;
+                                text-decoration: none;
+                                border-bottom: 1px solid transparent;
+                                transition: all 0.3s ease;
+                            }
+                            a:hover {
+                                color: #5a67d8;
+                                border-bottom-color: #5a67d8;
+                            }
+                            img {
+                                max-width: 100%;
+                                height: auto;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                margin: 1em 0;
+                            }
+                            ul, ol {
+                                margin: 1em 0;
+                                padding-left: 2em;
+                            }
+                            li {
+                                margin-bottom: 0.5em;
+                                color: #4a5568;
+                            }
+                            ul[style*="disc"] li {
+                                list-style-type: disc;
+                            }
+                            ul[style*="circle"] li {
+                                list-style-type: circle;
+                            }
+                            ul[style*="square"] li {
+                                list-style-type: square;
+                            }
+                            ul[style*="none"] li {
+                                list-style-type: none;
+                            }
+                            ol[type="1"] li {
+                                list-style-type: decimal;
+                            }
+                            ol[type="A"] li {
+                                list-style-type: upper-alpha;
+                            }
+                            ol[type="a"] li {
+                                list-style-type: lower-alpha;
+                            }
+                            ol[type="I"] li {
+                                list-style-type: upper-roman;
+                            }
+                            ol[type="i"] li {
+                                list-style-type: lower-roman;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 1.5em 0;
+                                background: white;
+                                border-radius: 8px;
+                                overflow: hidden;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            }
+                            th {
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                color: white;
+                                padding: 12px 15px;
+                                text-align: left;
+                                font-weight: 600;
+                            }
+                            td {
+                                padding: 12px 15px;
+                                border-bottom: 1px solid #e2e8f0;
+                            }
+                            tr:hover {
+                                background-color: #f7fafc;
+                            }
+                            form {
+                                background: white;
+                                padding: 2em;
+                                border-radius: 12px;
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                margin: 1.5em 0;
+                            }
+                            label {
+                                display: block;
+                                margin-bottom: 0.5em;
+                                font-weight: 500;
+                                color: #4a5568;
+                            }
+                            input, textarea, select {
+                                width: 100%;
+                                padding: 0.75em;
+                                border: 2px solid #e2e8f0;
+                                border-radius: 6px;
+                                font-size: 1em;
+                                transition: border-color 0.3s ease;
+                                margin-bottom: 1em;
+                                box-sizing: border-box;
+                            }
+                            input:focus, textarea:focus, select:focus {
+                                outline: none;
+                                border-color: #667eea;
+                                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                            }
+                            button {
+                                background: linear-gradient(45deg, #667eea, #764ba2);
+                                color: white;
+                                padding: 0.75em 1.5em;
+                                border: none;
+                                border-radius: 6px;
+                                font-size: 1em;
+                                font-weight: 500;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            }
+                            button:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+                            }
+                            div {
+                                margin: 1em 0;
+                            }
+                            br {
+                                line-height: 2;
+                            }
+                            hr {
+                                border: none;
+                                height: 2px;
+                                background: linear-gradient(90deg, transparent, #667eea, transparent);
+                                margin: 2em 0;
+                                border-radius: 1px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${code.replace(/<!DOCTYPE html>[\s\S]*?<body[^>]*>/i, '').replace(/<\/body>[\s\S]*?<\/html>/i, '')}
+                    </body>
+                    </html>`;
+                    
+                    previewDoc.write(styledCode);
+                    previewDoc.close();
+                    
+                    showNotification('✅ HTML berhasil di-generate!', 'success');
+                } else {
+                    codeOutput.textContent = '<!-- Belum ada blok yang disusun -->';
+                    const previewDoc = preview.contentDocument || preview.contentWindow.document;
+                    previewDoc.open();
+                    previewDoc.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: 'Inter', sans-serif;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    height: 100vh;
+                                    margin: 0;
+                                    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+                                    color: #666;
+                                }
+                                .message {
+                                    text-align: center;
+                                    padding: 2em;
+                                    background: white;
+                                    border-radius: 12px;
+                                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="message">
+                                <h3>🎨 Preview Area</h3>
+                                <p>Susun blok untuk melihat preview halaman web</p>
+                            </div>
+                        </body>
+                        </html>
+                    `);
+                    previewDoc.close();
+                }
+            } catch (error) {
+                console.error('Error generating code:', error);
+                showNotification('❌ Error saat generate HTML', 'error');
+            }
+        }
+
+        // Add block function
+        function addBlock(blockType) {
+            const block = workspace.newBlock(blockType);
+            block.initSvg();
+            block.render();
+            
+            // Find the bottom-most block and its position
+            const allBlocks = workspace.getAllBlocks();
+            let bottomY = 50; // Default starting position
+            let bottomX = 50; // Default starting position
+            
+            if (allBlocks.length > 1) { // More than just the new block
+                let bottomMostBlock = null;
+                let lowestY = -Infinity;
+                
+                allBlocks.forEach(existingBlock => {
+                    if (existingBlock !== block) { // Don't include the new block itself
+                        const blockBounds = existingBlock.getBoundingRectangle();
+                        const blockBottom = blockBounds.bottom;
+                        if (blockBottom > lowestY) {
+                            lowestY = blockBottom;
+                            bottomMostBlock = existingBlock;
+                        }
+                    }
+                });
+                
+                if (bottomMostBlock) {
+                    const bottomBlockBounds = bottomMostBlock.getBoundingRectangle();
+                    bottomX = bottomBlockBounds.left; // Use the same X position as the bottom-most block
+                    bottomY = bottomBlockBounds.bottom + 10; // Small gap below the bottom-most block
+                }
+            }
+            
+            block.moveBy(bottomX, bottomY);
+            
+            // Scroll to show the new block if it's outside the visible area
+            workspace.centerOnBlock(block.id);
+            
+            showNotification(`✅ Blok ${blockType.replace('html_', '').toUpperCase()} ditambahkan!`, 'success');
+        }
+
+        // Clear workspace
+        function clearWorkspace() {
+            workspace.clear();
+            document.getElementById('codeOutput').textContent = '<!-- Workspace dikosongkan -->';
+            const preview = document.getElementById('preview');
+            const previewDoc = preview.contentDocument || preview.contentWindow.document;
+            previewDoc.open();
+            previewDoc.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: 'Inter', sans-serif;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            height: 100vh;
+                            margin: 0;
+                            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+                            color: #666;
+                        }
+                        .message {
+                            text-align: center;
+                            padding: 2em;
+                            background: white;
+                            border-radius: 12px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="message">
+                        <h3>🗑️ Workspace Dikosongkan</h3>
+                        <p>Mulai susun blok baru untuk membuat halaman web</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            previewDoc.close();
+            showNotification('🗑️ Workspace berhasil dikosongkan!', 'info');
+        }
+
+        // Load basic HTML structure
+        function loadBasicHTML() {
+            clearWorkspace();
+            
+            // Create HTML document block
+            const docBlock = workspace.newBlock('html_document');
+            docBlock.initSvg();
+            docBlock.render();
+            docBlock.moveBy(50, 50);
+            
+            // Create head block
+            const headBlock = workspace.newBlock('html_head');
+            headBlock.initSvg();
+            headBlock.render();
+            
+            // Create title block
+            const titleBlock = workspace.newBlock('html_title');
+            titleBlock.initSvg();
+            titleBlock.render();
+            titleBlock.setFieldValue('Halaman Web Saya', 'TEXT');
+            
+            // Create body block
+            const bodyBlock = workspace.newBlock('html_body');
+            bodyBlock.initSvg();
+            bodyBlock.render();
+            
+            // Create heading block
+            const headingBlock = workspace.newBlock('html_heading');
+            headingBlock.initSvg();
+            headingBlock.render();
+            headingBlock.setFieldValue('h1', 'LEVEL');
+            headingBlock.setFieldValue('Selamat Datang!', 'TEXT');
+            
+            // Create paragraph block
+            const paragraphBlock = workspace.newBlock('html_p');
+            paragraphBlock.initSvg();
+            paragraphBlock.render();
+            paragraphBlock.setFieldValue('Ini adalah halaman web pertama saya yang dibuat dengan Blockly.', 'TEXT');
+            
+            // Connect blocks
+            docBlock.getInput('CONTENT').connection.connect(headBlock.previousConnection);
+            headBlock.getInput('CONTENT').connection.connect(titleBlock.previousConnection);
+            headBlock.nextConnection.connect(bodyBlock.previousConnection);
+            bodyBlock.getInput('CONTENT').connection.connect(headingBlock.previousConnection);
+            headingBlock.nextConnection.connect(paragraphBlock.previousConnection);
+            
+            setTimeout(() => {
+                generateCode();
+                showNotification('🏗️ Struktur HTML dasar berhasil dimuat!', 'success');
+            }, 500);
+        }
+
+        // Load form example
+        function loadFormExample() {
+            clearWorkspace();
+            
+            // Create HTML document block
+            const docBlock = workspace.newBlock('html_document');
+            docBlock.initSvg();
+            docBlock.render();
+            docBlock.moveBy(50, 50);
+            
+            // Create head block
+            const headBlock = workspace.newBlock('html_head');
+            headBlock.initSvg();
+            headBlock.render();
+            
+            // Create title block
+            const titleBlock = workspace.newBlock('html_title');
+            titleBlock.initSvg();
+            titleBlock.render();
+            titleBlock.setFieldValue('Form Kontak', 'TEXT');
+            
+            // Create body block
+            const bodyBlock = workspace.newBlock('html_body');
+            bodyBlock.initSvg();
+            bodyBlock.render();
+            
+            // Create heading block
+            const headingBlock = workspace.newBlock('html_heading');
+            headingBlock.initSvg();
+            headingBlock.render();
+            headingBlock.setFieldValue('h2', 'LEVEL');
+            headingBlock.setFieldValue('Hubungi Kami', 'TEXT');
+            
+            // Create form block
+            const formBlock = workspace.newBlock('html_form');
+            formBlock.initSvg();
+            formBlock.render();
+            
+            // Create name label
+            const nameLabel = workspace.newBlock('html_label');
+            nameLabel.initSvg();
+            nameLabel.render();
+            nameLabel.setFieldValue('Nama:', 'TEXT');
+            nameLabel.setFieldValue('nama', 'FOR');
+            
+            // Create name input
+            const nameInput = workspace.newBlock('html_input');
+            nameInput.initSvg();
+            nameInput.render();
+            nameInput.setFieldValue('text', 'TYPE');
+            nameInput.setFieldValue('nama', 'NAME');
+            
+            // Create email label
+            const emailLabel = workspace.newBlock('html_label');
+            emailLabel.initSvg();
+            emailLabel.render();
+            emailLabel.setFieldValue('Email:', 'TEXT');
+            emailLabel.setFieldValue('email', 'FOR');
+            
+            // Create email input
+            const emailInput = workspace.newBlock('html_input');
+            emailInput.initSvg();
+            emailInput.render();
+            emailInput.setFieldValue('email', 'TYPE');
+            emailInput.setFieldValue('email', 'NAME');
+            
+            // Create message label
+            const messageLabel = workspace.newBlock('html_label');
+            messageLabel.initSvg();
+            messageLabel.render();
+            messageLabel.setFieldValue('Pesan:', 'TEXT');
+            messageLabel.setFieldValue('pesan', 'FOR');
+            
+            // Create textarea
+            const textarea = workspace.newBlock('html_textarea');
+            textarea.initSvg();
+            textarea.render();
+            textarea.setFieldValue('pesan', 'NAME');
+            textarea.setFieldValue('Tulis pesan Anda di sini...', 'PLACEHOLDER');
+            
+            // Create submit button
+            const submitButton = workspace.newBlock('html_button');
+            submitButton.initSvg();
+            submitButton.render();
+            submitButton.setFieldValue('Kirim Pesan', 'TEXT');
+            submitButton.setFieldValue('submit', 'TYPE');
+            
+            // Connect blocks
+            docBlock.getInput('CONTENT').connection.connect(headBlock.previousConnection);
+            headBlock.getInput('CONTENT').connection.connect(titleBlock.previousConnection);
+            headBlock.nextConnection.connect(bodyBlock.previousConnection);
+            bodyBlock.getInput('CONTENT').connection.connect(headingBlock.previousConnection);
+            headingBlock.nextConnection.connect(formBlock.previousConnection);
+            formBlock.getInput('CONTENT').connection.connect(nameLabel.previousConnection);
+            nameLabel.nextConnection.connect(nameInput.previousConnection);
+            nameInput.nextConnection.connect(emailLabel.previousConnection);
+            emailLabel.nextConnection.connect(emailInput.previousConnection);
+            emailInput.nextConnection.connect(messageLabel.previousConnection);
+            messageLabel.nextConnection.connect(textarea.previousConnection);
+            textarea.nextConnection.connect(submitButton.previousConnection);
+            
+            setTimeout(() => {
+                generateCode();
+                showNotification('📝 Contoh form berhasil dimuat!', 'success');
+            }, 500);
+        }
+
+        // Load table example
+        function loadTableExample() {
+            clearWorkspace();
+            
+            // Create HTML document block
+            const docBlock = workspace.newBlock('html_document');
+            docBlock.initSvg();
+            docBlock.render();
+            docBlock.moveBy(50, 50);
+            
+            // Create head block
+            const headBlock = workspace.newBlock('html_head');
+            headBlock.initSvg();
+            headBlock.render();
+            
+            // Create title block
+            const titleBlock = workspace.newBlock('html_title');
+            titleBlock.initSvg();
+            titleBlock.render();
+            titleBlock.setFieldValue('Data Siswa', 'TEXT');
+            
+            // Create body block
+            const bodyBlock = workspace.newBlock('html_body');
+            bodyBlock.initSvg();
+            bodyBlock.render();
+            
+            // Create heading block
+            const headingBlock = workspace.newBlock('html_heading');
+            headingBlock.initSvg();
+            headingBlock.render();
+            headingBlock.setFieldValue('h2', 'LEVEL');
+            headingBlock.setFieldValue('Daftar Siswa Kelas 10A', 'TEXT');
+            
+            // Create table block
+            const tableBlock = workspace.newBlock('html_table');
+            tableBlock.initSvg();
+            tableBlock.render();
+            
+            // Create header row
+            const headerRow = workspace.newBlock('html_tr');
+            headerRow.initSvg();
+            headerRow.render();
+            
+            // Create header cells
+            const header1 = workspace.newBlock('html_th');
+            header1.initSvg();
+            header1.render();
+            header1.setFieldValue('No', 'TEXT');
+            
+            const header2 = workspace.newBlock('html_th');
+            header2.initSvg();
+            header2.render();
+            header2.setFieldValue('Nama', 'TEXT');
+            
+            const header3 = workspace.newBlock('html_th');
+            header3.initSvg();
+            header3.render();
+            header3.setFieldValue('Nilai', 'TEXT');
+            
+            // Create data row 1
+            const dataRow1 = workspace.newBlock('html_tr');
+            dataRow1.initSvg();
+            dataRow1.render();
+            
+            const data1_1 = workspace.newBlock('html_td');
+            data1_1.initSvg();
+            data1_1.render();
+            data1_1.setFieldValue('1', 'TEXT');
+            
+            const data1_2 = workspace.newBlock('html_td');
+            data1_2.initSvg();
+            data1_2.render();
+            data1_2.setFieldValue('Ahmad Rizki', 'TEXT');
+            
+            const data1_3 = workspace.newBlock('html_td');
+            data1_3.initSvg();
+            data1_3.render();
+            data1_3.setFieldValue('85', 'TEXT');
+            
+            // Create data row 2
+            const dataRow2 = workspace.newBlock('html_tr');
+            dataRow2.initSvg();
+            dataRow2.render();
+            
+            const data2_1 = workspace.newBlock('html_td');
+            data2_1.initSvg();
+            data2_1.render();
+            data2_1.setFieldValue('2', 'TEXT');
+            
+            const data2_2 = workspace.newBlock('html_td');
+            data2_2.initSvg();
+            data2_2.render();
+            data2_2.setFieldValue('Siti Nurhaliza', 'TEXT');
+            
+            const data2_3 = workspace.newBlock('html_td');
+            data2_3.initSvg();
+            data2_3.render();
+            data2_3.setFieldValue('92', 'TEXT');
+            
+            // Connect blocks
+            docBlock.getInput('CONTENT').connection.connect(headBlock.previousConnection);
+            headBlock.getInput('CONTENT').connection.connect(titleBlock.previousConnection);
+            headBlock.nextConnection.connect(bodyBlock.previousConnection);
+            bodyBlock.getInput('CONTENT').connection.connect(headingBlock.previousConnection);
+            headingBlock.nextConnection.connect(tableBlock.previousConnection);
+            
+            // Connect table rows
+            tableBlock.getInput('ROWS').connection.connect(headerRow.previousConnection);
+            headerRow.nextConnection.connect(dataRow1.previousConnection);
+            dataRow1.nextConnection.connect(dataRow2.previousConnection);
+            
+            // Connect header cells
+            headerRow.getInput('CELLS').connection.connect(header1.previousConnection);
+            header1.nextConnection.connect(header2.previousConnection);
+            header2.nextConnection.connect(header3.previousConnection);
+            
+            // Connect data row 1 cells
+            dataRow1.getInput('CELLS').connection.connect(data1_1.previousConnection);
+            data1_1.nextConnection.connect(data1_2.previousConnection);
+            data1_2.nextConnection.connect(data1_3.previousConnection);
+            
+            // Connect data row 2 cells
+            dataRow2.getInput('CELLS').connection.connect(data2_1.previousConnection);
+            data2_1.nextConnection.connect(data2_2.previousConnection);
+            data2_2.nextConnection.connect(data2_3.previousConnection);
+            
+            setTimeout(() => {
+                generateCode();
+                showNotification('📊 Contoh tabel berhasil dimuat!', 'success');
+            }, 500);
+        }
+
+        // Copy code to clipboard
+        function copyCode() {
+            const code = document.getElementById('codeOutput').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('📋 Kode HTML berhasil disalin!', 'success');
+            }).catch(() => {
+                showNotification('❌ Gagal menyalin kode', 'error');
+            });
+        }
+
+        // Filter blocks
+        function filterBlocks() {
+            const searchTerm = document.getElementById('blockSearch').value.toLowerCase();
+            const blockItems = document.querySelectorAll('.block-item');
+            const categories = document.querySelectorAll('.block-category');
+            
+            blockItems.forEach(item => {
+                const blockName = item.getAttribute('data-name').toLowerCase();
+                const blockType = item.getAttribute('data-block').toLowerCase();
+                const isMatch = blockName.includes(searchTerm) || blockType.includes(searchTerm);
+                
+                if (isMatch || searchTerm === '') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            categories.forEach(category => {
+                const visibleItems = category.querySelectorAll('.block-item[style="display: block"], .block-item:not([style*="display: none"])');
+                if (visibleItems.length === 0 && searchTerm !== '') {
+                    category.style.display = 'none';
+                } else {
+                    category.style.display = 'block';
+                }
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500',
+                warning: 'bg-yellow-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `notification fixed top-6 right-6 ${colors[type]} text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="mr-3 text-xl">✨</div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">${message}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            defineBlocks();
+            defineGenerators();
+            initBlockly();
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // ESC to close popups
+                if (e.key === 'Escape') {
+                    hideBlocksPopup();
+                    hideQuickActions();
+                    hideOutputFullscreen();
+                }
+                
+                // Ctrl/Cmd + B to show blocks popup
+                if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                    e.preventDefault();
+                    showBlocksPopup();
+                }
+                
+                // Ctrl/Cmd + R to run code
+                if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+                    e.preventDefault();
+                    runCode();
+                }
+                
+                // Ctrl/Cmd + Q to show quick actions
+                if ((e.ctrlKey || e.metaKey) && e.key === 'q') {
+                    e.preventDefault();
+                    showQuickActions();
+                }
+            });
+            
+            // Click outside popup to close
+            document.getElementById('blocksPopup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideBlocksPopup();
+                }
+            });
+            
+            document.getElementById('quickActionsPopup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideQuickActions();
+                }
+            });
+            
+            // Initial preview
+            const preview = document.getElementById('preview');
+            if (preview) {
+                const previewDoc = preview.contentDocument || preview.contentWindow.document;
+                previewDoc.open();
+                previewDoc.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: 'Inter', sans-serif;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                height: 100vh;
+                                margin: 0;
+                                background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+                                color: #666;
+                            }
+                            .message {
+                                text-align: center;
+                                padding: 2em;
+                                background: white;
+                                border-radius: 12px;
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="message">
+                            <h3>🎨 Preview Area</h3>
+                            <p>Susun blok untuk melihat preview halaman web</p>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                previewDoc.close();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97813169c2ea8971',t:'MTc1NjY5MjIyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
