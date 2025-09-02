@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Interactive Learning - Blockly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <style>
+        .blockly-ws {
+            height: calc(100vh - 80px);
+        }
+        .code-output {
+            font-family: 'Courier New', monospace;
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg border-b-2 border-indigo-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-indigo-700">C++ Learning Studio</h1>
+                    <span class="text-sm text-gray-500">Visual Programming with Blockly</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="addBlockBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2">
+                        <span>➕</span>
+                        <span>Add</span>
+                    </button>
+                    <button id="quickTemplateBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                        <span>⚡</span>
+                    </button>
+                    <button id="clearBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2">
+                        <span>🗑️</span>
+                        <span>Clear</span>
+                    </button>
+                    <button id="runBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2">
+                        <span>▶️</span>
+                        <span>Run</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <div id="workspace" class="blockly-ws"></div>
+
+    <!-- Block Selection Modal -->
+    <div id="blockModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-gray-800">Pilih Blok C++</h2>
+                        <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Basic Structure Category -->
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                        <h3 class="font-bold text-purple-700 mb-3">Struktur Dasar</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-sm" data-type="program_structure">Struktur Program C++</button>
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-sm" data-type="include">Include Library</button>
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-sm" data-type="namespace">Using Namespace</button>
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-sm" data-type="main">Fungsi main()</button>
+                        </div>
+                    </div>
+
+                    <!-- Input/Output Category -->
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h3 class="font-bold text-blue-700 mb-3">Input & Output</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-sm" data-type="cout">Output (cout)</button>
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-sm" data-type="cin">Input (cin)</button>
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-sm" data-type="chain"><<  (sambung nilai)</button>
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-sm" data-type="endl">Baris Baru</button>
+                        </div>
+                    </div>
+
+                    <!-- Variables Category -->
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h3 class="font-bold text-green-700 mb-3">Variabel</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-green-100 hover:bg-green-200 rounded text-sm" data-type="declare_var">Buat Variabel</button>
+                            <button class="block-btn w-full text-left p-2 bg-green-100 hover:bg-green-200 rounded text-sm" data-type="set_var">Ubah Nilai Variabel</button>
+                            <button class="block-btn w-full text-left p-2 bg-green-100 hover:bg-green-200 rounded text-sm" data-type="get_var">Ambil Nilai Variabel</button>
+                        </div>
+                    </div>
+
+                    <!-- Data Types Category -->
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h3 class="font-bold text-yellow-700 mb-3">Tipe Data</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-sm" data-type="text">Text</button>
+                            <button class="block-btn w-full text-left p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-sm" data-type="number">Angka</button>
+                            <button class="block-btn w-full text-left p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-sm" data-type="boolean">Logika (true/false)</button>
+                        </div>
+                    </div>
+
+                    <!-- Math Operations Category -->
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <h3 class="font-bold text-red-700 mb-3">Operasi Matematika</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-red-100 hover:bg-red-200 rounded text-sm" data-type="math_op">Operasi (+, -, *, /, %)</button>
+                        </div>
+                    </div>
+
+                    <!-- Logic Operations Category -->
+                    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                        <h3 class="font-bold text-indigo-700 mb-3">Operasi Logika</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-indigo-100 hover:bg-indigo-200 rounded text-sm" data-type="compare_op">Perbandingan (==, !=, >, <)</button>
+                            <button class="block-btn w-full text-left p-2 bg-indigo-100 hover:bg-indigo-200 rounded text-sm" data-type="logic_op">Logika (and, or)</button>
+                            <button class="block-btn w-full text-left p-2 bg-indigo-100 hover:bg-indigo-200 rounded text-sm" data-type="not_op">Negasi (!)</button>
+                        </div>
+                    </div>
+
+                    <!-- Control Flow Category -->
+                    <div class="bg-pink-50 p-4 rounded-lg border border-pink-200">
+                        <h3 class="font-bold text-pink-700 mb-3">Kontrol Alur</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-sm" data-type="if">If Statement</button>
+                            <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-sm" data-type="if_else">If-Else Statement</button>
+                        </div>
+                    </div>
+
+                    <!-- Loops Category -->
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                        <h3 class="font-bold text-teal-700 mb-3">Pengulangan</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-teal-100 hover:bg-teal-200 rounded text-sm" data-type="for_loop">For Loop</button>
+                            <button class="block-btn w-full text-left p-2 bg-teal-100 hover:bg-teal-200 rounded text-sm" data-type="while_loop">While Loop</button>
+                            <button class="block-btn w-full text-left p-2 bg-teal-100 hover:bg-teal-200 rounded text-sm" data-type="do_while">Do-While Loop</button>
+                        </div>
+                    </div>
+
+                    <!-- Comments Category -->
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-gray-700 mb-3">Komentar</h3>
+                        <div class="space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-gray-100 hover:bg-gray-200 rounded text-sm" data-type="comment">Komentar (//)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Templates Modal -->
+    <div id="templateModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-gray-800">Template Cepat C++</h2>
+                        <button id="closeTemplateModal" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Hello World Template -->
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200 hover:shadow-lg transition-shadow cursor-pointer" data-template="hello-world">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">👋</div>
+                            <h3 class="font-bold text-blue-700 text-lg">Hello World</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">Program dasar yang menampilkan "Hello World" ke layar.</p>
+                        <div class="bg-white p-3 rounded text-xs font-mono text-gray-700">
+                            #include &lt;iostream&gt;<br>
+                            using namespace std;<br>
+                            int main() {<br>
+                            &nbsp;&nbsp;cout &lt;&lt; "Hello World";<br>
+                            &nbsp;&nbsp;return 0;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Calculator Template -->
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 hover:shadow-lg transition-shadow cursor-pointer" data-template="calculator">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">🧮</div>
+                            <h3 class="font-bold text-green-700 text-lg">Kalkulator Sederhana</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">Program kalkulator dengan input dari user dan operasi matematika.</p>
+                        <div class="bg-white p-3 rounded text-xs font-mono text-gray-700">
+                            Input dua angka<br>
+                            Operasi: +, -, *, /<br>
+                            Tampilkan hasil
+                        </div>
+                    </div>
+
+                    <!-- Loop Example Template -->
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 hover:shadow-lg transition-shadow cursor-pointer" data-template="loop-example">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">🔄</div>
+                            <h3 class="font-bold text-purple-700 text-lg">Contoh Loop</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">Program yang mendemonstrasikan penggunaan for loop dan if statement.</p>
+                        <div class="bg-white p-3 rounded text-xs font-mono text-gray-700">
+                            For loop 1-10<br>
+                            If genap/ganjil<br>
+                            Tampilkan hasil
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Output Modal -->
+    <div id="codeModal" class="fixed inset-0 bg-white hidden z-50">
+        <div class="h-full flex flex-col">
+            <div class="p-6 border-b border-gray-200 bg-white">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Hasil Kode C++</h2>
+                    <button id="closeCodeModal" class="text-gray-500 hover:text-gray-700 text-2xl bg-gray-100 hover:bg-gray-200 rounded-full w-10 h-10 flex items-center justify-center">✕</button>
+                </div>
+            </div>
+            <div class="flex flex-1 overflow-hidden">
+                <div class="w-1/2 p-6 border-r border-gray-200 flex flex-col">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Kode C++:</h3>
+                    <pre id="generatedCode" class="code-output bg-gray-100 p-4 rounded-lg text-sm overflow-auto flex-1 border"></pre>
+                </div>
+                <div class="w-1/2 p-6 flex flex-col">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Output Program:</h3>
+                    <div id="programOutput" class="bg-black text-green-400 p-4 rounded-lg text-sm overflow-auto flex-1 font-mono whitespace-pre-wrap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Blockly workspace
+        let workspace;
+        let blockDefinitions = {};
+
+        // Define custom blocks
+        function defineBlocks() {
+            // Program structure block - main container
+            Blockly.Blocks['cpp_program_structure'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("Program C++");
+                    this.appendStatementInput("INCLUDES")
+                        .setCheck("include")
+                        .appendField("Includes:");
+                    this.appendStatementInput("NAMESPACES")
+                        .setCheck("namespace")
+                        .appendField("Namespaces:");
+                    this.appendStatementInput("MAIN_FUNCTION")
+                        .setCheck("main")
+                        .appendField("Main Function:");
+                    this.setColour(270);
+                    this.setTooltip("Struktur lengkap program C++ yang dapat diisi dengan blok-blok terpisah");
+                }
+            };
+
+            // Main function block (standalone)
+            Blockly.Blocks['cpp_main'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("int main()");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("return 0;");
+                    this.setPreviousStatement(true, "main");
+                    this.setNextStatement(true, "main");
+                    this.setColour(270);
+                    this.setTooltip("Fungsi utama program C++");
+                }
+            };
+
+            // Include block
+            Blockly.Blocks['cpp_include'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("#include <")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["iostream", "iostream"],
+                            ["string", "string"],
+                            ["cmath", "cmath"],
+                            ["vector", "vector"]
+                        ]), "LIBRARY")
+                        .appendField(">");
+                    this.setPreviousStatement(true, "include");
+                    this.setNextStatement(true, "include");
+                    this.setColour(270);
+                }
+            };
+
+            // Namespace block
+            Blockly.Blocks['cpp_namespace'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("using namespace std;");
+                    this.setPreviousStatement(true, "namespace");
+                    this.setNextStatement(true, "namespace");
+                    this.setColour(270);
+                }
+            };
+
+            // Cout block
+            Blockly.Blocks['cpp_cout'] = {
+                init: function() {
+                    this.appendValueInput("VALUE")
+                        .setCheck(null)
+                        .appendField("cout <<");
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldCheckbox("TRUE"), "NEWLINE")
+                        .appendField("endl");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(210);
+                    this.setTooltip("Output teks ke layar. Centang untuk menambah endl.");
+                }
+            };
+
+            // Cin block
+            Blockly.Blocks['cpp_cin'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("cin >>")
+                        .appendField(new Blockly.FieldTextInput("variable"), "VAR");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(210);
+                }
+            };
+
+            // Chain block for connecting values
+            Blockly.Blocks['cpp_chain'] = {
+                init: function() {
+                    this.appendValueInput("LEFT")
+                        .setCheck(null);
+                    this.appendValueInput("RIGHT")
+                        .setCheck(null)
+                        .appendField("<<");
+                    this.setOutput(true, null);
+                    this.setColour(210);
+                    this.setInputsInline(true);
+                    this.setTooltip("Menghubungkan nilai dengan nilai lain menggunakan <<");
+                }
+            };
+
+            // Endl block
+            Blockly.Blocks['cpp_endl'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("endl");
+                    this.setOutput(true, null);
+                    this.setColour(210);
+                }
+            };
+
+            // Variable declaration
+            Blockly.Blocks['cpp_declare_var'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldDropdown([
+                            ["int", "int"],
+                            ["double", "double"],
+                            ["string", "string"],
+                            ["bool", "bool"]
+                        ]), "TYPE")
+                        .appendField(new Blockly.FieldTextInput("variable"), "NAME");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null)
+                        .appendField("=");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                }
+            };
+
+            // Variable assignment
+            Blockly.Blocks['cpp_set_var'] = {
+                init: function() {
+                    this.appendValueInput("VALUE")
+                        .setCheck(null)
+                        .appendField(new Blockly.FieldTextInput("variable"), "VAR")
+                        .appendField("=");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                }
+            };
+
+            // Get variable
+            Blockly.Blocks['cpp_get_var'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldTextInput("variable"), "VAR");
+                    this.setOutput(true, null);
+                    this.setColour(120);
+                }
+            };
+
+            // Text block
+            Blockly.Blocks['cpp_text'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("\"")
+                        .appendField(new Blockly.FieldTextInput("Hello World"), "TEXT")
+                        .appendField("\"");
+                    this.setOutput(true, "String");
+                    this.setColour(60);
+                }
+            };
+
+            // Number block
+            Blockly.Blocks['cpp_number'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldNumber(0), "NUM");
+                    this.setOutput(true, "Number");
+                    this.setColour(60);
+                }
+            };
+
+            // Boolean block
+            Blockly.Blocks['cpp_boolean'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldDropdown([
+                            ["true", "true"],
+                            ["false", "false"]
+                        ]), "BOOL");
+                    this.setOutput(true, "Boolean");
+                    this.setColour(60);
+                }
+            };
+
+            // Math operation
+            Blockly.Blocks['cpp_math'] = {
+                init: function() {
+                    this.appendValueInput("A")
+                        .setCheck("Number");
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldDropdown([
+                            ["+", "+"],
+                            ["-", "-"],
+                            ["*", "*"],
+                            ["/", "/"],
+                            ["%", "%"]
+                        ]), "OP");
+                    this.appendValueInput("B")
+                        .setCheck("Number");
+                    this.setOutput(true, "Number");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                }
+            };
+
+            // Comparison operation
+            Blockly.Blocks['cpp_compare'] = {
+                init: function() {
+                    this.appendValueInput("A")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldDropdown([
+                            ["==", "=="],
+                            ["!=", "!="],
+                            [">", ">"],
+                            [">=", ">="],
+                            ["<", "<"],
+                            ["<=", "<="]
+                        ]), "OP");
+                    this.appendValueInput("B")
+                        .setCheck(null);
+                    this.setOutput(true, "Boolean");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                }
+            };
+
+            // Logic operation
+            Blockly.Blocks['cpp_logic'] = {
+                init: function() {
+                    this.appendValueInput("A")
+                        .setCheck("Boolean");
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldDropdown([
+                            ["&&", "&&"],
+                            ["||", "||"]
+                        ]), "OP");
+                    this.appendValueInput("B")
+                        .setCheck("Boolean");
+                    this.setOutput(true, "Boolean");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                }
+            };
+
+            // Not operation
+            Blockly.Blocks['cpp_not'] = {
+                init: function() {
+                    this.appendValueInput("BOOL")
+                        .setCheck("Boolean")
+                        .appendField("!");
+                    this.setOutput(true, "Boolean");
+                    this.setColour(230);
+                }
+            };
+
+            // If statement
+            Blockly.Blocks['cpp_if'] = {
+                init: function() {
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("if (");
+                    this.appendDummyInput()
+                        .appendField(")");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                }
+            };
+
+            // If-else statement
+            Blockly.Blocks['cpp_if_else'] = {
+                init: function() {
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("if (");
+                    this.appendDummyInput()
+                        .appendField(")");
+                    this.appendStatementInput("IF_STATEMENTS")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("else");
+                    this.appendStatementInput("ELSE_STATEMENTS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                }
+            };
+
+            // For loop
+            Blockly.Blocks['cpp_for'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("for (")
+                        .appendField(new Blockly.FieldTextInput("int i = 0"), "INIT")
+                        .appendField(";");
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean");
+                    this.appendDummyInput()
+                        .appendField(";")
+                        .appendField(new Blockly.FieldTextInput("i++"), "UPDATE")
+                        .appendField(")");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(180);
+                }
+            };
+
+            // While loop
+            Blockly.Blocks['cpp_while'] = {
+                init: function() {
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("while (");
+                    this.appendDummyInput()
+                        .appendField(")");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(180);
+                }
+            };
+
+            // Do-while loop
+            Blockly.Blocks['cpp_do_while'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("do");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null);
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("while (");
+                    this.appendDummyInput()
+                        .appendField(")");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(180);
+                }
+            };
+
+            // Comment block
+            Blockly.Blocks['cpp_comment'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("//")
+                        .appendField(new Blockly.FieldTextInput("comment"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(90);
+                }
+            };
+        }
+
+        // Code generators
+        function defineGenerators() {
+            // Program structure generator
+            Blockly.JavaScript['cpp_program_structure'] = function(block) {
+                const includes = Blockly.JavaScript.statementToCode(block, 'INCLUDES');
+                const namespaces = Blockly.JavaScript.statementToCode(block, 'NAMESPACES');
+                const mainFunction = Blockly.JavaScript.statementToCode(block, 'MAIN_FUNCTION');
+                
+                let code = '';
+                if (includes) code += includes + '\n';
+                if (namespaces) code += namespaces + '\n';
+                if (mainFunction) code += mainFunction;
+                
+                return code;
+            };
+
+            // Main function generator (standalone)
+            Blockly.JavaScript['cpp_main'] = function(block) {
+                const statements = Blockly.JavaScript.statementToCode(block, 'STATEMENTS');
+                return `int main() {\n${statements}    return 0;\n}\n`;
+            };
+
+            Blockly.JavaScript['cpp_include'] = function(block) {
+                const library = block.getFieldValue('LIBRARY');
+                return `#include <${library}>\n`;
+            };
+
+            Blockly.JavaScript['cpp_namespace'] = function(block) {
+                return 'using namespace std;\n';
+            };
+
+            Blockly.JavaScript['cpp_cout'] = function(block) {
+                const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+                const newline = block.getFieldValue('NEWLINE') === 'TRUE';
+                if (newline) {
+                    return `    cout << ${value} << endl;\n`;
+                } else {
+                    return `    cout << ${value};\n`;
+                }
+            };
+
+            Blockly.JavaScript['cpp_chain'] = function(block) {
+                const left = Blockly.JavaScript.valueToCode(block, 'LEFT', Blockly.JavaScript.ORDER_ATOMIC);
+                const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', Blockly.JavaScript.ORDER_ATOMIC);
+                return [`${left} << ${right}`, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_cin'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                return `    cin >> ${variable};\n`;
+            };
+
+            Blockly.JavaScript['cpp_endl'] = function(block) {
+                return ['endl', Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_declare_var'] = function(block) {
+                const type = block.getFieldValue('TYPE');
+                const name = block.getFieldValue('NAME');
+                const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+                return `    ${type} ${name} = ${value};\n`;
+            };
+
+            Blockly.JavaScript['cpp_set_var'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+                return `    ${variable} = ${value};\n`;
+            };
+
+            Blockly.JavaScript['cpp_get_var'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                return [variable, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_text'] = function(block) {
+                const text = block.getFieldValue('TEXT');
+                return [`"${text}"`, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_number'] = function(block) {
+                const number = block.getFieldValue('NUM');
+                return [number, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_boolean'] = function(block) {
+                const bool = block.getFieldValue('BOOL');
+                return [bool, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_math'] = function(block) {
+                const a = Blockly.JavaScript.valueToCode(block, 'A', Blockly.JavaScript.ORDER_ATOMIC);
+                const op = block.getFieldValue('OP');
+                const b = Blockly.JavaScript.valueToCode(block, 'B', Blockly.JavaScript.ORDER_ATOMIC);
+                return [`(${a} ${op} ${b})`, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_compare'] = function(block) {
+                const a = Blockly.JavaScript.valueToCode(block, 'A', Blockly.JavaScript.ORDER_ATOMIC);
+                const op = block.getFieldValue('OP');
+                const b = Blockly.JavaScript.valueToCode(block, 'B', Blockly.JavaScript.ORDER_ATOMIC);
+                return [`(${a} ${op} ${b})`, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_logic'] = function(block) {
+                const a = Blockly.JavaScript.valueToCode(block, 'A', Blockly.JavaScript.ORDER_ATOMIC);
+                const op = block.getFieldValue('OP');
+                const b = Blockly.JavaScript.valueToCode(block, 'B', Blockly.JavaScript.ORDER_ATOMIC);
+                return [`(${a} ${op} ${b})`, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_not'] = function(block) {
+                const bool = Blockly.JavaScript.valueToCode(block, 'BOOL', Blockly.JavaScript.ORDER_ATOMIC);
+                return [`!${bool}`, Blockly.JavaScript.ORDER_ATOMIC];
+            };
+
+            Blockly.JavaScript['cpp_if'] = function(block) {
+                const condition = Blockly.JavaScript.valueToCode(block, 'CONDITION', Blockly.JavaScript.ORDER_ATOMIC);
+                const statements = Blockly.JavaScript.statementToCode(block, 'STATEMENTS');
+                return `    if (${condition}) {\n${statements}    }\n`;
+            };
+
+            Blockly.JavaScript['cpp_if_else'] = function(block) {
+                const condition = Blockly.JavaScript.valueToCode(block, 'CONDITION', Blockly.JavaScript.ORDER_ATOMIC);
+                const ifStatements = Blockly.JavaScript.statementToCode(block, 'IF_STATEMENTS');
+                const elseStatements = Blockly.JavaScript.statementToCode(block, 'ELSE_STATEMENTS');
+                return `    if (${condition}) {\n${ifStatements}    } else {\n${elseStatements}    }\n`;
+            };
+
+            Blockly.JavaScript['cpp_for'] = function(block) {
+                const init = block.getFieldValue('INIT');
+                const condition = Blockly.JavaScript.valueToCode(block, 'CONDITION', Blockly.JavaScript.ORDER_ATOMIC);
+                const update = block.getFieldValue('UPDATE');
+                const statements = Blockly.JavaScript.statementToCode(block, 'STATEMENTS');
+                return `    for (${init}; ${condition}; ${update}) {\n${statements}    }\n`;
+            };
+
+            Blockly.JavaScript['cpp_while'] = function(block) {
+                const condition = Blockly.JavaScript.valueToCode(block, 'CONDITION', Blockly.JavaScript.ORDER_ATOMIC);
+                const statements = Blockly.JavaScript.statementToCode(block, 'STATEMENTS');
+                return `    while (${condition}) {\n${statements}    }\n`;
+            };
+
+            Blockly.JavaScript['cpp_do_while'] = function(block) {
+                const condition = Blockly.JavaScript.valueToCode(block, 'CONDITION', Blockly.JavaScript.ORDER_ATOMIC);
+                const statements = Blockly.JavaScript.statementToCode(block, 'STATEMENTS');
+                return `    do {\n${statements}    } while (${condition});\n`;
+            };
+
+            Blockly.JavaScript['cpp_comment'] = function(block) {
+                const text = block.getFieldValue('TEXT');
+                return `    // ${text}\n`;
+            };
+        }
+
+        // Initialize workspace
+        function initWorkspace() {
+            defineBlocks();
+            defineGenerators();
+
+            workspace = Blockly.inject('workspace', {
+                toolbox: null,
+                grid: {
+                    spacing: 20,
+                    length: 3,
+                    colour: '#ccc',
+                    snap: true
+                },
+                zoom: {
+                    controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                },
+                trashcan: true
+            });
+        }
+
+        // Add block to workspace
+        function addBlockToWorkspace(blockType) {
+            const block = workspace.newBlock(blockType);
+            block.initSvg();
+            block.render();
+            block.moveBy(50, 50);
+            return block;
+        }
+
+        // Create template programs
+        function createTemplate(templateType) {
+            // Clear workspace first
+            workspace.clear();
+            
+            switch (templateType) {
+                case 'hello-world':
+                    createHelloWorldTemplate();
+                    break;
+                case 'calculator':
+                    createCalculatorTemplate();
+                    break;
+                case 'loop-example':
+                    createLoopExampleTemplate();
+                    break;
+            }
+        }
+
+        function createHelloWorldTemplate() {
+            // Create program structure block
+            const programBlock = addBlockToWorkspace('cpp_program_structure');
+            programBlock.moveBy(50, 50);
+            
+            // Create include block
+            const includeBlock = addBlockToWorkspace('cpp_include');
+            includeBlock.setFieldValue('iostream', 'LIBRARY');
+            includeBlock.moveBy(100, 100);
+            
+            // Create namespace block
+            const namespaceBlock = addBlockToWorkspace('cpp_namespace');
+            namespaceBlock.moveBy(100, 150);
+            
+            // Create main function block
+            const mainBlock = addBlockToWorkspace('cpp_main');
+            mainBlock.moveBy(100, 200);
+            
+            // Create cout block
+            const coutBlock = addBlockToWorkspace('cpp_cout');
+            coutBlock.setFieldValue('TRUE', 'NEWLINE');
+            coutBlock.moveBy(150, 250);
+            
+            // Create text block
+            const textBlock = addBlockToWorkspace('cpp_text');
+            textBlock.setFieldValue('Hello World!', 'TEXT');
+            textBlock.moveBy(250, 250);
+            
+            // Connect blocks to program structure
+            const includesInput = programBlock.getInput('INCLUDES');
+            if (includesInput && includesInput.connection) {
+                includesInput.connection.connect(includeBlock.previousConnection);
+            }
+            
+            const namespacesInput = programBlock.getInput('NAMESPACES');
+            if (namespacesInput && namespacesInput.connection) {
+                namespacesInput.connection.connect(namespaceBlock.previousConnection);
+            }
+            
+            const mainInput = programBlock.getInput('MAIN_FUNCTION');
+            if (mainInput && mainInput.connection) {
+                mainInput.connection.connect(mainBlock.previousConnection);
+            }
+            
+            // Connect cout inside main function
+            const mainStatements = mainBlock.getInput('STATEMENTS');
+            if (mainStatements && mainStatements.connection) {
+                mainStatements.connection.connect(coutBlock.previousConnection);
+            }
+            
+            // Connect text to cout
+            const coutValue = coutBlock.getInput('VALUE');
+            if (coutValue && coutValue.connection && textBlock.outputConnection) {
+                coutValue.connection.connect(textBlock.outputConnection);
+            }
+            
+            // Render all blocks
+            programBlock.render();
+            includeBlock.render();
+            namespaceBlock.render();
+            mainBlock.render();
+            coutBlock.render();
+            textBlock.render();
+        }
+
+        function createCalculatorTemplate() {
+            // Create program structure block
+            const programBlock = addBlockToWorkspace('cpp_program_structure');
+            programBlock.moveBy(50, 50);
+            
+            // Create include block
+            const includeBlock = addBlockToWorkspace('cpp_include');
+            includeBlock.setFieldValue('iostream', 'LIBRARY');
+            includeBlock.moveBy(100, 100);
+            
+            // Create namespace block
+            const namespaceBlock = addBlockToWorkspace('cpp_namespace');
+            namespaceBlock.moveBy(100, 150);
+            
+            // Create main function block
+            const mainBlock = addBlockToWorkspace('cpp_main');
+            mainBlock.moveBy(100, 200);
+            
+            // Create variable declarations
+            const num1Block = addBlockToWorkspace('cpp_declare_var');
+            num1Block.setFieldValue('double', 'TYPE');
+            num1Block.setFieldValue('num1', 'NAME');
+            num1Block.moveBy(100, 200);
+            
+            const num1Value = addBlockToWorkspace('cpp_number');
+            num1Value.setFieldValue(0, 'NUM');
+            num1Value.moveBy(300, 200);
+            
+            const num2Block = addBlockToWorkspace('cpp_declare_var');
+            num2Block.setFieldValue('double', 'TYPE');
+            num2Block.setFieldValue('num2', 'NAME');
+            num2Block.moveBy(100, 250);
+            
+            const num2Value = addBlockToWorkspace('cpp_number');
+            num2Value.setFieldValue(0, 'NUM');
+            num2Value.moveBy(300, 250);
+            
+            // Create cout blocks for prompts
+            const prompt1Block = addBlockToWorkspace('cpp_cout');
+            prompt1Block.setFieldValue('FALSE', 'NEWLINE');
+            prompt1Block.moveBy(100, 300);
+            
+            const prompt1Text = addBlockToWorkspace('cpp_text');
+            prompt1Text.setFieldValue('Masukkan angka pertama: ', 'TEXT');
+            prompt1Text.moveBy(300, 300);
+            
+            const cin1Block = addBlockToWorkspace('cpp_cin');
+            cin1Block.setFieldValue('num1', 'VAR');
+            cin1Block.moveBy(100, 350);
+            
+            const prompt2Block = addBlockToWorkspace('cpp_cout');
+            prompt2Block.setFieldValue('FALSE', 'NEWLINE');
+            prompt2Block.moveBy(100, 400);
+            
+            const prompt2Text = addBlockToWorkspace('cpp_text');
+            prompt2Text.setFieldValue('Masukkan angka kedua: ', 'TEXT');
+            prompt2Text.moveBy(300, 400);
+            
+            const cin2Block = addBlockToWorkspace('cpp_cin');
+            cin2Block.setFieldValue('num2', 'VAR');
+            cin2Block.moveBy(100, 450);
+            
+            // Create result calculation
+            const resultBlock = addBlockToWorkspace('cpp_declare_var');
+            resultBlock.setFieldValue('double', 'TYPE');
+            resultBlock.setFieldValue('hasil', 'NAME');
+            resultBlock.moveBy(100, 500);
+            
+            const mathBlock = addBlockToWorkspace('cpp_math');
+            mathBlock.setFieldValue('+', 'OP');
+            mathBlock.moveBy(300, 500);
+            
+            const var1Block = addBlockToWorkspace('cpp_get_var');
+            var1Block.setFieldValue('num1', 'VAR');
+            var1Block.moveBy(400, 480);
+            
+            const var2Block = addBlockToWorkspace('cpp_get_var');
+            var2Block.setFieldValue('num2', 'VAR');
+            var2Block.moveBy(400, 520);
+            
+            // Create output
+            const outputBlock = addBlockToWorkspace('cpp_cout');
+            outputBlock.setFieldValue('TRUE', 'NEWLINE');
+            outputBlock.moveBy(100, 550);
+            
+            const chainBlock = addBlockToWorkspace('cpp_chain');
+            chainBlock.moveBy(300, 550);
+            
+            const outputText = addBlockToWorkspace('cpp_text');
+            outputText.setFieldValue('Hasil: ', 'TEXT');
+            outputText.moveBy(400, 530);
+            
+            const resultVar = addBlockToWorkspace('cpp_get_var');
+            resultVar.setFieldValue('hasil', 'VAR');
+            resultVar.moveBy(400, 570);
+            
+            // Connect blocks to program structure
+            const includesInput = programBlock.getInput('INCLUDES');
+            if (includesInput && includesInput.connection) {
+                includesInput.connection.connect(includeBlock.previousConnection);
+            }
+            
+            const namespacesInput = programBlock.getInput('NAMESPACES');
+            if (namespacesInput && namespacesInput.connection) {
+                namespacesInput.connection.connect(namespaceBlock.previousConnection);
+            }
+            
+            const mainInput = programBlock.getInput('MAIN_FUNCTION');
+            if (mainInput && mainInput.connection) {
+                mainInput.connection.connect(mainBlock.previousConnection);
+            }
+            
+            // Connect inside main function
+            const mainStatements = mainBlock.getInput('STATEMENTS');
+            if (mainStatements && mainStatements.connection) {
+                mainStatements.connection.connect(num1Block.previousConnection);
+                num1Block.nextConnection.connect(num2Block.previousConnection);
+                num2Block.nextConnection.connect(prompt1Block.previousConnection);
+                prompt1Block.nextConnection.connect(cin1Block.previousConnection);
+                cin1Block.nextConnection.connect(prompt2Block.previousConnection);
+                prompt2Block.nextConnection.connect(cin2Block.previousConnection);
+                cin2Block.nextConnection.connect(resultBlock.previousConnection);
+                resultBlock.nextConnection.connect(outputBlock.previousConnection);
+            }
+            
+            // Connect values
+            if (num1Block.getInput('VALUE') && num1Block.getInput('VALUE').connection) {
+                num1Block.getInput('VALUE').connection.connect(num1Value.outputConnection);
+            }
+            if (num2Block.getInput('VALUE') && num2Block.getInput('VALUE').connection) {
+                num2Block.getInput('VALUE').connection.connect(num2Value.outputConnection);
+            }
+            if (prompt1Block.getInput('VALUE') && prompt1Block.getInput('VALUE').connection) {
+                prompt1Block.getInput('VALUE').connection.connect(prompt1Text.outputConnection);
+            }
+            if (prompt2Block.getInput('VALUE') && prompt2Block.getInput('VALUE').connection) {
+                prompt2Block.getInput('VALUE').connection.connect(prompt2Text.outputConnection);
+            }
+            
+            if (mathBlock.getInput('A') && mathBlock.getInput('A').connection) {
+                mathBlock.getInput('A').connection.connect(var1Block.outputConnection);
+            }
+            if (mathBlock.getInput('B') && mathBlock.getInput('B').connection) {
+                mathBlock.getInput('B').connection.connect(var2Block.outputConnection);
+            }
+            if (resultBlock.getInput('VALUE') && resultBlock.getInput('VALUE').connection) {
+                resultBlock.getInput('VALUE').connection.connect(mathBlock.outputConnection);
+            }
+            
+            if (chainBlock.getInput('LEFT') && chainBlock.getInput('LEFT').connection) {
+                chainBlock.getInput('LEFT').connection.connect(outputText.outputConnection);
+            }
+            if (chainBlock.getInput('RIGHT') && chainBlock.getInput('RIGHT').connection) {
+                chainBlock.getInput('RIGHT').connection.connect(resultVar.outputConnection);
+            }
+            if (outputBlock.getInput('VALUE') && outputBlock.getInput('VALUE').connection) {
+                outputBlock.getInput('VALUE').connection.connect(chainBlock.outputConnection);
+            }
+            
+            // Render all blocks
+            [programBlock, includeBlock, namespaceBlock, mainBlock, num1Block, num1Value, num2Block, num2Value,
+             prompt1Block, prompt1Text, cin1Block, prompt2Block, prompt2Text, cin2Block,
+             resultBlock, mathBlock, var1Block, var2Block, outputBlock, chainBlock, outputText, resultVar].forEach(block => {
+                if (block) block.render();
+            });
+        }
+
+        function createLoopExampleTemplate() {
+            // Create program structure block
+            const programBlock = addBlockToWorkspace('cpp_program_structure');
+            programBlock.moveBy(50, 50);
+            
+            // Create include block
+            const includeBlock = addBlockToWorkspace('cpp_include');
+            includeBlock.setFieldValue('iostream', 'LIBRARY');
+            includeBlock.moveBy(100, 100);
+            
+            // Create namespace block
+            const namespaceBlock = addBlockToWorkspace('cpp_namespace');
+            namespaceBlock.moveBy(100, 150);
+            
+            // Create main function block
+            const mainBlock = addBlockToWorkspace('cpp_main');
+            mainBlock.moveBy(100, 200);
+            
+            // Create for loop
+            const forBlock = addBlockToWorkspace('cpp_for');
+            forBlock.setFieldValue('int i = 1', 'INIT');
+            forBlock.setFieldValue('i++', 'UPDATE');
+            forBlock.moveBy(100, 200);
+            
+            // Create condition for for loop
+            const conditionBlock = addBlockToWorkspace('cpp_compare');
+            conditionBlock.setFieldValue('<=', 'OP');
+            conditionBlock.moveBy(300, 200);
+            
+            const iVar = addBlockToWorkspace('cpp_get_var');
+            iVar.setFieldValue('i', 'VAR');
+            iVar.moveBy(400, 180);
+            
+            const tenNum = addBlockToWorkspace('cpp_number');
+            tenNum.setFieldValue(10, 'NUM');
+            tenNum.moveBy(400, 220);
+            
+            // Create if-else inside loop
+            const ifElseBlock = addBlockToWorkspace('cpp_if_else');
+            ifElseBlock.moveBy(150, 250);
+            
+            // Create condition for if (i % 2 == 0)
+            const modCondition = addBlockToWorkspace('cpp_compare');
+            modCondition.setFieldValue('==', 'OP');
+            modCondition.moveBy(350, 250);
+            
+            const modMath = addBlockToWorkspace('cpp_math');
+            modMath.setFieldValue('%', 'OP');
+            modMath.moveBy(450, 230);
+            
+            const iVar2 = addBlockToWorkspace('cpp_get_var');
+            iVar2.setFieldValue('i', 'VAR');
+            iVar2.moveBy(550, 210);
+            
+            const twoNum = addBlockToWorkspace('cpp_number');
+            twoNum.setFieldValue(2, 'NUM');
+            twoNum.moveBy(550, 250);
+            
+            const zeroNum = addBlockToWorkspace('cpp_number');
+            zeroNum.setFieldValue(0, 'NUM');
+            zeroNum.moveBy(450, 270);
+            
+            // Create cout for even numbers
+            const evenCout = addBlockToWorkspace('cpp_cout');
+            evenCout.setFieldValue('TRUE', 'NEWLINE');
+            evenCout.moveBy(200, 300);
+            
+            const evenChain = addBlockToWorkspace('cpp_chain');
+            evenChain.moveBy(400, 300);
+            
+            const iVar3 = addBlockToWorkspace('cpp_get_var');
+            iVar3.setFieldValue('i', 'VAR');
+            iVar3.moveBy(500, 280);
+            
+            const evenText = addBlockToWorkspace('cpp_text');
+            evenText.setFieldValue(' adalah bilangan genap', 'TEXT');
+            evenText.moveBy(500, 320);
+            
+            // Create cout for odd numbers
+            const oddCout = addBlockToWorkspace('cpp_cout');
+            oddCout.setFieldValue('TRUE', 'NEWLINE');
+            oddCout.moveBy(200, 350);
+            
+            const oddChain = addBlockToWorkspace('cpp_chain');
+            oddChain.moveBy(400, 350);
+            
+            const iVar4 = addBlockToWorkspace('cpp_get_var');
+            iVar4.setFieldValue('i', 'VAR');
+            iVar4.moveBy(500, 330);
+            
+            const oddText = addBlockToWorkspace('cpp_text');
+            oddText.setFieldValue(' adalah bilangan ganjil', 'TEXT');
+            oddText.moveBy(500, 370);
+            
+            // Connect blocks to program structure
+            const includesInput = programBlock.getInput('INCLUDES');
+            if (includesInput && includesInput.connection) {
+                includesInput.connection.connect(includeBlock.previousConnection);
+            }
+            
+            const namespacesInput = programBlock.getInput('NAMESPACES');
+            if (namespacesInput && namespacesInput.connection) {
+                namespacesInput.connection.connect(namespaceBlock.previousConnection);
+            }
+            
+            const mainInput = programBlock.getInput('MAIN_FUNCTION');
+            if (mainInput && mainInput.connection) {
+                mainInput.connection.connect(mainBlock.previousConnection);
+            }
+            
+            // Connect inside main
+            const mainStatements = mainBlock.getInput('STATEMENTS');
+            if (mainStatements && mainStatements.connection) {
+                mainStatements.connection.connect(forBlock.previousConnection);
+            }
+            
+            // Connect for loop condition
+            if (conditionBlock.getInput('A') && conditionBlock.getInput('A').connection) {
+                conditionBlock.getInput('A').connection.connect(iVar.outputConnection);
+            }
+            if (conditionBlock.getInput('B') && conditionBlock.getInput('B').connection) {
+                conditionBlock.getInput('B').connection.connect(tenNum.outputConnection);
+            }
+            if (forBlock.getInput('CONDITION') && forBlock.getInput('CONDITION').connection) {
+                forBlock.getInput('CONDITION').connection.connect(conditionBlock.outputConnection);
+            }
+            
+            // Connect if-else inside for loop
+            const forStatements = forBlock.getInput('STATEMENTS');
+            if (forStatements && forStatements.connection) {
+                forStatements.connection.connect(ifElseBlock.previousConnection);
+            }
+            
+            // Connect if condition
+            if (modMath.getInput('A') && modMath.getInput('A').connection) {
+                modMath.getInput('A').connection.connect(iVar2.outputConnection);
+            }
+            if (modMath.getInput('B') && modMath.getInput('B').connection) {
+                modMath.getInput('B').connection.connect(twoNum.outputConnection);
+            }
+            if (modCondition.getInput('A') && modCondition.getInput('A').connection) {
+                modCondition.getInput('A').connection.connect(modMath.outputConnection);
+            }
+            if (modCondition.getInput('B') && modCondition.getInput('B').connection) {
+                modCondition.getInput('B').connection.connect(zeroNum.outputConnection);
+            }
+            if (ifElseBlock.getInput('CONDITION') && ifElseBlock.getInput('CONDITION').connection) {
+                ifElseBlock.getInput('CONDITION').connection.connect(modCondition.outputConnection);
+            }
+            
+            // Connect if statements (even)
+            const ifStatements = ifElseBlock.getInput('IF_STATEMENTS');
+            if (ifStatements && ifStatements.connection) {
+                ifStatements.connection.connect(evenCout.previousConnection);
+            }
+            if (evenChain.getInput('LEFT') && evenChain.getInput('LEFT').connection) {
+                evenChain.getInput('LEFT').connection.connect(iVar3.outputConnection);
+            }
+            if (evenChain.getInput('RIGHT') && evenChain.getInput('RIGHT').connection) {
+                evenChain.getInput('RIGHT').connection.connect(evenText.outputConnection);
+            }
+            if (evenCout.getInput('VALUE') && evenCout.getInput('VALUE').connection) {
+                evenCout.getInput('VALUE').connection.connect(evenChain.outputConnection);
+            }
+            
+            // Connect else statements (odd)
+            const elseStatements = ifElseBlock.getInput('ELSE_STATEMENTS');
+            if (elseStatements && elseStatements.connection) {
+                elseStatements.connection.connect(oddCout.previousConnection);
+            }
+            if (oddChain.getInput('LEFT') && oddChain.getInput('LEFT').connection) {
+                oddChain.getInput('LEFT').connection.connect(iVar4.outputConnection);
+            }
+            if (oddChain.getInput('RIGHT') && oddChain.getInput('RIGHT').connection) {
+                oddChain.getInput('RIGHT').connection.connect(oddText.outputConnection);
+            }
+            if (oddCout.getInput('VALUE') && oddCout.getInput('VALUE').connection) {
+                oddCout.getInput('VALUE').connection.connect(oddChain.outputConnection);
+            }
+            
+            // Render all blocks
+            [programBlock, includeBlock, namespaceBlock, mainBlock, forBlock, conditionBlock, iVar, tenNum,
+             ifElseBlock, modCondition, modMath, iVar2, twoNum, zeroNum,
+             evenCout, evenChain, iVar3, evenText, oddCout, oddChain, iVar4, oddText].forEach(block => {
+                if (block) block.render();
+            });
+        }
+
+        // Generate and simulate C++ code
+        async function generateAndRunCode() {
+            try {
+                // Check if workspace has blocks
+                const blocks = workspace.getAllBlocks();
+                if (blocks.length === 0) {
+                    document.getElementById('generatedCode').textContent = 'No blocks in workspace. Please add some blocks first.';
+                    document.getElementById('programOutput').textContent = 'No code to execute.';
+                    document.getElementById('codeModal').classList.remove('hidden');
+                    return;
+                }
+
+                // Generate code from blocks using custom generator
+                let code = generateCppCode();
+                
+                document.getElementById('generatedCode').textContent = code || 'No code generated from blocks';
+                
+                // Check for compilation errors
+                const errors = checkCompilationErrors(code);
+                
+                // Simple simulation of C++ output
+                let output = '';
+                
+                if (!code || code.trim() === '') {
+                    output = 'No code to execute. Please connect your blocks properly.';
+                } else if (errors.length > 0) {
+                    output = 'COMPILATION ERRORS:\n\n';
+                    errors.forEach((error, index) => {
+                        output += `Error ${index + 1}: ${error}\n`;
+                    });
+                    output += '\nFix these errors to run your program.';
+                } else {
+                    // Check if code has cin statements
+                    const lines = code.split('\n');
+                    const cinStatements = [];
+                    for (let line of lines) {
+                        if (line.includes('cin >>')) {
+                            const match = line.match(/cin >> (\w+);/);
+                            if (match) {
+                                cinStatements.push(match[1]);
+                            }
+                        }
+                    }
+                    
+                    // If there are cin statements, show input dialog first
+                    if (cinStatements.length > 0) {
+                        const inputProvided = await createInputDialog(cinStatements);
+                        if (!inputProvided) {
+                            // User cancelled
+                            return;
+                        }
+                    }
+                    
+                    // Execute the C++ code simulation
+                    output = simulateCppExecution(code);
+                    
+                    if (!output) {
+                        output = 'Program compiled successfully!\n(No output statements found)';
+                    }
+                }
+                
+                document.getElementById('programOutput').textContent = output;
+                document.getElementById('codeModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error generating code:', error);
+                document.getElementById('generatedCode').textContent = 'Error generating code: ' + error.message;
+                document.getElementById('programOutput').textContent = 'Error: ' + error.message;
+                document.getElementById('codeModal').classList.remove('hidden');
+            }
+        }
+
+        // Custom C++ code generator
+        function generateCppCode() {
+            let code = '';
+            const topBlocks = workspace.getTopBlocks();
+            
+            for (let block of topBlocks) {
+                code += generateBlockCode(block);
+            }
+            
+            return code;
+        }
+
+        // Generate code for individual blocks
+        function generateBlockCode(block) {
+            if (!block) return '';
+            
+            switch (block.type) {
+                case 'cpp_include':
+                    const library = block.getFieldValue('LIBRARY');
+                    return `#include <${library}>\n`;
+                    
+                case 'cpp_namespace':
+                    return 'using namespace std;\n';
+                    
+                case 'cpp_main':
+                    const statements = generateStatementCode(block, 'STATEMENTS');
+                    return `\nint main() {\n${statements}    return 0;\n}\n`;
+                    
+                case 'cpp_cout':
+                    const value = generateValueCode(block, 'VALUE');
+                    const newline = block.getFieldValue('NEWLINE') === 'TRUE';
+                    if (newline) {
+                        return `    cout << ${value} << endl;\n`;
+                    } else {
+                        return `    cout << ${value};\n`;
+                    }
+                    
+                case 'cpp_cin':
+                    const variable = block.getFieldValue('VAR');
+                    return `    cin >> ${variable};\n`;
+                    
+                case 'cpp_declare_var':
+                    const type = block.getFieldValue('TYPE');
+                    const name = block.getFieldValue('NAME');
+                    const varValue = generateValueCode(block, 'VALUE');
+                    return `    ${type} ${name} = ${varValue};\n`;
+                    
+                case 'cpp_set_var':
+                    const varName = block.getFieldValue('VAR');
+                    const setValue = generateValueCode(block, 'VALUE');
+                    return `    ${varName} = ${setValue};\n`;
+                    
+                case 'cpp_text':
+                    const text = block.getFieldValue('TEXT');
+                    return `"${text}"`;
+                    
+                case 'cpp_number':
+                    const number = block.getFieldValue('NUM');
+                    return number.toString();
+                    
+                case 'cpp_boolean':
+                    const bool = block.getFieldValue('BOOL');
+                    return bool;
+                    
+                case 'cpp_get_var':
+                    const getVar = block.getFieldValue('VAR');
+                    return getVar;
+                    
+                case 'cpp_endl':
+                    return 'endl';
+                    
+                case 'cpp_chain':
+                    const left = generateValueCode(block, 'LEFT');
+                    const right = generateValueCode(block, 'RIGHT');
+                    return `${left} << ${right}`;
+                    
+                case 'cpp_math':
+                    const a = generateValueCode(block, 'A');
+                    const op = block.getFieldValue('OP');
+                    const b = generateValueCode(block, 'B');
+                    return `(${a} ${op} ${b})`;
+                    
+                case 'cpp_compare':
+                    const compA = generateValueCode(block, 'A');
+                    const compOp = block.getFieldValue('OP');
+                    const compB = generateValueCode(block, 'B');
+                    return `(${compA} ${compOp} ${compB})`;
+                    
+                case 'cpp_logic':
+                    const logicA = generateValueCode(block, 'A');
+                    const logicOp = block.getFieldValue('OP');
+                    const logicB = generateValueCode(block, 'B');
+                    return `(${logicA} ${logicOp} ${logicB})`;
+                    
+                case 'cpp_not':
+                    const notValue = generateValueCode(block, 'BOOL');
+                    return `!${notValue}`;
+                    
+                case 'cpp_if':
+                    const condition = generateValueCode(block, 'CONDITION');
+                    const ifStatements = generateStatementCode(block, 'STATEMENTS');
+                    return `    if (${condition}) {\n${ifStatements}    }\n`;
+                    
+                case 'cpp_if_else':
+                    const elseCondition = generateValueCode(block, 'CONDITION');
+                    const ifElseStatements = generateStatementCode(block, 'IF_STATEMENTS');
+                    const elseStatements = generateStatementCode(block, 'ELSE_STATEMENTS');
+                    return `    if (${elseCondition}) {\n${ifElseStatements}    } else {\n${elseStatements}    }\n`;
+                    
+                case 'cpp_for':
+                    const init = block.getFieldValue('INIT');
+                    const forCondition = generateValueCode(block, 'CONDITION');
+                    const update = block.getFieldValue('UPDATE');
+                    const forStatements = generateStatementCode(block, 'STATEMENTS');
+                    return `    for (${init}; ${forCondition}; ${update}) {\n${forStatements}    }\n`;
+                    
+                case 'cpp_while':
+                    const whileCondition = generateValueCode(block, 'CONDITION');
+                    const whileStatements = generateStatementCode(block, 'STATEMENTS');
+                    return `    while (${whileCondition}) {\n${whileStatements}    }\n`;
+                    
+                case 'cpp_do_while':
+                    const doWhileCondition = generateValueCode(block, 'CONDITION');
+                    const doWhileStatements = generateStatementCode(block, 'STATEMENTS');
+                    return `    do {\n${doWhileStatements}    } while (${doWhileCondition});\n`;
+                    
+                case 'cpp_comment':
+                    const commentText = block.getFieldValue('TEXT');
+                    return `    // ${commentText}\n`;
+                    
+                case 'cpp_program_structure':
+                    const includes = generateStatementCode(block, 'INCLUDES');
+                    const namespaces = generateStatementCode(block, 'NAMESPACES');
+                    const mainFunction = generateStatementCode(block, 'MAIN_FUNCTION');
+                    let structureCode = '';
+                    if (includes) structureCode += includes + '\n';
+                    if (namespaces) structureCode += namespaces + '\n';
+                    if (mainFunction) structureCode += mainFunction;
+                    return structureCode;
+                    
+                default:
+                    console.warn(`Unknown block type: ${block.type}`);
+                    return '';
+            }
+        }
+
+        // Generate code for statement inputs
+        function generateStatementCode(block, inputName) {
+            const targetBlock = block.getInputTargetBlock(inputName);
+            if (!targetBlock) return '';
+            
+            let code = '';
+            let currentBlock = targetBlock;
+            
+            while (currentBlock) {
+                code += generateBlockCode(currentBlock);
+                currentBlock = currentBlock.getNextBlock();
+            }
+            
+            return code;
+        }
+
+        // Generate code for value inputs
+        function generateValueCode(block, inputName) {
+            const targetBlock = block.getInputTargetBlock(inputName);
+            if (!targetBlock) return '';
+            
+            return generateBlockCode(targetBlock);
+        }
+
+        // Check for compilation errors
+        function checkCompilationErrors(code) {
+            const errors = [];
+            const lines = code.split('\n');
+            const declaredVariables = new Set();
+            
+            // Check if using namespace std is present
+            const hasNamespace = code.includes('using namespace std;');
+            const hasIostreamInclude = code.includes('#include <iostream>');
+            
+            // First pass: collect all declared variables
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Check for variable declarations (int x = ..., string name = ..., etc.)
+                const declareMatch = line.match(/^\s*(int|double|string|bool|char|float)\s+(\w+)\s*=/);
+                if (declareMatch) {
+                    const varName = declareMatch[2];
+                    declaredVariables.add(varName);
+                }
+                
+                // Also check for loop variable declarations (for loops)
+                const forMatch = line.match(/for\s*\(\s*(int|double|string|bool|char|float)\s+(\w+)/);
+                if (forMatch) {
+                    const varName = forMatch[2];
+                    declaredVariables.add(varName);
+                }
+            }
+            
+            // Second pass: check for errors
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                const lineNumber = i + 1;
+                
+                // Check for cout without namespace
+                if (line.includes('cout') && !hasNamespace && !line.includes('std::cout')) {
+                    errors.push(`Line ${lineNumber}: 'cout' was not declared in this scope. Add 'using namespace std;' or use 'std::cout'`);
+                }
+                
+                // Check for cin without namespace
+                if (line.includes('cin') && !hasNamespace && !line.includes('std::cin')) {
+                    errors.push(`Line ${lineNumber}: 'cin' was not declared in this scope. Add 'using namespace std;' or use 'std::cin'`);
+                }
+                
+                // Check for endl without namespace
+                if (line.includes('endl') && !hasNamespace && !line.includes('std::endl')) {
+                    errors.push(`Line ${lineNumber}: 'endl' was not declared in this scope. Add 'using namespace std;' or use 'std::endl'`);
+                }
+                
+                // Check for string without namespace (if string is used)
+                if (line.includes('string ') && !hasNamespace && !line.includes('std::string')) {
+                    errors.push(`Line ${lineNumber}: 'string' was not declared in this scope. Add 'using namespace std;' or use 'std::string'`);
+                }
+                
+                // Check for variable assignment to undeclared variables (x = ...)
+                const assignMatch = line.match(/^\s*(\w+)\s*=/);
+                if (assignMatch && !line.includes('int ') && !line.includes('double ') && !line.includes('string ') && !line.includes('bool ') && !line.includes('char ') && !line.includes('float ')) {
+                    const varName = assignMatch[1];
+                    if (!declaredVariables.has(varName)) {
+                        errors.push(`Line ${lineNumber}: '${varName}' was not declared in this scope. Declare the variable first using a variable declaration block.`);
+                    }
+                }
+                
+                // Check for cin usage with undeclared variables (cin >> x)
+                const cinMatch = line.match(/cin\s*>>\s*(\w+)/);
+                if (cinMatch) {
+                    const varName = cinMatch[1];
+                    if (!declaredVariables.has(varName)) {
+                        errors.push(`Line ${lineNumber}: '${varName}' was not declared in this scope. Declare the variable first using a variable declaration block.`);
+                    }
+                }
+                
+                // Check for variable usage in expressions (more complex check)
+                // This will catch variables used in cout, math operations, etc.
+                // But first, remove all string literals to avoid false positives
+                let lineWithoutStrings = line;
+                
+                // Remove string literals (anything between quotes)
+                lineWithoutStrings = lineWithoutStrings.replace(/"[^"]*"/g, '""');
+                
+                const variableUsageRegex = /\b(\w+)\b/g;
+                let match;
+                while ((match = variableUsageRegex.exec(lineWithoutStrings)) !== null) {
+                    const varName = match[1];
+                    
+                    // Skip keywords, built-in functions, and already declared variables
+                    const keywords = ['int', 'double', 'string', 'bool', 'char', 'float', 'cout', 'cin', 'endl', 'if', 'else', 'for', 'while', 'do', 'return', 'main', 'true', 'false', 'include', 'using', 'namespace', 'std'];
+                    
+                    if (!keywords.includes(varName) && 
+                        !declaredVariables.has(varName) && 
+                        !varName.match(/^\d/) && // Skip numbers
+                        !lineWithoutStrings.includes(`${varName} =`) && // Skip if it's being declared in this line
+                        (lineWithoutStrings.includes(`cout`) && lineWithoutStrings.includes(varName) || // Variable used in cout
+                         lineWithoutStrings.includes(`(${varName}`) || // Variable used in expressions
+                         lineWithoutStrings.includes(`${varName} +`) || lineWithoutStrings.includes(`${varName} -`) || 
+                         lineWithoutStrings.includes(`${varName} *`) || lineWithoutStrings.includes(`${varName} /`) ||
+                         lineWithoutStrings.includes(`+ ${varName}`) || lineWithoutStrings.includes(`- ${varName}`) || 
+                         lineWithoutStrings.includes(`* ${varName}`) || lineWithoutStrings.includes(`/ ${varName}`) ||
+                         lineWithoutStrings.includes(`== ${varName}`) || lineWithoutStrings.includes(`!= ${varName}`) ||
+                         lineWithoutStrings.includes(`> ${varName}`) || lineWithoutStrings.includes(`< ${varName}`) ||
+                         lineWithoutStrings.includes(`${varName} ==`) || lineWithoutStrings.includes(`${varName} !=`) ||
+                         lineWithoutStrings.includes(`${varName} >`) || lineWithoutStrings.includes(`${varName} <`))) {
+                        
+                        errors.push(`Line ${lineNumber}: '${varName}' was not declared in this scope. Declare the variable first using a variable declaration block.`);
+                        break; // Only report once per line to avoid spam
+                    }
+                }
+            }
+            
+            // Check for iostream include when using cout/cin
+            if ((code.includes('cout') || code.includes('cin')) && !hasIostreamInclude) {
+                errors.push(`Missing '#include <iostream>' - required for cout/cin operations`);
+            }
+            
+            // Check for string include when using string type
+            if (code.includes('string ') && !code.includes('#include <string>')) {
+                errors.push(`Missing '#include <string>' - required for string type`);
+            }
+            
+            return errors;
+        }
+
+        // Complete C++ code simulator with proper math evaluation and loop execution
+        function simulateCppExecution(code) {
+            console.log('🚀 Starting C++ simulation with code:', code);
+            
+            const lines = code.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('#') && !line.startsWith('using') && line !== 'int main() {' && line !== 'return 0;' && line !== '}');
+            const variables = {};
+            let output = '';
+            
+            // Pre-scan for cin statements to collect all inputs at once
+            const cinStatements = [];
+            for (let line of lines) {
+                if (line.includes('cin >>')) {
+                    const match = line.match(/cin >> (\w+);/);
+                    if (match) {
+                        cinStatements.push(match[1]);
+                    }
+                }
+            }
+            
+            // If there are cin statements, use pre-collected inputs
+            if (cinStatements.length > 0 && window.collectedInputs) {
+                // Use the collected inputs
+                Object.assign(variables, window.collectedInputs.variables);
+                
+                // Clear the collected inputs
+                delete window.collectedInputs;
+            } else if (cinStatements.length > 0) {
+                // Fallback: use default values if no inputs collected
+                for (let varName of cinStatements) {
+                    variables[varName] = 0;
+                }
+            }
+            
+            console.log('📊 Initial variables:', variables);
+            
+            function executeBlock(blockLines, startIndex = 0, endIndex = blockLines.length) {
+                let blockOutput = '';
+                let i = startIndex;
+                
+                console.log(`🔄 Executing block from ${startIndex} to ${endIndex}`);
+                
+                while (i < endIndex) {
+                    const line = blockLines[i].trim();
+                    console.log(`📝 Processing line ${i}: "${line}"`);
+                    
+                    if (!line || line === '}' || line === '{') {
+                        i++;
+                        continue;
+                    }
+                    
+                    // Variable declaration
+                    const declareMatch = line.match(/^\s*(int|double|string|bool|char|float)\s+(\w+)\s*=\s*(.+);/);
+                    if (declareMatch) {
+                        const varName = declareMatch[2];
+                        let value = declareMatch[3].trim();
+                        
+                        console.log(`🔧 Declaring variable ${varName} with value: ${value}`);
+                        
+                        const evaluatedValue = evaluateExpression(value, variables);
+                        variables[varName] = evaluatedValue;
+                        
+                        console.log(`✅ Variable ${varName} = ${evaluatedValue}`);
+                        i++;
+                        continue;
+                    }
+                    
+                    // Variable assignment
+                    const assignMatch = line.match(/^\s*(\w+)\s*=\s*(.+);/);
+                    if (assignMatch && !line.includes('int ') && !line.includes('double ') && !line.includes('string ') && !line.includes('bool ')) {
+                        const varName = assignMatch[1];
+                        let value = assignMatch[2].trim();
+                        
+                        console.log(`🔄 Assigning to variable ${varName} with value: ${value}`);
+                        
+                        const evaluatedValue = evaluateExpression(value, variables);
+                        variables[varName] = evaluatedValue;
+                        
+                        console.log(`✅ Variable ${varName} = ${evaluatedValue}`);
+                        i++;
+                        continue;
+                    }
+                    
+                    // Input statement (cin) - values already collected
+                    if (line.includes('cin >>')) {
+                        const match = line.match(/cin >> (\w+);/);
+                        if (match) {
+                            const varName = match[1];
+                            // Variable should already be set from pre-collected inputs
+                            if (variables[varName] === undefined) {
+                                variables[varName] = 0; // Fallback
+                            }
+                            console.log(`📥 Input for ${varName}: ${variables[varName]}`);
+                        }
+                        i++;
+                        continue;
+                    }
+                    
+                    // Output statement
+                    if (line.includes('cout <<')) {
+                        const match = line.match(/cout << (.+);/);
+                        if (match) {
+                            let expression = match[1].trim();
+                            console.log(`📤 Output expression: ${expression}`);
+                            
+                            const result = parseOutputExpression(expression, variables);
+                            blockOutput += result;
+                            console.log(`📤 Output result: "${result}"`);
+                        }
+                        i++;
+                        continue;
+                    }
+                    
+                    // If statement
+                    if (line.startsWith('if (')) {
+                        const conditionMatch = line.match(/if \((.+)\) \{/);
+                        if (conditionMatch) {
+                            const condition = conditionMatch[1];
+                            console.log(`🔍 If condition: ${condition}`);
+                            
+                            const conditionResult = evaluateExpression(condition, variables);
+                            console.log(`🔍 Condition result: ${conditionResult}`);
+                            
+                            // Find the matching closing brace
+                            let braceCount = 1;
+                            let ifEndIndex = i + 1;
+                            while (ifEndIndex < blockLines.length && braceCount > 0) {
+                                const checkLine = blockLines[ifEndIndex].trim();
+                                if (checkLine === '{') braceCount++;
+                                if (checkLine === '}') braceCount--;
+                                ifEndIndex++;
+                            }
+                            
+                            // Check if there's an else block
+                            let elseStartIndex = -1;
+                            let elseEndIndex = -1;
+                            if (ifEndIndex < blockLines.length && blockLines[ifEndIndex].trim() === 'else {') {
+                                elseStartIndex = ifEndIndex + 1;
+                                braceCount = 1;
+                                elseEndIndex = elseStartIndex;
+                                while (elseEndIndex < blockLines.length && braceCount > 0) {
+                                    const checkLine = blockLines[elseEndIndex].trim();
+                                    if (checkLine === '{') braceCount++;
+                                    if (checkLine === '}') braceCount--;
+                                    elseEndIndex++;
+                                }
+                            }
+                            
+                            // Execute the appropriate block
+                            if (isTruthy(conditionResult)) {
+                                console.log(`✅ Executing IF block`);
+                                blockOutput += executeBlock(blockLines, i + 1, ifEndIndex - 1);
+                            } else if (elseStartIndex !== -1) {
+                                console.log(`✅ Executing ELSE block`);
+                                blockOutput += executeBlock(blockLines, elseStartIndex, elseEndIndex - 1);
+                            }
+                            
+                            // Move to after the if-else block
+                            i = elseEndIndex !== -1 ? elseEndIndex : ifEndIndex;
+                            continue;
+                        }
+                    }
+                    
+                    // For loop
+                    if (line.startsWith('for (')) {
+                        const forMatch = line.match(/for \((.+); (.+); (.+)\) \{/);
+                        if (forMatch) {
+                            const init = forMatch[1].trim();
+                            const condition = forMatch[2].trim();
+                            const update = forMatch[3].trim();
+                            
+                            console.log(`🔄 For loop - Init: ${init}, Condition: ${condition}, Update: ${update}`);
+                            
+                            // Find the loop body end
+                            let braceCount = 1;
+                            let loopEndIndex = i + 1;
+                            while (loopEndIndex < blockLines.length && braceCount > 0) {
+                                const checkLine = blockLines[loopEndIndex].trim();
+                                if (checkLine === '{') braceCount++;
+                                if (checkLine === '}') braceCount--;
+                                loopEndIndex++;
+                            }
+                            
+                            // Execute initialization
+                            const initMatch = init.match(/(int|double|string|bool|char|float)\s+(\w+)\s*=\s*(.+)/);
+                            if (initMatch) {
+                                const varName = initMatch[2];
+                                const value = initMatch[3];
+                                
+                                const evaluatedValue = evaluateExpression(value, variables);
+                                variables[varName] = evaluatedValue;
+                                console.log(`🔄 Loop init: ${varName} = ${evaluatedValue}`);
+                            }
+                            
+                            // Execute loop
+                            let loopCount = 0;
+                            const maxIterations = 1000; // Prevent infinite loops
+                            
+                            while (loopCount < maxIterations) {
+                                const conditionResult = evaluateExpression(condition, variables);
+                                console.log(`🔄 Loop iteration ${loopCount + 1}, condition result: ${conditionResult}`);
+                                
+                                if (!isTruthy(conditionResult)) {
+                                    console.log(`🛑 Loop condition false, breaking`);
+                                    break;
+                                }
+                                
+                                blockOutput += executeBlock(blockLines, i + 1, loopEndIndex - 1);
+                                
+                                // Execute update
+                                executeUpdate(update, variables);
+                                
+                                loopCount++;
+                                console.log(`🔄 Variables after iteration ${loopCount}:`, variables);
+                            }
+                            
+                            i = loopEndIndex;
+                            continue;
+                        }
+                    }
+                    
+                    // While loop
+                    if (line.startsWith('while (')) {
+                        const whileMatch = line.match(/while \((.+)\) \{/);
+                        if (whileMatch) {
+                            const condition = whileMatch[1];
+                            console.log(`🔄 While condition: ${condition}`);
+                            
+                            // Find the loop body end
+                            let braceCount = 1;
+                            let loopEndIndex = i + 1;
+                            while (loopEndIndex < blockLines.length && braceCount > 0) {
+                                const checkLine = blockLines[loopEndIndex].trim();
+                                if (checkLine === '{') braceCount++;
+                                if (checkLine === '}') braceCount--;
+                                loopEndIndex++;
+                            }
+                            
+                            // Execute loop
+                            let loopCount = 0;
+                            const maxIterations = 1000;
+                            
+                            while (loopCount < maxIterations) {
+                                const conditionResult = evaluateExpression(condition, variables);
+                                console.log(`🔄 While iteration ${loopCount + 1}, condition result: ${conditionResult}`);
+                                
+                                if (!isTruthy(conditionResult)) {
+                                    console.log(`🛑 While condition false, breaking`);
+                                    break;
+                                }
+                                
+                                blockOutput += executeBlock(blockLines, i + 1, loopEndIndex - 1);
+                                loopCount++;
+                            }
+                            
+                            i = loopEndIndex;
+                            continue;
+                        }
+                    }
+                    
+                    // Do-while loop
+                    if (line === 'do {') {
+                        // Find the while condition
+                        let doEndIndex = i + 1;
+                        let braceCount = 1;
+                        while (doEndIndex < blockLines.length && braceCount > 0) {
+                            const checkLine = blockLines[doEndIndex].trim();
+                            if (checkLine === '{') braceCount++;
+                            if (checkLine === '}') braceCount--;
+                            doEndIndex++;
+                        }
+                        
+                        // Find the while condition
+                        let whileCondition = '';
+                        if (doEndIndex < blockLines.length) {
+                            const whileMatch = blockLines[doEndIndex].match(/while \((.+)\);/);
+                            if (whileMatch) {
+                                whileCondition = whileMatch[1];
+                            }
+                        }
+                        
+                        console.log(`🔄 Do-while condition: ${whileCondition}`);
+                        
+                        // Execute do-while loop
+                        let loopCount = 0;
+                        const maxIterations = 1000;
+                        
+                        do {
+                            blockOutput += executeBlock(blockLines, i + 1, doEndIndex - 1);
+                            loopCount++;
+                            
+                            if (whileCondition) {
+                                const conditionResult = evaluateExpression(whileCondition, variables);
+                                console.log(`🔄 Do-while iteration ${loopCount}, condition result: ${conditionResult}`);
+                                
+                                if (!isTruthy(conditionResult)) {
+                                    console.log(`🛑 Do-while condition false, breaking`);
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        } while (loopCount < maxIterations);
+                        
+                        i = doEndIndex + 1;
+                        continue;
+                    }
+                    
+                    // Comment
+                    if (line.startsWith('//')) {
+                        i++;
+                        continue;
+                    }
+                    
+                    i++;
+                }
+                
+                return blockOutput;
+            }
+            
+            const result = executeBlock(lines);
+            console.log('🎯 Final execution result:', result);
+            
+            return result;
+        }
+
+        // Enhanced expression evaluator with proper C++ semantics
+        function evaluateExpression(expr, variables = {}) {
+            if (!expr || typeof expr !== 'string') return 0;
+            
+            expr = expr.trim();
+            console.log(`🧮 Evaluating expression: "${expr}" with variables:`, variables);
+            
+            // Remove outer parentheses if they wrap the entire expression
+            while (expr.startsWith('(') && expr.endsWith(')') && isBalancedParentheses(expr.slice(1, -1))) {
+                expr = expr.slice(1, -1).trim();
+                console.log(`🧮 Removed outer parentheses: "${expr}"`);
+            }
+            
+            // Handle logical NOT
+            if (expr.startsWith('!')) {
+                const innerResult = evaluateExpression(expr.substring(1), variables);
+                return isTruthy(innerResult) ? 0 : 1; // C++ uses 0/1 for false/true
+            }
+            
+            // Handle logical operators (&&, ||) - lowest precedence
+            for (let op of ['||', '&&']) {
+                const opIndex = findLogicalOperator(expr, op);
+                if (opIndex !== -1) {
+                    const left = evaluateExpression(expr.substring(0, opIndex).trim(), variables);
+                    const right = evaluateExpression(expr.substring(opIndex + op.length).trim(), variables);
+                    
+                    if (op === '&&') {
+                        return (isTruthy(left) && isTruthy(right)) ? 1 : 0;
+                    } else { // ||
+                        return (isTruthy(left) || isTruthy(right)) ? 1 : 0;
+                    }
+                }
+            }
+            
+            // Handle comparison operators
+            for (let op of ['==', '!=', '<=', '>=', '<', '>']) {
+                const opIndex = findComparisonOperator(expr, op);
+                if (opIndex !== -1) {
+                    const left = evaluateExpression(expr.substring(0, opIndex).trim(), variables);
+                    const right = evaluateExpression(expr.substring(opIndex + op.length).trim(), variables);
+                    
+                    const leftNum = toNumber(left);
+                    const rightNum = toNumber(right);
+                    
+                    let result = false;
+                    switch (op) {
+                        case '==': result = leftNum === rightNum; break;
+                        case '!=': result = leftNum !== rightNum; break;
+                        case '<=': result = leftNum <= rightNum; break;
+                        case '>=': result = leftNum >= rightNum; break;
+                        case '<': result = leftNum < rightNum; break;
+                        case '>': result = leftNum > rightNum; break;
+                    }
+                    
+                    console.log(`🔍 Comparison ${leftNum} ${op} ${rightNum} = ${result}`);
+                    return result ? 1 : 0;
+                }
+            }
+            
+            // Handle arithmetic operators with proper precedence
+            // First handle + and - (lower precedence)
+            for (let op of ['+', '-']) {
+                const opIndex = findArithmeticOperatorNew(expr, op);
+                if (opIndex !== -1) {
+                    const leftPart = expr.substring(0, opIndex).trim();
+                    const rightPart = expr.substring(opIndex + 1).trim();
+                    
+                    console.log(`🧮 Found ${op} operator at index ${opIndex}: "${leftPart}" ${op} "${rightPart}"`);
+                    console.log(`🧮 About to evaluate left: "${leftPart}"`);
+                    
+                    const left = evaluateExpression(leftPart, variables);
+                    console.log(`🧮 Left result: ${left} (type: ${typeof left})`);
+                    
+                    console.log(`🧮 About to evaluate right: "${rightPart}"`);
+                    const right = evaluateExpression(rightPart, variables);
+                    console.log(`🧮 Right result: ${right} (type: ${typeof right})`);
+                    
+                    const leftNum = toNumber(left);
+                    const rightNum = toNumber(right);
+                    
+                    console.log(`🧮 Converted to numbers: ${leftNum} ${op} ${rightNum}`);
+                    
+                    let result;
+                    if (op === '+') {
+                        result = leftNum + rightNum;
+                    } else { // op === '-'
+                        result = leftNum - rightNum;
+                    }
+                    
+                    console.log(`🧮 Final math result: ${leftNum} ${op} ${rightNum} = ${result}`);
+                    return result;
+                }
+            }
+            
+            // Then handle *, /, % (higher precedence)
+            for (let op of ['*', '/', '%']) {
+                const opIndex = findArithmeticOperatorNew(expr, op);
+                if (opIndex !== -1) {
+                    const leftPart = expr.substring(0, opIndex).trim();
+                    const rightPart = expr.substring(opIndex + 1).trim();
+                    
+                    console.log(`🧮 Found ${op} operator at index ${opIndex}: "${leftPart}" ${op} "${rightPart}"`);
+                    console.log(`🧮 About to evaluate left: "${leftPart}"`);
+                    
+                    const left = evaluateExpression(leftPart, variables);
+                    console.log(`🧮 Left result: ${left} (type: ${typeof left})`);
+                    
+                    console.log(`🧮 About to evaluate right: "${rightPart}"`);
+                    const right = evaluateExpression(rightPart, variables);
+                    console.log(`🧮 Right result: ${right} (type: ${typeof right})`);
+                    
+                    const leftNum = toNumber(left);
+                    const rightNum = toNumber(right);
+                    
+                    console.log(`🧮 Converted to numbers: ${leftNum} ${op} ${rightNum}`);
+                    
+                    let result;
+                    switch (op) {
+                        case '*': result = leftNum * rightNum; break;
+                        case '/': result = rightNum !== 0 ? leftNum / rightNum : 0; break;
+                        case '%': result = rightNum !== 0 ? leftNum % rightNum : 0; break;
+                    }
+                    
+                    console.log(`🧮 Final math result: ${leftNum} ${op} ${rightNum} = ${result}`);
+                    return result;
+                }
+            }
+            
+            // Handle simple values
+            return evaluateSimpleValue(expr, variables);
+        }
+
+        // Check if parentheses are balanced
+        function isBalancedParentheses(expr) {
+            let count = 0;
+            for (let char of expr) {
+                if (char === '(') count++;
+                else if (char === ')') count--;
+                if (count < 0) return false;
+            }
+            return count === 0;
+        }
+
+        // Find operator index, respecting parentheses
+        function findOperatorIndex(expr, op) {
+            let parenCount = 0;
+            for (let i = expr.length - 1; i >= 0; i--) {
+                if (expr[i] === ')') parenCount++;
+                else if (expr[i] === '(') parenCount--;
+                else if (parenCount === 0 && expr.substring(i, i + op.length) === op) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        // Find operator index from right to left, respecting parentheses
+        function findOperatorIndexRightToLeft(expr, op) {
+            let parenCount = 0;
+            for (let i = expr.length - 1; i >= 0; i--) {
+                if (expr[i] === ')') parenCount++;
+                else if (expr[i] === '(') parenCount--;
+                else if (parenCount === 0 && expr.substring(i, i + op.length) === op) {
+                    // Make sure this isn't part of a larger operator (like <= containing <)
+                    if (op.length === 1) {
+                        // For single character operators, check it's not part of a multi-char operator
+                        const prevChar = i > 0 ? expr[i - 1] : '';
+                        const nextChar = i + 1 < expr.length ? expr[i + 1] : '';
+                        
+                        if ((op === '<' && nextChar === '=') || 
+                            (op === '>' && nextChar === '=') ||
+                            (op === '=' && (prevChar === '=' || nextChar === '=')) ||
+                            (op === '!' && nextChar === '=')) {
+                            continue; // Skip this, it's part of a larger operator
+                        }
+                    }
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        // Find arithmetic operator with proper precedence handling
+        function findArithmeticOperator(expr, op) {
+            let parenCount = 0;
+            let lastFoundIndex = -1;
+            
+            // Search from left to right to find the rightmost occurrence at the same parentheses level
+            for (let i = 0; i < expr.length; i++) {
+                if (expr[i] === '(') parenCount++;
+                else if (expr[i] === ')') parenCount--;
+                else if (parenCount === 0 && expr.substring(i, i + op.length) === op) {
+                    // Make sure this isn't part of a larger operator
+                    if (op.length === 1) {
+                        const prevChar = i > 0 ? expr[i - 1] : '';
+                        const nextChar = i + 1 < expr.length ? expr[i + 1] : '';
+                        
+                        // Skip if it's part of a multi-character operator
+                        if ((op === '<' && nextChar === '=') || 
+                            (op === '>' && nextChar === '=') ||
+                            (op === '=' && (prevChar === '=' || nextChar === '=')) ||
+                            (op === '!' && nextChar === '=')) {
+                            continue;
+                        }
+                        
+                        // For minus, check if it's a negative sign (at start or after operator)
+                        if (op === '-' && (i === 0 || /[+\-*/%(=<>!&|]/.test(prevChar))) {
+                            continue;
+                        }
+                    }
+                    
+                    lastFoundIndex = i;
+                }
+            }
+            
+            return lastFoundIndex;
+        }
+
+        // Completely new arithmetic operator finder with proper precedence
+        function findArithmeticOperatorNew(expr, op) {
+            console.log(`🔍 Looking for operator "${op}" in expression: "${expr}"`);
+            
+            let parenCount = 0;
+            let foundPositions = [];
+            
+            // Find all valid positions for this operator
+            for (let i = 0; i < expr.length; i++) {
+                const char = expr[i];
+                
+                if (char === '(') {
+                    parenCount++;
+                } else if (char === ')') {
+                    parenCount--;
+                } else if (parenCount === 0 && expr.substring(i, i + op.length) === op) {
+                    const prevChar = i > 0 ? expr[i - 1] : '';
+                    const nextChar = i + 1 < expr.length ? expr[i + 1] : '';
+                    
+                    // Skip multi-character operators
+                    if ((op === '<' && nextChar === '=') || 
+                        (op === '>' && nextChar === '=') ||
+                        (op === '=' && (prevChar === '=' || nextChar === '=')) ||
+                        (op === '!' && nextChar === '=') ||
+                        (op === '&' && nextChar === '&') ||
+                        (op === '|' && nextChar === '|')) {
+                        continue;
+                    }
+                    
+                    // Handle negative numbers vs subtraction
+                    if (op === '-') {
+                        // It's a negative sign if at start or after these characters
+                        if (i === 0 || /[+\-*/%(=<>!&|,(\s]/.test(prevChar)) {
+                            console.log(`🔍 Skipping negative sign at position ${i}`);
+                            continue;
+                        }
+                    }
+                    
+                    // Skip unary plus
+                    if (op === '+' && i === 0) {
+                        continue;
+                    }
+                    
+                    foundPositions.push(i);
+                    console.log(`🔍 Valid "${op}" found at position ${i}`);
+                }
+            }
+            
+            // Return the rightmost valid position (for left-associative operators)
+            const result = foundPositions.length > 0 ? foundPositions[foundPositions.length - 1] : -1;
+            console.log(`🔍 Final result for "${op}": ${result} (from positions: ${foundPositions})`);
+            return result;
+        }
+
+        // Find logical operators
+        function findLogicalOperator(expr, op) {
+            let parenCount = 0;
+            
+            // Search from right to left for logical operators
+            for (let i = expr.length - op.length; i >= 0; i--) {
+                if (expr[i] === ')') parenCount++;
+                else if (expr[i] === '(') parenCount--;
+                else if (parenCount === 0 && expr.substring(i, i + op.length) === op) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        // Find comparison operators
+        function findComparisonOperator(expr, op) {
+            let parenCount = 0;
+            
+            // Search from right to left for comparison operators
+            for (let i = expr.length - op.length; i >= 0; i--) {
+                if (expr[i] === ')') parenCount++;
+                else if (expr[i] === '(') parenCount--;
+                else if (parenCount === 0 && expr.substring(i, i + op.length) === op) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        // Evaluate simple values (numbers, variables, strings, booleans)
+        function evaluateSimpleValue(expr, variables = {}) {
+            expr = expr.trim();
+            console.log(`🔍 Evaluating simple value: "${expr}"`);
+            
+            // Handle empty expression
+            if (!expr) {
+                console.log(`❌ Empty expression, returning 0`);
+                return 0;
+            }
+            
+            // Check if it's a number (including negative numbers and decimals)
+            if (/^-?\d+(\.\d+)?$/.test(expr)) {
+                const result = parseFloat(expr);
+                console.log(`🔢 Number: ${expr} = ${result}`);
+                return result;
+            }
+            
+            // Check if it's a variable
+            if (/^[a-zA-Z_]\w*$/.test(expr)) {
+                if (variables.hasOwnProperty(expr)) {
+                    const result = variables[expr];
+                    console.log(`📊 Variable: ${expr} = ${result} (type: ${typeof result})`);
+                    return result;
+                } else {
+                    console.log(`❌ Variable ${expr} not found in variables:`, Object.keys(variables));
+                    return 0;
+                }
+            }
+            
+            // Check if it's a string literal
+            if (expr.startsWith('"') && expr.endsWith('"')) {
+                const result = expr.slice(1, -1);
+                console.log(`📝 String: ${expr} = "${result}"`);
+                return result;
+            }
+            
+            // Check if it's a boolean
+            if (expr === 'true') {
+                console.log(`✅ Boolean: true = 1`);
+                return 1;
+            }
+            if (expr === 'false') {
+                console.log(`❌ Boolean: false = 0`);
+                return 0;
+            }
+            
+            // Check if it's endl
+            if (expr === 'endl') {
+                console.log(`📝 Endl token`);
+                return 'endl';
+            }
+            
+            // Handle parentheses around simple values
+            if (expr.startsWith('(') && expr.endsWith(')') && isBalancedParentheses(expr.slice(1, -1))) {
+                console.log(`🔄 Removing parentheses and re-evaluating: "${expr.slice(1, -1)}"`);
+                return evaluateSimpleValue(expr.slice(1, -1), variables);
+            }
+            
+            // Try to handle expressions that might have been missed
+            if (expr.includes(' ') || expr.includes('+') || expr.includes('-') || expr.includes('*') || expr.includes('/') || expr.includes('%')) {
+                console.log(`🔄 Expression contains operators, trying to re-evaluate: "${expr}"`);
+                return evaluateExpression(expr, variables);
+            }
+            
+            // Default fallback
+            console.log(`❓ Unknown expression: "${expr}", defaulting to 0`);
+            return 0;
+        }
+
+        // Convert value to number for arithmetic operations
+        function toNumber(value) {
+            if (typeof value === 'number') return value;
+            if (typeof value === 'string') {
+                if (value === 'true') return 1;
+                if (value === 'false') return 0;
+                const num = parseFloat(value);
+                return isNaN(num) ? 0 : num;
+            }
+            return 0;
+        }
+
+        // Check if value is truthy in C++ context
+        function isTruthy(value) {
+            if (typeof value === 'number') return value !== 0;
+            if (typeof value === 'string') {
+                if (value === 'true') return true;
+                if (value === 'false') return false;
+                const num = parseFloat(value);
+                return !isNaN(num) && num !== 0;
+            }
+            return Boolean(value);
+        }
+
+        // Execute update expressions (i++, i--, i+=n, etc.)
+        function executeUpdate(update, variables) {
+            update = update.trim();
+            console.log(`🔄 Executing update: ${update}`);
+            
+            if (update.includes('++')) {
+                const varName = update.replace('++', '').trim();
+                if (variables[varName] !== undefined) {
+                    variables[varName] = toNumber(variables[varName]) + 1;
+                    console.log(`➕ Incremented ${varName} to ${variables[varName]}`);
+                }
+            } else if (update.includes('--')) {
+                const varName = update.replace('--', '').trim();
+                if (variables[varName] !== undefined) {
+                    variables[varName] = toNumber(variables[varName]) - 1;
+                    console.log(`➖ Decremented ${varName} to ${variables[varName]}`);
+                }
+            } else if (update.includes('+=')) {
+                const parts = update.split('+=');
+                const varName = parts[0].trim();
+                const increment = evaluateExpression(parts[1].trim(), variables);
+                if (variables[varName] !== undefined) {
+                    variables[varName] = toNumber(variables[varName]) + toNumber(increment);
+                    console.log(`➕ Added ${increment} to ${varName}, now ${variables[varName]}`);
+                }
+            } else if (update.includes('-=')) {
+                const parts = update.split('-=');
+                const varName = parts[0].trim();
+                const decrement = evaluateExpression(parts[1].trim(), variables);
+                if (variables[varName] !== undefined) {
+                    variables[varName] = toNumber(variables[varName]) - toNumber(decrement);
+                    console.log(`➖ Subtracted ${decrement} from ${varName}, now ${variables[varName]}`);
+                }
+            }
+        }
+
+        // Parse output expressions for cout statements
+        function parseOutputExpression(expr, variables = {}) {
+            console.log(`📤 Parsing output expression: "${expr}"`);
+            
+            let result = '';
+            
+            // Handle chained expressions with <<
+            const parts = expr.split('<<').map(part => part.trim());
+            console.log(`🔗 Output parts:`, parts);
+            
+            for (let part of parts) {
+                if (part === 'endl') {
+                    result += '\n';
+                    console.log(`📝 Added newline`);
+                } else if (part.startsWith('"') && part.endsWith('"')) {
+                    // String literal
+                    const text = part.slice(1, -1);
+                    result += text;
+                    console.log(`📝 Added string: "${text}"`);
+                } else {
+                    // Evaluate the expression
+                    const value = evaluateExpression(part, variables);
+                    const formatted = formatOutputValue(value);
+                    result += formatted;
+                    console.log(`📝 Added evaluated value: ${formatted} (from ${part})`);
+                }
+            }
+            
+            console.log(`📤 Final output: "${result}"`);
+            return result;
+        }
+
+        // Format values for output
+        function formatOutputValue(value) {
+            if (typeof value === 'number') {
+                // Remove unnecessary decimal places
+                return value % 1 === 0 ? value.toString() : value.toFixed(10).replace(/\.?0+$/, '');
+            }
+            return String(value);
+        }
+
+        // Create input dialog for cin statements
+        function createInputDialog(cinStatements) {
+            return new Promise((resolve) => {
+                // Create modal backdrop
+                const backdrop = document.createElement('div');
+                backdrop.className = 'fixed inset-0 bg-black bg-opacity-50 modal-backdrop z-50 flex items-center justify-center';
+                
+                // Create modal content
+                const modal = document.createElement('div');
+                modal.className = 'bg-white rounded-xl shadow-2xl max-w-md w-full mx-4';
+                
+                // Create header
+                const header = document.createElement('div');
+                header.className = 'p-6 border-b border-gray-200';
+                header.innerHTML = `
+                    <h2 class="text-xl font-bold text-gray-800">Input Nilai Program</h2>
+                    <p class="text-sm text-gray-600 mt-1">Masukkan nilai untuk variabel yang dibutuhkan:</p>
+                `;
+                
+                // Create form
+                const form = document.createElement('form');
+                form.className = 'p-6 space-y-4';
+                
+                const inputs = {};
+                
+                // Create input fields for each cin statement
+                cinStatements.forEach((varName, index) => {
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.innerHTML = `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Nilai untuk variabel "${varName}":
+                        </label>
+                        <input 
+                            type="text" 
+                            id="input_${varName}" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Masukkan nilai..."
+                            ${index === 0 ? 'autofocus' : ''}
+                        >
+                    `;
+                    form.appendChild(fieldDiv);
+                    
+                    const input = fieldDiv.querySelector('input');
+                    inputs[varName] = input;
+                });
+                
+                // Create buttons
+                const buttonDiv = document.createElement('div');
+                buttonDiv.className = 'flex justify-end space-x-3 pt-4 border-t border-gray-200';
+                buttonDiv.innerHTML = `
+                    <button type="button" id="cancelBtn" class="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium">
+                        Jalankan Program
+                    </button>
+                `;
+                form.appendChild(buttonDiv);
+                
+                // Assemble modal
+                modal.appendChild(header);
+                modal.appendChild(form);
+                backdrop.appendChild(modal);
+                
+                // Add to document
+                document.body.appendChild(backdrop);
+                
+                // Handle form submission
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const variables = {};
+                    
+                    // Collect all input values
+                    for (let [varName, inputElement] of Object.entries(inputs)) {
+                        let value = inputElement.value.trim();
+                        
+                        if (value === '') {
+                            value = '0'; // Default to 0 if empty
+                        }
+                        
+                        // Try to convert to number if possible
+                        if (!isNaN(value) && value !== '') {
+                            variables[varName] = parseFloat(value);
+                        } else {
+                            variables[varName] = value;
+                        }
+                    }
+                    
+                    // Store in global scope for execution
+                    window.collectedInputs = { variables };
+                    
+                    // Remove modal
+                    document.body.removeChild(backdrop);
+                    
+                    resolve(true);
+                });
+                
+                // Handle cancel
+                buttonDiv.querySelector('#cancelBtn').addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    resolve(false);
+                });
+                
+                // Handle backdrop click
+                backdrop.addEventListener('click', (e) => {
+                    if (e.target === backdrop) {
+                        document.body.removeChild(backdrop);
+                        resolve(false);
+                    }
+                });
+                
+                // Handle Enter key to submit
+                Object.values(inputs).forEach(input => {
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            form.dispatchEvent(new Event('submit'));
+                        }
+                    });
+                });
+            });
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initWorkspace();
+
+            // Modal controls
+            document.getElementById('addBlockBtn').addEventListener('click', function() {
+                document.getElementById('blockModal').classList.remove('hidden');
+            });
+
+            document.getElementById('quickTemplateBtn').addEventListener('click', function() {
+                document.getElementById('templateModal').classList.remove('hidden');
+            });
+
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('blockModal').classList.add('hidden');
+            });
+
+            document.getElementById('closeTemplateModal').addEventListener('click', function() {
+                document.getElementById('templateModal').classList.add('hidden');
+            });
+
+            document.getElementById('closeCodeModal').addEventListener('click', function() {
+                document.getElementById('codeModal').classList.add('hidden');
+            });
+
+            // Clear workspace
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                console.log('Clear button clicked');
+                
+                // Check if workspace exists and has blocks
+                if (workspace && workspace.getAllBlocks().length > 0) {
+                    if (confirm('Apakah Anda yakin ingin menghapus semua blok?')) {
+                        workspace.clear();
+                        console.log('Workspace cleared');
+                    }
+                } else {
+                    alert('Tidak ada blok untuk dihapus.');
+                }
+            });
+
+            // Run code
+            document.getElementById('runBtn').addEventListener('click', function() {
+                console.log('Run button clicked');
+                generateAndRunCode();
+            });
+
+            // Block selection
+            document.querySelectorAll('.block-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const blockType = this.getAttribute('data-type');
+                    const blockMap = {
+                        'program_structure': 'cpp_program_structure',
+                        'main': 'cpp_main',
+                        'include': 'cpp_include',
+                        'namespace': 'cpp_namespace',
+                        'cout': 'cpp_cout',
+                        'cin': 'cpp_cin',
+                        'chain': 'cpp_chain',
+                        'endl': 'cpp_endl',
+                        'declare_var': 'cpp_declare_var',
+                        'set_var': 'cpp_set_var',
+                        'get_var': 'cpp_get_var',
+                        'text': 'cpp_text',
+                        'number': 'cpp_number',
+                        'boolean': 'cpp_boolean',
+                        'math_op': 'cpp_math',
+                        'compare_op': 'cpp_compare',
+                        'logic_op': 'cpp_logic',
+                        'not_op': 'cpp_not',
+                        'if': 'cpp_if',
+                        'if_else': 'cpp_if_else',
+                        'for_loop': 'cpp_for',
+                        'while_loop': 'cpp_while',
+                        'do_while': 'cpp_do_while',
+                        'comment': 'cpp_comment'
+                    };
+                    
+                    if (blockMap[blockType]) {
+                        addBlockToWorkspace(blockMap[blockType]);
+                        document.getElementById('blockModal').classList.add('hidden');
+                    }
+                });
+            });
+
+            // Template selection
+            document.querySelectorAll('[data-template]').forEach(templateBtn => {
+                templateBtn.addEventListener('click', function() {
+                    const templateType = this.getAttribute('data-template');
+                    
+                    // Always confirm before creating template
+                    let shouldProceed = true;
+                    if (workspace.getAllBlocks().length > 0) {
+                        shouldProceed = confirm('Ini akan menghapus semua blok yang ada. Lanjutkan?');
+                    }
+                    
+                    if (shouldProceed) {
+                        // Clear workspace first
+                        workspace.clear();
+                        
+                        // Small delay to ensure workspace is cleared
+                        setTimeout(() => {
+                            createTemplate(templateType);
+                        }, 100);
+                        
+                        document.getElementById('templateModal').classList.add('hidden');
+                    }
+                });
+            });
+
+            // Close modals when clicking outside
+            document.getElementById('blockModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('templateModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('codeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978dac64574c3df0',t:'MTc1NjgyMzA5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
