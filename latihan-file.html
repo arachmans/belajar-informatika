@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Organisasi File - PT. Maju Sejahtera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .file-item {
+            transition: all 0.3s ease;
+        }
+        .file-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .folder-item {
+            transition: all 0.2s ease;
+        }
+        .folder-item:hover {
+            background-color: #f3f4f6;
+        }
+        .drop-zone {
+            min-height: 40px;
+            transition: all 0.2s ease;
+        }
+        .drop-zone.drag-over {
+            background-color: #dbeafe;
+            border: 2px dashed #3b82f6;
+        }
+        .dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="min-h-screen p-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">🏢 Simulasi Organisasi File Digital</h1>
+                <p class="text-gray-600">Selamat datang di PT. Maju Sejahtera! Mari rapikan file-file digital ini.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Column -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Instructions Area -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h2 class="text-xl font-bold text-blue-800 mb-4">📋 Tugas Pertama Anda di PT. Maju Sejahtera!</h2>
+                        <div class="text-sm text-blue-700 space-y-3">
+                            <p><strong>Selamat datang di tim kami!</strong> Sebagai tugas pertama, Anda diminta untuk merapikan file-file digital yang ada di desktop bersama.</p>
+                            
+                            <div class="bg-white p-4 rounded border">
+                                <p class="font-semibold mb-2">Tugas Anda adalah:</p>
+                                <ol class="list-decimal list-inside space-y-1 text-xs">
+                                    <li>Buat struktur folder yang rapi untuk menyimpan semua file ini</li>
+                                    <li>Buat satu folder utama bernama <strong>"Dokumen Kantor 2023"</strong></li>
+                                    <li>Di dalam Dokumen Kantor 2023, buat tiga subfolder utama:
+                                        <ul class="list-disc list-inside ml-4 mt-1">
+                                            <li><strong>01_Keuangan</strong></li>
+                                            <li><strong>02_Pemasaran</strong></li>
+                                            <li><strong>03_SDM</strong></li>
+                                        </ul>
+                                    </li>
+                                    <li>Di dalam folder 01_Keuangan, buat lagi dua subfolder:
+                                        <ul class="list-disc list-inside ml-4 mt-1">
+                                            <li><strong>Faktur & Invoice</strong></li>
+                                            <li><strong>Laporan Pajak</strong></li>
+                                        </ul>
+                                    </li>
+                                    <li>Setelah struktur folder selesai, pindahkan semua 20 file yang tersedia ke dalam folder yang paling sesuai</li>
+                                </ol>
+                            </div>
+                            
+                            <p class="font-semibold text-blue-800">🎯 Selamat bekerja!</p>
+                        </div>
+                    </div>
+
+                    <!-- Folder Structure Area -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">📁 Struktur Folder</h3>
+                            <button onclick="createNewFolder()" class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
+                                + Folder Baru
+                            </button>
+                        </div>
+                        <div id="folderStructure" class="space-y-2 min-h-[300px]">
+                            <p class="text-gray-500 text-sm italic">Klik "Folder Baru" untuk mulai membuat struktur folder...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Files Area -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📄 File yang Perlu Diorganisir (20 file)</h3>
+                        <div id="filesArea" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                            <!-- Files will be populated by JavaScript -->
+                        </div>
+                        
+                        <div class="mt-8 text-center">
+                            <button onclick="checkAnswer()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-colors shadow-md">
+                                🔍 Periksa Jawaban
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for creating folders -->
+    <div id="folderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 mx-4">
+            <h3 class="text-lg font-semibold mb-4">Buat Folder Baru</h3>
+            <input type="text" id="folderNameInput" placeholder="Nama folder..." class="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeFolderModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Batal</button>
+                <button onclick="confirmCreateFolder()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">Buat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 mx-4">
+            <div id="resultContent"></div>
+            <div class="flex justify-end mt-4">
+                <button onclick="closeResultModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let folders = {};
+        let currentParentId = null;
+        let fileLocations = {};
+        
+        // File list with proper categorization
+        const files = [
+            { name: "Laporan_Keuangan_Q3.xlsx", icon: "📊", category: "keuangan", subcategory: "laporan" },
+            { name: "Invoice_untuk_PT_Cahaya.pdf", icon: "🧾", category: "keuangan", subcategory: "invoice" },
+            { name: "Desain_Brosur_Terbaru.ai", icon: "🎨", category: "pemasaran", subcategory: "design" },
+            { name: "CV_Pelamar_Andi.pdf", icon: "📄", category: "sdm", subcategory: "recruitment" },
+            { name: "Bukti_Potong_PPH21_September.pdf", icon: "🧾", category: "keuangan", subcategory: "pajak" },
+            { name: "Konten_Kalender_Medsos_Oktober.docx", icon: "📝", category: "pemasaran", subcategory: "content" },
+            { name: "Data_Absensi_Karyawan.csv", icon: "📋", category: "sdm", subcategory: "attendance" },
+            { name: "Logo_Perusahaan_Resolusi_Tinggi.png", icon: "🖼️", category: "pemasaran", subcategory: "design" },
+            { name: "Faktur_Pembelian_ATK.pdf", icon: "🧾", category: "keuangan", subcategory: "invoice" },
+            { name: "Presentasi_Strategi_Marketing_Q4.pptx", icon: "📊", category: "pemasaran", subcategory: "presentation" },
+            { name: "Formulir_Klaim_Asuransi_Kesehatan.docx", icon: "📄", category: "sdm", subcategory: "benefits" },
+            { name: "Laporan_Pajak_Tahunan_2022.pdf", icon: "📊", category: "keuangan", subcategory: "pajak" },
+            { name: "Video_Iklan_Produk_A.mp4", icon: "🎬", category: "pemasaran", subcategory: "video" },
+            { name: "Surat_Penawaran_Kerja_Budi.pdf", icon: "📄", category: "sdm", subcategory: "recruitment" },
+            { name: "Invoice_dari_Vendor_Logistik.pdf", icon: "🧾", category: "keuangan", subcategory: "invoice" },
+            { name: "Riset_Kata_Kunci_SEO.xlsx", icon: "📊", category: "pemasaran", subcategory: "research" },
+            { name: "Foto_Acara_Gathering_Tim.jpg", icon: "📸", category: "sdm", subcategory: "events" },
+            { name: "Panduan_Karyawan_Baru.pdf", icon: "📖", category: "sdm", subcategory: "training" },
+            { name: "Tagihan_Internet_September.pdf", icon: "🧾", category: "keuangan", subcategory: "invoice" },
+            { name: "SPT_Masa_PPN_Agustus.pdf", icon: "📊", category: "keuangan", subcategory: "pajak" }
+        ];
+
+        // Initialize the game
+        function initGame() {
+            renderFiles();
+        }
+
+        // Render files in the files area
+        function renderFiles() {
+            const filesArea = document.getElementById('filesArea');
+            filesArea.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                if (!fileLocations[file.name]) {
+                    const fileElement = document.createElement('div');
+                    fileElement.className = 'file-item bg-gray-50 border border-gray-200 rounded-lg p-3 cursor-move hover:shadow-md';
+                    fileElement.draggable = true;
+                    fileElement.innerHTML = `
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">${file.icon}</div>
+                            <div class="text-xs text-gray-700 break-words">${file.name}</div>
+                        </div>
+                    `;
+                    
+                    fileElement.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', file.name);
+                        fileElement.classList.add('dragging');
+                    });
+                    
+                    fileElement.addEventListener('dragend', () => {
+                        fileElement.classList.remove('dragging');
+                    });
+                    
+                    filesArea.appendChild(fileElement);
+                }
+            });
+        }
+
+        // Create new folder
+        function createNewFolder() {
+            document.getElementById('folderModal').classList.remove('hidden');
+            document.getElementById('folderModal').classList.add('flex');
+            document.getElementById('folderNameInput').focus();
+        }
+
+        function closeFolderModal() {
+            document.getElementById('folderModal').classList.add('hidden');
+            document.getElementById('folderModal').classList.remove('flex');
+            document.getElementById('folderNameInput').value = '';
+            currentParentId = null;
+        }
+
+        function confirmCreateFolder() {
+            const folderName = document.getElementById('folderNameInput').value.trim();
+            if (folderName) {
+                const folderId = Date.now().toString();
+                const parentId = currentParentId || 'root';
+                
+                if (!folders[parentId]) {
+                    folders[parentId] = [];
+                }
+                
+                folders[parentId].push({
+                    id: folderId,
+                    name: folderName,
+                    files: []
+                });
+                
+                renderFolderStructure();
+                closeFolderModal();
+            }
+        }
+
+        // Render folder structure
+        function renderFolderStructure() {
+            const container = document.getElementById('folderStructure');
+            container.innerHTML = '';
+            
+            if (!folders.root || folders.root.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm italic">Klik "Folder Baru" untuk mulai membuat struktur folder...</p>';
+                return;
+            }
+            
+            renderFolderLevel(container, 'root', 0);
+        }
+
+        function renderFolderLevel(container, parentId, level) {
+            if (!folders[parentId]) return;
+            
+            folders[parentId].forEach(folder => {
+                const folderElement = document.createElement('div');
+                folderElement.className = 'folder-item';
+                
+                const indent = level * 20;
+                folderElement.innerHTML = `
+                    <div class="flex items-center p-2 rounded hover:bg-gray-50 drop-zone" style="margin-left: ${indent}px;" data-folder-id="${folder.id}">
+                        <span class="text-lg mr-2">📁</span>
+                        <span class="font-medium text-gray-800">${folder.name}</span>
+                        <button onclick="createSubfolder('${folder.id}')" class="ml-auto text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">+ Sub</button>
+                    </div>
+                `;
+                
+                // Add drag and drop functionality
+                const dropZone = folderElement.querySelector('.drop-zone');
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('drag-over');
+                });
+                
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.classList.remove('drag-over');
+                });
+                
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('drag-over');
+                    const fileName = e.dataTransfer.getData('text/plain');
+                    moveFileToFolder(fileName, folder.id);
+                });
+                
+                container.appendChild(folderElement);
+                
+                // Show files in this folder
+                if (folder.files && folder.files.length > 0) {
+                    const filesContainer = document.createElement('div');
+                    filesContainer.style.marginLeft = `${indent + 20}px`;
+                    folder.files.forEach(fileName => {
+                        const file = files.find(f => f.name === fileName);
+                        if (file) {
+                            const fileDiv = document.createElement('div');
+                            fileDiv.className = 'flex items-center p-1 text-sm text-gray-600';
+                            fileDiv.innerHTML = `<span class="mr-2">${file.icon}</span><span>${fileName}</span>`;
+                            filesContainer.appendChild(fileDiv);
+                        }
+                    });
+                    container.appendChild(filesContainer);
+                }
+                
+                // Render subfolders
+                renderFolderLevel(container, folder.id, level + 1);
+            });
+        }
+
+        function createSubfolder(parentId) {
+            currentParentId = parentId;
+            createNewFolder();
+        }
+
+        function moveFileToFolder(fileName, folderId) {
+            // Remove file from its current location
+            Object.keys(folders).forEach(parentId => {
+                if (folders[parentId]) {
+                    folders[parentId].forEach(folder => {
+                        const fileIndex = folder.files.indexOf(fileName);
+                        if (fileIndex > -1) {
+                            folder.files.splice(fileIndex, 1);
+                        }
+                    });
+                }
+            });
+            
+            // Add file to new folder
+            const targetFolder = findFolderById(folderId);
+            if (targetFolder) {
+                targetFolder.files.push(fileName);
+                fileLocations[fileName] = folderId;
+            }
+            
+            renderFiles();
+            renderFolderStructure();
+        }
+
+        function findFolderById(folderId) {
+            for (let parentId in folders) {
+                const folder = folders[parentId].find(f => f.id === folderId);
+                if (folder) return folder;
+            }
+            return null;
+        }
+
+        // Check answer function
+        function checkAnswer() {
+            let score = 0;
+            let feedback = [];
+            
+            // Check folder structure
+            const mainFolder = folders.root?.find(f => f.name === "Dokumen Kantor 2023");
+            if (mainFolder) {
+                score += 10;
+                feedback.push("✅ Folder utama 'Dokumen Kantor 2023' sudah dibuat");
+                
+                const subfolders = folders[mainFolder.id] || [];
+                const requiredSubfolders = ["01_Keuangan", "02_Pemasaran", "03_SDM"];
+                
+                requiredSubfolders.forEach(reqFolder => {
+                    if (subfolders.find(f => f.name === reqFolder)) {
+                        score += 10;
+                        feedback.push(`✅ Subfolder '${reqFolder}' sudah dibuat`);
+                    } else {
+                        feedback.push(`❌ Subfolder '${reqFolder}' belum dibuat`);
+                    }
+                });
+                
+                // Check Keuangan subfolders
+                const keuanganFolder = subfolders.find(f => f.name === "01_Keuangan");
+                if (keuanganFolder) {
+                    const keuanganSubs = folders[keuanganFolder.id] || [];
+                    const requiredKeuanganSubs = ["Faktur & Invoice", "Laporan Pajak"];
+                    
+                    requiredKeuanganSubs.forEach(reqSub => {
+                        if (keuanganSubs.find(f => f.name === reqSub)) {
+                            score += 10;
+                            feedback.push(`✅ Subfolder '${reqSub}' sudah dibuat`);
+                        } else {
+                            feedback.push(`❌ Subfolder '${reqSub}' belum dibuat`);
+                        }
+                    });
+                }
+            } else {
+                feedback.push("❌ Folder utama 'Dokumen Kantor 2023' belum dibuat");
+            }
+            
+            // Check file placement
+            let correctFiles = 0;
+            files.forEach(file => {
+                const correctLocation = getCorrectLocation(file, mainFolder);
+                const currentLocation = fileLocations[file.name];
+                
+                if (currentLocation && correctLocation && currentLocation === correctLocation) {
+                    correctFiles++;
+                }
+            });
+            
+            score += correctFiles * 2;
+            
+            // Show results
+            const totalScore = Math.min(100, score);
+            let resultHTML = `
+                <h3 class="text-xl font-bold mb-4">📊 Hasil Penilaian</h3>
+                <div class="mb-4">
+                    <div class="text-3xl font-bold text-center ${totalScore >= 80 ? 'text-green-600' : totalScore >= 60 ? 'text-yellow-600' : 'text-red-600'}">${totalScore}/100</div>
+                    <div class="text-center text-gray-600">File yang benar: ${correctFiles}/20</div>
+                </div>
+                <div class="space-y-2 max-h-60 overflow-y-auto">
+            `;
+            
+            feedback.forEach(item => {
+                resultHTML += `<div class="text-sm">${item}</div>`;
+            });
+            
+            resultHTML += '</div>';
+            
+            if (totalScore >= 80) {
+                resultHTML += '<div class="mt-4 p-3 bg-green-100 text-green-800 rounded">🎉 Selamat! Anda berhasil menyelesaikan tugas dengan baik!</div>';
+            } else if (totalScore >= 60) {
+                resultHTML += '<div class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded">👍 Cukup baik! Masih ada beberapa yang perlu diperbaiki.</div>';
+            } else {
+                resultHTML += '<div class="mt-4 p-3 bg-red-100 text-red-800 rounded">💪 Jangan menyerah! Coba lagi dan perhatikan instruksi dengan teliti.</div>';
+            }
+            
+            document.getElementById('resultContent').innerHTML = resultHTML;
+            document.getElementById('resultModal').classList.remove('hidden');
+            document.getElementById('resultModal').classList.add('flex');
+        }
+
+        function getCorrectLocation(file, mainFolder) {
+            if (!mainFolder) return null;
+            
+            const subfolders = folders[mainFolder.id] || [];
+            
+            if (file.category === 'keuangan') {
+                const keuanganFolder = subfolders.find(f => f.name === "01_Keuangan");
+                if (keuanganFolder) {
+                    const keuanganSubs = folders[keuanganFolder.id] || [];
+                    if (file.subcategory === 'invoice') {
+                        const invoiceFolder = keuanganSubs.find(f => f.name === "Faktur & Invoice");
+                        return invoiceFolder?.id;
+                    } else if (file.subcategory === 'pajak') {
+                        const pajakFolder = keuanganSubs.find(f => f.name === "Laporan Pajak");
+                        return pajakFolder?.id;
+                    }
+                    return keuanganFolder.id;
+                }
+            } else if (file.category === 'pemasaran') {
+                const pemasaranFolder = subfolders.find(f => f.name === "02_Pemasaran");
+                return pemasaranFolder?.id;
+            } else if (file.category === 'sdm') {
+                const sdmFolder = subfolders.find(f => f.name === "03_SDM");
+                return sdmFolder?.id;
+            }
+            
+            return null;
+        }
+
+        function closeResultModal() {
+            document.getElementById('resultModal').classList.add('hidden');
+            document.getElementById('resultModal').classList.remove('flex');
+        }
+
+        // Handle Enter key in folder name input
+        document.getElementById('folderNameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                confirmCreateFolder();
+            }
+        });
+
+        // Initialize game when page loads
+        initGame();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978a124a81c64116',t:'MTc1Njc4NTMyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
