@@ -8,8 +8,12 @@
     <style>
         .file-item {
             transition: all 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
-        .file-item:hover {
+        .file-item:hover, .file-item:active {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
@@ -23,13 +27,55 @@
             min-height: 40px;
             transition: all 0.2s ease;
         }
-        .drop-zone.drag-over {
+        .drop-zone.drag-over, .drop-zone.touch-over {
             background-color: #dbeafe;
             border: 2px dashed #3b82f6;
         }
         .dragging {
             opacity: 0.5;
             transform: rotate(5deg);
+        }
+        .touch-dragging {
+            opacity: 0.7;
+            transform: scale(1.05);
+            z-index: 1000;
+            position: relative;
+        }
+        .mobile-hint {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-hint {
+                display: block;
+            }
+            .file-item {
+                padding: 12px;
+                min-height: 80px;
+            }
+            .drop-zone {
+                min-height: 50px;
+                padding: 8px;
+            }
+            .folder-item .drop-zone {
+                border: 1px dashed transparent;
+            }
+            .folder-item .drop-zone.touch-over {
+                border: 2px dashed #3b82f6;
+                background-color: #dbeafe;
+            }
+        }
+        .touch-feedback {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
         }
     </style>
 </head>
@@ -95,6 +141,9 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">📄 File yang Perlu Diorganisir (20 file)</h3>
+                        <div class="mobile-hint bg-blue-50 border border-blue-200 rounded p-3 mb-4">
+                            <p class="text-sm text-blue-700">📱 <strong>Petunjuk HP:</strong> Tekan dan tahan file, lalu seret ke folder yang diinginkan. Lepaskan saat folder menyala biru.</p>
+                        </div>
                         <div id="filesArea" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                             <!-- Files will be populated by JavaScript -->
                         </div>
@@ -110,6 +159,9 @@
         </div>
     </div>
 
+    <!-- Touch feedback for mobile -->
+    <div id="touchFeedback" class="touch-feedback"></div>
+
     <!-- Modal for creating folders -->
     <div id="folderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 w-96 mx-4">
@@ -118,6 +170,30 @@
             <div class="flex justify-end space-x-3">
                 <button onclick="closeFolderModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Batal</button>
                 <button onclick="confirmCreateFolder()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">Buat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for renaming folders -->
+    <div id="renameModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 mx-4">
+            <h3 class="text-lg font-semibold mb-4">Rename Folder</h3>
+            <input type="text" id="renameInput" placeholder="Nama folder baru..." class="w-full p-3 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeRenameModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Batal</button>
+                <button onclick="confirmRename()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">Rename</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for delete confirmation -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 mx-4">
+            <h3 class="text-lg font-semibold mb-4">Konfirmasi Hapus</h3>
+            <p class="text-gray-600 mb-4">Apakah Anda yakin ingin menghapus folder ini? Semua file di dalamnya akan dikembalikan ke area file.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Batal</button>
+                <button onclick="confirmDelete()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors">Hapus</button>
             </div>
         </div>
     </div>
@@ -137,6 +213,18 @@
         let folders = {};
         let currentParentId = null;
         let fileLocations = {};
+        let currentRenameId = null;
+        let currentDeleteId = null;
+        let currentDeleteParent = null;
+        
+        // Touch/drag state
+        let isDragging = false;
+        let draggedElement = null;
+        let draggedFileName = null;
+        let draggedSourceFolder = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let currentDropTarget = null;
         
         // File list with proper categorization
         const files = [
@@ -184,14 +272,22 @@
                         </div>
                     `;
                     
+                    // Desktop drag events
                     fileElement.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.effectAllowed = 'move';
                         e.dataTransfer.setData('text/plain', file.name);
+                        e.dataTransfer.setData('source-folder', '');
                         fileElement.classList.add('dragging');
+                        isDragging = true;
                     });
                     
                     fileElement.addEventListener('dragend', () => {
                         fileElement.classList.remove('dragging');
+                        isDragging = false;
                     });
+                    
+                    // Touch events for mobile
+                    addTouchEvents(fileElement, file.name, null);
                     
                     filesArea.appendChild(fileElement);
                 }
@@ -255,30 +351,43 @@
                 
                 const indent = level * 20;
                 folderElement.innerHTML = `
-                    <div class="flex items-center p-2 rounded hover:bg-gray-50 drop-zone" style="margin-left: ${indent}px;" data-folder-id="${folder.id}">
+                    <div class="flex items-center p-2 rounded hover:bg-gray-50 drop-zone group" style="margin-left: ${indent}px;" data-folder-id="${folder.id}">
                         <span class="text-lg mr-2">📁</span>
-                        <span class="font-medium text-gray-800">${folder.name}</span>
-                        <button onclick="createSubfolder('${folder.id}')" class="ml-auto text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">+ Sub</button>
+                        <span class="font-medium text-gray-800 flex-1">${folder.name}</span>
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
+                            <button onclick="createSubfolder('${folder.id}')" class="text-xs bg-green-200 hover:bg-green-300 px-2 py-1 rounded" title="Tambah Subfolder">+ Sub</button>
+                            <button onclick="renameFolder('${folder.id}')" class="text-xs bg-blue-200 hover:bg-blue-300 px-2 py-1 rounded" title="Rename">✏️</button>
+                            <button onclick="deleteFolder('${folder.id}', '${parentId}')" class="text-xs bg-red-200 hover:bg-red-300 px-2 py-1 rounded" title="Hapus">🗑️</button>
+                        </div>
                     </div>
                 `;
                 
                 // Add drag and drop functionality
                 const dropZone = folderElement.querySelector('.drop-zone');
+                
+                // Desktop drag events
                 dropZone.addEventListener('dragover', (e) => {
                     e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
                     dropZone.classList.add('drag-over');
                 });
                 
-                dropZone.addEventListener('dragleave', () => {
-                    dropZone.classList.remove('drag-over');
+                dropZone.addEventListener('dragleave', (e) => {
+                    if (!dropZone.contains(e.relatedTarget)) {
+                        dropZone.classList.remove('drag-over');
+                    }
                 });
                 
                 dropZone.addEventListener('drop', (e) => {
                     e.preventDefault();
                     dropZone.classList.remove('drag-over');
                     const fileName = e.dataTransfer.getData('text/plain');
-                    moveFileToFolder(fileName, folder.id);
+                    const sourceFolder = e.dataTransfer.getData('source-folder');
+                    moveFileToFolder(fileName, folder.id, sourceFolder || null);
                 });
+                
+                // Touch events for mobile drop zones
+                addDropZoneTouchEvents(dropZone, folder.id);
                 
                 container.appendChild(folderElement);
                 
@@ -290,8 +399,27 @@
                         const file = files.find(f => f.name === fileName);
                         if (file) {
                             const fileDiv = document.createElement('div');
-                            fileDiv.className = 'flex items-center p-1 text-sm text-gray-600';
-                            fileDiv.innerHTML = `<span class="mr-2">${file.icon}</span><span>${fileName}</span>`;
+                            fileDiv.className = 'flex items-center p-1 text-sm text-gray-600 hover:bg-gray-100 rounded cursor-move';
+                            fileDiv.draggable = true;
+                            fileDiv.innerHTML = `<span class="mr-2">${file.icon}</span><span class="flex-1">${fileName}</span><span class="text-xs text-gray-400">📁</span>`;
+                            
+                            // Desktop drag functionality for files in folders
+                            fileDiv.addEventListener('dragstart', (e) => {
+                                e.dataTransfer.effectAllowed = 'move';
+                                e.dataTransfer.setData('text/plain', fileName);
+                                e.dataTransfer.setData('source-folder', folder.id);
+                                fileDiv.classList.add('dragging');
+                                isDragging = true;
+                            });
+                            
+                            fileDiv.addEventListener('dragend', () => {
+                                fileDiv.classList.remove('dragging');
+                                isDragging = false;
+                            });
+                            
+                            // Touch events for files in folders
+                            addTouchEvents(fileDiv, fileName, folder.id);
+                            
                             filesContainer.appendChild(fileDiv);
                         }
                     });
@@ -308,22 +436,33 @@
             createNewFolder();
         }
 
-        function moveFileToFolder(fileName, folderId) {
+        function moveFileToFolder(fileName, folderId, sourceFolderId = null) {
             // Remove file from its current location
-            Object.keys(folders).forEach(parentId => {
-                if (folders[parentId]) {
-                    folders[parentId].forEach(folder => {
-                        const fileIndex = folder.files.indexOf(fileName);
-                        if (fileIndex > -1) {
-                            folder.files.splice(fileIndex, 1);
-                        }
-                    });
+            if (sourceFolderId) {
+                const sourceFolder = findFolderById(sourceFolderId);
+                if (sourceFolder) {
+                    const fileIndex = sourceFolder.files.indexOf(fileName);
+                    if (fileIndex > -1) {
+                        sourceFolder.files.splice(fileIndex, 1);
+                    }
                 }
-            });
+            } else {
+                // Remove from any folder it might be in
+                Object.keys(folders).forEach(parentId => {
+                    if (folders[parentId]) {
+                        folders[parentId].forEach(folder => {
+                            const fileIndex = folder.files.indexOf(fileName);
+                            if (fileIndex > -1) {
+                                folder.files.splice(fileIndex, 1);
+                            }
+                        });
+                    }
+                });
+            }
             
             // Add file to new folder
             const targetFolder = findFolderById(folderId);
-            if (targetFolder) {
+            if (targetFolder && !targetFolder.files.includes(fileName)) {
                 targetFolder.files.push(fileName);
                 fileLocations[fileName] = folderId;
             }
@@ -459,15 +598,292 @@
             document.getElementById('resultModal').classList.remove('flex');
         }
 
-        // Handle Enter key in folder name input
+        // Rename folder functions
+        function renameFolder(folderId) {
+            const folder = findFolderById(folderId);
+            if (folder) {
+                currentRenameId = folderId;
+                document.getElementById('renameInput').value = folder.name;
+                document.getElementById('renameModal').classList.remove('hidden');
+                document.getElementById('renameModal').classList.add('flex');
+                document.getElementById('renameInput').focus();
+                document.getElementById('renameInput').select();
+            }
+        }
+
+        function closeRenameModal() {
+            document.getElementById('renameModal').classList.add('hidden');
+            document.getElementById('renameModal').classList.remove('flex');
+            document.getElementById('renameInput').value = '';
+            currentRenameId = null;
+        }
+
+        function confirmRename() {
+            const newName = document.getElementById('renameInput').value.trim();
+            if (newName && currentRenameId) {
+                const folder = findFolderById(currentRenameId);
+                if (folder) {
+                    folder.name = newName;
+                    renderFolderStructure();
+                }
+                closeRenameModal();
+            }
+        }
+
+        // Delete folder functions
+        function deleteFolder(folderId, parentId) {
+            currentDeleteId = folderId;
+            currentDeleteParent = parentId;
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.getElementById('deleteModal').classList.add('flex');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').classList.remove('flex');
+            currentDeleteId = null;
+            currentDeleteParent = null;
+        }
+
+        function confirmDelete() {
+            if (currentDeleteId && currentDeleteParent) {
+                const folder = findFolderById(currentDeleteId);
+                if (folder) {
+                    // Return all files to the main files area
+                    folder.files.forEach(fileName => {
+                        delete fileLocations[fileName];
+                    });
+                    
+                    // Also handle subfolders recursively
+                    returnAllFilesFromSubfolders(currentDeleteId);
+                    
+                    // Remove folder from parent
+                    const parentFolders = folders[currentDeleteParent];
+                    if (parentFolders) {
+                        const folderIndex = parentFolders.findIndex(f => f.id === currentDeleteId);
+                        if (folderIndex > -1) {
+                            parentFolders.splice(folderIndex, 1);
+                        }
+                    }
+                    
+                    // Remove any subfolders
+                    delete folders[currentDeleteId];
+                    
+                    renderFiles();
+                    renderFolderStructure();
+                }
+                closeDeleteModal();
+            }
+        }
+
+        function returnAllFilesFromSubfolders(folderId) {
+            if (folders[folderId]) {
+                folders[folderId].forEach(subfolder => {
+                    // Return files from this subfolder
+                    subfolder.files.forEach(fileName => {
+                        delete fileLocations[fileName];
+                    });
+                    
+                    // Recursively handle sub-subfolders
+                    returnAllFilesFromSubfolders(subfolder.id);
+                });
+                
+                // Delete the subfolder structure
+                delete folders[folderId];
+            }
+        }
+
+        // Handle Enter key in inputs
         document.getElementById('folderNameInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 confirmCreateFolder();
             }
         });
 
+        document.getElementById('renameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                confirmRename();
+            }
+        });
+
+        // Touch event handlers for mobile drag and drop
+        function addTouchEvents(element, fileName, sourceFolderId) {
+            let touchStartTime = 0;
+            let longPressTimer = null;
+            let hasMoved = false;
+            
+            element.addEventListener('touchstart', (e) => {
+                touchStartTime = Date.now();
+                hasMoved = false;
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                
+                // Start long press timer
+                longPressTimer = setTimeout(() => {
+                    if (!hasMoved) {
+                        startTouchDrag(element, fileName, sourceFolderId, touch);
+                    }
+                }, 500); // 500ms for long press
+                
+                e.preventDefault();
+            }, { passive: false });
+            
+            element.addEventListener('touchmove', (e) => {
+                const touch = e.touches[0];
+                const deltaX = Math.abs(touch.clientX - touchStartX);
+                const deltaY = Math.abs(touch.clientY - touchStartY);
+                
+                if (deltaX > 10 || deltaY > 10) {
+                    hasMoved = true;
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                }
+                
+                if (isDragging && draggedElement === element) {
+                    handleTouchMove(e);
+                }
+                
+                e.preventDefault();
+            }, { passive: false });
+            
+            element.addEventListener('touchend', (e) => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                
+                if (isDragging && draggedElement === element) {
+                    handleTouchEnd(e);
+                }
+                
+                e.preventDefault();
+            }, { passive: false });
+        }
+        
+        function addDropZoneTouchEvents(dropZone, folderId) {
+            dropZone.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    const touch = e.touches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    
+                    if (dropZone.contains(elementBelow) || elementBelow === dropZone) {
+                        if (currentDropTarget !== dropZone) {
+                            // Remove highlight from previous target
+                            if (currentDropTarget) {
+                                currentDropTarget.classList.remove('touch-over');
+                            }
+                            // Add highlight to new target
+                            dropZone.classList.add('touch-over');
+                            currentDropTarget = dropZone;
+                            showTouchFeedback('Lepaskan untuk memasukkan ke folder');
+                        }
+                    }
+                }
+            }, { passive: true });
+        }
+        
+        function startTouchDrag(element, fileName, sourceFolderId, touch) {
+            isDragging = true;
+            draggedElement = element;
+            draggedFileName = fileName;
+            draggedSourceFolder = sourceFolderId;
+            
+            element.classList.add('touch-dragging');
+            showTouchFeedback('Seret ke folder tujuan');
+            
+            // Add vibration feedback if available
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+        
+        function handleTouchMove(e) {
+            const touch = e.touches[0];
+            
+            // Clear previous drop target highlights
+            document.querySelectorAll('.touch-over').forEach(el => {
+                el.classList.remove('touch-over');
+            });
+            
+            // Find element under touch point
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            const dropZone = elementBelow?.closest('.drop-zone');
+            
+            if (dropZone && dropZone !== currentDropTarget) {
+                if (currentDropTarget) {
+                    currentDropTarget.classList.remove('touch-over');
+                }
+                dropZone.classList.add('touch-over');
+                currentDropTarget = dropZone;
+                showTouchFeedback('Lepaskan untuk memasukkan ke folder');
+            } else if (!dropZone && currentDropTarget) {
+                currentDropTarget.classList.remove('touch-over');
+                currentDropTarget = null;
+                showTouchFeedback('Seret ke folder tujuan');
+            }
+        }
+        
+        function handleTouchEnd(e) {
+            if (currentDropTarget) {
+                const folderId = currentDropTarget.getAttribute('data-folder-id');
+                if (folderId && draggedFileName) {
+                    moveFileToFolder(draggedFileName, folderId, draggedSourceFolder);
+                    showTouchFeedback('File berhasil dipindahkan!');
+                    
+                    // Success vibration
+                    if (navigator.vibrate) {
+                        navigator.vibrate([50, 50, 50]);
+                    }
+                }
+                currentDropTarget.classList.remove('touch-over');
+                currentDropTarget = null;
+            } else {
+                showTouchFeedback('Pemindahan dibatalkan');
+            }
+            
+            // Clean up
+            if (draggedElement) {
+                draggedElement.classList.remove('touch-dragging');
+            }
+            
+            isDragging = false;
+            draggedElement = null;
+            draggedFileName = null;
+            draggedSourceFolder = null;
+            
+            // Hide feedback after delay
+            setTimeout(hideTouchFeedback, 2000);
+        }
+        
+        function showTouchFeedback(message) {
+            const feedback = document.getElementById('touchFeedback');
+            feedback.textContent = message;
+            feedback.style.display = 'block';
+        }
+        
+        function hideTouchFeedback() {
+            const feedback = document.getElementById('touchFeedback');
+            feedback.style.display = 'none';
+        }
+        
+        // Prevent default touch behaviors that might interfere
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchstart', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         // Initialize game when page loads
         initGame();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978a124a81c64116',t:'MTc1Njc4NTMyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978c0ced03d237b5',t:'MTc1NjgwNjA3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
