@@ -265,11 +265,13 @@
             Blockly.Blocks['cpp_main'] = {
                 init: function() {
                     this.appendDummyInput()
-                        .appendField("int main()");
+                        .appendField("int main() {");
                     this.appendStatementInput("STATEMENTS")
-                        .setCheck(null);
+                        .setCheck(null)
+                        .appendField("   ");
                     this.appendDummyInput()
-                        .appendField("return 0;");
+                        .appendField("   return 0;")
+                        .appendField(new Blockly.FieldLabel("}", "blocklyText"));
                     this.setPreviousStatement(true, "main");
                     this.setNextStatement(true, "main");
                     this.setColour(270);
@@ -309,9 +311,10 @@
             // Cout block
             Blockly.Blocks['cpp_cout'] = {
                 init: function() {
-                    this.appendValueInput("VALUE")
-                        .setCheck(null)
+                    this.appendDummyInput()
                         .appendField("cout <<");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null);
                     this.appendDummyInput()
                         .appendField(new Blockly.FieldCheckbox("TRUE"), "NEWLINE")
                         .appendField("endl");
@@ -319,6 +322,7 @@
                     this.setNextStatement(true, null);
                     this.setColour(210);
                     this.setTooltip("Output teks ke layar. Centang untuk menambah endl.");
+                    this.setInputsInline(true);
                 }
             };
 
@@ -326,7 +330,7 @@
             Blockly.Blocks['cpp_cin'] = {
                 init: function() {
                     this.appendDummyInput()
-                        .appendField("cin >>")
+                        .appendField("cin >> ")
                         .appendField(new Blockly.FieldTextInput("variable"), "VAR");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
@@ -369,26 +373,29 @@
                             ["string", "string"],
                             ["bool", "bool"]
                         ]), "TYPE")
-                        .appendField(new Blockly.FieldTextInput("variable"), "NAME");
-                    this.appendValueInput("VALUE")
-                        .setCheck(null)
+                        .appendField(new Blockly.FieldTextInput("variable"), "NAME")
                         .appendField("=");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(120);
+                    this.setInputsInline(true);
                 }
             };
 
             // Variable assignment
             Blockly.Blocks['cpp_set_var'] = {
                 init: function() {
-                    this.appendValueInput("VALUE")
-                        .setCheck(null)
+                    this.appendDummyInput()
                         .appendField(new Blockly.FieldTextInput("variable"), "VAR")
                         .appendField("=");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(120);
+                    this.setInputsInline(true);
                 }
             };
 
@@ -446,9 +453,9 @@
                         .appendField(new Blockly.FieldDropdown([
                             ["+", "+"],
                             ["-", "-"],
-                            ["*", "*"],
-                            ["/", "/"],
-                            ["%", "%"]
+                            ["×", "*"],
+                            ["÷", "/"],
+                            ["mod", "%"]
                         ]), "OP");
                     this.appendValueInput("B")
                         .setCheck("Number");
@@ -512,36 +519,36 @@
             // If statement
             Blockly.Blocks['cpp_if'] = {
                 init: function() {
-                    this.appendValueInput("CONDITION")
-                        .setCheck("Boolean")
-                        .appendField("if (");
                     this.appendDummyInput()
-                        .appendField(")");
+                        .appendField("if");
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean");
                     this.appendStatementInput("STATEMENTS")
                         .setCheck(null);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(330);
+                    this.setInputsInline(true);
                 }
             };
 
             // If-else statement
             Blockly.Blocks['cpp_if_else'] = {
                 init: function() {
+                    this.appendDummyInput()
+                        .appendField("if");
                     this.appendValueInput("CONDITION")
-                        .setCheck("Boolean")
-                        .appendField("if (");
-                    this.appendDummyInput()
-                        .appendField(")");
+                        .setCheck("Boolean");
                     this.appendStatementInput("IF_STATEMENTS")
-                        .setCheck(null);
-                    this.appendDummyInput()
-                        .appendField("else");
+                        .setCheck(null)
+                        .appendField("do");
                     this.appendStatementInput("ELSE_STATEMENTS")
-                        .setCheck(null);
+                        .setCheck(null)
+                        .appendField("else");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(330);
+                    this.setInputsInline(true);
                 }
             };
 
@@ -549,36 +556,36 @@
             Blockly.Blocks['cpp_for'] = {
                 init: function() {
                     this.appendDummyInput()
-                        .appendField("for (")
+                        .appendField("for")
                         .appendField(new Blockly.FieldTextInput("int i = 0"), "INIT")
                         .appendField(";");
                     this.appendValueInput("CONDITION")
                         .setCheck("Boolean");
                     this.appendDummyInput()
                         .appendField(";")
-                        .appendField(new Blockly.FieldTextInput("i++"), "UPDATE")
-                        .appendField(")");
+                        .appendField(new Blockly.FieldTextInput("i++"), "UPDATE");
                     this.appendStatementInput("STATEMENTS")
                         .setCheck(null);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(180);
+                    this.setInputsInline(true);
                 }
             };
 
             // While loop
             Blockly.Blocks['cpp_while'] = {
                 init: function() {
-                    this.appendValueInput("CONDITION")
-                        .setCheck("Boolean")
-                        .appendField("while (");
                     this.appendDummyInput()
-                        .appendField(")");
+                        .appendField("while");
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean");
                     this.appendStatementInput("STATEMENTS")
                         .setCheck(null);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(180);
+                    this.setInputsInline(true);
                 }
             };
 
@@ -591,12 +598,11 @@
                         .setCheck(null);
                     this.appendValueInput("CONDITION")
                         .setCheck("Boolean")
-                        .appendField("while (");
-                    this.appendDummyInput()
-                        .appendField(")");
+                        .appendField("while");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(180);
+                    this.setInputsInline(true);
                 }
             };
 
@@ -797,7 +803,36 @@
             const block = workspace.newBlock(blockType);
             block.initSvg();
             block.render();
-            block.moveBy(50, 50);
+            
+            // Position blocks in a simple way
+            const existingBlocks = workspace.getAllBlocks();
+            
+            if (existingBlocks.length === 1) {
+                // First block - position at a reasonable starting location
+                block.moveBy(100, 100);
+            } else {
+                // Find the bottom-most block position
+                let maxY = 0;
+                let maxX = 100;
+                
+                for (let existingBlock of existingBlocks) {
+                    if (existingBlock !== block) {
+                        const pos = existingBlock.getRelativeToSurfaceXY();
+                        const height = existingBlock.getHeightWidth().height;
+                        const bottomY = pos.y + height;
+                        
+                        if (bottomY > maxY) {
+                            maxY = bottomY;
+                            maxX = pos.x;
+                        }
+                    }
+                }
+                
+                // Position new block below the bottom-most block
+                const newY = maxY + 20; // 20px gap
+                block.moveBy(maxX, newY);
+            }
+            
             return block;
         }
 
@@ -1621,21 +1656,9 @@
                 }
             }
             
-            // If there are cin statements, use pre-collected inputs
-            if (cinStatements.length > 0 && window.collectedInputs) {
-                // Use the collected inputs
-                Object.assign(variables, window.collectedInputs.variables);
-                
-                // Clear the collected inputs
-                delete window.collectedInputs;
-            } else if (cinStatements.length > 0) {
-                // Fallback: use default values if no inputs collected
-                for (let varName of cinStatements) {
-                    variables[varName] = 0;
-                }
-            }
-            
-            console.log('📊 Initial variables:', variables);
+            console.log('📊 Initial variables before input processing:', variables);
+            console.log('📋 Found cin statements for variables:', cinStatements);
+            console.log('🔍 Collected inputs available:', window.collectedInputs);
             
             function executeBlock(blockLines, startIndex = 0, endIndex = blockLines.length) {
                 let blockOutput = '';
@@ -1660,10 +1683,16 @@
                         
                         console.log(`🔧 Declaring variable ${varName} with value: ${value}`);
                         
-                        const evaluatedValue = evaluateExpression(value, variables);
-                        variables[varName] = evaluatedValue;
+                        // Check if this variable has input from user
+                        if (window.collectedInputs && window.collectedInputs.variables[varName] !== undefined) {
+                            variables[varName] = window.collectedInputs.variables[varName];
+                            console.log(`✅ Variable ${varName} initialized with user input: ${variables[varName]}`);
+                        } else {
+                            const evaluatedValue = evaluateExpression(value, variables);
+                            variables[varName] = evaluatedValue;
+                            console.log(`✅ Variable ${varName} initialized with default: ${evaluatedValue}`);
+                        }
                         
-                        console.log(`✅ Variable ${varName} = ${evaluatedValue}`);
                         i++;
                         continue;
                     }
@@ -1684,16 +1713,19 @@
                         continue;
                     }
                     
-                    // Input statement (cin) - values already collected
+                    // Input statement (cin) - update variable with collected input
                     if (line.includes('cin >>')) {
                         const match = line.match(/cin >> (\w+);/);
                         if (match) {
                             const varName = match[1];
-                            // Variable should already be set from pre-collected inputs
-                            if (variables[varName] === undefined) {
+                            // Update the variable with the collected input value
+                            if (window.collectedInputs && window.collectedInputs.variables[varName] !== undefined) {
+                                variables[varName] = window.collectedInputs.variables[varName];
+                                console.log(`📥 Updated ${varName} with input: ${variables[varName]} (type: ${typeof variables[varName]})`);
+                            } else if (variables[varName] === undefined) {
                                 variables[varName] = 0; // Fallback
+                                console.log(`⚠️ Variable ${varName} not found in inputs, using default: 0`);
                             }
-                            console.log(`📥 Input for ${varName}: ${variables[varName]}`);
                         }
                         i++;
                         continue;
@@ -1923,6 +1955,12 @@
             
             const result = executeBlock(lines);
             console.log('🎯 Final execution result:', result);
+            
+            // Clear collected inputs after execution
+            if (window.collectedInputs) {
+                delete window.collectedInputs;
+                console.log('🧹 Cleared collected inputs after execution');
+            }
             
             return result;
         }
@@ -2483,11 +2521,16 @@
                         
                         // Try to convert to number if possible
                         if (!isNaN(value) && value !== '') {
-                            variables[varName] = parseFloat(value);
+                            const numValue = parseFloat(value);
+                            variables[varName] = numValue;
+                            console.log(`📝 Input collected: ${varName} = ${numValue} (number)`);
                         } else {
                             variables[varName] = value;
+                            console.log(`📝 Input collected: ${varName} = "${value}" (string)`);
                         }
                     }
+                    
+                    console.log('📋 All collected inputs:', variables);
                     
                     // Store in global scope for execution
                     window.collectedInputs = { variables };
@@ -2555,8 +2598,18 @@
                 // Check if workspace exists and has blocks
                 if (workspace && workspace.getAllBlocks().length > 0) {
                     if (confirm('Apakah Anda yakin ingin menghapus semua blok?')) {
-                        workspace.clear();
-                        console.log('Workspace cleared');
+                        try {
+                            // Clear all blocks from workspace
+                            workspace.clear();
+                            
+                            console.log('Workspace cleared successfully');
+                            
+                            // Show confirmation
+                            alert('Semua blok telah dihapus!');
+                        } catch (error) {
+                            console.error('Error clearing workspace:', error);
+                            alert('Terjadi kesalahan saat menghapus blok.');
+                        }
                     }
                 } else {
                     alert('Tidak ada blok untuk dihapus.');
@@ -2652,5 +2705,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978dac64574c3df0',t:'MTc1NjgyMzA5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978de73a02632a90',t:'MTc1NjgyNTUwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
