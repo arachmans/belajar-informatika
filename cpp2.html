@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Interactive Learning - Blockly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <script src="https://unpkg.com/jscpp@0.6.5/dist/JSCPP.es5.min.js"></script>
+    <style>
+        .blockly-ws {
+            height: calc(100vh - 56px);
+        }
+        
+        @media (min-width: 640px) {
+            .blockly-ws {
+                height: calc(100vh - 80px);
+            }
+        }
+        
+        /* Ensure trash icon is visible on mobile */
+        .blocklyTrash {
+            display: block !important;
+        }
+        
+        /* Make trash icon larger on mobile */
+        @media (max-width: 640px) {
+            .blocklyTrash {
+                width: 60px !important;
+                height: 60px !important;
+            }
+        }
+        .code-output {
+            font-family: 'Courier New', monospace;
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+        .input-prompt {
+            background: #1a1a1a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .input-prompt:focus {
+            outline: none;
+            box-shadow: 0 0 5px #00ff00;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg border-b-2 border-indigo-200">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4">
+            <div class="flex justify-between items-center h-14 sm:h-16">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <h1 class="text-lg sm:text-2xl font-bold text-indigo-700">C++ Studio</h1>
+                    <span class="hidden sm:inline text-sm text-gray-500">Visual Programming</span>
+                </div>
+                <div class="flex items-center space-x-1 sm:space-x-3">
+                    <button id="addBlockBtn" class="bg-green-500 hover:bg-green-600 text-white px-2 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-sm">
+                        <span>➕</span>
+                        <span class="hidden sm:inline">Add</span>
+                    </button>
+                    <button id="quickTemplateBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-2 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center text-sm">
+                        <span>⚡</span>
+                    </button>
+                    <button id="clearBtn" class="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-sm">
+                        <span>🗑️</span>
+                        <span class="hidden sm:inline">Clear</span>
+                    </button>
+                    <button id="runBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-sm">
+                        <span>▶️</span>
+                        <span>Run</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <div id="workspace" class="blockly-ws"></div>
+
+    <!-- Block Selection Modal -->
+    <div id="blockModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] sm:max-h-[80vh] overflow-y-auto">
+                <div class="p-4 sm:p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg sm:text-2xl font-bold text-gray-800">Pilih Blok C++</h2>
+                        <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl">✕</button>
+                    </div>
+                </div>
+                <div class="p-3 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+                    <!-- Basic Structure Category -->
+                    <div class="bg-purple-50 p-3 sm:p-4 rounded-lg border border-purple-200">
+                        <h3 class="font-bold text-purple-700 mb-2 sm:mb-3 text-sm sm:text-base">Struktur Dasar</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-xs sm:text-sm" data-type="include">Include Library</button>
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-xs sm:text-sm" data-type="namespace">Using Namespace</button>
+                            <button class="block-btn w-full text-left p-2 bg-purple-100 hover:bg-purple-200 rounded text-xs sm:text-sm" data-type="main">Fungsi main()</button>
+                        </div>
+                    </div>
+
+                    <!-- Input/Output Category -->
+                    <div class="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-200">
+                        <h3 class="font-bold text-blue-700 mb-2 sm:mb-3 text-sm sm:text-base">Input & Output</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-xs sm:text-sm" data-type="cout">Output (cout)</button>
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-xs sm:text-sm" data-type="cin">Input (cin)</button>
+                            <button class="block-btn w-full text-left p-2 bg-blue-100 hover:bg-blue-200 rounded text-xs sm:text-sm" data-type="stream">Stream Operator</button>
+                        </div>
+                    </div>
+
+                    <!-- Variables Category -->
+                    <div class="bg-green-50 p-3 sm:p-4 rounded-lg border border-green-200">
+                        <h3 class="font-bold text-green-700 mb-2 sm:mb-3 text-sm sm:text-base">Variabel</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-green-100 hover:bg-green-200 rounded text-xs sm:text-sm" data-type="declare_var">Buat Variabel</button>
+                            <button class="block-btn w-full text-left p-2 bg-green-100 hover:bg-green-200 rounded text-xs sm:text-sm" data-type="set_var">Ubah Nilai Variabel</button>
+                            <button class="block-btn w-full text-left p-2 bg-green-100 hover:bg-green-200 rounded text-xs sm:text-sm" data-type="get_var">Ambil Nilai Variabel</button>
+                        </div>
+                    </div>
+
+                    <!-- Data Types Category -->
+                    <div class="bg-yellow-50 p-3 sm:p-4 rounded-lg border border-yellow-200">
+                        <h3 class="font-bold text-yellow-700 mb-2 sm:mb-3 text-sm sm:text-base">Tipe Data</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-xs sm:text-sm" data-type="text">Text</button>
+                            <button class="block-btn w-full text-left p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-xs sm:text-sm" data-type="number">Angka</button>
+                            <button class="block-btn w-full text-left p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-xs sm:text-sm" data-type="boolean">Logika (true/false)</button>
+                        </div>
+                    </div>
+
+                    <!-- Math Operations Category -->
+                    <div class="bg-red-50 p-3 sm:p-4 rounded-lg border border-red-200">
+                        <h3 class="font-bold text-red-700 mb-2 sm:mb-3 text-sm sm:text-base">Operasi Matematika</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-red-100 hover:bg-red-200 rounded text-xs sm:text-sm" data-type="math_op">Operasi (+, -, *, /, %)</button>
+                        </div>
+                    </div>
+
+                    <!-- Logic Operations Category -->
+                    <div class="bg-indigo-50 p-3 sm:p-4 rounded-lg border border-indigo-200">
+                        <h3 class="font-bold text-indigo-700 mb-2 sm:mb-3 text-sm sm:text-base">Operasi Logika</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-indigo-100 hover:bg-indigo-200 rounded text-xs sm:text-sm" data-type="compare_op">Perbandingan</button>
+                            <button class="block-btn w-full text-left p-2 bg-indigo-100 hover:bg-indigo-200 rounded text-xs sm:text-sm" data-type="logical_op">Logika (&&, ||)</button>
+                            <button class="block-btn w-full text-left p-2 bg-indigo-100 hover:bg-indigo-200 rounded text-xs sm:text-sm" data-type="not_op">Negasi (!)</button>
+                        </div>
+                    </div>
+
+                    <!-- Control Flow Category -->
+                    <div class="bg-pink-50 p-3 sm:p-4 rounded-lg border border-pink-200">
+                        <h3 class="font-bold text-pink-700 mb-2 sm:mb-3 text-sm sm:text-base">Kontrol Alur</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-xs sm:text-sm" data-type="if">If Statement</button>
+                            <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-xs sm:text-sm" data-type="if_else">If-Else Statement</button>
+                        </div>
+                    </div>
+
+                    <!-- Loops Category -->
+                    <div class="bg-teal-50 p-3 sm:p-4 rounded-lg border border-teal-200">
+                        <h3 class="font-bold text-teal-700 mb-2 sm:mb-3 text-sm sm:text-base">Pengulangan</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-teal-100 hover:bg-teal-200 rounded text-xs sm:text-sm" data-type="for_loop">For Loop</button>
+                            <button class="block-btn w-full text-left p-2 bg-teal-100 hover:bg-teal-200 rounded text-xs sm:text-sm" data-type="while_loop">While Loop</button>
+                        </div>
+                    </div>
+
+                    <!-- Comments Category -->
+                    <div class="bg-gray-50 p-3 sm:p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">Komentar</h3>
+                        <div class="space-y-1 sm:space-y-2">
+                            <button class="block-btn w-full text-left p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs sm:text-sm" data-type="comment">Komentar (//)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Templates Modal -->
+    <div id="templateModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] sm:max-h-[80vh] overflow-y-auto">
+                <div class="p-4 sm:p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg sm:text-2xl font-bold text-gray-800">Template Cepat C++</h2>
+                        <button id="closeTemplateModal" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl">✕</button>
+                    </div>
+                </div>
+                <div class="p-3 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+                    <!-- Hello World Template -->
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-lg border border-blue-200 hover:shadow-lg transition-shadow cursor-pointer" data-template="hello-world">
+                        <div class="text-center mb-3 sm:mb-4">
+                            <div class="text-3xl sm:text-4xl mb-2">👋</div>
+                            <h3 class="font-bold text-blue-700 text-base sm:text-lg">Hello World</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Program dasar yang menampilkan "Hello World" ke layar.</p>
+                        <div class="bg-white p-2 sm:p-3 rounded text-xs font-mono text-gray-700">
+                            #include &lt;iostream&gt;<br>
+                            using namespace std;<br>
+                            int main() {<br>
+                            &nbsp;&nbsp;cout &lt;&lt; "Hello World";<br>
+                            &nbsp;&nbsp;return 0;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Calculator Template -->
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-lg border border-green-200 hover:shadow-lg transition-shadow cursor-pointer" data-template="calculator">
+                        <div class="text-center mb-3 sm:mb-4">
+                            <div class="text-3xl sm:text-4xl mb-2">🧮</div>
+                            <h3 class="font-bold text-green-700 text-base sm:text-lg">Kalkulator Sederhana</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Program kalkulator dengan input dari user dan operasi matematika.</p>
+                        <div class="bg-white p-2 sm:p-3 rounded text-xs font-mono text-gray-700">
+                            Input dua angka<br>
+                            Operasi: +, -, *, /<br>
+                            Tampilkan hasil
+                        </div>
+                    </div>
+
+                    <!-- Loop Example Template -->
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-lg border border-purple-200 hover:shadow-lg transition-shadow cursor-pointer" data-template="loop-example">
+                        <div class="text-center mb-3 sm:mb-4">
+                            <div class="text-3xl sm:text-4xl mb-2">🔄</div>
+                            <h3 class="font-bold text-purple-700 text-base sm:text-lg">Contoh Loop</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Program yang mendemonstrasikan penggunaan for loop dan if statement.</p>
+                        <div class="bg-white p-2 sm:p-3 rounded text-xs font-mono text-gray-700">
+                            For loop 1-10<br>
+                            If genap/ganjil<br>
+                            Tampilkan hasil
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Output Modal -->
+    <div id="codeModal" class="fixed inset-0 bg-white hidden z-50">
+        <div class="h-full flex flex-col">
+            <div class="p-4 sm:p-6 border-b border-gray-200 bg-white">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">Hasil Kode C++</h2>
+                    <button id="closeCodeModal" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl bg-gray-100 hover:bg-gray-200 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">✕</button>
+                </div>
+            </div>
+            <!-- Mobile Layout: Output on top, Code on bottom -->
+            <div class="flex flex-col lg:flex-row flex-1 overflow-hidden">
+                <!-- Output Section (First on mobile, Second on desktop) -->
+                <div class="w-full lg:w-1/2 p-3 sm:p-6 lg:border-r border-gray-200 flex flex-col order-1 lg:order-2">
+                    <div class="flex items-center justify-between mb-2 sm:mb-3">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-700">Output Program:</h3>
+                        <div id="executionMode" class="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
+                            Mode: Checking...
+                        </div>
+                    </div>
+                    
+                    <!-- Input Section in Code Modal -->
+                    <div id="inputSection" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-center mb-3">
+                            <span class="text-lg mr-2">⌨️</span>
+                            <h4 class="text-base font-bold text-blue-800">Input Program C++</h4>
+                        </div>
+                        <div id="inputPrompt" class="text-sm text-gray-600 mb-3">Masukkan nilai untuk variabel:</div>
+                        <div class="flex gap-3">
+                            <div class="flex-1 relative">
+                                <input type="text" id="userInput" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono bg-white" placeholder="Ketik nilai di sini...">
+                                <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                    <span class="text-xs">Enter ↵</span>
+                                </div>
+                            </div>
+                            <button id="submitInput" class="px-4 py-3 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md whitespace-nowrap">
+                                ✓ OK
+                            </button>
+                            <button id="cancelInput" class="px-4 py-3 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors whitespace-nowrap">
+                                ✕ Batal
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            <span class="font-medium">Shortcut:</span> Enter untuk OK, Esc untuk Batal
+                        </div>
+                    </div>
+                    
+                    <div id="programOutput" class="bg-black text-green-400 p-3 sm:p-4 rounded-lg text-xs sm:text-sm overflow-auto flex-1 font-mono whitespace-pre-wrap min-h-[200px] lg:min-h-0"></div>
+                </div>
+                <!-- Code Section (Second on mobile, First on desktop) -->
+                <div class="w-full lg:w-1/2 p-3 sm:p-6 border-t lg:border-t-0 border-gray-200 flex flex-col order-2 lg:order-1">
+                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-700">Kode C++:</h3>
+                    <pre id="generatedCode" class="code-output bg-gray-100 p-3 sm:p-4 rounded-lg text-xs sm:text-sm overflow-auto flex-1 border min-h-[200px] lg:min-h-0"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Section in Code Modal -->
+    <div id="inputSection" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+        <div class="flex items-center mb-3">
+            <span class="text-lg mr-2">⌨️</span>
+            <h4 class="text-base font-bold text-blue-800">Input Program C++</h4>
+        </div>
+        <div id="inputPrompt" class="text-sm text-gray-600 mb-3">Masukkan nilai untuk variabel:</div>
+        <div class="flex gap-3">
+            <div class="flex-1 relative">
+                <input type="text" id="userInput" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono bg-white" placeholder="Ketik nilai di sini...">
+                <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <span class="text-xs">Enter ↵</span>
+                </div>
+            </div>
+            <button id="submitInput" class="px-4 py-3 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md whitespace-nowrap">
+                ✓ OK
+            </button>
+            <button id="cancelInput" class="px-4 py-3 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors whitespace-nowrap">
+                ✕ Batal
+            </button>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">
+            <span class="font-medium">Shortcut:</span> Enter untuk OK, Esc untuk Batal
+        </div>
+    </div>
+
+    <script>
+        // Initialize Blockly workspace
+        let workspace;
+        
+        // Global variables for input handling
+        let inputQueue = [];
+        let currentInputIndex = 0;
+        let inputResolve = null;
+        let programVariables = {};
+
+        // Define custom blocks
+        function defineBlocks() {
+            // Include block
+            Blockly.Blocks['cpp_include'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📚 #include <")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["iostream", "iostream"],
+                            ["string", "string"],
+                            ["cmath", "cmath"],
+                            ["vector", "vector"]
+                        ]), "LIBRARY")
+                        .appendField(">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(270);
+                    this.setTooltip("Menyertakan library C++");
+                }
+            };
+
+            // Namespace block
+            Blockly.Blocks['cpp_namespace'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🏷️ using namespace std;");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(270);
+                    this.setTooltip("Menggunakan namespace standar C++");
+                }
+            };
+
+            // Main function block
+            Blockly.Blocks['cpp_main'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🚀 int main() {");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("    return 0;")
+                        .appendField("}");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(270);
+                    this.setTooltip("Fungsi utama program C++");
+                }
+            };
+
+            // Cout block
+            Blockly.Blocks['cpp_cout'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📤 cout <<");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("endl")
+                        .appendField(new Blockly.FieldCheckbox("TRUE"), "ENDL")
+                        .appendField(";");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(210);
+                    this.setTooltip("Output text to screen with optional line break (endl)");
+                    this.setInputsInline(true);
+                }
+            };
+
+            // Cin block
+            Blockly.Blocks['cpp_cin'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📥 cin >>")
+                        .appendField(new Blockly.FieldTextInput("variable"), "VAR")
+                        .appendField(";");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(210);
+                    this.setTooltip("Input value from user to variable");
+                }
+            };
+
+            // Stream operator block
+            Blockly.Blocks['cpp_stream'] = {
+                init: function() {
+                    this.appendValueInput("LEFT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("🔗")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["<<", "<<"],
+                            [">>", ">>"]
+                        ]), "OP");
+                    this.appendValueInput("RIGHT")
+                        .setCheck(null);
+                    this.setOutput(true, null);
+                    this.setColour(210);
+                    this.setInputsInline(true);
+                    this.setTooltip("Stream operator for chaining input/output operations");
+                }
+            };
+
+            // Variable declaration
+            Blockly.Blocks['cpp_declare_var'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📦")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["int", "int"],
+                            ["double", "double"],
+                            ["string", "string"],
+                            ["bool", "bool"]
+                        ]), "TYPE")
+                        .appendField(new Blockly.FieldTextInput("variable"), "NAME")
+                        .appendField("=");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField(";");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setInputsInline(true);
+                    this.setTooltip("Create new variable with data type and initial value");
+                }
+            };
+
+            // Variable assignment
+            Blockly.Blocks['cpp_set_var'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📝")
+                        .appendField(new Blockly.FieldTextInput("variable"), "VAR")
+                        .appendField("=");
+                    this.appendValueInput("VALUE")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField(";");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setInputsInline(true);
+                    this.setTooltip("Change value of existing variable");
+                }
+            };
+
+            // Get variable
+            Blockly.Blocks['cpp_get_var'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📊")
+                        .appendField(new Blockly.FieldTextInput("variable"), "VAR");
+                    this.setOutput(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Get value from variable");
+                }
+            };
+
+            // Text block
+            Blockly.Blocks['cpp_text'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("📝 \"")
+                        .appendField(new Blockly.FieldTextInput("Hello World"), "TEXT")
+                        .appendField("\"");
+                    this.setOutput(true, "String");
+                    this.setColour(60);
+                    this.setTooltip("Text or string literal");
+                }
+            };
+
+            // Number block
+            Blockly.Blocks['cpp_number'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔢")
+                        .appendField(new Blockly.FieldNumber(0), "NUM");
+                    this.setOutput(true, "Number");
+                    this.setColour(60);
+                    this.setTooltip("Number (integer or decimal)");
+                }
+            };
+
+            // Boolean block
+            Blockly.Blocks['cpp_boolean'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("✅")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["true", "true"],
+                            ["false", "false"]
+                        ]), "BOOL");
+                    this.setOutput(true, "Boolean");
+                    this.setColour(60);
+                    this.setTooltip("Boolean value: true or false");
+                }
+            };
+
+            // Math operation
+            Blockly.Blocks['cpp_math'] = {
+                init: function() {
+                    this.appendValueInput("A")
+                        .setCheck("Number");
+                    this.appendDummyInput()
+                        .appendField("🧮")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["+", "+"],
+                            ["-", "-"],
+                            ["*", "*"],
+                            ["/", "/"],
+                            ["%", "%"]
+                        ]), "OP");
+                    this.appendValueInput("B")
+                        .setCheck("Number");
+                    this.setOutput(true, "Number");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                    this.setTooltip("Basic math operations");
+                }
+            };
+
+            // Comparison operation
+            Blockly.Blocks['cpp_compare'] = {
+                init: function() {
+                    this.appendValueInput("A")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("⚖️")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["==", "=="],
+                            ["!=", "!="],
+                            [">", ">"],
+                            [">=", ">="],
+                            ["<", "<"],
+                            ["<=", "<="]
+                        ]), "OP");
+                    this.appendValueInput("B")
+                        .setCheck(null);
+                    this.setOutput(true, "Boolean");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                    this.setTooltip("Compare two values");
+                }
+            };
+
+            // Logical operation (AND/OR)
+            Blockly.Blocks['cpp_logical'] = {
+                init: function() {
+                    this.appendValueInput("A")
+                        .setCheck("Boolean");
+                    this.appendDummyInput()
+                        .appendField("🔗")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["&&", "&&"],
+                            ["||", "||"]
+                        ]), "OP");
+                    this.appendValueInput("B")
+                        .setCheck("Boolean");
+                    this.setOutput(true, "Boolean");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                    this.setTooltip("Logical AND (&&) or OR (||) operation");
+                }
+            };
+
+            // Logical NOT operation
+            Blockly.Blocks['cpp_not'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("❌ !");
+                    this.appendValueInput("VALUE")
+                        .setCheck("Boolean");
+                    this.setOutput(true, "Boolean");
+                    this.setColour(230);
+                    this.setInputsInline(true);
+                    this.setTooltip("Logical NOT operation - reverses true/false");
+                }
+            };
+
+            // If statement
+            Blockly.Blocks['cpp_if'] = {
+                init: function() {
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("🤔 if (");
+                    this.appendDummyInput()
+                        .appendField(") {");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("}");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setInputsInline(true);
+                    this.setTooltip("Jika kondisi benar, jalankan blok perintah");
+                }
+            };
+
+            // If-else statement
+            Blockly.Blocks['cpp_if_else'] = {
+                init: function() {
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("🤔 if (");
+                    this.appendDummyInput()
+                        .appendField(") {");
+                    this.appendStatementInput("IF_STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("} else {");
+                    this.appendStatementInput("ELSE_STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("}");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setInputsInline(true);
+                    this.setTooltip("Jika kondisi TRUE, jalankan blok IF. Jika FALSE, jalankan blok ELSE.");
+                }
+            };
+
+            // For loop
+            Blockly.Blocks['cpp_for'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔄 for (int")
+                        .appendField(new Blockly.FieldTextInput("i"), "VAR")
+                        .appendField("=")
+                        .appendField(new Blockly.FieldNumber(1), "START")
+                        .appendField(";")
+                        .appendField(new Blockly.FieldTextInput("i"), "VAR2")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["<=", "<="],
+                            ["<", "<"],
+                            [">=", ">="],
+                            [">", ">"],
+                            ["==", "=="],
+                            ["!=", "!="]
+                        ]), "CONDITION")
+                        .appendField(new Blockly.FieldNumber(10), "END")
+                        .appendField(";")
+                        .appendField(new Blockly.FieldTextInput("i"), "VAR3")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["++", "++"],
+                            ["--", "--"],
+                            ["+=", "+="],
+                            ["-=", "-="]
+                        ]), "INCREMENT")
+                        .appendField(") {");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("}");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(180);
+                    this.setTooltip("Pengulangan dengan berbagai kondisi dan increment");
+                }
+            };
+
+            // While loop
+            Blockly.Blocks['cpp_while'] = {
+                init: function() {
+                    this.appendValueInput("CONDITION")
+                        .setCheck("Boolean")
+                        .appendField("🔄 while (");
+                    this.appendDummyInput()
+                        .appendField(") {");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("}");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(180);
+                    this.setInputsInline(true);
+                    this.setTooltip("Pengulangan selama kondisi benar");
+                }
+            };
+
+            // Comment block
+            Blockly.Blocks['cpp_comment'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("💬 //")
+                        .appendField(new Blockly.FieldTextInput("komentar"), "TEXT");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(90);
+                    this.setTooltip("Komentar - tidak dijalankan, hanya untuk catatan");
+                }
+            };
+        }
+
+        // Custom C++ Code Generator
+        function createCppGenerator() {
+            const generator = {
+                ORDER_ATOMIC: 0,
+                ORDER_NONE: 99,
+                
+                // Helper methods
+                valueToCode: function(block, name, order) {
+                    const targetBlock = block.getInputTargetBlock(name);
+                    if (!targetBlock) return '';
+                    
+                    const func = this[targetBlock.type];
+                    if (func) {
+                        const result = func.call(this, targetBlock);
+                        return Array.isArray(result) ? result[0] : result;
+                    }
+                    return '';
+                },
+                
+                statementToCode: function(block, name) {
+                    let code = '';
+                    let targetBlock = block.getInputTargetBlock(name);
+                    
+                    while (targetBlock) {
+                        const func = this[targetBlock.type];
+                        if (func) {
+                            const result = func.call(this, targetBlock);
+                            code += Array.isArray(result) ? result[0] : result;
+                        }
+                        targetBlock = targetBlock.getNextBlock();
+                    }
+                    
+                    return code;
+                },
+                
+                blockToCode: function(block) {
+                    const func = this[block.type];
+                    if (func) {
+                        const result = func.call(this, block);
+                        return Array.isArray(result) ? result[0] : result;
+                    }
+                    return '';
+                }
+            };
+            
+            // Block generators
+            generator['cpp_include'] = function(block) {
+                const library = block.getFieldValue('LIBRARY');
+                return `#include <${library}>\n`;
+            };
+
+            generator['cpp_namespace'] = function(block) {
+                return 'using namespace std;\n';
+            };
+
+            generator['cpp_main'] = function(block) {
+                const statements = this.statementToCode(block, 'STATEMENTS');
+                return `int main() {\n${statements}    return 0;\n}\n`;
+            };
+
+            generator['cpp_cout'] = function(block) {
+                const value = this.valueToCode(block, 'VALUE', this.ORDER_ATOMIC) || '""';
+                const useEndl = block.getFieldValue('ENDL') === 'TRUE';
+                const endlPart = useEndl ? ' << endl' : '';
+                return `    cout << ${value}${endlPart};\n`;
+            };
+
+            generator['cpp_cin'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                return `    cin >> ${variable};\n`;
+            };
+
+            generator['cpp_declare_var'] = function(block) {
+                const type = block.getFieldValue('TYPE');
+                const name = block.getFieldValue('NAME');
+                const value = this.valueToCode(block, 'VALUE', this.ORDER_ATOMIC) || '0';
+                return `    ${type} ${name} = ${value};\n`;
+            };
+
+            generator['cpp_set_var'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                const value = this.valueToCode(block, 'VALUE', this.ORDER_ATOMIC) || '0';
+                return `    ${variable} = ${value};\n`;
+            };
+
+            generator['cpp_get_var'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                return [variable, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_text'] = function(block) {
+                const text = block.getFieldValue('TEXT');
+                return [`"${text}"`, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_number'] = function(block) {
+                const number = block.getFieldValue('NUM');
+                return [number.toString(), this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_boolean'] = function(block) {
+                const bool = block.getFieldValue('BOOL');
+                return [bool, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_math'] = function(block) {
+                const a = this.valueToCode(block, 'A', this.ORDER_ATOMIC) || '0';
+                const op = block.getFieldValue('OP');
+                const b = this.valueToCode(block, 'B', this.ORDER_ATOMIC) || '0';
+                return [`(${a} ${op} ${b})`, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_compare'] = function(block) {
+                const a = this.valueToCode(block, 'A', this.ORDER_ATOMIC) || '0';
+                const op = block.getFieldValue('OP');
+                const b = this.valueToCode(block, 'B', this.ORDER_ATOMIC) || '0';
+                return [`(${a} ${op} ${b})`, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_stream'] = function(block) {
+                const left = this.valueToCode(block, 'LEFT', this.ORDER_ATOMIC) || 'cout';
+                const op = block.getFieldValue('OP');
+                const right = this.valueToCode(block, 'RIGHT', this.ORDER_ATOMIC) || '""';
+                return [`${left} ${op} ${right}`, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_logical'] = function(block) {
+                const a = this.valueToCode(block, 'A', this.ORDER_ATOMIC) || 'true';
+                const op = block.getFieldValue('OP');
+                const b = this.valueToCode(block, 'B', this.ORDER_ATOMIC) || 'true';
+                return [`(${a} ${op} ${b})`, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_not'] = function(block) {
+                const value = this.valueToCode(block, 'VALUE', this.ORDER_ATOMIC) || 'true';
+                return [`!(${value})`, this.ORDER_ATOMIC];
+            };
+
+            generator['cpp_if'] = function(block) {
+                const condition = this.valueToCode(block, 'CONDITION', this.ORDER_ATOMIC) || 'true';
+                const statements = this.statementToCode(block, 'STATEMENTS');
+                return `    if (${condition}) {\n${statements}    }\n`;
+            };
+
+            generator['cpp_if_else'] = function(block) {
+                const condition = this.valueToCode(block, 'CONDITION', this.ORDER_ATOMIC) || 'true';
+                const ifStatements = this.statementToCode(block, 'IF_STATEMENTS');
+                const elseStatements = this.statementToCode(block, 'ELSE_STATEMENTS');
+                return `    if (${condition}) {\n${ifStatements}    }\n    else {\n${elseStatements}    }\n`;
+            };
+
+            generator['cpp_for'] = function(block) {
+                const variable = block.getFieldValue('VAR');
+                const start = block.getFieldValue('START');
+                const condition = block.getFieldValue('CONDITION');
+                const end = block.getFieldValue('END');
+                const increment = block.getFieldValue('INCREMENT');
+                const statements = this.statementToCode(block, 'STATEMENTS');
+                
+                let incrementPart = '';
+                if (increment === '++' || increment === '--') {
+                    incrementPart = `${variable}${increment}`;
+                } else {
+                    incrementPart = `${variable} ${increment} 1`;
+                }
+                
+                return `    for (int ${variable} = ${start}; ${variable} ${condition} ${end}; ${incrementPart}) {\n${statements}    }\n`;
+            };
+
+            generator['cpp_while'] = function(block) {
+                const condition = this.valueToCode(block, 'CONDITION', this.ORDER_ATOMIC) || 'true';
+                const statements = this.statementToCode(block, 'STATEMENTS');
+                return `    while (${condition}) {\n${statements}    }\n`;
+            };
+
+            generator['cpp_comment'] = function(block) {
+                const text = block.getFieldValue('TEXT');
+                return `    // ${text}\n`;
+            };
+            
+            return generator;
+        }
+
+        // Input handling functions
+        function showInputModal(prompt, variableName) {
+            return new Promise((resolve) => {
+                console.log('Showing input section for:', variableName);
+                
+                const inputSection = document.getElementById('inputSection');
+                const promptElement = document.getElementById('inputPrompt');
+                const inputElement = document.getElementById('userInput');
+                
+                if (!inputSection || !promptElement || !inputElement) {
+                    console.error('Input section elements not found');
+                    resolve('0');
+                    return;
+                }
+                
+                promptElement.innerHTML = `
+                    <div class="text-gray-700">
+                        <span class="text-blue-600 font-semibold">🔍 Program Input:</span> ${prompt || `Masukkan nilai untuk variabel "${variableName}"`}
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">
+                        💡 Tip: Ketik angka untuk variabel numerik, atau teks untuk string
+                    </div>
+                `;
+                
+                inputElement.value = '';
+                inputElement.placeholder = `Contoh: 42 atau "Hello World"`;
+                
+                inputSection.classList.remove('hidden');
+                console.log('Input section shown');
+                
+                // Focus input after section is shown
+                setTimeout(() => {
+                    inputElement.focus();
+                    inputElement.select();
+                }, 150);
+                
+                let resolved = false;
+                
+                const submitHandler = () => {
+                    if (resolved) return;
+                    resolved = true;
+                    
+                    const value = inputElement.value.trim();
+                    console.log('Submit clicked, value:', value);
+                    
+                    inputSection.classList.add('hidden');
+                    resolve(value || '0');
+                    cleanup();
+                };
+                
+                const cancelHandler = () => {
+                    if (resolved) return;
+                    resolved = true;
+                    
+                    console.log('Cancel clicked');
+                    inputSection.classList.add('hidden');
+                    resolve('0');
+                    cleanup();
+                };
+                
+                const keyHandler = (e) => {
+                    if (resolved) return;
+                    
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        console.log('Enter pressed');
+                        submitHandler();
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        console.log('Escape pressed');
+                        cancelHandler();
+                    }
+                };
+                
+                const cleanup = () => {
+                    const submitBtn = document.getElementById('submitInput');
+                    const cancelBtn = document.getElementById('cancelInput');
+                    
+                    if (submitBtn) submitBtn.removeEventListener('click', submitHandler);
+                    if (cancelBtn) cancelBtn.removeEventListener('click', cancelHandler);
+                    if (inputElement) inputElement.removeEventListener('keydown', keyHandler);
+                };
+                
+                // Add event listeners
+                const submitBtn = document.getElementById('submitInput');
+                const cancelBtn = document.getElementById('cancelInput');
+                
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', submitHandler);
+                    console.log('Submit button listener added');
+                }
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', cancelHandler);
+                    console.log('Cancel button listener added');
+                }
+                if (inputElement) {
+                    inputElement.addEventListener('keydown', keyHandler);
+                    console.log('Keydown listener added');
+                }
+            });
+        }
+
+        // Initialize workspace
+        function initWorkspace() {
+            defineBlocks();
+            
+            // Create and store the generator
+            window.cppGenerator = createCppGenerator();
+
+            workspace = Blockly.inject('workspace', {
+                toolbox: null,
+                grid: {
+                    spacing: 20,
+                    length: 3,
+                    colour: '#ccc',
+                    snap: true
+                },
+                zoom: {
+                    controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                },
+                trashcan: true
+            });
+        }
+
+        // Add block to workspace
+        function addBlockToWorkspace(blockType) {
+            const block = workspace.newBlock(blockType);
+            block.initSvg();
+            block.render();
+            
+            // Position blocks in a simple way
+            const existingBlocks = workspace.getAllBlocks();
+            
+            if (existingBlocks.length === 1) {
+                // First block - center it
+                block.moveBy(100, 100);
+            } else {
+                // Find the bottom-most block position more accurately
+                let maxY = 0;
+                let maxX = 100;
+                
+                for (let existingBlock of existingBlocks) {
+                    if (existingBlock !== block) {
+                        const pos = existingBlock.getRelativeToSurfaceXY();
+                        const size = existingBlock.getHeightWidth();
+                        const bottomY = pos.y + size.height;
+                        
+                        if (bottomY > maxY) {
+                            maxY = bottomY;
+                            maxX = pos.x;
+                        }
+                    }
+                }
+                
+                // Position new block directly below the bottom-most block with proper spacing
+                const newY = maxY + 30; // Increased gap for better visibility
+                block.moveBy(maxX, newY);
+                
+                // Ensure block is visible by scrolling if needed
+                setTimeout(() => {
+                    const blockPos = block.getRelativeToSurfaceXY();
+                    const metrics = workspace.getMetrics();
+                    const viewHeight = metrics.viewHeight;
+                    const scrollY = metrics.viewTop;
+                    
+                    // If block is below visible area, scroll to show it
+                    if (blockPos.y > scrollY + viewHeight - 100) {
+                        workspace.scroll(0, blockPos.y - viewHeight + 200);
+                    }
+                }, 100);
+            }
+            
+            return block;
+        }
+
+        // Generate and run C++ code
+        async function generateAndRunCode() {
+            try {
+                const blocks = workspace.getAllBlocks();
+                if (blocks.length === 0) {
+                    document.getElementById('generatedCode').textContent = 'No blocks in workspace. Please add some blocks first.';
+                    document.getElementById('programOutput').textContent = 'No code to execute.';
+                    document.getElementById('codeModal').classList.remove('hidden');
+                    return;
+                }
+
+                // Make sure generator is available
+                if (!window.cppGenerator) {
+                    document.getElementById('generatedCode').textContent = 'Code generator not ready. Please try again.';
+                    document.getElementById('programOutput').textContent = 'Generator error.';
+                    document.getElementById('codeModal').classList.remove('hidden');
+                    return;
+                }
+
+                // Show loading state
+                document.getElementById('programOutput').textContent = 'Compiling and running C++ code...\nPlease wait...';
+                document.getElementById('codeModal').classList.remove('hidden');
+
+                // Generate code from blocks - process connected blocks in sequence
+                let code = '';
+                const topBlocks = workspace.getTopBlocks();
+                
+                for (let topBlock of topBlocks) {
+                    let currentBlock = topBlock;
+                    
+                    // Follow the chain of connected blocks
+                    while (currentBlock) {
+                        const blockCode = window.cppGenerator.blockToCode(currentBlock);
+                        if (blockCode) {
+                            code += blockCode;
+                        }
+                        
+                        // Move to next connected block
+                        currentBlock = currentBlock.getNextBlock();
+                    }
+                }
+                
+                document.getElementById('generatedCode').textContent = code || 'No code generated from blocks';
+                
+                // Reset input handling
+                inputQueue = [];
+                currentInputIndex = 0;
+                programVariables = {};
+                
+                // Execute C++ code with interactive input
+                let output = await executeCppCodeWithInput(code);
+                
+                if (!output) {
+                    output = 'Program compiled successfully!\n(No output statements found)';
+                }
+                
+                document.getElementById('programOutput').textContent = output;
+            } catch (error) {
+                console.error('Error generating code:', error);
+                document.getElementById('generatedCode').textContent = 'Error generating code: ' + error.message;
+                document.getElementById('programOutput').textContent = 'Error: ' + error.message;
+                document.getElementById('codeModal').classList.remove('hidden');
+            }
+        }
+
+        // Real C++ code execution using JSCPP
+        let jscppReady = false;
+        let jscppLoadAttempts = 0;
+        const maxLoadAttempts = 10;
+        
+        // Initialize JSCPP module with better error handling
+        function initializeJSCPP() {
+            const modeIndicator = document.getElementById('executionMode');
+            
+            // Wait for JSCPP to load with multiple attempts
+            const checkJSCPP = () => {
+                jscppLoadAttempts++;
+                console.log(`JSCPP load attempt ${jscppLoadAttempts}/${maxLoadAttempts}`);
+                
+                try {
+                    // Check if JSCPP is available in different ways
+                    const jscppAvailable = (typeof JSCPP !== 'undefined') || 
+                                         (typeof window.JSCPP !== 'undefined') || 
+                                         (window.JSCPP);
+                    
+                    console.log('JSCPP availability check:', {
+                        'typeof JSCPP': typeof JSCPP,
+                        'window.JSCPP': typeof window.JSCPP,
+                        'JSCPP object': JSCPP,
+                        'available': jscppAvailable
+                    });
+                    
+                    if (jscppAvailable) {
+                        const jscppObj = JSCPP || window.JSCPP;
+                        
+                        if (jscppObj && typeof jscppObj.run === 'function') {
+                            jscppReady = true;
+                            console.log('✅ JSCPP library loaded successfully');
+                            
+                            modeIndicator.textContent = 'Mode: Real C++ (JSCPP)';
+                            modeIndicator.className = 'text-xs px-2 py-1 rounded bg-green-100 text-green-700';
+                            
+                            // Test JSCPP with simple program
+                            try {
+                                const testCode = '#include <iostream>\nusing namespace std;\nint main() { return 0; }';
+                                const result = jscppObj.run(testCode, '', {
+                                    stdio: {
+                                        write: function() {},
+                                        read: function() { return ''; }
+                                    }
+                                });
+                                console.log('✅ JSCPP test successful, exit code:', result);
+                                
+                                modeIndicator.textContent = 'Mode: Real C++ (JSCPP) ✓';
+                                return; // Success, stop checking
+                            } catch (testError) {
+                                console.warn('❌ JSCPP test failed:', testError);
+                                jscppReady = false;
+                                
+                                modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Error)';
+                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-700';
+                            }
+                        } else {
+                            console.warn('❌ JSCPP object found but run method missing');
+                            console.log('JSCPP methods available:', Object.keys(jscppObj || {}));
+                        }
+                    } else {
+                        console.warn(`❌ JSCPP not available (attempt ${jscppLoadAttempts})`);
+                    }
+                    
+                    // If we reach here, JSCPP is not working properly
+                    if (jscppLoadAttempts < maxLoadAttempts) {
+                        // Try again after a delay
+                        setTimeout(checkJSCPP, 500);
+                    } else {
+                        // Give up and use simulation
+                        console.log('🔄 Max attempts reached, using Enhanced Simulation mode');
+                        modeIndicator.textContent = 'Mode: Enhanced Simulation';
+                        modeIndicator.className = 'text-xs px-2 py-1 rounded bg-blue-100 text-blue-700';
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Error checking JSCPP:', error);
+                    
+                    if (jscppLoadAttempts < maxLoadAttempts) {
+                        setTimeout(checkJSCPP, 500);
+                    } else {
+                        modeIndicator.textContent = 'Mode: Enhanced Simulation (Load Error)';
+                        modeIndicator.className = 'text-xs px-2 py-1 rounded bg-red-100 text-red-700';
+                    }
+                }
+            };
+            
+            // Start checking immediately
+            modeIndicator.textContent = 'Mode: Loading JSCPP...';
+            modeIndicator.className = 'text-xs px-2 py-1 rounded bg-gray-100 text-gray-700';
+            
+            checkJSCPP();
+        }
+        
+        // Execute C++ code with interactive input support
+        async function executeCppCodeWithInput(code) {
+            // Reset input handling state
+            inputQueue = [];
+            currentInputIndex = 0;
+            programVariables = {};
+            
+            // First, collect all cin operations to prepare input prompts
+            const cinMatches = code.match(/cin\s*>>\s*(\w+);/g);
+            if (cinMatches) {
+                inputQueue = cinMatches.map(match => {
+                    const varMatch = match.match(/cin\s*>>\s*(\w+);/);
+                    return varMatch ? varMatch[1] : 'variable';
+                });
+                console.log('Found cin operations for variables:', inputQueue);
+            }
+            
+            // Try JSCPP first if available, fallback to simulation
+            if (jscppReady) {
+                try {
+                    console.log('Attempting JSCPP execution...');
+                    return await executeWithJSCPP(code);
+                } catch (error) {
+                    console.warn('JSCPP execution failed, falling back to simulation:', error);
+                    return await simulateCppExecutionWithInput(code);
+                }
+            } else {
+                console.log('Using enhanced simulation mode');
+                return await simulateCppExecutionWithInput(code);
+            }
+        }
+        
+        // Execute with JSCPP (with input support)
+        async function executeWithJSCPP(code) {
+            let output = '';
+            let inputIndex = 0;
+            let inputBuffer = [];
+            
+            // Get the correct JSCPP object
+            const jscppObj = JSCPP || window.JSCPP;
+            if (!jscppObj || typeof jscppObj.run !== 'function') {
+                throw new Error('JSCPP not available or run method missing');
+            }
+            
+            // Pre-collect all inputs if we have cin operations
+            if (inputQueue.length > 0) {
+                document.getElementById('programOutput').textContent = '🔄 Collecting inputs for C++ program...\n';
+                
+                for (let i = 0; i < inputQueue.length; i++) {
+                    const variableName = inputQueue[i];
+                    const userInput = await showInputModal(
+                        `Input ${i + 1} dari ${inputQueue.length} - Variabel "${variableName}":`,
+                        variableName
+                    );
+                    inputBuffer.push(userInput.trim());
+                    
+                    // Update progress
+                    document.getElementById('programOutput').textContent = 
+                        `✅ Input ${i + 1}/${inputQueue.length} collected: ${variableName} = ${userInput}\n` +
+                        (i < inputQueue.length - 1 ? '⏳ Collecting remaining inputs...\n' : '🚀 Starting program execution...\n');
+                }
+            }
+            
+            const config = {
+                stdio: {
+                    write: function(s) {
+                        output += s;
+                        console.log('JSCPP output:', s);
+                        // Update output in real-time
+                        const currentDisplay = document.getElementById('programOutput').textContent;
+                        if (!currentDisplay.includes('🚀 Program Output:')) {
+                            document.getElementById('programOutput').textContent = '🚀 Program Output:\n' + output;
+                        } else {
+                            document.getElementById('programOutput').textContent = '🚀 Program Output:\n' + output;
+                        }
+                    },
+                    read: function() {
+                        if (inputIndex < inputBuffer.length) {
+                            const input = inputBuffer[inputIndex];
+                            inputIndex++;
+                            console.log(`JSCPP reading input ${inputIndex}: ${input}`);
+                            return input + '\n';
+                        }
+                        console.log('JSCPP: No more input available, returning empty string');
+                        return '';
+                    }
+                },
+                debug: false,
+                includes: {
+                    iostream: true,
+                    string: true,
+                    cmath: true
+                }
+            };
+            
+            try {
+                console.log('🚀 Executing C++ code with JSCPP...');
+                console.log('Code to execute:', code);
+                console.log('Config:', config);
+                
+                // Clean up the code - remove any problematic characters
+                const cleanCode = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                
+                const exitCode = jscppObj.run(cleanCode, '', config);
+                
+                console.log('✅ JSCPP execution completed with exit code:', exitCode);
+                
+                // Format final output
+                let finalOutput = '';
+                if (inputBuffer.length > 0) {
+                    finalOutput += '📥 Program Inputs:\n';
+                    inputBuffer.forEach((input, i) => {
+                        finalOutput += `   ${inputQueue[i]} = ${input}\n`;
+                    });
+                    finalOutput += '\n';
+                }
+                
+                finalOutput += '📤 Program Output:\n';
+                finalOutput += output || '(No output produced)';
+                
+                if (exitCode !== 0) {
+                    finalOutput += `\n\n⚠️ Program exited with code: ${exitCode}`;
+                } else {
+                    finalOutput += '\n\n✅ Program completed successfully!';
+                }
+                
+                return finalOutput;
+                
+            } catch (error) {
+                console.error('❌ JSCPP execution error:', error);
+                console.log('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack,
+                    line: error.line,
+                    column: error.column
+                });
+                
+                // Provide detailed error information
+                let errorOutput = '❌ C++ Execution Error (JSCPP):\n\n';
+                errorOutput += `Error Type: ${error.name || 'Unknown'}\n`;
+                errorOutput += `Message: ${error.message || 'No message available'}\n`;
+                
+                if (error.line !== undefined) {
+                    errorOutput += `Line: ${error.line}\n`;
+                }
+                
+                if (error.column !== undefined) {
+                    errorOutput += `Column: ${error.column}\n`;
+                }
+                
+                errorOutput += '\n💡 Falling back to Enhanced Simulation mode...';
+                
+                // Don't throw, fall back to simulation
+                console.log('🔄 Falling back to simulation due to JSCPP error');
+                return await simulateCppExecutionWithInput(code);
+            }
+        }
+        
+        // Enhanced simulation with interactive input
+        async function simulateCppExecutionWithInput(code) {
+            try {
+                console.log('Starting C++ simulation with code:', code);
+                
+                // Parse the code more carefully to handle nested structures
+                const lines = code.split('\n').map(line => line.trim());
+                console.log('All lines:', lines);
+                
+                const variables = {};
+                let output = '';
+                
+                // Find main function content with proper brace tracking
+                let inMainFunction = false;
+                let braceCount = 0;
+                let mainContent = [];
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    
+                    if (line.includes('int main()')) {
+                        inMainFunction = true;
+                        continue;
+                    }
+                    
+                    if (inMainFunction) {
+                        // Count braces more carefully
+                        const openBraces = (line.match(/\{/g) || []).length;
+                        const closeBraces = (line.match(/\}/g) || []).length;
+                        
+                        braceCount += openBraces - closeBraces;
+                        
+                        if (braceCount === 0 && closeBraces > 0) {
+                            break; // End of main function
+                        }
+                        
+                        if (line && !line.includes('return 0') && line !== '{' && line !== '}') {
+                            mainContent.push({
+                                content: line,
+                                lineNumber: i,
+                                braceLevel: braceCount
+                            });
+                        }
+                    }
+                }
+                
+                console.log('Main function content:', mainContent);
+                
+                // Execute main function content with proper control flow
+                output = await executeCodeBlock(mainContent, variables, output);
+                
+                return output || 'Program executed successfully!\n(No output statements found)';
+            } catch (error) {
+                console.error('Simulation error:', error);
+                return `Simulation Error: ${error.message}`;
+            }
+        }
+        
+        // Execute a block of code with proper control flow handling
+        async function executeCodeBlock(codeLines, variables, currentOutput) {
+            let output = currentOutput;
+            let i = 0;
+            
+            while (i < codeLines.length) {
+                const lineObj = codeLines[i];
+                const line = lineObj.content;
+                
+                console.log('Processing line:', line);
+                
+                // Variable declaration with initialization
+                const declareMatch = line.match(/^\s*(int|double|string|bool)\s+(\w+)\s*=\s*(.+);/);
+                if (declareMatch) {
+                    const type = declareMatch[1];
+                    const varName = declareMatch[2];
+                    let value = declareMatch[3].trim();
+                    
+                    // Handle different value types
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        variables[varName] = value.slice(1, -1);
+                    } else if (value === 'true') {
+                        variables[varName] = true;
+                    } else if (value === 'false') {
+                        variables[varName] = false;
+                    } else if (variables[value] !== undefined) {
+                        variables[varName] = variables[value];
+                    } else {
+                        value = evaluateExpression(value, variables);
+                        variables[varName] = value;
+                    }
+                    
+                    console.log(`Variable declared: ${varName} = ${variables[varName]}`);
+                    i++;
+                    continue;
+                }
+                
+                // Input statement (cin)
+                const cinMatch = line.match(/cin\s*>>\s*(\w+);/);
+                if (cinMatch) {
+                    const varName = cinMatch[1];
+                    
+                    // Show waiting message
+                    output += `⏳ Menunggu input untuk variabel "${varName}"...\n`;
+                    document.getElementById('programOutput').textContent = output;
+                    
+                    try {
+                        const userInput = await showInputModal(
+                            `Program meminta input untuk variabel "${varName}":`,
+                            varName
+                        );
+                        
+                        // Remove waiting message
+                        output = output.replace(`⏳ Menunggu input untuk variabel "${varName}"...\n`, '');
+                        
+                        // Process the input
+                        const trimmedInput = userInput.trim();
+                        
+                        // Try to parse as number first
+                        const numValue = parseFloat(trimmedInput);
+                        if (!isNaN(numValue) && trimmedInput !== '' && !trimmedInput.includes('"')) {
+                            variables[varName] = numValue;
+                            output += `✅ Input: ${varName} = ${numValue}\n`;
+                        } else {
+                            // Handle as string
+                            const stringValue = trimmedInput.replace(/^["']|["']$/g, '');
+                            variables[varName] = stringValue;
+                            output += `✅ Input: ${varName} = "${stringValue}"\n`;
+                        }
+                        
+                        console.log(`Input received for ${varName}:`, variables[varName]);
+                    } catch (error) {
+                        console.error('Error getting input:', error);
+                        output += `❌ Error getting input for ${varName}\n`;
+                        variables[varName] = 0;
+                    }
+                    i++;
+                    continue;
+                }
+                
+                // Variable assignment
+                const assignMatch = line.match(/^\s*(\w+)\s*=\s*(.+);/);
+                if (assignMatch && !line.includes('int ') && !line.includes('double ') && !line.includes('string ') && !line.includes('bool ')) {
+                    const varName = assignMatch[1];
+                    let value = assignMatch[2].trim();
+                    
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        variables[varName] = value.slice(1, -1);
+                    } else if (value === 'true') {
+                        variables[varName] = true;
+                    } else if (value === 'false') {
+                        variables[varName] = false;
+                    } else if (variables[value] !== undefined) {
+                        variables[varName] = variables[value];
+                    } else {
+                        variables[varName] = evaluateExpression(value, variables);
+                    }
+                    
+                    console.log(`Variable assigned: ${varName} = ${variables[varName]}`);
+                    i++;
+                    continue;
+                }
+                
+                // Output statement (cout)
+                if (line.includes('cout <<')) {
+                    let outputLine = '';
+                    let hasEndl = line.includes('<< endl');
+                    
+                    // Extract all parts between << operators
+                    const parts = line.split('<<').slice(1); // Remove 'cout' part
+                    
+                    for (let part of parts) {
+                        part = part.replace(/;$/, '').trim();
+                        if (part === 'endl') continue;
+                        
+                        if (part.startsWith('"') && part.endsWith('"')) {
+                            // String literal
+                            outputLine += part.slice(1, -1);
+                        } else if (variables[part] !== undefined) {
+                            // Variable
+                            outputLine += variables[part];
+                        } else {
+                            // Try to evaluate as expression
+                            const result = evaluateExpression(part, variables);
+                            outputLine += result;
+                        }
+                    }
+                    
+                    output += outputLine;
+                    if (hasEndl) output += '\n';
+                    
+                    // Update display in real-time
+                    document.getElementById('programOutput').textContent = output;
+                    i++;
+                    continue;
+                }
+                
+                // For loop - handle nested structure
+                if (line.startsWith('for (')) {
+                    const forResult = await handleForLoop(line, codeLines, i, variables, output);
+                    output = forResult.output;
+                    i = forResult.nextIndex;
+                    continue;
+                }
+                
+                // If statement - handle nested structure
+                if (line.includes('if (')) {
+                    const ifResult = await handleIfStatement(line, codeLines, i, variables, output);
+                    output = ifResult.output;
+                    i = ifResult.nextIndex;
+                    continue;
+                }
+                
+                // While loop - handle nested structure
+                if (line.startsWith('while (')) {
+                    const whileResult = await handleWhileLoop(line, codeLines, i, variables, output);
+                    output = whileResult.output;
+                    i = whileResult.nextIndex;
+                    continue;
+                }
+                
+                // Comment
+                if (line.startsWith('//')) {
+                    i++;
+                    continue;
+                }
+                
+                // Unknown statement - skip
+                console.warn('Unknown statement:', line);
+                i++;
+            }
+            
+            return output;
+        }
+        
+        // Handle For Loop execution
+        async function handleForLoop(forLine, codeLines, startIndex, variables, currentOutput) {
+            let output = currentOutput;
+            
+            // Parse for loop parameters
+            const forMatch = forLine.match(/for \(int (\w+) = (\d+); (\w+) ([<>=!]+) (\d+); (\w+)(\+\+|--|\+=|\-=).*\)/);
+            if (!forMatch) {
+                console.error('Invalid for loop syntax:', forLine);
+                return { output, nextIndex: startIndex + 1 };
+            }
+            
+            const varName = forMatch[1];
+            const start = parseInt(forMatch[2]);
+            const conditionVar = forMatch[3];
+            const condition = forMatch[4];
+            const end = parseInt(forMatch[5]);
+            const incrementVar = forMatch[6];
+            const increment = forMatch[7];
+            
+            // Find the loop body
+            const loopBody = extractBlockBody(codeLines, startIndex);
+            console.log('For loop body:', loopBody);
+            
+            // Execute the loop
+            let current = start;
+            let iterations = 0;
+            const maxIterations = 1000;
+            
+            while (iterations < maxIterations) {
+                // Check condition
+                let conditionMet = false;
+                switch (condition) {
+                    case '<=': conditionMet = current <= end; break;
+                    case '<': conditionMet = current < end; break;
+                    case '>=': conditionMet = current >= end; break;
+                    case '>': conditionMet = current > end; break;
+                    case '==': conditionMet = current == end; break;
+                    case '!=': conditionMet = current != end; break;
+                }
+                
+                if (!conditionMet) break;
+                
+                // Set loop variable
+                variables[varName] = current;
+                console.log(`Loop iteration ${iterations + 1}: ${varName} = ${current}`);
+                
+                // Execute loop body
+                output = await executeCodeBlock(loopBody.body, variables, output);
+                
+                // Increment
+                switch (increment) {
+                    case '++': current++; break;
+                    case '--': current--; break;
+                    case '+=': current += 1; break;
+                    case '-=': current -= 1; break;
+                }
+                
+                iterations++;
+            }
+            
+            return { output, nextIndex: loopBody.nextIndex };
+        }
+        
+        // Handle If Statement execution
+        async function handleIfStatement(ifLine, codeLines, startIndex, variables, currentOutput) {
+            let output = currentOutput;
+            
+            // Parse if condition - handle both simple if and if-else
+            const ifMatch = ifLine.match(/if \((.+?)\)/);
+            if (!ifMatch) {
+                console.error('Invalid if statement syntax:', ifLine);
+                return { output, nextIndex: startIndex + 1 };
+            }
+            
+            const condition = ifMatch[1].trim();
+            const conditionResult = evaluateCondition(condition, variables);
+            console.log(`If condition "${condition}" evaluated to:`, conditionResult);
+            
+            // Check if this is an if-else or just if
+            const isIfElse = codeLines.some((line, idx) => 
+                idx > startIndex && line.content.includes('} else {')
+            );
+            
+            if (isIfElse) {
+                // Extract if and else blocks
+                const blocks = extractIfElseBlocks(codeLines, startIndex);
+                
+                // Execute appropriate block
+                if (conditionResult && blocks.ifBody.length > 0) {
+                    console.log('Executing IF block (condition is true)');
+                    output = await executeCodeBlock(blocks.ifBody, variables, output);
+                } else if (!conditionResult && blocks.elseBody.length > 0) {
+                    console.log('Executing ELSE block (condition is false)');
+                    output = await executeCodeBlock(blocks.elseBody, variables, output);
+                } else {
+                    console.log('No block executed - condition:', conditionResult);
+                }
+                
+                return { output, nextIndex: blocks.nextIndex };
+            } else {
+                // Simple if statement without else
+                const ifBody = extractBlockBody(codeLines, startIndex);
+                
+                if (conditionResult && ifBody.body.length > 0) {
+                    console.log('Executing IF block (simple if, condition is true)');
+                    output = await executeCodeBlock(ifBody.body, variables, output);
+                } else {
+                    console.log('Skipping IF block (simple if, condition is false)');
+                }
+                
+                return { output, nextIndex: ifBody.nextIndex };
+            }
+        }
+        
+        // Handle While Loop execution
+        async function handleWhileLoop(whileLine, codeLines, startIndex, variables, currentOutput) {
+            let output = currentOutput;
+            
+            // Parse while condition
+            const whileMatch = whileLine.match(/while \((.+?)\)/);
+            if (!whileMatch) {
+                console.error('Invalid while loop syntax:', whileLine);
+                return { output, nextIndex: startIndex + 1 };
+            }
+            
+            const condition = whileMatch[1].trim();
+            
+            // Find the loop body
+            const loopBody = extractBlockBody(codeLines, startIndex);
+            
+            // Execute the loop
+            let iterations = 0;
+            const maxIterations = 1000;
+            
+            while (iterations < maxIterations) {
+                const conditionResult = evaluateCondition(condition, variables);
+                console.log(`While condition "${condition}" evaluated to:`, conditionResult);
+                
+                if (!conditionResult) break;
+                
+                // Execute loop body
+                output = await executeCodeBlock(loopBody.body, variables, output);
+                iterations++;
+            }
+            
+            return { output, nextIndex: loopBody.nextIndex };
+        }
+        
+        // Extract block body (for loops, if statements, etc.)
+        function extractBlockBody(codeLines, startIndex) {
+            const body = [];
+            let braceCount = 0;
+            let i = startIndex + 1;
+            let foundOpenBrace = false;
+            
+            while (i < codeLines.length) {
+                const line = codeLines[i].content;
+                
+                if (line.includes('{')) {
+                    braceCount++;
+                    foundOpenBrace = true;
+                } else if (line.includes('}')) {
+                    braceCount--;
+                    if (braceCount === 0 && foundOpenBrace) {
+                        break; // End of block
+                    }
+                } else if (foundOpenBrace && braceCount > 0 && line.trim() !== '') {
+                    body.push(codeLines[i]);
+                }
+                
+                i++;
+            }
+            
+            return { body, nextIndex: i + 1 };
+        }
+        
+        // Extract if-else blocks
+        function extractIfElseBlocks(codeLines, startIndex) {
+            const ifBody = [];
+            const elseBody = [];
+            let braceCount = 0;
+            let i = startIndex + 1;
+            let inElse = false;
+            let foundOpenBrace = false;
+            let foundElse = false;
+            
+            console.log('Extracting if-else blocks starting from index:', startIndex);
+            
+            while (i < codeLines.length) {
+                const line = codeLines[i].content.trim();
+                console.log(`Processing line ${i}: "${line}", braceCount: ${braceCount}, inElse: ${inElse}`);
+                
+                // Check for else transition
+                if (line.includes('} else {') || line === '} else {') {
+                    console.log('Found else transition at line', i);
+                    inElse = true;
+                    foundElse = true;
+                    i++;
+                    continue;
+                }
+                
+                // Handle opening braces
+                if (line.includes('{')) {
+                    const openBraces = (line.match(/\{/g) || []).length;
+                    braceCount += openBraces;
+                    foundOpenBrace = true;
+                    console.log(`Found ${openBraces} opening brace(s), braceCount now: ${braceCount}`);
+                }
+                
+                // Handle closing braces
+                if (line.includes('}')) {
+                    const closeBraces = (line.match(/\}/g) || []).length;
+                    braceCount -= closeBraces;
+                    console.log(`Found ${closeBraces} closing brace(s), braceCount now: ${braceCount}`);
+                    
+                    // If we've closed all braces and we're in a structured block, we're done
+                    if (braceCount === 0 && foundOpenBrace) {
+                        console.log('End of if-else structure detected');
+                        break;
+                    }
+                }
+                
+                // Add content to appropriate body (skip empty lines and pure brace lines)
+                if (foundOpenBrace && braceCount > 0 && line !== '' && line !== '{' && line !== '}' && !line.includes('} else {')) {
+                    if (inElse) {
+                        console.log('Adding to else body:', line);
+                        elseBody.push(codeLines[i]);
+                    } else {
+                        console.log('Adding to if body:', line);
+                        ifBody.push(codeLines[i]);
+                    }
+                }
+                
+                i++;
+            }
+            
+            console.log('Extraction complete. IF body:', ifBody.map(l => l.content));
+            console.log('ELSE body:', elseBody.map(l => l.content));
+            
+            return { ifBody, elseBody, nextIndex: i + 1 };
+        }
+        
+        // Helper function to execute individual statements
+        async function executeStatement(line, variables, output) {
+            if (line.includes('cout <<')) {
+                let outputLine = '';
+                let hasEndl = line.includes('<< endl');
+                
+                const parts = line.split('<<').slice(1);
+                
+                for (let part of parts) {
+                    part = part.replace(/;$/, '').trim();
+                    if (part === 'endl') continue;
+                    
+                    if (part.startsWith('"') && part.endsWith('"')) {
+                        outputLine += part.slice(1, -1);
+                    } else if (variables[part] !== undefined) {
+                        outputLine += variables[part];
+                    } else {
+                        const result = evaluateExpression(part, variables);
+                        outputLine += result;
+                    }
+                }
+                
+                const currentOutput = document.getElementById('programOutput').textContent;
+                const newOutput = currentOutput + outputLine + (hasEndl ? '\n' : '');
+                document.getElementById('programOutput').textContent = newOutput;
+            }
+        }
+        
+        // Helper function to evaluate mathematical expressions
+        function evaluateExpression(expr, variables) {
+            try {
+                // Replace variables with their values
+                let expression = expr;
+                for (let varName in variables) {
+                    const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                    expression = expression.replace(regex, variables[varName]);
+                }
+                
+                // Handle parentheses
+                expression = expression.replace(/[()]/g, '');
+                
+                // Simple math evaluation
+                if (expression.includes('+')) {
+                    const parts = expression.split('+');
+                    return parseFloat(parts[0].trim()) + parseFloat(parts[1].trim());
+                } else if (expression.includes('-')) {
+                    const parts = expression.split('-');
+                    return parseFloat(parts[0].trim()) - parseFloat(parts[1].trim());
+                } else if (expression.includes('*')) {
+                    const parts = expression.split('*');
+                    return parseFloat(parts[0].trim()) * parseFloat(parts[1].trim());
+                } else if (expression.includes('/')) {
+                    const parts = expression.split('/');
+                    const divisor = parseFloat(parts[1].trim());
+                    return divisor !== 0 ? parseFloat(parts[0].trim()) / divisor : 0;
+                } else if (expression.includes('%')) {
+                    const parts = expression.split('%');
+                    const divisor = parseFloat(parts[1].trim());
+                    return divisor !== 0 ? parseFloat(parts[0].trim()) % divisor : 0;
+                }
+                
+                // If no operation, try to parse as number
+                const num = parseFloat(expression);
+                return isNaN(num) ? 0 : num;
+            } catch (error) {
+                console.error('Error evaluating expression:', expr, error);
+                return 0;
+            }
+        }
+        
+        // Helper function to evaluate conditions
+        function evaluateCondition(condition, variables) {
+            try {
+                console.log('Evaluating condition:', condition, 'with variables:', variables);
+                
+                // Clean up the condition - remove extra spaces and parentheses
+                let expr = condition.trim();
+                
+                // Handle parentheses by removing outer ones but keeping inner structure
+                if (expr.startsWith('(') && expr.endsWith(')')) {
+                    expr = expr.slice(1, -1).trim();
+                }
+                
+                console.log('Cleaned expression:', expr);
+                
+                // Replace variables with their values more carefully
+                for (let varName in variables) {
+                    const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                    const value = variables[varName];
+                    expr = expr.replace(regex, value);
+                }
+                
+                console.log('Expression after variable substitution:', expr);
+                
+                // Handle logical operators first (&&, ||)
+                if (expr.includes('&&')) {
+                    const parts = expr.split('&&').map(p => p.trim());
+                    const left = evaluateCondition(parts[0], variables);
+                    const right = evaluateCondition(parts[1], variables);
+                    const result = left && right;
+                    console.log(`Logical AND: ${left} && ${right} = ${result}`);
+                    return result;
+                } else if (expr.includes('||')) {
+                    const parts = expr.split('||').map(p => p.trim());
+                    const left = evaluateCondition(parts[0], variables);
+                    const right = evaluateCondition(parts[1], variables);
+                    const result = left || right;
+                    console.log(`Logical OR: ${left} || ${right} = ${result}`);
+                    return result;
+                }
+                
+                // Handle modulo conditions with proper parsing
+                if (expr.includes('%')) {
+                    // Match patterns like "5 % 2 == 0" or "i % 2 == 0"
+                    const moduloMatch = expr.match(/(.+?)\s*%\s*(.+?)\s*(==|!=|>|<|>=|<=)\s*(.+)/);
+                    if (moduloMatch) {
+                        const leftExpr = moduloMatch[1].trim();
+                        const divisorExpr = moduloMatch[2].trim();
+                        const operator = moduloMatch[3];
+                        const rightExpr = moduloMatch[4].trim();
+                        
+                        const left = evaluateExpression(leftExpr, variables);
+                        const divisor = evaluateExpression(divisorExpr, variables);
+                        const right = evaluateExpression(rightExpr, variables);
+                        
+                        console.log(`Modulo operation: ${left} % ${divisor} ${operator} ${right}`);
+                        
+                        if (divisor !== 0) {
+                            const modResult = left % divisor;
+                            console.log(`Modulo result: ${modResult}`);
+                            
+                            let result;
+                            switch (operator) {
+                                case '==': result = modResult == right; break;
+                                case '!=': result = modResult != right; break;
+                                case '>': result = modResult > right; break;
+                                case '<': result = modResult < right; break;
+                                case '>=': result = modResult >= right; break;
+                                case '<=': result = modResult <= right; break;
+                                default: result = false;
+                            }
+                            
+                            console.log(`Modulo condition result: ${result}`);
+                            return result;
+                        }
+                    }
+                }
+                
+                // Handle comparison operators (order matters - check longer operators first)
+                if (expr.includes('<=')) {
+                    const parts = expr.split('<=').map(p => p.trim());
+                    const left = evaluateExpression(parts[0], variables);
+                    const right = evaluateExpression(parts[1], variables);
+                    const result = left <= right;
+                    console.log(`Comparison: ${left} <= ${right} = ${result}`);
+                    return result;
+                } else if (expr.includes('>=')) {
+                    const parts = expr.split('>=').map(p => p.trim());
+                    const left = evaluateExpression(parts[0], variables);
+                    const right = evaluateExpression(parts[1], variables);
+                    const result = left >= right;
+                    console.log(`Comparison: ${left} >= ${right} = ${result}`);
+                    return result;
+                } else if (expr.includes('==')) {
+                    const parts = expr.split('==').map(p => p.trim());
+                    const left = evaluateExpression(parts[0], variables);
+                    const right = evaluateExpression(parts[1], variables);
+                    const result = left == right;
+                    console.log(`Comparison: ${left} == ${right} = ${result}`);
+                    return result;
+                } else if (expr.includes('!=')) {
+                    const parts = expr.split('!=').map(p => p.trim());
+                    const left = evaluateExpression(parts[0], variables);
+                    const right = evaluateExpression(parts[1], variables);
+                    const result = left != right;
+                    console.log(`Comparison: ${left} != ${right} = ${result}`);
+                    return result;
+                } else if (expr.includes('<')) {
+                    const parts = expr.split('<').map(p => p.trim());
+                    const left = evaluateExpression(parts[0], variables);
+                    const right = evaluateExpression(parts[1], variables);
+                    const result = left < right;
+                    console.log(`Comparison: ${left} < ${right} = ${result}`);
+                    return result;
+                } else if (expr.includes('>')) {
+                    const parts = expr.split('>').map(p => p.trim());
+                    const left = evaluateExpression(parts[0], variables);
+                    const right = evaluateExpression(parts[1], variables);
+                    const result = left > right;
+                    console.log(`Comparison: ${left} > ${right} = ${result}`);
+                    return result;
+                }
+                
+                // Handle boolean literals
+                if (expr === 'true') return true;
+                if (expr === 'false') return false;
+                
+                // If no comparison operator, try to evaluate as expression and convert to boolean
+                const numResult = evaluateExpression(expr, variables);
+                const boolResult = Boolean(numResult);
+                console.log(`Boolean evaluation: ${expr} = ${numResult} -> ${boolResult}`);
+                return boolResult;
+                
+            } catch (error) {
+                console.error('Error evaluating condition:', condition, error);
+                return false;
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initWorkspace();
+            initializeJSCPP(); // Initialize JSCPP library
+
+            // Add block button
+            document.getElementById('addBlockBtn').addEventListener('click', function() {
+                document.getElementById('blockModal').classList.remove('hidden');
+            });
+
+            // Close modal buttons
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('blockModal').classList.add('hidden');
+            });
+
+            document.getElementById('closeTemplateModal').addEventListener('click', function() {
+                document.getElementById('templateModal').classList.add('hidden');
+            });
+
+            document.getElementById('closeCodeModal').addEventListener('click', function() {
+                document.getElementById('codeModal').classList.add('hidden');
+            });
+
+            // Template button
+            document.getElementById('quickTemplateBtn').addEventListener('click', function() {
+                document.getElementById('templateModal').classList.remove('hidden');
+            });
+
+            // Clear button
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                if (confirm('Hapus semua blok? Tindakan ini tidak dapat dibatalkan.')) {
+                    workspace.clear();
+                }
+            });
+
+            // Run button
+            document.getElementById('runBtn').addEventListener('click', generateAndRunCode);
+
+            // Block selection
+            document.querySelectorAll('.block-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const blockType = this.getAttribute('data-type');
+                    let actualBlockType;
+                    
+                    // Map block types correctly
+                    switch(blockType) {
+                        case 'include':
+                            actualBlockType = 'cpp_include';
+                            break;
+                        case 'namespace':
+                            actualBlockType = 'cpp_namespace';
+                            break;
+                        case 'main':
+                            actualBlockType = 'cpp_main';
+                            break;
+                        case 'cout':
+                            actualBlockType = 'cpp_cout';
+                            break;
+                        case 'cin':
+                            actualBlockType = 'cpp_cin';
+                            break;
+                        case 'declare_var':
+                            actualBlockType = 'cpp_declare_var';
+                            break;
+                        case 'set_var':
+                            actualBlockType = 'cpp_set_var';
+                            break;
+                        case 'get_var':
+                            actualBlockType = 'cpp_get_var';
+                            break;
+                        case 'text':
+                            actualBlockType = 'cpp_text';
+                            break;
+                        case 'number':
+                            actualBlockType = 'cpp_number';
+                            break;
+                        case 'boolean':
+                            actualBlockType = 'cpp_boolean';
+                            break;
+                        case 'math_op':
+                            actualBlockType = 'cpp_math';
+                            break;
+                        case 'compare_op':
+                            actualBlockType = 'cpp_compare';
+                            break;
+                        case 'logical_op':
+                            actualBlockType = 'cpp_logical';
+                            break;
+                        case 'not_op':
+                            actualBlockType = 'cpp_not';
+                            break;
+                        case 'stream':
+                            actualBlockType = 'cpp_stream';
+                            break;
+                        case 'if':
+                            actualBlockType = 'cpp_if';
+                            break;
+                        case 'if_else':
+                            actualBlockType = 'cpp_if_else';
+                            break;
+                        case 'for_loop':
+                            actualBlockType = 'cpp_for';
+                            break;
+                        case 'while_loop':
+                            actualBlockType = 'cpp_while';
+                            break;
+                        case 'comment':
+                            actualBlockType = 'cpp_comment';
+                            break;
+                        default:
+                            actualBlockType = 'cpp_' + blockType;
+                    }
+                    
+                    try {
+                        addBlockToWorkspace(actualBlockType);
+                        document.getElementById('blockModal').classList.add('hidden');
+                    } catch (error) {
+                        console.error('Error adding block:', error);
+                        alert('Terjadi kesalahan saat menambahkan blok: ' + actualBlockType);
+                    }
+                });
+            });
+
+            // Template selection
+            document.querySelectorAll('[data-template]').forEach(template => {
+                template.addEventListener('click', function() {
+                    const templateType = this.getAttribute('data-template');
+                    createTemplate(templateType);
+                    document.getElementById('templateModal').classList.add('hidden');
+                });
+            });
+
+            // Close modals when clicking outside
+            document.getElementById('blockModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('templateModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        });
+
+        // Create template programs
+        function createTemplate(templateType) {
+            workspace.clear();
+            
+            switch (templateType) {
+                case 'hello-world':
+                    createHelloWorldTemplate();
+                    break;
+                case 'calculator':
+                    createCalculatorTemplate();
+                    break;
+                case 'loop-example':
+                    createLoopExampleTemplate();
+                    break;
+            }
+        }
+
+        function createHelloWorldTemplate() {
+            // Create include block
+            const includeBlock = addBlockToWorkspace('cpp_include');
+            includeBlock.setFieldValue('iostream', 'LIBRARY');
+            
+            // Create namespace block
+            const namespaceBlock = addBlockToWorkspace('cpp_namespace');
+            
+            // Create main function block
+            const mainBlock = addBlockToWorkspace('cpp_main');
+            
+            // Create cout block
+            const coutBlock = addBlockToWorkspace('cpp_cout');
+            
+            // Create text block
+            const textBlock = addBlockToWorkspace('cpp_text');
+            textBlock.setFieldValue('Hello World!', 'TEXT');
+            
+            // Connect blocks
+            includeBlock.nextConnection.connect(namespaceBlock.previousConnection);
+            namespaceBlock.nextConnection.connect(mainBlock.previousConnection);
+            
+            // Connect cout inside main function
+            const mainStatements = mainBlock.getInput('STATEMENTS');
+            if (mainStatements && mainStatements.connection) {
+                mainStatements.connection.connect(coutBlock.previousConnection);
+            }
+            
+            // Connect text to cout
+            const coutValue = coutBlock.getInput('VALUE');
+            if (coutValue && coutValue.connection && textBlock.outputConnection) {
+                coutValue.connection.connect(textBlock.outputConnection);
+            }
+        }
+
+        function createCalculatorTemplate() {
+            // Create basic structure
+            const includeBlock = addBlockToWorkspace('cpp_include');
+            includeBlock.setFieldValue('iostream', 'LIBRARY');
+            
+            const namespaceBlock = addBlockToWorkspace('cpp_namespace');
+            const mainBlock = addBlockToWorkspace('cpp_main');
+            
+            // Create variable declarations
+            const num1Block = addBlockToWorkspace('cpp_declare_var');
+            num1Block.setFieldValue('double', 'TYPE');
+            num1Block.setFieldValue('num1', 'NAME');
+            const num1Value = addBlockToWorkspace('cpp_number');
+            num1Value.setFieldValue(0, 'NUM');
+            
+            const num2Block = addBlockToWorkspace('cpp_declare_var');
+            num2Block.setFieldValue('double', 'TYPE');
+            num2Block.setFieldValue('num2', 'NAME');
+            const num2Value = addBlockToWorkspace('cpp_number');
+            num2Value.setFieldValue(0, 'NUM');
+            
+            const resultBlock = addBlockToWorkspace('cpp_declare_var');
+            resultBlock.setFieldValue('double', 'TYPE');
+            resultBlock.setFieldValue('result', 'NAME');
+            const resultValue = addBlockToWorkspace('cpp_number');
+            resultValue.setFieldValue(0, 'NUM');
+            
+            // Create input prompts
+            const prompt1Block = addBlockToWorkspace('cpp_cout');
+            const prompt1Text = addBlockToWorkspace('cpp_text');
+            prompt1Text.setFieldValue('Masukkan angka pertama: ', 'TEXT');
+            prompt1Block.setFieldValue('FALSE', 'ENDL');
+            
+            const input1Block = addBlockToWorkspace('cpp_cin');
+            input1Block.setFieldValue('num1', 'VAR');
+            
+            const prompt2Block = addBlockToWorkspace('cpp_cout');
+            const prompt2Text = addBlockToWorkspace('cpp_text');
+            prompt2Text.setFieldValue('Masukkan angka kedua: ', 'TEXT');
+            prompt2Block.setFieldValue('FALSE', 'ENDL');
+            
+            const input2Block = addBlockToWorkspace('cpp_cin');
+            input2Block.setFieldValue('num2', 'VAR');
+            
+            // Create calculation
+            const calcBlock = addBlockToWorkspace('cpp_set_var');
+            calcBlock.setFieldValue('result', 'VAR');
+            const mathBlock = addBlockToWorkspace('cpp_math');
+            mathBlock.setFieldValue('+', 'OP');
+            const var1Block = addBlockToWorkspace('cpp_get_var');
+            var1Block.setFieldValue('num1', 'VAR');
+            const var2Block = addBlockToWorkspace('cpp_get_var');
+            var2Block.setFieldValue('num2', 'VAR');
+            
+            // Create output
+            const outputBlock = addBlockToWorkspace('cpp_cout');
+            const outputText = addBlockToWorkspace('cpp_text');
+            outputText.setFieldValue('Hasil: ', 'TEXT');
+            outputBlock.setFieldValue('FALSE', 'ENDL');
+            
+            const resultOutputBlock = addBlockToWorkspace('cpp_cout');
+            const resultVar = addBlockToWorkspace('cpp_get_var');
+            resultVar.setFieldValue('result', 'VAR');
+            
+            // Connect main structure
+            includeBlock.nextConnection.connect(namespaceBlock.previousConnection);
+            namespaceBlock.nextConnection.connect(mainBlock.previousConnection);
+            
+            // Connect all blocks inside main function
+            const mainStatements = mainBlock.getInput('STATEMENTS');
+            if (mainStatements && mainStatements.connection) {
+                mainStatements.connection.connect(num1Block.previousConnection);
+                num1Block.nextConnection.connect(num2Block.previousConnection);
+                num2Block.nextConnection.connect(resultBlock.previousConnection);
+                resultBlock.nextConnection.connect(prompt1Block.previousConnection);
+                prompt1Block.nextConnection.connect(input1Block.previousConnection);
+                input1Block.nextConnection.connect(prompt2Block.previousConnection);
+                prompt2Block.nextConnection.connect(input2Block.previousConnection);
+                input2Block.nextConnection.connect(calcBlock.previousConnection);
+                calcBlock.nextConnection.connect(outputBlock.previousConnection);
+                outputBlock.nextConnection.connect(resultOutputBlock.previousConnection);
+            }
+            
+            // Connect values to variable declarations
+            num1Block.getInput('VALUE').connection.connect(num1Value.outputConnection);
+            num2Block.getInput('VALUE').connection.connect(num2Value.outputConnection);
+            resultBlock.getInput('VALUE').connection.connect(resultValue.outputConnection);
+            
+            // Connect text to cout blocks
+            prompt1Block.getInput('VALUE').connection.connect(prompt1Text.outputConnection);
+            prompt2Block.getInput('VALUE').connection.connect(prompt2Text.outputConnection);
+            outputBlock.getInput('VALUE').connection.connect(outputText.outputConnection);
+            resultOutputBlock.getInput('VALUE').connection.connect(resultVar.outputConnection);
+            
+            // Connect math operation
+            mathBlock.getInput('A').connection.connect(var1Block.outputConnection);
+            mathBlock.getInput('B').connection.connect(var2Block.outputConnection);
+            calcBlock.getInput('VALUE').connection.connect(mathBlock.outputConnection);
+        }
+
+        function createLoopExampleTemplate() {
+            // Create basic structure
+            const includeBlock = addBlockToWorkspace('cpp_include');
+            includeBlock.setFieldValue('iostream', 'LIBRARY');
+            
+            const namespaceBlock = addBlockToWorkspace('cpp_namespace');
+            const mainBlock = addBlockToWorkspace('cpp_main');
+            
+            // Create for loop
+            const forBlock = addBlockToWorkspace('cpp_for');
+            forBlock.setFieldValue('i', 'VAR');
+            forBlock.setFieldValue('i', 'VAR2');
+            forBlock.setFieldValue('i', 'VAR3');
+            forBlock.setFieldValue(1, 'START');
+            forBlock.setFieldValue('<=', 'CONDITION');
+            forBlock.setFieldValue(10, 'END');
+            forBlock.setFieldValue('++', 'INCREMENT');
+            
+            // Create if statement inside loop to check even/odd
+            const ifBlock = addBlockToWorkspace('cpp_if_else');
+            const compareBlock = addBlockToWorkspace('cpp_compare');
+            compareBlock.setFieldValue('==', 'OP');
+            
+            // Math operation for modulo (i % 2)
+            const moduloBlock = addBlockToWorkspace('cpp_math');
+            moduloBlock.setFieldValue('%', 'OP');
+            const iVarBlock = addBlockToWorkspace('cpp_get_var');
+            iVarBlock.setFieldValue('i', 'VAR');
+            const twoBlock = addBlockToWorkspace('cpp_number');
+            twoBlock.setFieldValue(2, 'NUM');
+            const zeroBlock = addBlockToWorkspace('cpp_number');
+            zeroBlock.setFieldValue(0, 'NUM');
+            
+            // Output for even numbers
+            const evenCoutBlock = addBlockToWorkspace('cpp_cout');
+            const evenVarBlock = addBlockToWorkspace('cpp_get_var');
+            evenVarBlock.setFieldValue('i', 'VAR');
+            
+            const evenTextBlock = addBlockToWorkspace('cpp_cout');
+            const evenText = addBlockToWorkspace('cpp_text');
+            evenText.setFieldValue(' adalah bilangan genap', 'TEXT');
+            
+            // Output for odd numbers
+            const oddCoutBlock = addBlockToWorkspace('cpp_cout');
+            const oddVarBlock = addBlockToWorkspace('cpp_get_var');
+            oddVarBlock.setFieldValue('i', 'VAR');
+            
+            const oddTextBlock = addBlockToWorkspace('cpp_cout');
+            const oddText = addBlockToWorkspace('cpp_text');
+            oddText.setFieldValue(' adalah bilangan ganjil', 'TEXT');
+            
+            // Connect main structure
+            includeBlock.nextConnection.connect(namespaceBlock.previousConnection);
+            namespaceBlock.nextConnection.connect(mainBlock.previousConnection);
+            
+            // Connect loop inside main
+            const mainStatements = mainBlock.getInput('STATEMENTS');
+            if (mainStatements && mainStatements.connection) {
+                mainStatements.connection.connect(forBlock.previousConnection);
+            }
+            
+            // Connect if statement inside loop
+            const forStatements = forBlock.getInput('STATEMENTS');
+            if (forStatements && forStatements.connection) {
+                forStatements.connection.connect(ifBlock.previousConnection);
+            }
+            
+            // Connect condition for if statement (i % 2 == 0)
+            moduloBlock.getInput('A').connection.connect(iVarBlock.outputConnection);
+            moduloBlock.getInput('B').connection.connect(twoBlock.outputConnection);
+            compareBlock.getInput('A').connection.connect(moduloBlock.outputConnection);
+            compareBlock.getInput('B').connection.connect(zeroBlock.outputConnection);
+            ifBlock.getInput('CONDITION').connection.connect(compareBlock.outputConnection);
+            
+            // Connect even number output (IF branch)
+            const ifStatements = ifBlock.getInput('IF_STATEMENTS');
+            if (ifStatements && ifStatements.connection) {
+                ifStatements.connection.connect(evenCoutBlock.previousConnection);
+                evenCoutBlock.nextConnection.connect(evenTextBlock.previousConnection);
+            }
+            
+            // Connect odd number output (ELSE branch)
+            const elseStatements = ifBlock.getInput('ELSE_STATEMENTS');
+            if (elseStatements && elseStatements.connection) {
+                elseStatements.connection.connect(oddCoutBlock.previousConnection);
+                oddCoutBlock.nextConnection.connect(oddTextBlock.previousConnection);
+            }
+            
+            // Connect values to cout blocks
+            evenCoutBlock.getInput('VALUE').connection.connect(evenVarBlock.outputConnection);
+            evenCoutBlock.setFieldValue('FALSE', 'ENDL');
+            evenTextBlock.getInput('VALUE').connection.connect(evenText.outputConnection);
+            
+            oddCoutBlock.getInput('VALUE').connection.connect(oddVarBlock.outputConnection);
+            oddCoutBlock.setFieldValue('FALSE', 'ENDL');
+            oddTextBlock.getInput('VALUE').connection.connect(oddText.outputConnection);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b2bfd527dcfde7',t:'MTc1NzIxMTg2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
