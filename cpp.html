@@ -17,6 +17,19 @@
                 height: calc(100vh - 80px);
             }
         }
+        
+        /* Ensure trash icon is visible on mobile */
+        .blocklyTrash {
+            display: block !important;
+        }
+        
+        /* Make trash icon larger on mobile */
+        @media (max-width: 640px) {
+            .blocklyTrash {
+                width: 60px !important;
+                height: 60px !important;
+            }
+        }
         .code-output {
             font-family: 'Courier New', monospace;
         }
@@ -961,15 +974,15 @@
                 // First block - center it
                 block.moveBy(100, 100);
             } else {
-                // Find the bottom-most block position
+                // Find the bottom-most block position more accurately
                 let maxY = 0;
                 let maxX = 100;
                 
                 for (let existingBlock of existingBlocks) {
                     if (existingBlock !== block) {
                         const pos = existingBlock.getRelativeToSurfaceXY();
-                        const height = existingBlock.getHeightWidth().height;
-                        const bottomY = pos.y + height;
+                        const size = existingBlock.getHeightWidth();
+                        const bottomY = pos.y + size.height;
                         
                         if (bottomY > maxY) {
                             maxY = bottomY;
@@ -978,9 +991,22 @@
                     }
                 }
                 
-                // Position new block below the bottom-most block
-                const newY = maxY + 20; // 20px gap
+                // Position new block directly below the bottom-most block with proper spacing
+                const newY = maxY + 30; // Increased gap for better visibility
                 block.moveBy(maxX, newY);
+                
+                // Ensure block is visible by scrolling if needed
+                setTimeout(() => {
+                    const blockPos = block.getRelativeToSurfaceXY();
+                    const metrics = workspace.getMetrics();
+                    const viewHeight = metrics.viewHeight;
+                    const scrollY = metrics.viewTop;
+                    
+                    // If block is below visible area, scroll to show it
+                    if (blockPos.y > scrollY + viewHeight - 100) {
+                        workspace.scroll(0, blockPos.y - viewHeight + 200);
+                    }
+                }, 100);
             }
             
             return block;
@@ -1781,5 +1807,5 @@
             oddTextBlock.getInput('VALUE').connection.connect(oddText.outputConnection);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b0853af105fd96',t:'MTc1NzE4ODQ4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b28578f1839ccb',t:'MTc1NzIwOTQ3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
