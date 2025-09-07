@@ -146,6 +146,10 @@
                     <button id="quickTemplateBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-2 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center text-sm">
                         <span>⚡</span>
                     </button>
+                    <button id="fullscreenBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-2 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-sm">
+                        <span id="fullscreenIcon">🔳</span>
+                        <span class="hidden sm:inline" id="fullscreenText">Fullscreen</span>
+                    </button>
                     <button id="clearBtn" class="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-sm">
                         <span>🗑️</span>
                         <span class="hidden sm:inline">Clear</span>
@@ -2608,6 +2612,66 @@
             setTimeout(checkJSCPPStatus, 500);
         }
 
+        // Fullscreen functionality
+        let isFullscreen = false;
+        
+        function toggleFullscreen() {
+            const fullscreenIcon = document.getElementById('fullscreenIcon');
+            const fullscreenText = document.getElementById('fullscreenText');
+            
+            if (!isFullscreen) {
+                // Enter fullscreen
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+                
+                fullscreenIcon.textContent = '🔲';
+                fullscreenText.textContent = 'Exit Fullscreen';
+                isFullscreen = true;
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                
+                fullscreenIcon.textContent = '🔳';
+                fullscreenText.textContent = 'Fullscreen';
+                isFullscreen = false;
+            }
+        }
+        
+        // Listen for fullscreen changes (when user presses ESC or uses browser controls)
+        document.addEventListener('fullscreenchange', function() {
+            const fullscreenIcon = document.getElementById('fullscreenIcon');
+            const fullscreenText = document.getElementById('fullscreenText');
+            
+            if (!document.fullscreenElement) {
+                fullscreenIcon.textContent = '🔳';
+                fullscreenText.textContent = 'Fullscreen';
+                isFullscreen = false;
+            }
+        });
+        
+        // Handle webkit fullscreen change
+        document.addEventListener('webkitfullscreenchange', function() {
+            const fullscreenIcon = document.getElementById('fullscreenIcon');
+            const fullscreenText = document.getElementById('fullscreenText');
+            
+            if (!document.webkitFullscreenElement) {
+                fullscreenIcon.textContent = '🔳';
+                fullscreenText.textContent = 'Fullscreen';
+                isFullscreen = false;
+            }
+        });
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             initWorkspace();
@@ -2635,6 +2699,9 @@
             document.getElementById('quickTemplateBtn').addEventListener('click', function() {
                 document.getElementById('templateModal').classList.remove('hidden');
             });
+
+            // Fullscreen button
+            document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
 
             // Clear button
             document.getElementById('clearBtn').addEventListener('click', function() {
@@ -3004,5 +3071,5 @@
             oddTextBlock.getInput('VALUE').connection.connect(oddText.outputConnection);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b31354628d8802',t:'MTc1NzIxNTI4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b4576236d189bc',t:'MTc1NzIyODU1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
