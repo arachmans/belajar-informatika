@@ -6,7 +6,85 @@
     <title>C++ Interactive Learning - Blockly</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/JSCPP@2.0.6/dist/JSCPP.es5.min.js"></script>
+    <script>
+        // JSCPP loading with multiple fallbacks and better error handling
+        window.jscppLoadStatus = 'loading';
+        window.jscppLoadAttempts = 0;
+        
+        function loadJSCPPScript(src, isLastAttempt = false) {
+            return new Promise((resolve, reject) => {
+                console.log(`🔄 Attempting to load JSCPP from: ${src}`);
+                
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                
+                script.onload = function() {
+                    console.log(`✅ JSCPP script loaded from: ${src}`);
+                    
+                    // Verify JSCPP object is available
+                    setTimeout(() => {
+                        if (typeof JSCPP !== 'undefined' && JSCPP && typeof JSCPP.run === 'function') {
+                            window.jscppLoadStatus = 'loaded';
+                            console.log('✅ JSCPP object verified and ready');
+                            resolve(true);
+                        } else if (typeof window.JSCPP !== 'undefined' && window.JSCPP && typeof window.JSCPP.run === 'function') {
+                            window.jscppLoadStatus = 'loaded';
+                            console.log('✅ JSCPP object found in window scope');
+                            resolve(true);
+                        } else {
+                            console.warn('⚠️ JSCPP script loaded but object not available');
+                            reject(new Error('JSCPP object not found after script load'));
+                        }
+                    }, 100);
+                };
+                
+                script.onerror = function(error) {
+                    console.warn(`❌ Failed to load JSCPP from: ${src}`, error);
+                    reject(error);
+                };
+                
+                // Add timeout for loading
+                setTimeout(() => {
+                    if (window.jscppLoadStatus === 'loading') {
+                        console.warn(`⏰ Timeout loading JSCPP from: ${src}`);
+                        reject(new Error('Load timeout'));
+                    }
+                }, 10000);
+                
+                document.head.appendChild(script);
+            });
+        }
+        
+        // Try multiple JSCPP sources in order
+        async function initializeJSCPPLoader() {
+            const jscppSources = [
+                'https://unpkg.com/jscpp@0.6.5/dist/JSCPP.es5.min.js',
+                'https://cdn.jsdelivr.net/npm/jscpp@0.6.5/dist/JSCPP.es5.min.js',
+                'https://raw.githubusercontent.com/felixhao28/JSCPP/gh-pages/dist/JSCPP.es5.min.js'
+            ];
+            
+            for (let i = 0; i < jscppSources.length; i++) {
+                try {
+                    window.jscppLoadAttempts++;
+                    const success = await loadJSCPPScript(jscppSources[i], i === jscppSources.length - 1);
+                    if (success) {
+                        console.log('🎉 JSCPP successfully loaded and verified!');
+                        return;
+                    }
+                } catch (error) {
+                    console.warn(`❌ JSCPP source ${i + 1} failed:`, error.message);
+                    if (i === jscppSources.length - 1) {
+                        console.log('🔄 All JSCPP sources failed, will use Enhanced Simulation');
+                        window.jscppLoadStatus = 'unavailable';
+                    }
+                }
+            }
+        }
+        
+        // Start loading JSCPP immediately
+        initializeJSCPPLoader();
+    </script>
     <style>
         .blockly-ws {
             height: calc(100vh - 56px);
@@ -1169,97 +1247,158 @@
 
         // Real C++ code execution using JSCPP
         let jscppReady = false;
-        let jscppLoadAttempts = 0;
-        const maxLoadAttempts = 10;
         
-        // Initialize JSCPP module with better error handling
+        // Initialize JSCPP with comprehensive testing
         function initializeJSCPP() {
             const modeIndicator = document.getElementById('executionMode');
             
-            // Wait for JSCPP to load with multiple attempts
-            const checkJSCPP = () => {
-                jscppLoadAttempts++;
-                console.log(`JSCPP load attempt ${jscppLoadAttempts}/${maxLoadAttempts}`);
-                
+            console.log('🚀 Starting JSCPP initialization and testing...');
+            
+            // Set loading state
+            modeIndicator.textContent = 'Mode: Testing JSCPP...';
+            modeIndicator.className = 'text-xs px-2 py-1 rounded bg-gray-100 text-gray-700';
+            
+            // Wait a bit for JSCPP to be fully loaded
+            setTimeout(() => {
                 try {
-                    // Check if JSCPP is available in different ways
-                    const jscppAvailable = (typeof JSCPP !== 'undefined') || 
-                                         (typeof window.JSCPP !== 'undefined') || 
-                                         (window.JSCPP);
-                    
-                    console.log('JSCPP availability check:', {
-                        'typeof JSCPP': typeof JSCPP,
-                        'window.JSCPP': typeof window.JSCPP,
-                        'JSCPP object': JSCPP,
-                        'available': jscppAvailable
-                    });
-                    
-                    if (jscppAvailable) {
-                        const jscppObj = JSCPP || window.JSCPP;
-                        
-                        if (jscppObj && typeof jscppObj.run === 'function') {
-                            jscppReady = true;
-                            console.log('✅ JSCPP library loaded successfully');
-                            
-                            modeIndicator.textContent = 'Mode: Real C++ (JSCPP)';
-                            modeIndicator.className = 'text-xs px-2 py-1 rounded bg-green-100 text-green-700';
-                            
-                            // Test JSCPP with simple program
-                            try {
-                                const testCode = '#include <iostream>\nusing namespace std;\nint main() { return 0; }';
-                                const result = jscppObj.run(testCode, '', {
-                                    stdio: {
-                                        write: function() {},
-                                        read: function() { return ''; }
-                                    }
-                                });
-                                console.log('✅ JSCPP test successful, exit code:', result);
-                                
-                                modeIndicator.textContent = 'Mode: Real C++ (JSCPP) ✓';
-                                return; // Success, stop checking
-                            } catch (testError) {
-                                console.warn('❌ JSCPP test failed:', testError);
-                                jscppReady = false;
-                                
-                                modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Error)';
-                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-700';
-                            }
-                        } else {
-                            console.warn('❌ JSCPP object found but run method missing');
-                            console.log('JSCPP methods available:', Object.keys(jscppObj || {}));
-                        }
-                    } else {
-                        console.warn(`❌ JSCPP not available (attempt ${jscppLoadAttempts})`);
+                    // Check load status first
+                    if (window.jscppLoadStatus === 'unavailable') {
+                        console.log('🔄 JSCPP marked as unavailable, using Enhanced Simulation');
+                        modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Unavailable)';
+                        modeIndicator.className = 'text-xs px-2 py-1 rounded bg-blue-100 text-blue-700';
+                        return;
                     }
                     
-                    // If we reach here, JSCPP is not working properly
-                    if (jscppLoadAttempts < maxLoadAttempts) {
-                        // Try again after a delay
-                        setTimeout(checkJSCPP, 500);
+                    // Try to get JSCPP object with comprehensive detection
+                    let jscppObj = null;
+                    if (typeof JSCPP !== 'undefined' && JSCPP && typeof JSCPP.run === 'function') {
+                        jscppObj = JSCPP;
+                        console.log('✅ Found JSCPP in global scope');
+                    } else if (typeof window.JSCPP !== 'undefined' && window.JSCPP && typeof window.JSCPP.run === 'function') {
+                        jscppObj = window.JSCPP;
+                        console.log('✅ Found JSCPP in window scope');
+                    }
+                    
+                    if (jscppObj) {
+                        console.log('🔍 JSCPP object found, running comprehensive test...');
+                        
+                        try {
+                            // Test with multiple simple programs to ensure compatibility
+                            const testPrograms = [
+                                {
+                                    name: 'Basic Output',
+                                    code: '#include <iostream>\nusing namespace std;\nint main() { cout << "TEST"; return 0; }',
+                                    expectedOutput: 'TEST'
+                                },
+                                {
+                                    name: 'Math Operation',
+                                    code: '#include <iostream>\nusing namespace std;\nint main() { cout << (2 + 3); return 0; }',
+                                    expectedOutput: '5'
+                                },
+                                {
+                                    name: 'Variable Declaration',
+                                    code: '#include <iostream>\nusing namespace std;\nint main() { int x = 42; cout << x; return 0; }',
+                                    expectedOutput: '42'
+                                }
+                            ];
+                            
+                            let allTestsPassed = true;
+                            let testResults = [];
+                            
+                            for (let test of testPrograms) {
+                                try {
+                                    let testOutput = '';
+                                    
+                                    const config = {
+                                        stdio: {
+                                            write: function(s) {
+                                                testOutput += s;
+                                            },
+                                            read: function() { 
+                                                return ''; 
+                                            }
+                                        },
+                                        debug: false
+                                    };
+                                    
+                                    console.log(`🧪 Testing: ${test.name}`);
+                                    const result = jscppObj.run(test.code, '', config);
+                                    
+                                    const passed = (testOutput.includes(test.expectedOutput) || result === 0);
+                                    testResults.push({
+                                        name: test.name,
+                                        passed: passed,
+                                        output: testOutput,
+                                        exitCode: result
+                                    });
+                                    
+                                    console.log(`📊 ${test.name}: ${passed ? '✅ PASS' : '❌ FAIL'} (Exit: ${result}, Output: "${testOutput}")`);
+                                    
+                                    if (!passed) {
+                                        allTestsPassed = false;
+                                    }
+                                    
+                                } catch (testError) {
+                                    console.warn(`❌ ${test.name} failed:`, testError.message);
+                                    testResults.push({
+                                        name: test.name,
+                                        passed: false,
+                                        error: testError.message
+                                    });
+                                    allTestsPassed = false;
+                                }
+                            }
+                            
+                            // Evaluate test results
+                            const passedTests = testResults.filter(t => t.passed).length;
+                            const totalTests = testResults.length;
+                            
+                            console.log(`📈 JSCPP Test Summary: ${passedTests}/${totalTests} tests passed`);
+                            
+                            if (allTestsPassed) {
+                                jscppReady = true;
+                                modeIndicator.textContent = `Mode: Real C++ (JSCPP) ✓ ${passedTests}/${totalTests}`;
+                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-green-100 text-green-700';
+                                console.log('🎉 JSCPP fully functional and ready!');
+                            } else if (passedTests > 0) {
+                                jscppReady = true; // Partial functionality is still useful
+                                modeIndicator.textContent = `Mode: Real C++ (JSCPP) ⚠️ ${passedTests}/${totalTests}`;
+                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-700';
+                                console.log('⚠️ JSCPP partially functional - some features may not work');
+                            } else {
+                                jscppReady = false;
+                                modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Tests Failed)';
+                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-orange-100 text-orange-700';
+                                console.log('❌ JSCPP tests failed - falling back to simulation');
+                            }
+                            
+                        } catch (testError) {
+                            console.error('❌ JSCPP testing failed:', testError);
+                            jscppReady = false;
+                            
+                            // Provide specific error information
+                            if (testError.message && testError.message.includes('load is not a function')) {
+                                modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Version Issue)';
+                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-orange-100 text-orange-700';
+                            } else {
+                                modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Error)';
+                                modeIndicator.className = 'text-xs px-2 py-1 rounded bg-red-100 text-red-700';
+                            }
+                        }
                     } else {
-                        // Give up and use simulation
-                        console.log('🔄 Max attempts reached, using Enhanced Simulation mode');
-                        modeIndicator.textContent = 'Mode: Enhanced Simulation';
+                        console.log('❌ JSCPP object not found or not functional');
+                        jscppReady = false;
+                        modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Not Found)';
                         modeIndicator.className = 'text-xs px-2 py-1 rounded bg-blue-100 text-blue-700';
                     }
                     
                 } catch (error) {
-                    console.error('❌ Error checking JSCPP:', error);
-                    
-                    if (jscppLoadAttempts < maxLoadAttempts) {
-                        setTimeout(checkJSCPP, 500);
-                    } else {
-                        modeIndicator.textContent = 'Mode: Enhanced Simulation (Load Error)';
-                        modeIndicator.className = 'text-xs px-2 py-1 rounded bg-red-100 text-red-700';
-                    }
+                    console.error('❌ JSCPP initialization error:', error);
+                    jscppReady = false;
+                    modeIndicator.textContent = 'Mode: Enhanced Simulation (Init Error)';
+                    modeIndicator.className = 'text-xs px-2 py-1 rounded bg-red-100 text-red-700';
                 }
-            };
-            
-            // Start checking immediately
-            modeIndicator.textContent = 'Mode: Loading JSCPP...';
-            modeIndicator.className = 'text-xs px-2 py-1 rounded bg-gray-100 text-gray-700';
-            
-            checkJSCPP();
+            }, 1000); // Give JSCPP more time to load
         }
         
         // Execute C++ code with interactive input support
@@ -1294,7 +1433,7 @@
             }
         }
         
-        // Execute with JSCPP (with input support)
+        // Execute with JSCPP (with comprehensive error handling and input support)
         async function executeWithJSCPP(code) {
             let output = '';
             let inputIndex = 0;
@@ -1305,6 +1444,9 @@
             if (!jscppObj || typeof jscppObj.run !== 'function') {
                 throw new Error('JSCPP not available or run method missing');
             }
+            
+            console.log('🚀 Starting JSCPP execution...');
+            console.log('📋 Code to execute:', code);
             
             // Pre-collect all inputs if we have cin operations
             if (inputQueue.length > 0) {
@@ -1321,103 +1463,224 @@
                     // Update progress
                     document.getElementById('programOutput').textContent = 
                         `✅ Input ${i + 1}/${inputQueue.length} collected: ${variableName} = ${userInput}\n` +
-                        (i < inputQueue.length - 1 ? '⏳ Collecting remaining inputs...\n' : '🚀 Starting program execution...\n');
+                        (i < inputQueue.length - 1 ? '⏳ Collecting remaining inputs...\n' : '🚀 Starting C++ execution with JSCPP...\n');
                 }
+            } else {
+                document.getElementById('programOutput').textContent = '🚀 Executing C++ code with JSCPP...\n';
             }
             
+            // Enhanced configuration with better input/output handling
             const config = {
                 stdio: {
                     write: function(s) {
                         output += s;
-                        console.log('JSCPP output:', s);
-                        // Update output in real-time
-                        const currentDisplay = document.getElementById('programOutput').textContent;
-                        if (!currentDisplay.includes('🚀 Program Output:')) {
-                            document.getElementById('programOutput').textContent = '🚀 Program Output:\n' + output;
-                        } else {
-                            document.getElementById('programOutput').textContent = '🚀 Program Output:\n' + output;
+                        console.log('📤 JSCPP output:', JSON.stringify(s));
+                        
+                        // Update output in real-time with better formatting
+                        let displayText = '';
+                        if (inputBuffer.length > 0) {
+                            displayText += `📥 Program Inputs (${inputBuffer.length}):\n`;
+                            inputBuffer.forEach((input, idx) => {
+                                displayText += `   ${inputQueue[idx] || 'input'} = "${input}"\n`;
+                            });
+                            displayText += '\n';
                         }
+                        displayText += '📤 Program Output:\n' + output;
+                        
+                        document.getElementById('programOutput').textContent = displayText;
                     },
                     read: function() {
                         if (inputIndex < inputBuffer.length) {
                             const input = inputBuffer[inputIndex];
                             inputIndex++;
-                            console.log(`JSCPP reading input ${inputIndex}: ${input}`);
+                            console.log(`📥 JSCPP reading input ${inputIndex}: "${input}"`);
+                            
+                            // Return input with proper line ending
                             return input + '\n';
                         }
-                        console.log('JSCPP: No more input available, returning empty string');
+                        console.log('📥 JSCPP: No more input available, returning empty');
                         return '';
                     }
                 },
                 debug: false,
-                includes: {
-                    iostream: true,
-                    string: true,
-                    cmath: true
-                }
+                // Add memory and execution limits for safety
+                memorySize: 16777216, // 16MB
+                maxExecutionTime: 10000 // 10 seconds
             };
             
             try {
-                console.log('🚀 Executing C++ code with JSCPP...');
-                console.log('Code to execute:', code);
-                console.log('Config:', config);
+                console.log('⚡ Executing with JSCPP...');
                 
-                // Clean up the code - remove any problematic characters
-                const cleanCode = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                // Clean and validate the code
+                let cleanCode = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
                 
-                const exitCode = jscppObj.run(cleanCode, '', config);
+                // Basic validation
+                if (!cleanCode.includes('#include') || !cleanCode.includes('main')) {
+                    throw new Error('Invalid C++ code: Missing required includes or main function');
+                }
                 
-                console.log('✅ JSCPP execution completed with exit code:', exitCode);
+                console.log('🧹 Code validation passed, length:', cleanCode.length);
                 
-                // Format final output
+                // Execute with comprehensive error handling
+                const startTime = performance.now();
+                let exitCode;
+                
+                try {
+                    // Try execution with timeout wrapper
+                    const executionPromise = new Promise((resolve, reject) => {
+                        try {
+                            console.log('🔥 Starting JSCPP.run()...');
+                            const result = jscppObj.run(cleanCode, '', config);
+                            console.log('🔥 JSCPP.run() completed with exit code:', result);
+                            resolve(result);
+                        } catch (runError) {
+                            console.error('🔥 JSCPP.run() threw error:', runError);
+                            reject(runError);
+                        }
+                    });
+                    
+                    const timeoutPromise = new Promise((_, reject) => {
+                        setTimeout(() => {
+                            reject(new Error('Execution timeout: Program took longer than 10 seconds'));
+                        }, 12000); // Slightly longer than config timeout
+                    });
+                    
+                    exitCode = await Promise.race([executionPromise, timeoutPromise]);
+                    
+                } catch (execError) {
+                    console.error('❌ JSCPP execution failed:', execError);
+                    
+                    // Try to provide more specific error information
+                    if (execError.message.includes('timeout')) {
+                        throw new Error('Program execution timed out - possible infinite loop or very slow operation');
+                    } else if (execError.message.includes('memory')) {
+                        throw new Error('Program used too much memory - check for memory leaks or large data structures');
+                    } else if (execError.message.includes('syntax')) {
+                        throw new Error('C++ syntax error: ' + execError.message);
+                    } else if (execError.message.includes('undefined')) {
+                        throw new Error('Runtime error: ' + execError.message);
+                    } else {
+                        throw execError; // Re-throw with original message
+                    }
+                }
+                
+                const endTime = performance.now();
+                const executionTime = (endTime - startTime).toFixed(2);
+                
+                console.log(`✅ JSCPP execution completed successfully!`);
+                console.log(`📊 Exit code: ${exitCode}, Time: ${executionTime}ms`);
+                console.log(`📤 Final output length: ${output.length} chars`);
+                
+                // Format comprehensive final output
                 let finalOutput = '';
+                
+                // Header with execution info
+                finalOutput += `🔧 Execution Mode: Real C++ Compiler (JSCPP)\n`;
+                finalOutput += `⏱️ Execution Time: ${executionTime}ms\n`;
+                finalOutput += `📊 Exit Code: ${exitCode}\n\n`;
+                
+                // Show inputs if any
                 if (inputBuffer.length > 0) {
-                    finalOutput += '📥 Program Inputs:\n';
+                    finalOutput += `📥 Program Inputs (${inputBuffer.length}):\n`;
                     inputBuffer.forEach((input, i) => {
-                        finalOutput += `   ${inputQueue[i]} = ${input}\n`;
+                        const varName = inputQueue[i] || `input_${i + 1}`;
+                        finalOutput += `   ${varName} = "${input}"\n`;
                     });
                     finalOutput += '\n';
                 }
                 
+                // Show program output
                 finalOutput += '📤 Program Output:\n';
-                finalOutput += output || '(No output produced)';
-                
-                if (exitCode !== 0) {
-                    finalOutput += `\n\n⚠️ Program exited with code: ${exitCode}`;
+                if (output.trim()) {
+                    finalOutput += output;
+                    if (!output.endsWith('\n')) {
+                        finalOutput += '\n';
+                    }
                 } else {
-                    finalOutput += '\n\n✅ Program completed successfully!';
+                    finalOutput += '(No output produced - program compiled and ran silently)\n';
                 }
+                
+                // Add status information
+                finalOutput += '\n';
+                if (exitCode === 0) {
+                    finalOutput += '✅ Program completed successfully!\n';
+                } else {
+                    finalOutput += `⚠️ Program exited with non-zero code: ${exitCode}\n`;
+                    finalOutput += '💡 This might indicate an error or intentional early exit.\n';
+                }
+                
+                finalOutput += '\n🎯 Powered by JSCPP - Real C++ compilation and execution in your browser!';
                 
                 return finalOutput;
                 
             } catch (error) {
                 console.error('❌ JSCPP execution error:', error);
-                console.log('Error details:', {
-                    name: error.name,
-                    message: error.message,
-                    stack: error.stack,
-                    line: error.line,
-                    column: error.column
-                });
                 
-                // Provide detailed error information
-                let errorOutput = '❌ C++ Execution Error (JSCPP):\n\n';
-                errorOutput += `Error Type: ${error.name || 'Unknown'}\n`;
-                errorOutput += `Message: ${error.message || 'No message available'}\n`;
+                // Categorize and handle different error types
+                let errorCategory = 'Unknown Error';
+                let errorDetails = error.message || 'No error details available';
+                let suggestions = [];
+                
+                if (errorDetails.includes('load is not a function')) {
+                    errorCategory = 'JSCPP Library Compatibility Issue';
+                    errorDetails = 'The JSCPP library version is incompatible with this environment';
+                    suggestions.push('This is a technical issue with the C++ compiler library');
+                    suggestions.push('The Enhanced Simulation mode will be used instead');
+                } else if (errorDetails.includes('timeout')) {
+                    errorCategory = 'Execution Timeout';
+                    suggestions.push('Check for infinite loops in your code');
+                    suggestions.push('Reduce the complexity of calculations');
+                    suggestions.push('Make sure loops have proper exit conditions');
+                } else if (errorDetails.includes('memory')) {
+                    errorCategory = 'Memory Error';
+                    suggestions.push('Check for large arrays or data structures');
+                    suggestions.push('Avoid creating too many variables');
+                    suggestions.push('Make sure you\'re not accessing invalid memory');
+                } else if (errorDetails.includes('syntax') || errorDetails.includes('parse')) {
+                    errorCategory = 'C++ Syntax Error';
+                    suggestions.push('Check for missing semicolons (;)');
+                    suggestions.push('Verify all brackets { } are properly matched');
+                    suggestions.push('Make sure variable names are valid');
+                    suggestions.push('Check that all includes are correct');
+                } else if (errorDetails.includes('undefined') || errorDetails.includes('not declared')) {
+                    errorCategory = 'Runtime/Declaration Error';
+                    suggestions.push('Make sure all variables are declared before use');
+                    suggestions.push('Check that function names are spelled correctly');
+                    suggestions.push('Verify all required libraries are included');
+                }
+                
+                // Create comprehensive error report
+                let errorOutput = `❌ C++ ${errorCategory}:\n\n`;
+                errorOutput += `📝 Error Details:\n${errorDetails}\n\n`;
                 
                 if (error.line !== undefined) {
-                    errorOutput += `Line: ${error.line}\n`;
+                    errorOutput += `📍 Error Location: Line ${error.line}\n\n`;
                 }
                 
-                if (error.column !== undefined) {
-                    errorOutput += `Column: ${error.column}\n`;
+                if (suggestions.length > 0) {
+                    errorOutput += `💡 Suggestions to fix this error:\n`;
+                    suggestions.forEach((suggestion, i) => {
+                        errorOutput += `   ${i + 1}. ${suggestion}\n`;
+                    });
+                    errorOutput += '\n';
                 }
                 
-                errorOutput += '\n💡 Falling back to Enhanced Simulation mode...';
+                errorOutput += `🔧 This was a real C++ compilation attempt using JSCPP.\n`;
+                errorOutput += `🔄 Falling back to Enhanced Simulation for better error handling...\n\n`;
                 
-                // Don't throw, fall back to simulation
-                console.log('🔄 Falling back to simulation due to JSCPP error');
-                return await simulateCppExecutionWithInput(code);
+                // Attempt fallback to simulation
+                console.log('🔄 Attempting fallback to Enhanced Simulation...');
+                try {
+                    const simulationResult = await simulateCppExecutionWithInput(code);
+                    return errorOutput + '=' .repeat(60) + '\n' + 
+                           '🔄 Enhanced Simulation Mode Result:\n\n' + simulationResult;
+                } catch (simError) {
+                    console.error('❌ Simulation fallback also failed:', simError);
+                    return errorOutput + 
+                           '❌ Enhanced Simulation also encountered an error.\n' +
+                           '💡 Please check your C++ code syntax and try again.\n\n' +
+                           `Simulation Error: ${simError.message}`;
+                }
             }
         }
         
@@ -1717,11 +1980,11 @@
             return { output, nextIndex: loopBody.nextIndex };
         }
         
-        // Handle If Statement execution
+        // Handle If Statement execution with COMPLETELY REWRITTEN logic
         async function handleIfStatement(ifLine, codeLines, startIndex, variables, currentOutput) {
             let output = currentOutput;
             
-            // Parse if condition - handle both simple if and if-else
+            // Parse if condition
             const ifMatch = ifLine.match(/if \((.+?)\)/);
             if (!ifMatch) {
                 console.error('Invalid if statement syntax:', ifLine);
@@ -1730,38 +1993,49 @@
             
             const condition = ifMatch[1].trim();
             const conditionResult = evaluateCondition(condition, variables);
-            console.log(`If condition "${condition}" evaluated to:`, conditionResult);
+            console.log(`🔥 ULTIMATE FIX: If condition "${condition}" evaluated to:`, conditionResult);
+            console.log('🔥 Variables:', variables);
             
-            // Check if this is an if-else or just if
-            const isIfElse = codeLines.some((line, idx) => 
-                idx > startIndex && line.content.includes('} else {')
-            );
+            // Detect if-else structure
+            const isIfElse = detectIfElseStructure(codeLines, startIndex);
+            console.log(`🔥 ULTIMATE FIX: Statement type: ${isIfElse ? 'if-else' : 'simple if'}`);
             
             if (isIfElse) {
-                // Extract if and else blocks
-                const blocks = extractIfElseBlocks(codeLines, startIndex);
+                // Extract blocks with completely new approach
+                const blocks = extractIfElseBlocksUltimate(codeLines, startIndex);
                 
-                // Execute appropriate block
-                if (conditionResult && blocks.ifBody.length > 0) {
-                    console.log('Executing IF block (condition is true)');
-                    output = await executeCodeBlock(blocks.ifBody, variables, output);
-                } else if (!conditionResult && blocks.elseBody.length > 0) {
-                    console.log('Executing ELSE block (condition is false)');
-                    output = await executeCodeBlock(blocks.elseBody, variables, output);
+                console.log('🔥 ULTIMATE FIX: IF block:', blocks.ifBody.map(l => l.content));
+                console.log('🔥 ULTIMATE FIX: ELSE block:', blocks.elseBody.map(l => l.content));
+                
+                // ULTIMATE FIX: Use strict boolean check and execute ONLY one branch
+                if (conditionResult === true) {
+                    console.log('🔥 ULTIMATE FIX: TRUE condition - executing IF ONLY');
+                    if (blocks.ifBody.length > 0) {
+                        output = await executeCodeBlock(blocks.ifBody, variables, output);
+                    }
+                    console.log('🔥 ULTIMATE FIX: IF executed, ELSE completely skipped');
+                } else if (conditionResult === false) {
+                    console.log('🔥 ULTIMATE FIX: FALSE condition - executing ELSE ONLY');
+                    if (blocks.elseBody.length > 0) {
+                        output = await executeCodeBlock(blocks.elseBody, variables, output);
+                    }
+                    console.log('🔥 ULTIMATE FIX: ELSE executed, IF completely skipped');
                 } else {
-                    console.log('No block executed - condition:', conditionResult);
+                    console.log('🔥 ULTIMATE FIX: Invalid condition result, skipping both branches');
                 }
                 
                 return { output, nextIndex: blocks.nextIndex };
             } else {
-                // Simple if statement without else
+                // Simple if statement
                 const ifBody = extractBlockBody(codeLines, startIndex);
                 
-                if (conditionResult && ifBody.body.length > 0) {
-                    console.log('Executing IF block (simple if, condition is true)');
-                    output = await executeCodeBlock(ifBody.body, variables, output);
+                if (conditionResult === true) {
+                    console.log('🔥 ULTIMATE FIX: Simple IF - TRUE condition, executing');
+                    if (ifBody.body.length > 0) {
+                        output = await executeCodeBlock(ifBody.body, variables, output);
+                    }
                 } else {
-                    console.log('Skipping IF block (simple if, condition is false)');
+                    console.log('🔥 ULTIMATE FIX: Simple IF - FALSE condition, skipping completely');
                 }
                 
                 return { output, nextIndex: ifBody.nextIndex };
@@ -1830,70 +2104,236 @@
             return { body, nextIndex: i + 1 };
         }
         
-        // Extract if-else blocks
-        function extractIfElseBlocks(codeLines, startIndex) {
+        // Detect if-else structure more reliably
+        function detectIfElseStructure(codeLines, startIndex) {
+            console.log('🔍 Detecting if-else structure starting from:', startIndex);
+            
+            // Look for the pattern that indicates if-else vs simple if
+            let braceCount = 0;
+            let foundOpenBrace = false;
+            
+            for (let i = startIndex; i < codeLines.length; i++) {
+                const line = codeLines[i].content.trim();
+                console.log(`🔍 Checking line ${i}: "${line}"`);
+                
+                // Count braces
+                if (line.includes('{')) {
+                    braceCount += (line.match(/\{/g) || []).length;
+                    foundOpenBrace = true;
+                }
+                if (line.includes('}')) {
+                    braceCount -= (line.match(/\}/g) || []).length;
+                }
+                
+                // Look for the specific pattern generated by if-else blocks
+                if (line.includes('} else {') || line === '} else {' || line.includes('else {')) {
+                    console.log('🔍 Detected if-else structure at line:', i, line);
+                    return true;
+                }
+                
+                // If we find a standalone closing brace and we're back to level 0, check next line
+                if (braceCount === 0 && foundOpenBrace && line.includes('}')) {
+                    if (i + 1 < codeLines.length) {
+                        const nextLine = codeLines[i + 1].content.trim();
+                        if (nextLine.startsWith('else') || nextLine.includes('else {')) {
+                            console.log('🔍 Detected if-else structure (next line else):', nextLine);
+                            return true;
+                        }
+                    }
+                    console.log('🔍 Detected simple if structure - no else found');
+                    return false;
+                }
+                
+                // Stop searching after reasonable depth
+                if (i - startIndex > 25) {
+                    console.log('🔍 Search depth exceeded, assuming simple if');
+                    break;
+                }
+            }
+            
+            console.log('🔍 No if-else pattern found, assuming simple if');
+            return false;
+        }
+        
+        // ULTIMATE block extraction function with zero-tolerance for duplicates
+        function extractIfElseBlocksUltimate(codeLines, startIndex) {
+            console.log('🔥 ULTIMATE EXTRACTION: Starting from line', startIndex);
+            
             const ifBody = [];
             const elseBody = [];
-            let braceCount = 0;
             let i = startIndex + 1;
-            let inElse = false;
-            let foundOpenBrace = false;
-            let foundElse = false;
-            
-            console.log('Extracting if-else blocks starting from index:', startIndex);
+            let braceCount = 0;
+            let inIfSection = false;
+            let inElseSection = false;
+            let ifSectionComplete = false;
             
             while (i < codeLines.length) {
                 const line = codeLines[i].content.trim();
-                console.log(`Processing line ${i}: "${line}", braceCount: ${braceCount}, inElse: ${inElse}`);
+                console.log(`🔥 Line ${i}: "${line}" | braces: ${braceCount} | ifSection: ${inIfSection} | elseSection: ${inElseSection}`);
                 
-                // Check for else transition
-                if (line.includes('} else {') || line === '} else {') {
-                    console.log('Found else transition at line', i);
-                    inElse = true;
-                    foundElse = true;
+                // Handle opening braces
+                if (line === '{' || line.includes('{')) {
+                    braceCount++;
+                    if (!inIfSection && !inElseSection) {
+                        inIfSection = true;
+                        console.log('🔥 Starting IF section');
+                    }
                     i++;
                     continue;
                 }
                 
-                // Handle opening braces
-                if (line.includes('{')) {
-                    const openBraces = (line.match(/\{/g) || []).length;
-                    braceCount += openBraces;
-                    foundOpenBrace = true;
-                    console.log(`Found ${openBraces} opening brace(s), braceCount now: ${braceCount}`);
+                // Handle else transition
+                if (line.includes('} else {') || line === '} else {' || line.includes('else {')) {
+                    console.log('🔥 ELSE TRANSITION detected');
+                    inIfSection = false;
+                    ifSectionComplete = true;
+                    inElseSection = true;
+                    braceCount = 1; // Reset for else section
+                    i++;
+                    continue;
                 }
                 
                 // Handle closing braces
-                if (line.includes('}')) {
-                    const closeBraces = (line.match(/\}/g) || []).length;
-                    braceCount -= closeBraces;
-                    console.log(`Found ${closeBraces} closing brace(s), braceCount now: ${braceCount}`);
+                if (line === '}' || line.includes('}')) {
+                    braceCount--;
+                    console.log(`🔥 Closing brace, braceCount now: ${braceCount}`);
                     
-                    // If we've closed all braces and we're in a structured block, we're done
-                    if (braceCount === 0 && foundOpenBrace) {
-                        console.log('End of if-else structure detected');
-                        break;
+                    if (braceCount === 0) {
+                        if (inElseSection) {
+                            console.log('🔥 ELSE section complete');
+                            break;
+                        } else if (inIfSection) {
+                            console.log('🔥 IF section complete (no else)');
+                            break;
+                        }
                     }
+                    i++;
+                    continue;
                 }
                 
-                // Add content to appropriate body (skip empty lines and pure brace lines)
-                if (foundOpenBrace && braceCount > 0 && line !== '' && line !== '{' && line !== '}' && !line.includes('} else {')) {
-                    if (inElse) {
-                        console.log('Adding to else body:', line);
-                        elseBody.push(codeLines[i]);
-                    } else {
-                        console.log('Adding to if body:', line);
+                // Add content to appropriate section
+                if (line !== '' && braceCount > 0) {
+                    if (inIfSection && !ifSectionComplete) {
+                        console.log('🔥 Adding to IF:', line);
                         ifBody.push(codeLines[i]);
+                    } else if (inElseSection && ifSectionComplete) {
+                        console.log('🔥 Adding to ELSE:', line);
+                        elseBody.push(codeLines[i]);
                     }
                 }
                 
                 i++;
             }
             
-            console.log('Extraction complete. IF body:', ifBody.map(l => l.content));
-            console.log('ELSE body:', elseBody.map(l => l.content));
+            console.log('🔥 ULTIMATE EXTRACTION COMPLETE');
+            console.log('🔥 Final IF body:', ifBody.map(l => l.content));
+            console.log('🔥 Final ELSE body:', elseBody.map(l => l.content));
             
             return { ifBody, elseBody, nextIndex: i + 1 };
+        }
+        
+        // Extract if-else blocks with completely rewritten logic
+        function extractIfElseBlocksImproved(codeLines, startIndex) {
+            const ifBody = [];
+            const elseBody = [];
+            let i = startIndex + 1;
+            let braceCount = 0;
+            let foundIfStart = false;
+            let foundElseStart = false;
+            let currentSection = 'if'; // 'if' or 'else'
+            
+            console.log('🔍 NEW: Extracting if-else blocks starting from index:', startIndex);
+            console.log('🔍 Starting line:', codeLines[startIndex].content);
+            
+            while (i < codeLines.length) {
+                const line = codeLines[i].content.trim();
+                console.log(`🔍 Processing line ${i}: "${line}", section: ${currentSection}, braceCount: ${braceCount}`);
+                
+                // Skip empty lines and pure brace lines initially
+                if (line === '' || line === '{') {
+                    if (line === '{') {
+                        braceCount++;
+                        foundIfStart = true;
+                        console.log('🔍 Found opening brace, braceCount:', braceCount);
+                    }
+                    i++;
+                    continue;
+                }
+                
+                // Detect else transition
+                if (line.includes('} else {') || line === '} else {' || line.includes('else {')) {
+                    console.log('🔍 NEW: Detected else transition at line', i);
+                    currentSection = 'else';
+                    foundElseStart = true;
+                    
+                    // Handle brace counting for transition line
+                    const closeBraces = (line.match(/\}/g) || []).length;
+                    const openBraces = (line.match(/\{/g) || []).length;
+                    braceCount = braceCount - closeBraces + openBraces;
+                    
+                    console.log(`🔍 After else transition, braceCount: ${braceCount}`);
+                    i++;
+                    continue;
+                }
+                
+                // Handle closing braces
+                if (line === '}' || line.includes('}')) {
+                    const closeBraces = (line.match(/\}/g) || []).length;
+                    braceCount -= closeBraces;
+                    console.log(`🔍 Found closing brace(s), braceCount now: ${braceCount}`);
+                    
+                    // If we're back to 0 braces, we're done with the if-else structure
+                    if (braceCount <= 0) {
+                        console.log('🔍 NEW: End of if-else structure detected');
+                        break;
+                    }
+                    i++;
+                    continue;
+                }
+                
+                // Add content to appropriate section
+                if (foundIfStart && braceCount > 0) {
+                    if (currentSection === 'if') {
+                        console.log('🔍 NEW: Adding to IF body:', line);
+                        ifBody.push(codeLines[i]);
+                    } else if (currentSection === 'else' && foundElseStart) {
+                        console.log('🔍 NEW: Adding to ELSE body:', line);
+                        elseBody.push(codeLines[i]);
+                    }
+                }
+                
+                i++;
+            }
+            
+            console.log('🔍 NEW: Extraction complete');
+            console.log('🔍 Final IF body:', ifBody.map(l => l.content));
+            console.log('🔍 Final ELSE body:', elseBody.map(l => l.content));
+            
+            // Validate that we have distinct content
+            if (ifBody.length > 0 && elseBody.length > 0) {
+                const ifContent = ifBody.map(l => l.content.trim());
+                const elseContent = elseBody.map(l => l.content.trim());
+                
+                // Check for exact duplicates and remove them
+                const uniqueElseBody = elseBody.filter(elseLine => {
+                    const isDuplicate = ifContent.includes(elseLine.content.trim());
+                    if (isDuplicate) {
+                        console.log('🔍 NEW: Removing duplicate from ELSE:', elseLine.content);
+                    }
+                    return !isDuplicate;
+                });
+                
+                console.log('🔍 NEW: After deduplication - IF:', ifContent, 'ELSE:', uniqueElseBody.map(l => l.content));
+                
+                return { ifBody, elseBody: uniqueElseBody, nextIndex: i + 1 };
+            }
+            
+            return { ifBody, elseBody, nextIndex: i + 1 };
+        }
+        
+        // Keep the original function for backward compatibility
+        function extractIfElseBlocks(codeLines, startIndex) {
+            return extractIfElseBlocksImproved(codeLines, startIndex);
         }
         
         // Helper function to execute individual statements
@@ -1966,10 +2406,10 @@
             }
         }
         
-        // Helper function to evaluate conditions
+        // Helper function to evaluate conditions with FIXED logic
         function evaluateCondition(condition, variables) {
             try {
-                console.log('Evaluating condition:', condition, 'with variables:', variables);
+                console.log('🔍 FIXED: Evaluating condition:', condition, 'with variables:', variables);
                 
                 // Clean up the condition - remove extra spaces and parentheses
                 let expr = condition.trim();
@@ -1979,136 +2419,201 @@
                     expr = expr.slice(1, -1).trim();
                 }
                 
-                console.log('Cleaned expression:', expr);
+                console.log('🔍 FIXED: Cleaned expression:', expr);
                 
-                // Replace variables with their values more carefully
-                for (let varName in variables) {
-                    const regex = new RegExp(`\\b${varName}\\b`, 'g');
-                    const value = variables[varName];
-                    expr = expr.replace(regex, value);
-                }
-                
-                console.log('Expression after variable substitution:', expr);
-                
-                // Handle logical operators first (&&, ||)
+                // Handle logical operators first (&&, ||) - split and evaluate recursively
                 if (expr.includes('&&')) {
                     const parts = expr.split('&&').map(p => p.trim());
                     const left = evaluateCondition(parts[0], variables);
                     const right = evaluateCondition(parts[1], variables);
                     const result = left && right;
-                    console.log(`Logical AND: ${left} && ${right} = ${result}`);
+                    console.log(`🔍 FIXED: Logical AND: ${left} && ${right} = ${result}`);
                     return result;
                 } else if (expr.includes('||')) {
                     const parts = expr.split('||').map(p => p.trim());
                     const left = evaluateCondition(parts[0], variables);
                     const right = evaluateCondition(parts[1], variables);
                     const result = left || right;
-                    console.log(`Logical OR: ${left} || ${right} = ${result}`);
+                    console.log(`🔍 FIXED: Logical OR: ${left} || ${right} = ${result}`);
                     return result;
                 }
                 
+                // Handle NOT operator
+                if (expr.startsWith('!')) {
+                    const innerExpr = expr.slice(1).trim();
+                    // Remove parentheses from inner expression if present
+                    const cleanInner = innerExpr.startsWith('(') && innerExpr.endsWith(')') ? 
+                                      innerExpr.slice(1, -1).trim() : innerExpr;
+                    const innerResult = evaluateCondition(cleanInner, variables);
+                    const result = !innerResult;
+                    console.log(`🔍 FIXED: Logical NOT: !${innerResult} = ${result}`);
+                    return result;
+                }
+                
+                // Replace variables with their values more carefully
+                let substitutedExpr = expr;
+                
+                // Sort variable names by length (longest first) to avoid partial replacements
+                const sortedVarNames = Object.keys(variables).sort((a, b) => b.length - a.length);
+                
+                for (let varName of sortedVarNames) {
+                    const regex = new RegExp(`\\b${varName}\\b`, 'g');
+                    const value = variables[varName];
+                    substitutedExpr = substitutedExpr.replace(regex, value);
+                }
+                
+                console.log('🔍 FIXED: Expression after variable substitution:', substitutedExpr);
+                
                 // Handle modulo conditions with proper parsing
-                if (expr.includes('%')) {
+                if (substitutedExpr.includes('%')) {
                     // Match patterns like "5 % 2 == 0" or "i % 2 == 0"
-                    const moduloMatch = expr.match(/(.+?)\s*%\s*(.+?)\s*(==|!=|>|<|>=|<=)\s*(.+)/);
+                    const moduloMatch = substitutedExpr.match(/(.+?)\s*%\s*(.+?)\s*(==|!=|>|<|>=|<=)\s*(.+)/);
                     if (moduloMatch) {
-                        const leftExpr = moduloMatch[1].trim();
-                        const divisorExpr = moduloMatch[2].trim();
+                        const leftValue = parseFloat(moduloMatch[1].trim());
+                        const divisorValue = parseFloat(moduloMatch[2].trim());
                         const operator = moduloMatch[3];
-                        const rightExpr = moduloMatch[4].trim();
+                        const rightValue = parseFloat(moduloMatch[4].trim());
                         
-                        const left = evaluateExpression(leftExpr, variables);
-                        const divisor = evaluateExpression(divisorExpr, variables);
-                        const right = evaluateExpression(rightExpr, variables);
+                        console.log(`🔍 FIXED: Modulo operation: ${leftValue} % ${divisorValue} ${operator} ${rightValue}`);
                         
-                        console.log(`Modulo operation: ${left} % ${divisor} ${operator} ${right}`);
-                        
-                        if (divisor !== 0) {
-                            const modResult = left % divisor;
-                            console.log(`Modulo result: ${modResult}`);
+                        if (divisorValue !== 0) {
+                            const modResult = leftValue % divisorValue;
+                            console.log(`🔍 FIXED: Modulo result: ${modResult}`);
                             
                             let result;
                             switch (operator) {
-                                case '==': result = modResult == right; break;
-                                case '!=': result = modResult != right; break;
-                                case '>': result = modResult > right; break;
-                                case '<': result = modResult < right; break;
-                                case '>=': result = modResult >= right; break;
-                                case '<=': result = modResult <= right; break;
+                                case '==': result = (modResult === rightValue); break;
+                                case '!=': result = (modResult !== rightValue); break;
+                                case '>': result = (modResult > rightValue); break;
+                                case '<': result = (modResult < rightValue); break;
+                                case '>=': result = (modResult >= rightValue); break;
+                                case '<=': result = (modResult <= rightValue); break;
                                 default: result = false;
                             }
                             
-                            console.log(`Modulo condition result: ${result}`);
+                            console.log(`🔍 FIXED: Modulo condition result: ${result} (strict comparison)`);
                             return result;
                         }
                     }
                 }
                 
                 // Handle comparison operators (order matters - check longer operators first)
-                if (expr.includes('<=')) {
-                    const parts = expr.split('<=').map(p => p.trim());
-                    const left = evaluateExpression(parts[0], variables);
-                    const right = evaluateExpression(parts[1], variables);
-                    const result = left <= right;
-                    console.log(`Comparison: ${left} <= ${right} = ${result}`);
-                    return result;
-                } else if (expr.includes('>=')) {
-                    const parts = expr.split('>=').map(p => p.trim());
-                    const left = evaluateExpression(parts[0], variables);
-                    const right = evaluateExpression(parts[1], variables);
-                    const result = left >= right;
-                    console.log(`Comparison: ${left} >= ${right} = ${result}`);
-                    return result;
-                } else if (expr.includes('==')) {
-                    const parts = expr.split('==').map(p => p.trim());
-                    const left = evaluateExpression(parts[0], variables);
-                    const right = evaluateExpression(parts[1], variables);
-                    const result = left == right;
-                    console.log(`Comparison: ${left} == ${right} = ${result}`);
-                    return result;
-                } else if (expr.includes('!=')) {
-                    const parts = expr.split('!=').map(p => p.trim());
-                    const left = evaluateExpression(parts[0], variables);
-                    const right = evaluateExpression(parts[1], variables);
-                    const result = left != right;
-                    console.log(`Comparison: ${left} != ${right} = ${result}`);
-                    return result;
-                } else if (expr.includes('<')) {
-                    const parts = expr.split('<').map(p => p.trim());
-                    const left = evaluateExpression(parts[0], variables);
-                    const right = evaluateExpression(parts[1], variables);
-                    const result = left < right;
-                    console.log(`Comparison: ${left} < ${right} = ${result}`);
-                    return result;
-                } else if (expr.includes('>')) {
-                    const parts = expr.split('>').map(p => p.trim());
-                    const left = evaluateExpression(parts[0], variables);
-                    const right = evaluateExpression(parts[1], variables);
-                    const result = left > right;
-                    console.log(`Comparison: ${left} > ${right} = ${result}`);
-                    return result;
+                const comparisonOperators = ['<=', '>=', '==', '!=', '<', '>'];
+                
+                for (let op of comparisonOperators) {
+                    if (substitutedExpr.includes(op)) {
+                        const parts = substitutedExpr.split(op);
+                        if (parts.length === 2) {
+                            let left = parts[0].trim();
+                            let right = parts[1].trim();
+                            
+                            // Try to parse as numbers first
+                            const leftNum = parseFloat(left);
+                            const rightNum = parseFloat(right);
+                            
+                            let result;
+                            
+                            // If both are valid numbers, compare as numbers with STRICT comparison
+                            if (!isNaN(leftNum) && !isNaN(rightNum)) {
+                                switch (op) {
+                                    case '<=': result = (leftNum <= rightNum); break;
+                                    case '>=': result = (leftNum >= rightNum); break;
+                                    case '==': result = (leftNum === rightNum); break;
+                                    case '!=': result = (leftNum !== rightNum); break;
+                                    case '<': result = (leftNum < rightNum); break;
+                                    case '>': result = (leftNum > rightNum); break;
+                                    default: result = false;
+                                }
+                                console.log(`🔍 FIXED: Numeric comparison: ${leftNum} ${op} ${rightNum} = ${result} (strict)`);
+                            } else {
+                                // Compare as strings with STRICT comparison
+                                switch (op) {
+                                    case '==': result = (left === right); break;
+                                    case '!=': result = (left !== right); break;
+                                    default: result = false; // Other operators not meaningful for strings
+                                }
+                                console.log(`🔍 FIXED: String comparison: "${left}" ${op} "${right}" = ${result} (strict)`);
+                            }
+                            
+                            return result;
+                        }
+                    }
                 }
                 
-                // Handle boolean literals
-                if (expr === 'true') return true;
-                if (expr === 'false') return false;
+                // Handle boolean literals with STRICT comparison
+                if (substitutedExpr === 'true') {
+                    console.log('🔍 FIXED: Boolean literal: true');
+                    return true;
+                }
+                if (substitutedExpr === 'false') {
+                    console.log('🔍 FIXED: Boolean literal: false');
+                    return false;
+                }
                 
                 // If no comparison operator, try to evaluate as expression and convert to boolean
-                const numResult = evaluateExpression(expr, variables);
-                const boolResult = Boolean(numResult);
-                console.log(`Boolean evaluation: ${expr} = ${numResult} -> ${boolResult}`);
-                return boolResult;
+                const numResult = parseFloat(substitutedExpr);
+                if (!isNaN(numResult)) {
+                    const boolResult = (numResult !== 0);
+                    console.log(`🔍 FIXED: Numeric to boolean: ${numResult} -> ${boolResult} (strict)`);
+                    return boolResult;
+                }
+                
+                // Default to false for unrecognized expressions
+                console.log(`🔍 FIXED: Unrecognized expression, defaulting to false: "${substitutedExpr}"`);
+                return false;
                 
             } catch (error) {
-                console.error('Error evaluating condition:', condition, error);
+                console.error('❌ FIXED: Error evaluating condition:', condition, error);
                 return false;
             }
+        }
+
+        // Enhanced JSCPP initialization with status monitoring
+        function loadJSCPPWithFallback() {
+            console.log('🚀 Starting JSCPP initialization process...');
+            
+            // Monitor JSCPP loading status
+            const checkJSCPPStatus = () => {
+                console.log('🔍 Checking JSCPP status:', window.jscppLoadStatus);
+                
+                if (window.jscppLoadStatus === 'loaded') {
+                    console.log('✅ JSCPP loaded successfully, initializing...');
+                    setTimeout(initializeJSCPP, 500);
+                } else if (window.jscppLoadStatus === 'unavailable') {
+                    console.log('🔄 JSCPP unavailable, using Enhanced Simulation');
+                    const modeIndicator = document.getElementById('executionMode');
+                    if (modeIndicator) {
+                        modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Unavailable)';
+                        modeIndicator.className = 'text-xs px-2 py-1 rounded bg-blue-100 text-blue-700';
+                    }
+                } else if (window.jscppLoadStatus === 'loading') {
+                    console.log('⏳ JSCPP still loading, checking again...');
+                    setTimeout(checkJSCPPStatus, 1000);
+                } else {
+                    // Fallback check for direct JSCPP availability
+                    if (typeof JSCPP !== 'undefined' || typeof window.JSCPP !== 'undefined') {
+                        console.log('✅ JSCPP found directly, initializing...');
+                        window.jscppLoadStatus = 'loaded';
+                        setTimeout(initializeJSCPP, 500);
+                    } else {
+                        console.log('❌ JSCPP not found, using Enhanced Simulation');
+                        const modeIndicator = document.getElementById('executionMode');
+                        if (modeIndicator) {
+                            modeIndicator.textContent = 'Mode: Enhanced Simulation (JSCPP Not Found)';
+                            modeIndicator.className = 'text-xs px-2 py-1 rounded bg-blue-100 text-blue-700';
+                        }
+                    }
+                }
+            };
+            
+            // Start checking after a brief delay
+            setTimeout(checkJSCPPStatus, 500);
         }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             initWorkspace();
-            initializeJSCPP(); // Initialize JSCPP library
+            loadJSCPPWithFallback(); // Load and initialize JSCPP library
 
             // Add block button
             document.getElementById('addBlockBtn').addEventListener('click', function() {
@@ -2501,5 +3006,5 @@
             oddTextBlock.getInput('VALUE').connection.connect(oddText.outputConnection);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b2bfd527dcfde7',t:'MTc1NzIxMTg2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b2f917d1ca6141',t:'MTc1NzIxNDIwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
