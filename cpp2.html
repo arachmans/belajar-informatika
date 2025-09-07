@@ -59,9 +59,9 @@
         // Try multiple JSCPP sources in order
         async function initializeJSCPPLoader() {
             const jscppSources = [
+                'https://cdn.jsdelivr.net/gh/felixhao28/JSCPP@gh-pages/dist/JSCPP.es5.min.js',
                 'https://unpkg.com/jscpp@0.6.5/dist/JSCPP.es5.min.js',
-                'https://cdn.jsdelivr.net/npm/jscpp@0.6.5/dist/JSCPP.es5.min.js',
-                'https://raw.githubusercontent.com/felixhao28/JSCPP/gh-pages/dist/JSCPP.es5.min.js'
+                'https://cdn.jsdelivr.net/npm/jscpp@0.6.5/dist/JSCPP.es5.min.js'
             ];
             
             for (let i = 0; i < jscppSources.length; i++) {
@@ -1438,6 +1438,7 @@
             let output = '';
             let inputIndex = 0;
             let inputBuffer = [];
+            let inputString = '';
             
             // Get the correct JSCPP object
             const jscppObj = JSCPP || window.JSCPP;
@@ -1458,13 +1459,19 @@
                         `Input ${i + 1} dari ${inputQueue.length} - Variabel "${variableName}":`,
                         variableName
                     );
-                    inputBuffer.push(userInput.trim());
+                    const cleanInput = userInput.trim();
+                    inputBuffer.push(cleanInput);
+                    
+                    // Build input string for JSCPP - each input on separate line
+                    inputString += cleanInput + '\n';
                     
                     // Update progress
                     document.getElementById('programOutput').textContent = 
-                        `✅ Input ${i + 1}/${inputQueue.length} collected: ${variableName} = ${userInput}\n` +
+                        `✅ Input ${i + 1}/${inputQueue.length} collected: ${variableName} = ${cleanInput}\n` +
                         (i < inputQueue.length - 1 ? '⏳ Collecting remaining inputs...\n' : '🚀 Starting C++ execution with JSCPP...\n');
                 }
+                
+                console.log('📥 Complete input string for JSCPP:', JSON.stringify(inputString));
             } else {
                 document.getElementById('programOutput').textContent = '🚀 Executing C++ code with JSCPP...\n';
             }
@@ -1488,18 +1495,6 @@
                         displayText += '📤 Program Output:\n' + output;
                         
                         document.getElementById('programOutput').textContent = displayText;
-                    },
-                    read: function() {
-                        if (inputIndex < inputBuffer.length) {
-                            const input = inputBuffer[inputIndex];
-                            inputIndex++;
-                            console.log(`📥 JSCPP reading input ${inputIndex}: "${input}"`);
-                            
-                            // Return input with proper line ending
-                            return input + '\n';
-                        }
-                        console.log('📥 JSCPP: No more input available, returning empty');
-                        return '';
                     }
                 },
                 debug: false,
@@ -1530,7 +1525,10 @@
                     const executionPromise = new Promise((resolve, reject) => {
                         try {
                             console.log('🔥 Starting JSCPP.run()...');
-                            const result = jscppObj.run(cleanCode, '', config);
+                            console.log('🔥 Input string being passed:', JSON.stringify(inputString));
+                            
+                            // Pass the input string as the second parameter to JSCPP.run()
+                            const result = jscppObj.run(cleanCode, inputString, config);
                             console.log('🔥 JSCPP.run() completed with exit code:', result);
                             resolve(result);
                         } catch (runError) {
@@ -3006,5 +3004,5 @@
             oddTextBlock.getInput('VALUE').connection.connect(oddText.outputConnection);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b2f917d1ca6141',t:'MTc1NzIxNDIwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b31354628d8802',t:'MTc1NzIxNTI4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
