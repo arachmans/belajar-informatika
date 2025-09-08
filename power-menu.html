@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 11 Power Menu Simulation</title>
+    <!-- Loading Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styles for font and animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease-in-out;
+            /* Mengatur gaya latar belakang untuk wallpaper gradasi */
+            background: linear-gradient(to bottom, #0078d4, #001C38);
+            background-size: cover;
+            background-position: center;
+        }
+        .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
+        .fade-out { animation: fadeOut 0.5s ease-in-out forwards; }
+        .zoom-in { animation: zoomIn 0.5s ease-in-out forwards; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Animasi spinner untuk logo Windows */
+        #spinner { border-top-color: transparent; }
+        
+        /* Animasi indikator tidur */
+        .sleep-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        /* Gaya taskbar tambahan */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="text-white flex flex-col items-center justify-center min-h-screen p-4" style="background: linear-gradient(to bottom, #0078d4, #001C38);">
+
+    <!-- Pintasan Desktop -->
+    <div id="desktop-shortcuts" class="absolute top-4 left-4 flex flex-col items-start space-y-4">
+        <!-- Pintasan This PC -->
+        <div onclick="showAppMessage('This PC')" class="flex flex-col items-center cursor-pointer hover:bg-white/10 p-2 rounded-md transition-all">
+            <!-- Ikon monitor baru -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h4l-1.5 3h11L16 18h4c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 13H6V5h12v11z"/>
+            </svg>
+            <span class="text-xs mt-1">This PC</span>
+        </div>
+
+        <!-- Pintasan Notepad -->
+        <div onclick="toggleNotepad()" class="flex flex-col items-center cursor-pointer hover:bg-white/10 p-2 rounded-md transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 19H5V5h14v14zM19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                <path d="M12 17H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+            <span class="text-xs mt-1">Notepad</span>
+        </div>
+    </div>
+    
+    <!-- Aplikasi Notepad (Konten Desktop) -->
+    <div id="notepad" class="absolute top-[10%] left-[40%] -translate-x-1/2 -translate-y-1/2 bg-gray-800/80 backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden p-1 w-full max-w-xs mx-auto my-auto hidden">
+        <!-- Bilah Judul Notepad -->
+        <div class="flex justify-between items-center bg-gray-700/80 text-white text-xs px-2 py-1 rounded-t-md">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2v20h16V2H4zm2 2h12v12h-12V4zm0 14h12v2H6v-2z"/></svg>
+                <span>untitled.txt</span>
+            </div>
+            <div class="flex items-center space-x-1">
+                <button class="w-6 h-6 hover:bg-white/10 flex items-center justify-center rounded-sm transition-all duration-200">-</button>
+                <button class="w-6 h-6 hover:bg-white/10 flex items-center justify-center rounded-sm transition-all duration-200">□</button>
+                <button onclick="toggleNotepad()" class="w-6 h-6 hover:bg-red-500 hover:text-white flex items-center justify-center rounded-sm transition-all duration-200">x</button>
+            </div>
+        </div>
+        <!-- Area Teks Notepad -->
+        <textarea id="notepad-textarea" class="w-full h-64 bg-transparent text-white p-2 focus:outline-none resize-none text-sm leading-relaxed" oninput="updateNotepadContent(this.value)"></textarea>
+    </div>
+    
+    <!-- Layar Proses Umum (Untuk pesan sementara) -->
+    <div id="process-screen" class="absolute inset-0 flex flex-col items-center justify-center hidden">
+        <!-- Mengganti ikon spinner dengan logo Windows SVG -->
+        <div id="windows-logo-container" class="w-16 h-16 zoom-in">
+            <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 3L11.5 2.25V11.25H2.5V3ZM12.5 2.25L21.5 3V11.25H12.5V2.25ZM12.5 12.25H21.5V21L12.5 21.75V12.25ZM11.5 12.25V21.75L2.5 21V12.25H11.5Z"/>
+            </svg>
+        </div>
+        <h2 id="process-title" class="text-4xl font-extrabold mb-3 text-white mt-8"></h2>
+        <p id="process-message" class="text-xl text-gray-300"></p>
+    </div>
+    
+    <!-- Layar Shutdown -->
+    <div id="shutdown-screen" class="absolute inset-0 flex items-center justify-center flex-col hidden">
+        <div class="flex flex-col items-center justify-center">
+            <h1 class="text-2xl font-bold text-gray-500 fade-in">Goodbye.</h1>
+            <button id="shutdown-power-btn" onclick="powerOn(3000)" class="mt-8 px-6 py-3 bg-white text-gray-800 font-bold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                Power On
+            </button>
+        </div>
+    </div>
+
+    <!-- Layar Login (untuk Log Off) -->
+    <div id="login-screen" class="absolute inset-0 flex items-center justify-center flex-col hidden">
+        <div class="w-full max-w-sm text-center">
+            <img src="https://placehold.co/128x128/7e22ce/ffffff?text=AB" alt="User Avatar" class="mx-auto rounded-full mb-4 border-4 border-gray-600">
+            <h3 class="text-2xl font-bold">Welcome Back!</h3>
+            <p class="text-gray-400 mb-6">Please sign in to continue</p>
+            <div class="bg-gray-800 p-2 rounded-lg flex items-center">
+                <input type="password" value="********" readonly class="bg-transparent w-full p-2 focus:outline-none" />
+                <button class="bg-blue-600 text-white p-2 rounded-md ml-2">➔</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Layar Tidur (Status khusus) -->
+    <div id="sleep-screen" class="absolute inset-0 flex flex-col items-center justify-center hidden bg-black">
+        <div class="sleep-indicator"></div>
+    </div>
+
+    <!-- Menu Mulai (Awalnya tersembunyi) -->
+    <div id="start-menu" class="fixed hidden bottom-16 left-1/2 -translate-x-1/2 p-2 bg-gray-800/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700 w-full max-w-xs origin-bottom">
+        <!-- Profil Pengguna di dalam menu Mulai -->
+        <div class="flex items-center space-x-3 p-3 mb-2">
+            <img src="https://placehold.co/40x40/7e22ce/ffffff?text=AB" alt="User Avatar" class="rounded-full">
+            <span class="font-bold text-sm">AB-Creative</span>
+        </div>
+        
+        <!-- Opsi Daya (Awalnya tersembunyi) -->
+        <div id="power-options" class="hidden space-y-3 p-2 rounded-lg bg-gray-700/50 my-2">
+            <button onclick="runSimulation('shutdown')" class="w-full flex items-center justify-start space-x-3 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                <span>Shutdown</span>
+            </button>
+            <button onclick="runSimulation('restart')" class="w-full flex items-center justify-start space-x-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 4l5 5M20 20l-5-5" /></svg>
+                <span>Restart</span>
+            </button>
+            <button onclick="runSimulation('sleep')" class="w-full flex items-center justify-start space-x-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                <span>Sleep</span>
+            </button>
+            <button onclick="runSimulation('hibernate')" class="w-full flex items-center justify-start space-x-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-6h2v-2h-2v2z" /></svg>
+                <span>Hibernate</span>
+            </button>
+            <button onclick="runSimulation('logoff')" class="w-full flex items-center justify-start space-x-3 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
+                <span>Log Off</span>
+            </button>
+        </div>
+        
+        <!-- Tombol Power untuk membuka opsi daya -->
+        <button onclick="togglePowerOptions()" class="w-full flex items-center justify-between p-2 rounded-lg transition-all duration-200 hover:bg-white/10">
+            <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <span class="text-sm">Power Options</span>
+            </div>
+            <svg id="power-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+    </div>
+
+    <!-- Taskbar (Selalu terlihat) -->
+    <div id="taskbar" class="taskbar flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800/50 backdrop-blur-xl shadow-lg border-t border-gray-700">
+        <button onclick="toggleStartMenu()" class="p-2 rounded-lg hover:bg-white/20 transition-all duration-200">
+            <svg class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 3L11.5 2.25V11.25H2.5V3ZM12.5 2.25L21.5 3V11.25H12.5V2.25ZM12.5 12.25H21.5V21L12.5 21.75V12.25ZM11.5 12.25V21.75L2.5 21V12.25H11.5Z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- JavaScript untuk Simulasi -->
+    <script>
+        // Mendapatkan elemen-elemen DOM
+        let startMenu;
+        let powerOptions;
+        let powerIcon;
+        let processScreen;
+        let processTitle;
+        let processMessage;
+        let loginScreen;
+        let sleepScreen;
+        let shutdownScreen;
+        let desktopShortcuts;
+        let notepad;
+        let taskbar; 
+        let windowsLogoContainer;
+        const body = document.body;
+        
+        // Wallpaper gradasi
+        const gradientBackground = 'linear-gradient(to bottom, #0078d4, #001C38)';
+        
+        const initialNotepadContent = `Selamat datang di Notepad.
+Silakan tulis apa pun yang Anda inginkan.
+Ini adalah simulasi menu power Windows 11.
+`;
+        
+        // Objek untuk melacak status Notepad
+        let notepadState = {
+            isOpen: false,
+            content: initialNotepadContent
+        };
+
+        // Fungsi untuk menginisialisasi ulang variabel DOM
+        function initializeDOM() {
+            startMenu = document.getElementById('start-menu');
+            powerOptions = document.getElementById('power-options');
+            powerIcon = document.getElementById('power-icon');
+            processScreen = document.getElementById('process-screen');
+            processTitle = document.getElementById('process-title');
+            processMessage = document.getElementById('process-message');
+            loginScreen = document.getElementById('login-screen');
+            sleepScreen = document.getElementById('sleep-screen');
+            shutdownScreen = document.getElementById('shutdown-screen');
+            desktopShortcuts = document.getElementById('desktop-shortcuts');
+            notepad = document.getElementById('notepad');
+            taskbar = document.getElementById('taskbar');
+            windowsLogoContainer = document.getElementById('windows-logo-container');
+            
+            // Mengatur konten awal textarea
+            document.getElementById('notepad-textarea').value = notepadState.content;
+        }
+
+        window.onload = function() {
+            initializeDOM();
+            // Semua layar simulasi disembunyikan kecuali desktop dan taskbar pada saat awal
+            processScreen.classList.add('hidden');
+            loginScreen.classList.add('hidden');
+            sleepScreen.classList.add('hidden');
+            shutdownScreen.classList.add('hidden');
+            notepad.classList.add('hidden'); // Sembunyikan notepad di awal
+        };
+        
+        // Fungsi untuk menyimpan perubahan konten Notepad
+        function updateNotepadContent(content) {
+            notepadState.content = content;
+        }
+        
+        // Fungsi untuk mengaktifkan/menonaktifkan aplikasi Notepad
+        function toggleNotepad() {
+            if (notepad.classList.contains('hidden')) {
+                notepad.classList.remove('hidden');
+                notepad.classList.add('fade-in');
+                notepadState.isOpen = true;
+            } else {
+                notepad.classList.add('hidden');
+                notepad.classList.remove('fade-in');
+                notepadState.isOpen = false;
+            }
+        }
+        
+        // Fungsi untuk menampilkan pesan sementara di layar
+        function showAppMessage(appName) {
+            // Sembunyikan desktop dan taskbar sementara
+            desktopShortcuts.classList.add('hidden');
+            notepad.classList.add('hidden');
+            taskbar.classList.add('hidden');
+            
+            // Tampilkan layar proses dengan pesan
+            processScreen.classList.remove('hidden');
+            windowsLogoContainer.classList.add('hidden');
+            processTitle.innerText = appName;
+            processMessage.innerText = `Aplikasi ${appName} tidak berfungsi dalam simulasi ini.`;
+            
+            // Kembali ke desktop setelah 2 detik
+            setTimeout(() => {
+                resetToDesktop();
+            }, 2000);
+        }
+
+        // Fungsi untuk mengembalikan antarmuka ke keadaan desktop
+        function resetToDesktop() {
+            // Sembunyikan semua layar simulasi
+            processScreen.classList.add('hidden');
+            loginScreen.classList.add('hidden');
+            sleepScreen.classList.add('hidden');
+            shutdownScreen.classList.add('hidden');
+            
+            // Tampilkan kembali elemen desktop
+            desktopShortcuts.classList.remove('hidden');
+            taskbar.classList.remove('hidden');
+            
+            // Tambahkan animasi fade-in
+            desktopShortcuts.classList.add('fade-in');
+            taskbar.classList.add('fade-in');
+
+            // Kembalikan ke wallpaper gradasi
+            body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4 bg-cover bg-center';
+            body.style.background = gradientBackground;
+
+            // Perbarui konten Notepad dari variabel
+            document.getElementById('notepad-textarea').value = notepadState.content;
+        }
+
+        // Fungsi untuk menyalakan komputer dengan durasi yang bisa disesuaikan
+        function powerOn(duration) {
+            // Sembunyikan layar shutdown
+            shutdownScreen.classList.add('hidden');
+            
+            processScreen.classList.remove('hidden');
+            windowsLogoContainer.classList.remove('hidden'); // Tampilkan logo Windows
+            processTitle.innerText = 'Starting up...';
+            processMessage.innerText = '';
+            
+            // Atur latar belakang menjadi hitam saat "Starting up..."
+            body.style.background = '#000000';
+            
+            // Setelah booting, kembalikan ke desktop
+            setTimeout(() => {
+                resetToDesktop();
+                // Periksa status Notepad yang disimpan
+                if (notepadState.isOpen) {
+                    notepad.classList.remove('hidden');
+                    notepad.classList.add('fade-in');
+                }
+            }, duration);
+        }
+
+        // Fungsi untuk menyalakan komputer dan mensimulasikan booting
+        function toggleStartMenu() {
+            if (startMenu.classList.contains('hidden')) {
+                startMenu.classList.remove('hidden');
+                startMenu.classList.add('fade-in');
+            } else {
+                startMenu.classList.remove('fade-in');
+                startMenu.classList.add('fade-out');
+                setTimeout(() => {
+                    startMenu.classList.add('hidden');
+                    startMenu.classList.remove('fade-out');
+                }, 500);
+            }
+        }
+
+        // Fungsi untuk menyalakan komputer dan mensimulasikan booting
+        function togglePowerOptions() {
+            if (powerOptions.classList.contains('hidden')) {
+                powerOptions.classList.remove('hidden');
+                powerIcon.style.transform = 'rotate(90deg)';
+            } else {
+                powerOptions.classList.add('hidden');
+                powerIcon.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // Fungsi untuk menangani "bangun dari tidur"
+        function wakeUpHandler() {
+            // Hapus event listener setelah digunakan
+            sleepScreen.removeEventListener('click', wakeUpHandler);
+            window.removeEventListener('keydown', wakeUpHandler);
+            
+            // Mengatur layar proses bangun dari tidur
+            processScreen.classList.remove('hidden');
+            processTitle.innerText = 'Waking up...';
+            processMessage.innerText = 'Restoring your session...';
+            // Atur latar belakang menjadi hitam saat "Waking up..."
+            body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4';
+            body.style.backgroundColor = '#000000'; // Atur latar belakang langsung
+            
+            setTimeout(() => {
+                resetToDesktop();
+                // Periksa status Notepad yang disimpan
+                if (notepadState.isOpen) {
+                    notepad.classList.remove('hidden');
+                    notepad.classList.add('fade-in');
+                }
+            }, 1500); // Durasi bangun tidur yang lebih cepat
+        }
+
+        // Fungsi utama untuk menjalankan simulasi
+        function runSimulation(action) {
+            // Sembunyikan semua menu sebelum memulai
+            startMenu.classList.add('hidden');
+            taskbar.classList.add('hidden');
+            desktopShortcuts.classList.add('hidden');
+            windowsLogoContainer.classList.add('hidden'); // Sembunyikan logo Windows secara default
+
+            // Simpan status Notepad sebelum memulai proses Sleep atau Hibernate
+            if (action === 'sleep' || action === 'hibernate') {
+                notepadState.content = document.getElementById('notepad-textarea').value;
+            }
+            
+            notepad.classList.add('hidden');
+
+            switch (action) {
+                case 'shutdown':
+                    // Reset konten Notepad dan status
+                    notepadState.content = initialNotepadContent;
+                    notepadState.isOpen = false;
+                    
+                    processScreen.classList.remove('hidden');
+                    processTitle.innerText = 'Shutting Down';
+                    processMessage.innerText = 'System is shutting down...';
+                    // Atur latar belakang menjadi biru gelap saat proses mematikan
+                    body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4';
+                    body.style.background = '#001C38';
+                    
+                    setTimeout(() => {
+                        processScreen.classList.add('hidden');
+                        // Ubah latar belakang menjadi hitam saat layar "Goodbye" muncul
+                        body.style.background = '#000000';
+                        shutdownScreen.classList.remove('hidden');
+                    }, 2500);
+                    break;
+
+                case 'restart':
+                    // Reset konten Notepad dan status
+                    notepadState.content = initialNotepadContent;
+                    notepadState.isOpen = false;
+
+                    processScreen.classList.remove('hidden');
+                    processTitle.innerText = 'Restarting';
+                    processMessage.innerText = 'Your computer will restart...';
+                    // Atur latar belakang menjadi biru gelap
+                    body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4';
+                    body.style.background = '#001C38';
+                    
+                    setTimeout(() => {
+                        processScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            powerOn(3000);
+                        }, 1000);
+                    }, 2000);
+                    break;
+
+                case 'logoff':
+                    // Reset konten Notepad dan status
+                    notepadState.content = initialNotepadContent;
+                    notepadState.isOpen = false;
+
+                    processScreen.classList.remove('hidden');
+                    processTitle.innerText = 'Logging Off';
+                    processMessage.innerText = 'You are logging off...';
+                    // Gunakan warna biru gelap yang sama untuk proses logoff
+                    body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4';
+                    body.style.background = '#001C38';
+                    
+                    setTimeout(() => {
+                        processScreen.classList.add('hidden');
+                        loginScreen.classList.remove('hidden');
+                        body.className = 'bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4';
+                        // Menambahkan kembali event listener sementara untuk kembali ke desktop
+                        document.querySelector('#login-screen button').onclick = () => {
+                            loginScreen.classList.add('hidden');
+                            resetToDesktop();
+                        };
+                    }, 1000);
+                    break;
+
+                case 'sleep':
+                    sleepScreen.classList.remove('hidden');
+                    // Atur latar belakang menjadi hitam saat tidur
+                    body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4';
+                    body.style.backgroundColor = '#000000'; // Atur latar belakang langsung
+                    
+                    // Menambahkan event listener untuk bangun dari tidur
+                    sleepScreen.addEventListener('click', wakeUpHandler);
+                    window.addEventListener('keydown', wakeUpHandler);
+                    break;
+
+                case 'hibernate':
+                    processScreen.classList.remove('hidden');
+                    processTitle.innerText = 'Hibernating';
+                    processMessage.innerText = 'Saving your session to disk...';
+                    // Atur latar belakang menjadi biru gelap
+                    body.className = 'text-white flex flex-col items-center justify-center min-h-screen p-4';
+                    body.style.background = '#001C38';
+                    
+                    setTimeout(() => {
+                        processScreen.classList.add('hidden');
+                        // Ubah latar belakang menjadi hitam saat layar "Goodbye" muncul
+                        body.style.background = '#000000';
+                        shutdownScreen.classList.remove('hidden'); // Menggunakan kembali layar shutdown
+                        document.getElementById('shutdown-power-btn').onclick = () => {
+                           powerOn(1000); // Memanggil powerOn dengan durasi lebih cepat (1000ms)
+                        };
+                    }, 3000);
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
