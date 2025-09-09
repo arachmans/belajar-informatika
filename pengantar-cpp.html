@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Pemrograman Dasar - Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .slide-enter { transform: translateX(100%); opacity: 0; }
+        .slide-active { transform: translateX(0); opacity: 1; transition: all 0.5s ease-in-out; }
+        .slide-exit { transform: translateX(-100%); opacity: 0; }
+        .code-animation { animation: typewriter 2s steps(40) 1s forwards; }
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        .progress-bar { transition: width 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">💻</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800">Belajar Pemrograman Dasar</h1>
+                </div>
+                <div class="text-sm text-gray-600">
+                    Materi <span id="currentSlide">1</span> dari <span id="totalSlides">7</span>
+                </div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mt-4">
+                <div id="progressBar" class="progress-bar bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full" style="width: 14.3%"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-8">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            
+            <!-- Slide 1: Manfaat Belajar Pemrograman -->
+            <div id="slide1" class="slide-content p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">🎯 Mengapa Siswa SMA Harus Belajar Pemrograman?</h2>
+                    <p class="text-lg text-gray-600">Mari kita lihat manfaat luar biasa dari belajar pemrograman!</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border-l-4 border-green-500">
+                            <h3 class="font-semibold text-green-800 mb-2">🧠 Melatih Logika Berpikir</h3>
+                            <p class="text-green-700">Seperti bermain puzzle atau catur, pemrograman melatih otak untuk berpikir sistematis dan logis.</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border-l-4 border-blue-500">
+                            <h3 class="font-semibold text-blue-800 mb-2">🚀 Peluang Karir Masa Depan</h3>
+                            <p class="text-blue-700">Programmer adalah profesi dengan gaji tinggi dan banyak dibutuhkan di era digital ini.</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl border-l-4 border-purple-500">
+                            <h3 class="font-semibold text-purple-800 mb-2">💡 Kreativitas Tanpa Batas</h3>
+                            <p class="text-purple-700">Buat game, aplikasi, website - wujudkan ide kreatifmu menjadi kenyataan!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-orange-100 p-6 rounded-xl">
+                        <h3 class="font-semibold text-orange-800 mb-4">📱 Contoh Nyata di Sekitar Kita:</h3>
+                        <ul class="space-y-3 text-orange-700">
+                            <li class="flex items-center"><span class="mr-2">📱</span> Instagram, TikTok, WhatsApp</li>
+                            <li class="flex items-center"><span class="mr-2">🎮</span> Mobile Legends, PUBG, Genshin Impact</li>
+                            <li class="flex items-center"><span class="mr-2">🛒</span> Shopee, Tokopedia, Grab</li>
+                            <li class="flex items-center"><span class="mr-2">📚</span> Google Classroom, Zoom, Ruangguru</li>
+                        </ul>
+                        <p class="mt-4 text-sm text-orange-600 italic">Semua aplikasi ini dibuat oleh programmer seperti yang akan kamu pelajari!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Definisi Dasar -->
+            <div id="slide2" class="slide-content p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">📚 Memahami Istilah Dasar Pemrograman</h2>
+                    <p class="text-lg text-gray-600">Mari kenali istilah-istilah penting dalam dunia pemrograman</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 p-6 rounded-xl">
+                            <h3 class="text-xl font-bold text-indigo-800 mb-3">🖥️ Program</h3>
+                            <p class="text-indigo-700 mb-3">Kumpulan instruksi yang ditulis untuk komputer agar melakukan tugas tertentu.</p>
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-sm text-gray-600"><strong>Analogi:</strong> Seperti resep masakan - langkah demi langkah untuk membuat nasi goreng!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl">
+                            <h3 class="text-xl font-bold text-green-800 mb-3">⚡ Pemrograman</h3>
+                            <p class="text-green-700 mb-3">Proses menulis, menguji, dan memelihara kode program.</p>
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-sm text-gray-600"><strong>Analogi:</strong> Seperti menulis skenario film - kamu yang menentukan alur ceritanya!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-xl">
+                            <h3 class="text-xl font-bold text-purple-800 mb-3">🗣️ Bahasa Pemrograman</h3>
+                            <p class="text-purple-700 mb-3">Bahasa khusus yang digunakan untuk berkomunikasi dengan komputer.</p>
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-sm text-gray-600"><strong>Contoh:</strong> C++, Python, Java - seperti bahasa Inggris, Indonesia, Jepang untuk manusia!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-xl">
+                            <h3 class="text-xl font-bold text-orange-800 mb-3">🎯 Fungsi Bahasa Pemrograman</h3>
+                            <ul class="text-orange-700 space-y-2">
+                                <li>• Memberikan instruksi ke komputer</li>
+                                <li>• Memecahkan masalah secara sistematis</li>
+                                <li>• Membuat aplikasi dan sistem</li>
+                                <li>• Mengotomatisasi pekerjaan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Tingkat Bahasa Pemrograman -->
+            <div id="slide3" class="slide-content p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">🏗️ Tingkat Bahasa Pemrograman</h2>
+                    <p class="text-lg text-gray-600">Dari yang paling dekat dengan mesin hingga yang mudah dipahami manusia</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-red-50 to-red-100 p-6 rounded-xl border-l-4 border-red-500">
+                        <h3 class="text-xl font-bold text-red-800 mb-3">🔧 Bahasa Tingkat Rendah (Low Level)</h3>
+                        <p class="text-red-700 mb-4">Bahasa yang sangat dekat dengan bahasa mesin, sulit dipahami manusia tapi sangat efisien.</p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-red-800 mb-2">Assembly Language</h4>
+                                <div class="bg-gray-100 p-3 rounded font-mono text-sm">
+                                    MOV AX, 5<br>
+                                    ADD AX, 3<br>
+                                    MOV BX, AX
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-red-800 mb-2">Kegunaan:</h4>
+                                <ul class="text-sm text-red-700">
+                                    <li>• Sistem operasi</li>
+                                    <li>• Driver hardware</li>
+                                    <li>• Embedded systems</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl border-l-4 border-blue-500">
+                        <h3 class="text-xl font-bold text-blue-800 mb-3">⚖️ Bahasa Tingkat Menengah (Middle Level)</h3>
+                        <p class="text-blue-700 mb-4">Kombinasi antara efisiensi dan kemudahan, cocok untuk berbagai keperluan.</p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">Contoh: C, C++</h4>
+                                <div class="bg-gray-100 p-3 rounded font-mono text-sm">
+                                    #include &lt;iostream&gt;<br>
+                                    int main() {<br>
+                                    &nbsp;&nbsp;cout &lt;&lt; "Hello World!";<br>
+                                    &nbsp;&nbsp;return 0;<br>
+                                    }
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">Kegunaan:</h4>
+                                <ul class="text-sm text-blue-700">
+                                    <li>• Game development</li>
+                                    <li>• Aplikasi desktop</li>
+                                    <li>• Sistem database</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-xl border-l-4 border-green-500">
+                        <h3 class="text-xl font-bold text-green-800 mb-3">🚀 Bahasa Tingkat Tinggi (High Level)</h3>
+                        <p class="text-green-700 mb-4">Bahasa yang mudah dipahami manusia, mirip bahasa Inggris sehari-hari.</p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">Contoh: Python, JavaScript</h4>
+                                <div class="bg-gray-100 p-3 rounded font-mono text-sm">
+                                    print("Hello World!")<br>
+                                    nama = "Budi"<br>
+                                    umur = 17<br>
+                                    print(f"Hai {nama}, umur {umur}")
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">Kegunaan:</h4>
+                                <ul class="text-sm text-green-700">
+                                    <li>• Website dan aplikasi web</li>
+                                    <li>• Data science</li>
+                                    <li>• Artificial Intelligence</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Paradigma Pemrograman -->
+            <div id="slide4" class="slide-content p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">🎭 Paradigma Pemrograman</h2>
+                    <p class="text-lg text-gray-600">Berbagai gaya dan pendekatan dalam menulis program</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-blue-800 mb-4">📋 Pemrograman Prosedural</h3>
+                        <p class="text-blue-700 mb-4">Program ditulis sebagai urutan langkah-langkah (seperti resep masakan)</p>
+                        <div class="bg-white p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-blue-800 mb-2">Contoh Bahasa: C, Pascal</h4>
+                            <div class="bg-gray-100 p-3 rounded font-mono text-sm">
+                                1. Mulai<br>
+                                2. Input nilai<br>
+                                3. Hitung hasil<br>
+                                4. Tampilkan hasil<br>
+                                5. Selesai
+                            </div>
+                        </div>
+                        <p class="text-sm text-blue-600"><strong>Analogi:</strong> Seperti mengikuti panduan merakit LEGO step by step!</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-green-800 mb-4">🏗️ Pemrograman Berorientasi Objek</h3>
+                        <p class="text-green-700 mb-4">Program dibuat dari objek-objek yang saling berinteraksi</p>
+                        <div class="bg-white p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-green-800 mb-2">Contoh Bahasa: Java, C++, Python</h4>
+                            <div class="bg-gray-100 p-3 rounded text-sm">
+                                <strong>Objek Siswa:</strong><br>
+                                - Nama, Kelas, Nilai<br>
+                                - Belajar(), Ujian(), Lulus()
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-600"><strong>Analogi:</strong> Seperti bermain The Sims - setiap karakter punya sifat dan kemampuan!</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-purple-800 mb-4">🔄 Pemrograman Fungsional</h3>
+                        <p class="text-purple-700 mb-4">Program dibuat dari fungsi-fungsi matematika</p>
+                        <div class="bg-white p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-purple-800 mb-2">Contoh Bahasa: Haskell, Lisp</h4>
+                            <div class="bg-gray-100 p-3 rounded font-mono text-sm">
+                                f(x) = x + 1<br>
+                                g(x) = x * 2<br>
+                                hasil = g(f(5))
+                            </div>
+                        </div>
+                        <p class="text-sm text-purple-600"><strong>Analogi:</strong> Seperti kalkulator scientific - input masuk, hasil keluar!</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-orange-800 mb-4">⚡ Pemrograman Event-Driven</h3>
+                        <p class="text-orange-700 mb-4">Program merespons kejadian/event (klik, input, dll)</p>
+                        <div class="bg-white p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-orange-800 mb-2">Contoh Bahasa: JavaScript, Visual Basic</h4>
+                            <div class="bg-gray-100 p-3 rounded text-sm">
+                                Ketika tombol diklik → Tampilkan pesan<br>
+                                Ketika mouse hover → Ubah warna<br>
+                                Ketika form disubmit → Validasi data
+                            </div>
+                        </div>
+                        <p class="text-sm text-orange-600"><strong>Analogi:</strong> Seperti remote TV - tekan tombol, ada reaksi!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Compiler vs Interpreter -->
+            <div id="slide5" class="slide-content p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">🔄 Compiler vs Interpreter</h2>
+                    <p class="text-lg text-gray-600">Dua cara berbeda untuk menjalankan program</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border-2 border-blue-200">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl">⚡</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-800">Compiler</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">📝 Cara Kerja:</h4>
+                                <p class="text-blue-700 text-sm">Menerjemahkan SELURUH kode sekaligus menjadi bahasa mesin sebelum dijalankan</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">🏃‍♂️ Kecepatan:</h4>
+                                <p class="text-blue-700 text-sm">Sangat cepat saat dijalankan karena sudah dalam bahasa mesin</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">🔍 Deteksi Error:</h4>
+                                <p class="text-blue-700 text-sm">Menemukan semua error sebelum program dijalankan</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">📱 Contoh Bahasa:</h4>
+                                <p class="text-blue-700 text-sm">C, C++, Rust, Go</p>
+                            </div>
+                            
+                            <div class="bg-blue-100 p-4 rounded-lg">
+                                <p class="text-blue-800 text-sm font-medium">🎯 Analogi: Seperti menerjemahkan buku dari bahasa Inggris ke Indonesia secara lengkap, baru kemudian dibaca!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border-2 border-green-200">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl">🔄</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-green-800">Interpreter</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">📝 Cara Kerja:</h4>
+                                <p class="text-green-700 text-sm">Menerjemahkan dan menjalankan kode BARIS DEMI BARIS secara langsung</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">🏃‍♂️ Kecepatan:</h4>
+                                <p class="text-green-700 text-sm">Lebih lambat karena harus menerjemahkan sambil jalan</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">🔍 Deteksi Error:</h4>
+                                <p class="text-green-700 text-sm">Error ditemukan saat baris tersebut dijalankan</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">📱 Contoh Bahasa:</h4>
+                                <p class="text-green-700 text-sm">Python, JavaScript, PHP</p>
+                            </div>
+                            
+                            <div class="bg-green-100 p-4 rounded-lg">
+                                <p class="text-green-800 text-sm font-medium">🎯 Analogi: Seperti penerjemah simultan yang menerjemahkan sambil pembicara berbicara!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-gradient-to-r from-yellow-50 to-yellow-100 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold text-yellow-800 mb-4 text-center">🤔 Mana yang Lebih Baik?</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Pilih Compiler jika:</h4>
+                            <ul class="text-yellow-700 text-sm space-y-1">
+                                <li>• Butuh performa tinggi (game, sistem)</li>
+                                <li>• Program akan didistribusi ke banyak user</li>
+                                <li>• Ingin melindungi source code</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Pilih Interpreter jika:</h4>
+                            <ul class="text-yellow-700 text-sm space-y-1">
+                                <li>• Ingin development yang cepat</li>
+                                <li>• Sering testing dan debugging</li>
+                                <li>• Membuat prototype atau script</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Berkenalan dengan C++ -->
+            <div id="slide6" class="slide-content p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">👋 Berkenalan dengan C++</h2>
+                    <p class="text-lg text-gray-600">Bahasa pemrograman yang powerful dan populer di dunia</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Pengenalan C++ -->
+                    <div class="lg:col-span-2 bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-indigo-800 mb-4">🚀 Apa itu C++?</h3>
+                        <p class="text-indigo-700 mb-4">C++ adalah bahasa pemrograman yang dikembangkan dari bahasa C oleh Bjarne Stroustrup pada tahun 1985. Bahasa ini menggabungkan kekuatan bahasa tingkat rendah dengan kemudahan pemrograman berorientasi objek.</p>
+                        
+                        <div class="bg-white p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-indigo-800 mb-2">Contoh Program C++ Sederhana:</h4>
+                            <div class="bg-gray-900 text-green-400 p-4 rounded font-mono text-sm overflow-x-auto">
+                                <div class="code-animation overflow-hidden whitespace-nowrap">
+#include &lt;iostream&gt;<br>
+using namespace std;<br><br>
+int main() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Halo, Siswa SMA!" &lt;&lt; endl;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Selamat belajar C++!" &lt;&lt; endl;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return 0;<br>
+}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-indigo-100 p-4 rounded-lg">
+                            <p class="text-indigo-800 text-sm"><strong>Fun Fact:</strong> Nama C++ berasal dari operator increment (++) dalam bahasa C, yang berarti "C yang ditingkatkan"!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Aplikasi C++ -->
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-purple-800 mb-4">🎮 C++ Digunakan Untuk:</h3>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🎮</span>
+                                <div>
+                                    <p class="font-semibold text-purple-800">Game Development</p>
+                                    <p class="text-xs text-purple-600">Unreal Engine, Unity</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🖥️</span>
+                                <div>
+                                    <p class="font-semibold text-purple-800">Sistem Operasi</p>
+                                    <p class="text-xs text-purple-600">Windows, Linux</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🌐</span>
+                                <div>
+                                    <p class="font-semibold text-purple-800">Web Browser</p>
+                                    <p class="text-xs text-purple-600">Chrome, Firefox</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🗄️</span>
+                                <div>
+                                    <p class="font-semibold text-purple-800">Database</p>
+                                    <p class="text-xs text-purple-600">MySQL, MongoDB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kelebihan dan Kekurangan -->
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                            <span class="mr-2">✅</span> Kelebihan C++
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-green-800">🚀 Performa Tinggi</h4>
+                                <p class="text-green-700 text-sm">Sangat cepat karena dikompilasi langsung ke bahasa mesin</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-green-800">🔧 Kontrol Penuh</h4>
+                                <p class="text-green-700 text-sm">Bisa mengatur memori dan hardware secara detail</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-green-800">📚 Library Lengkap</h4>
+                                <p class="text-green-700 text-sm">STL (Standard Template Library) yang sangat kaya</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-green-800">🌍 Portabilitas</h4>
+                                <p class="text-green-700 text-sm">Bisa jalan di berbagai platform (Windows, Mac, Linux)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-red-800 mb-4 flex items-center">
+                            <span class="mr-2">⚠️</span> Kekurangan C++
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-red-800">📈 Kurva Belajar Curam</h4>
+                                <p class="text-red-700 text-sm">Butuh waktu lama untuk menguasai semua fiturnya</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-red-800">🐛 Rawan Error</h4>
+                                <p class="text-red-700 text-sm">Memory leak dan pointer error jika tidak hati-hati</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-red-800">⏰ Development Lambat</h4>
+                                <p class="text-red-700 text-sm">Butuh waktu lebih lama untuk menulis program</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <h4 class="font-semibold text-red-800">🔧 Kompilasi Lama</h4>
+                                <p class="text-red-700 text-sm">Program besar butuh waktu lama untuk dikompilasi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-gradient-to-r from-yellow-50 to-yellow-100 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold text-yellow-800 mb-3 text-center">💡 Tips untuk Siswa SMA</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <span class="text-3xl mb-2 block">📖</span>
+                            <h4 class="font-semibold text-yellow-800 mb-2">Mulai dari Dasar</h4>
+                            <p class="text-yellow-700 text-sm">Pelajari konsep dasar dulu: variabel, loop, function</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <span class="text-3xl mb-2 block">💻</span>
+                            <h4 class="font-semibold text-yellow-800 mb-2">Praktik Rutin</h4>
+                            <p class="text-yellow-700 text-sm">Coding setiap hari, mulai dari program sederhana</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <span class="text-3xl mb-2 block">👥</span>
+                            <h4 class="font-semibold text-yellow-800 mb-2">Join Komunitas</h4>
+                            <p class="text-yellow-700 text-sm">Bergabung dengan forum dan grup belajar C++</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Kesimpulan -->
+            <div id="slide7" class="slide-content p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">🎉 Selamat! Kamu Sudah Menyelesaikan Materi</h2>
+                    <p class="text-lg text-gray-600">Mari kita rangkum apa yang sudah kita pelajari hari ini</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl text-center">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">🎯</span>
+                        </div>
+                        <h3 class="font-bold text-blue-800 mb-2">Manfaat Pemrograman</h3>
+                        <p class="text-blue-700 text-sm">Melatih logika, peluang karir, dan kreativitas tanpa batas</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl text-center">
+                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">📚</span>
+                        </div>
+                        <h3 class="font-bold text-green-800 mb-2">Konsep Dasar</h3>
+                        <p class="text-green-700 text-sm">Program, pemrograman, bahasa pemrograman, dan fungsinya</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl text-center">
+                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">🏗️</span>
+                        </div>
+                        <h3 class="font-bold text-purple-800 mb-2">Tingkat Bahasa</h3>
+                        <p class="text-purple-700 text-sm">Rendah, menengah, dan tinggi dengan karakteristiknya</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl text-center">
+                        <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">🎭</span>
+                        </div>
+                        <h3 class="font-bold text-orange-800 mb-2">Paradigma</h3>
+                        <p class="text-orange-700 text-sm">Prosedural, OOP, fungsional, dan event-driven</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-xl text-center">
+                        <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">⚡</span>
+                        </div>
+                        <h3 class="font-bold text-red-800 mb-2">Compiler vs Interpreter</h3>
+                        <p class="text-red-700 text-sm">Dua cara berbeda menjalankan program</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl text-center">
+                        <div class="w-16 h-16 bg-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">👋</span>
+                        </div>
+                        <h3 class="font-bold text-indigo-800 mb-2">Bahasa C++</h3>
+                        <p class="text-indigo-700 text-sm">Kelebihan, kekurangan, dan penggunaannya</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 p-8 rounded-xl mb-6">
+                    <h3 class="text-2xl font-bold text-yellow-800 mb-4 text-center">🚀 Langkah Selanjutnya</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <h4 class="font-bold text-yellow-800">📖 Untuk Pemula:</h4>
+                            <ul class="text-yellow-700 space-y-2">
+                                <li class="flex items-center"><span class="mr-2">1️⃣</span> Install IDE (Dev-C++, Code::Blocks)</li>
+                                <li class="flex items-center"><span class="mr-2">2️⃣</span> Pelajari syntax dasar C++</li>
+                                <li class="flex items-center"><span class="mr-2">3️⃣</span> Buat program "Hello World"</li>
+                                <li class="flex items-center"><span class="mr-2">4️⃣</span> Latihan soal-soal sederhana</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-bold text-yellow-800">🎯 Sumber Belajar:</h4>
+                            <ul class="text-yellow-700 space-y-2">
+                                <li class="flex items-center"><span class="mr-2">📺</span> YouTube: Programmer Zaman Now</li>
+                                <li class="flex items-center"><span class="mr-2">🌐</span> Website: cplusplus.com</li>
+                                <li class="flex items-center"><span class="mr-2">📱</span> App: SoloLearn, Codecademy</li>
+                                <li class="flex items-center"><span class="mr-2">📚</span> Buku: "C++ untuk Pemula"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-2">💪 Ingat: Setiap Programmer Hebat Pernah Menjadi Pemula!</h3>
+                    <p class="text-blue-100">Jangan takut untuk memulai. Coding adalah skill yang akan sangat berguna di masa depan. Selamat belajar dan semoga sukses! 🚀</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mt-8">
+            <button id="prevBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                ← Sebelumnya
+            </button>
+            
+            <div class="flex space-x-2">
+                <button class="slide-indicator w-3 h-3 rounded-full bg-blue-500 transition-colors duration-200" data-slide="1"></button>
+                <button class="slide-indicator w-3 h-3 rounded-full bg-gray-300 transition-colors duration-200" data-slide="2"></button>
+                <button class="slide-indicator w-3 h-3 rounded-full bg-gray-300 transition-colors duration-200" data-slide="3"></button>
+                <button class="slide-indicator w-3 h-3 rounded-full bg-gray-300 transition-colors duration-200" data-slide="4"></button>
+                <button class="slide-indicator w-3 h-3 rounded-full bg-gray-300 transition-colors duration-200" data-slide="5"></button>
+                <button class="slide-indicator w-3 h-3 rounded-full bg-gray-300 transition-colors duration-200" data-slide="6"></button>
+                <button class="slide-indicator w-3 h-3 rounded-full bg-gray-300 transition-colors duration-200" data-slide="7"></button>
+            </div>
+            
+            <button id="nextBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
+                Selanjutnya →
+            </button>
+        </div>
+    </main>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">🧠 Kuis Interaktif</h2>
+                <p class="text-gray-600">Uji pemahamanmu tentang materi yang sudah dipelajari!</p>
+            </div>
+            
+            <div id="quizContent">
+                <!-- Quiz content will be inserted here -->
+            </div>
+            
+            <div class="flex justify-center mt-6">
+                <button id="closeQuiz" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+        
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "Apa manfaat utama belajar pemrograman bagi siswa SMA?",
+                options: ["Hanya untuk menjadi programmer", "Melatih logika berpikir dan membuka peluang karir", "Supaya bisa main game", "Untuk pamer ke teman"],
+                correct: 1
+            },
+            {
+                question: "Bahasa pemrograman mana yang termasuk tingkat tinggi?",
+                options: ["Assembly", "Machine Language", "Python", "Binary"],
+                correct: 2
+            },
+            {
+                question: "Apa perbedaan utama compiler dan interpreter?",
+                options: ["Tidak ada perbedaan", "Compiler menerjemahkan seluruh kode sekaligus, interpreter baris per baris", "Interpreter lebih cepat", "Compiler hanya untuk C++"],
+                correct: 1
+            }
+        ];
+        
+        function updateSlide() {
+            // Hide all slides
+            for (let i = 1; i <= totalSlides; i++) {
+                document.getElementById(`slide${i}`).classList.add('hidden');
+            }
+            
+            // Show current slide
+            document.getElementById(`slide${currentSlide}`).classList.remove('hidden');
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Update slide counter
+            document.getElementById('currentSlide').textContent = currentSlide;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').textContent = currentSlide === totalSlides ? 'Selesai 🎉' : 'Selanjutnya →';
+            
+            // Update slide indicators
+            document.querySelectorAll('.slide-indicator').forEach((indicator, index) => {
+                if (index + 1 === currentSlide) {
+                    indicator.classList.remove('bg-gray-300');
+                    indicator.classList.add('bg-blue-500');
+                } else {
+                    indicator.classList.remove('bg-blue-500');
+                    indicator.classList.add('bg-gray-300');
+                }
+            });
+        }
+        
+        function showQuiz() {
+            const quizContent = document.getElementById('quizContent');
+            let quizHTML = '';
+            
+            quizQuestions.forEach((q, index) => {
+                quizHTML += `
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-3">${index + 1}. ${q.question}</h3>
+                        <div class="space-y-2">
+                            ${q.options.map((option, optIndex) => `
+                                <label class="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded">
+                                    <input type="radio" name="q${index}" value="${optIndex}" class="mr-3">
+                                    <span>${option}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            quizHTML += `
+                <div class="text-center">
+                    <button onclick="checkAnswers()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        Periksa Jawaban
+                    </button>
+                </div>
+                <div id="quizResult" class="mt-4 hidden"></div>
+            `;
+            
+            quizContent.innerHTML = quizHTML;
+            document.getElementById('quizModal').classList.remove('hidden');
+            document.getElementById('quizModal').classList.add('flex');
+        }
+        
+        function checkAnswers() {
+            let score = 0;
+            let resultHTML = '<h3 class="font-bold text-lg mb-4">Hasil Kuis:</h3>';
+            
+            quizQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const isCorrect = selected && parseInt(selected.value) === q.correct;
+                
+                if (isCorrect) score++;
+                
+                resultHTML += `
+                    <div class="mb-3 p-3 rounded ${isCorrect ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500'} border-l-4">
+                        <p class="font-semibold">${index + 1}. ${q.question}</p>
+                        <p class="text-sm ${isCorrect ? 'text-green-700' : 'text-red-700'}">
+                            ${isCorrect ? '✅ Benar!' : `❌ Salah. Jawaban yang benar: ${q.options[q.correct]}`}
+                        </p>
+                    </div>
+                `;
+            });
+            
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '🎉 Excellent! Kamu sangat memahami materi ini!';
+            } else if (percentage >= 60) {
+                message = '👍 Good job! Pemahaman kamu cukup baik!';
+            } else {
+                message = '📚 Keep learning! Coba baca ulang materinya ya!';
+            }
+            
+            resultHTML = `
+                <div class="text-center mb-4 p-4 bg-blue-50 rounded-lg">
+                    <h3 class="text-xl font-bold text-blue-800">Skor: ${score}/${quizQuestions.length} (${percentage}%)</h3>
+                    <p class="text-blue-700 mt-2">${message}</p>
+                </div>
+            ` + resultHTML;
+            
+            document.getElementById('quizResult').innerHTML = resultHTML;
+            document.getElementById('quizResult').classList.remove('hidden');
+        }
+        
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            } else {
+                showQuiz();
+            }
+        });
+        
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        });
+        
+        document.getElementById('closeQuiz').addEventListener('click', () => {
+            document.getElementById('quizModal').classList.add('hidden');
+            document.getElementById('quizModal').classList.remove('flex');
+        });
+        
+        // Slide indicators
+        document.querySelectorAll('.slide-indicator').forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = index + 1;
+                updateSlide();
+            });
+        });
+        
+        // Initialize
+        updateSlide();
+        
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate elements on slide change
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.slide-content > div').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c83bb3053a5ce5',t:'MTc1NzQzNzEzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
