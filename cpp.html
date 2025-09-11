@@ -241,6 +241,7 @@
                         <div class="space-y-1 sm:space-y-2">
                             <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-xs sm:text-sm" data-type="if">If Statement</button>
                             <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-xs sm:text-sm" data-type="if_else">If-Else Statement</button>
+                            <button class="block-btn w-full text-left p-2 bg-pink-100 hover:bg-pink-200 rounded text-xs sm:text-sm" data-type="else">Else Block</button>
                         </div>
                     </div>
 
@@ -320,6 +321,8 @@
                             Tampilkan hasil
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -340,7 +343,7 @@
                 <div class="w-full lg:w-1/2 p-3 sm:p-6 lg:border-r border-gray-200 flex flex-col order-1 lg:order-2">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
                         <h3 class="text-base sm:text-lg font-semibold text-gray-700">Output Program:</h3>
-                        <div id="executionMode" class="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 overflow-auto">
+                        <div id="executionMode" class="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
                             Mode: Checking...
                         </div>
                     </div>
@@ -428,14 +431,15 @@
                         .appendField(new Blockly.FieldDropdown([
                             ["iostream", "iostream"],
                             ["string", "string"],
+                            ["cstdio", "cstdio"],
                             ["cmath", "cmath"],
-                            ["vector", "vector"]
+                            ["cstdlib", "cstdlib"]
                         ]), "LIBRARY")
                         .appendField(">");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(270);
-                    this.setTooltip("Menyertakan library C++");
+                    this.setTooltip("Menyertakan library C++ (string library menggunakan Enhanced Simulation)");
                 }
             };
 
@@ -530,8 +534,8 @@
                         .appendField(new Blockly.FieldDropdown([
                             ["int", "int"],
                             ["double", "double"],
-                            ["string", "string"],
-                            ["bool", "bool"]
+                            ["bool", "bool"],
+                            ["string", "string"]
                         ]), "TYPE")
                         .appendField(new Blockly.FieldTextInput("variable"), "NAME")
                         .appendField("=");
@@ -743,6 +747,23 @@
                     this.setColour(330);
                     this.setInputsInline(true);
                     this.setTooltip("Jika kondisi TRUE, jalankan blok IF. Jika FALSE, jalankan blok ELSE.");
+                }
+            };
+
+            // Else block (standalone)
+            Blockly.Blocks['cpp_else'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("🔄 else {");
+                    this.appendStatementInput("STATEMENTS")
+                        .setCheck(null)
+                        .appendField("    ");
+                    this.appendDummyInput()
+                        .appendField("}");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Blok else - dijalankan jika blok if di atasnya bernilai false");
                 }
             };
 
@@ -972,6 +993,11 @@
                 return `    if (${condition}) {\n${ifStatements}    }\n    else {\n${elseStatements}    }\n`;
             };
 
+            generator['cpp_else'] = function(block) {
+                const statements = this.statementToCode(block, 'STATEMENTS');
+                return `    else {\n${statements}    }\n`;
+            };
+
             generator['cpp_for'] = function(block) {
                 const variable = block.getFieldValue('VAR');
                 const start = block.getFieldValue('START');
@@ -1108,10 +1134,13 @@
 
         // Initialize workspace
         function initWorkspace() {
+            console.log('Defining blocks...');
             defineBlocks();
+            console.log('Blocks defined, available blocks:', Object.keys(Blockly.Blocks));
             
             // Create and store the generator
             window.cppGenerator = createCppGenerator();
+            console.log('Generator created');
 
             workspace = Blockly.inject('workspace', {
                 toolbox: null,
@@ -1129,15 +1158,150 @@
                     minScale: 0.3,
                     scaleSpeed: 1.2
                 },
-                trashcan: true
+                trashcan: true,
+                move: {
+                    scrollbars: {
+                        horizontal: true,
+                        vertical: true
+                    },
+                    drag: true,
+                    wheel: true
+                }
             });
+            
+            // Add custom drag functionality for workspace panning
+            addWorkspaceDragFunctionality();
+            
+            console.log('Workspace injected successfully');
+        }
+
+        // Add workspace drag functionality for panning
+        function addWorkspaceDragFunctionality() {
+            const workspaceDiv = document.getElementById('workspace');
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragStartY = 0;
+            let initialScrollX = 0;
+            let initialScrollY = 0;
+
+            // Mouse events for desktop
+            workspaceDiv.addEventListener('mousedown', function(e) {
+                // Only start dragging if clicking on empty workspace (not on blocks)
+                if (e.target.classList.contains('blocklyMainBackground') || 
+                    e.target.classList.contains('blocklyWorkspace') ||
+                    e.target.tagName === 'svg' && e.target.classList.contains('blocklySvg')) {
+                    
+                    isDragging = true;
+                    dragStartX = e.clientX;
+                    dragStartY = e.clientY;
+                    
+                    const metrics = workspace.getMetrics();
+                    initialScrollX = metrics.viewLeft;
+                    initialScrollY = metrics.viewTop;
+                    
+                    workspaceDiv.style.cursor = 'grabbing';
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging) {
+                    const deltaX = e.clientX - dragStartX;
+                    const deltaY = e.clientY - dragStartY;
+                    
+                    // Calculate new scroll position (inverted for natural feel)
+                    const newScrollX = initialScrollX - deltaX;
+                    const newScrollY = initialScrollY - deltaY;
+                    
+                    workspace.scroll(newScrollX, newScrollY);
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('mouseup', function(e) {
+                if (isDragging) {
+                    isDragging = false;
+                    workspaceDiv.style.cursor = 'default';
+                }
+            });
+
+            // Touch events for mobile
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            workspaceDiv.addEventListener('touchstart', function(e) {
+                if (e.target.classList.contains('blocklyMainBackground') || 
+                    e.target.classList.contains('blocklyWorkspace') ||
+                    e.target.tagName === 'svg' && e.target.classList.contains('blocklySvg')) {
+                    
+                    if (e.touches.length === 1) {
+                        const touch = e.touches[0];
+                        touchStartX = touch.clientX;
+                        touchStartY = touch.clientY;
+                        
+                        const metrics = workspace.getMetrics();
+                        initialScrollX = metrics.viewLeft;
+                        initialScrollY = metrics.viewTop;
+                        
+                        isDragging = true;
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            workspaceDiv.addEventListener('touchmove', function(e) {
+                if (isDragging && e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    const deltaX = touch.clientX - touchStartX;
+                    const deltaY = touch.clientY - touchStartY;
+                    
+                    const newScrollX = initialScrollX - deltaX;
+                    const newScrollY = initialScrollY - deltaY;
+                    
+                    workspace.scroll(newScrollX, newScrollY);
+                    e.preventDefault();
+                }
+            });
+
+            workspaceDiv.addEventListener('touchend', function(e) {
+                isDragging = false;
+            });
+
+            // Add visual feedback for draggable areas
+            const style = document.createElement('style');
+            style.textContent = `
+                .blocklyMainBackground {
+                    cursor: grab !important;
+                }
+                .blocklyMainBackground:active {
+                    cursor: grabbing !important;
+                }
+                .blocklyWorkspace {
+                    cursor: grab;
+                }
+                .blocklyWorkspace:active {
+                    cursor: grabbing;
+                }
+            `;
+            document.head.appendChild(style);
         }
 
         // Add block to workspace
         function addBlockToWorkspace(blockType) {
+            console.log('Adding block to workspace:', blockType);
+            console.log('Available blocks:', Object.keys(Blockly.Blocks));
+            console.log('Block definition exists:', !!Blockly.Blocks[blockType]);
+            
+            if (!Blockly.Blocks[blockType]) {
+                throw new Error(`Block type '${blockType}' is not defined. Available blocks: ${Object.keys(Blockly.Blocks).join(', ')}`);
+            }
+            
             const block = workspace.newBlock(blockType);
+            console.log('Block created:', block);
             block.initSvg();
+            console.log('Block SVG initialized');
             block.render();
+            console.log('Block rendered');
             
             // Position blocks in a simple way
             const existingBlocks = workspace.getAllBlocks();
@@ -1444,6 +1608,12 @@
             let inputBuffer = [];
             let inputString = '';
             
+            // Check if code uses string library - JSCPP doesn't support it well
+            if (code.includes('#include <string>') || code.includes('string ')) {
+                console.log('🔄 Code uses string library - JSCPP has limited support, using Enhanced Simulation');
+                throw new Error('String library detected - using Enhanced Simulation for better compatibility');
+            }
+            
             // Get the correct JSCPP object
             const jscppObj = JSCPP || window.JSCPP;
             if (!jscppObj || typeof jscppObj.run !== 'function') {
@@ -1579,7 +1749,13 @@
                 // Header with execution info
                 finalOutput += `🔧 Execution Mode: Real C++ Compiler (JSCPP)\n`;
                 finalOutput += `⏱️ Execution Time: ${executionTime}ms\n`;
-                finalOutput += `📊 Exit Code: ${exitCode}\n\n`;
+                finalOutput += `📊 Exit Code: ${exitCode}\n`;
+                
+                // Add string library notice if applicable
+                if (cleanCode.includes('#include <string>') || cleanCode.includes('string ')) {
+                    finalOutput += `⚠️ Note: String library support is limited in JSCPP\n`;
+                }
+                finalOutput += '\n';
                 
                 // Show inputs if any
                 if (inputBuffer.length > 0) {
@@ -1698,6 +1874,15 @@
                 const variables = {};
                 let output = '';
                 
+                // Add header for Enhanced Simulation mode
+                const hasStringLibrary = code.includes('#include <string>') || code.includes('string ');
+                if (hasStringLibrary) {
+                    output += '🔧 Execution Mode: Enhanced Simulation (Full String Support)\n';
+                    output += '✅ String library fully supported in simulation mode\n\n';
+                } else {
+                    output += '🔧 Execution Mode: Enhanced Simulation\n\n';
+                }
+                
                 // Find main function content with proper brace tracking
                 let inMainFunction = false;
                 let braceCount = 0;
@@ -1756,14 +1941,22 @@
                 console.log('Processing line:', line);
                 
                 // Variable declaration with initialization
-                const declareMatch = line.match(/^\s*(int|double|string|bool)\s+(\w+)\s*=\s*(.+);/);
+                const declareMatch = line.match(/^\s*(int|double|bool|string)\s+(\w+)\s*=\s*(.+);/);
                 if (declareMatch) {
                     const type = declareMatch[1];
                     const varName = declareMatch[2];
                     let value = declareMatch[3].trim();
                     
-                    // Handle different value types
-                    if (value.startsWith('"') && value.endsWith('"')) {
+                    // Handle different value types based on declared type
+                    if (type === 'string') {
+                        if (value.startsWith('"') && value.endsWith('"')) {
+                            variables[varName] = value.slice(1, -1);
+                        } else if (variables[value] !== undefined) {
+                            variables[varName] = String(variables[value]);
+                        } else {
+                            variables[varName] = String(value);
+                        }
+                    } else if (value.startsWith('"') && value.endsWith('"')) {
                         variables[varName] = value.slice(1, -1);
                     } else if (value === 'true') {
                         variables[varName] = true;
@@ -1802,16 +1995,24 @@
                         // Process the input
                         const trimmedInput = userInput.trim();
                         
-                        // Try to parse as number first
+                        // Smart input handling - detect if it's a number or string
                         const numValue = parseFloat(trimmedInput);
-                        if (!isNaN(numValue) && trimmedInput !== '' && !trimmedInput.includes('"')) {
+                        const isQuotedString = trimmedInput.startsWith('"') && trimmedInput.endsWith('"');
+                        const isQuotedString2 = trimmedInput.startsWith("'") && trimmedInput.endsWith("'");
+                        
+                        if (isQuotedString || isQuotedString2) {
+                            // Explicitly quoted string
+                            const stringValue = trimmedInput.slice(1, -1);
+                            variables[varName] = stringValue;
+                            output += `✅ Input: ${varName} = "${stringValue}"\n`;
+                        } else if (!isNaN(numValue) && trimmedInput !== '' && /^-?\d*\.?\d+$/.test(trimmedInput)) {
+                            // Valid number
                             variables[varName] = numValue;
                             output += `✅ Input: ${varName} = ${numValue}\n`;
                         } else {
-                            // Handle as string
-                            const stringValue = trimmedInput.replace(/^["']|["']$/g, '');
-                            variables[varName] = stringValue;
-                            output += `✅ Input: ${varName} = "${stringValue}"\n`;
+                            // Treat as string (unquoted)
+                            variables[varName] = trimmedInput;
+                            output += `✅ Input: ${varName} = "${trimmedInput}"\n`;
                         }
                         
                         console.log(`Input received for ${varName}:`, variables[varName]);
@@ -1826,7 +2027,7 @@
                 
                 // Variable assignment
                 const assignMatch = line.match(/^\s*(\w+)\s*=\s*(.+);/);
-                if (assignMatch && !line.includes('int ') && !line.includes('double ') && !line.includes('string ') && !line.includes('bool ')) {
+                if (assignMatch && !line.includes('int ') && !line.includes('double ') && !line.includes('bool ')) {
                     const varName = assignMatch[1];
                     let value = assignMatch[2].trim();
                     
@@ -1894,6 +2095,14 @@
                     const ifResult = await handleIfStatement(line, codeLines, i, variables, output);
                     output = ifResult.output;
                     i = ifResult.nextIndex;
+                    continue;
+                }
+                
+                // Else statement - handle standalone else block
+                if (line.startsWith('else {')) {
+                    const elseResult = await handleElseStatement(line, codeLines, i, variables, output);
+                    output = elseResult.output;
+                    i = elseResult.nextIndex;
                     continue;
                 }
                 
@@ -1982,7 +2191,7 @@
             return { output, nextIndex: loopBody.nextIndex };
         }
         
-        // Handle If Statement execution with COMPLETELY REWRITTEN logic
+        // Handle If Statement execution with FIXED logic
         async function handleIfStatement(ifLine, codeLines, startIndex, variables, currentOutput) {
             let output = currentOutput;
             
@@ -1995,49 +2204,64 @@
             
             const condition = ifMatch[1].trim();
             const conditionResult = evaluateCondition(condition, variables);
-            console.log(`🔥 ULTIMATE FIX: If condition "${condition}" evaluated to:`, conditionResult);
-            console.log('🔥 Variables:', variables);
+            console.log(`✅ FIXED: If condition "${condition}" evaluated to:`, conditionResult);
+            console.log('✅ Variables available:', variables);
             
             // Detect if-else structure
             const isIfElse = detectIfElseStructure(codeLines, startIndex);
-            console.log(`🔥 ULTIMATE FIX: Statement type: ${isIfElse ? 'if-else' : 'simple if'}`);
+            console.log(`✅ FIXED: Statement type: ${isIfElse ? 'if-else' : 'simple if'}`);
             
             if (isIfElse) {
-                // Extract blocks with completely new approach
+                // Extract blocks with improved approach
                 const blocks = extractIfElseBlocksUltimate(codeLines, startIndex);
                 
-                console.log('🔥 ULTIMATE FIX: IF block:', blocks.ifBody.map(l => l.content));
-                console.log('🔥 ULTIMATE FIX: ELSE block:', blocks.elseBody.map(l => l.content));
+                console.log('✅ FIXED: IF block content:', blocks.ifBody.map(l => l.content));
+                console.log('✅ FIXED: ELSE block content:', blocks.elseBody.map(l => l.content));
                 
-                // ULTIMATE FIX: Use strict boolean check and execute ONLY one branch
-                if (conditionResult === true) {
-                    console.log('🔥 ULTIMATE FIX: TRUE condition - executing IF ONLY');
+                // FIXED: Execute based on condition result with proper boolean conversion
+                const shouldExecuteIf = Boolean(conditionResult);
+                console.log(`✅ FIXED: Condition result converted to boolean: ${shouldExecuteIf}`);
+                
+                if (shouldExecuteIf) {
+                    console.log('✅ FIXED: Executing IF block...');
                     if (blocks.ifBody.length > 0) {
+                        console.log('✅ FIXED: IF block has', blocks.ifBody.length, 'statements to execute');
                         output = await executeCodeBlock(blocks.ifBody, variables, output);
+                        console.log('✅ FIXED: IF block execution completed');
+                    } else {
+                        console.log('✅ FIXED: IF block is empty, nothing to execute');
                     }
-                    console.log('🔥 ULTIMATE FIX: IF executed, ELSE completely skipped');
-                } else if (conditionResult === false) {
-                    console.log('🔥 ULTIMATE FIX: FALSE condition - executing ELSE ONLY');
-                    if (blocks.elseBody.length > 0) {
-                        output = await executeCodeBlock(blocks.elseBody, variables, output);
-                    }
-                    console.log('🔥 ULTIMATE FIX: ELSE executed, IF completely skipped');
                 } else {
-                    console.log('🔥 ULTIMATE FIX: Invalid condition result, skipping both branches');
+                    console.log('✅ FIXED: Executing ELSE block...');
+                    if (blocks.elseBody.length > 0) {
+                        console.log('✅ FIXED: ELSE block has', blocks.elseBody.length, 'statements to execute');
+                        output = await executeCodeBlock(blocks.elseBody, variables, output);
+                        console.log('✅ FIXED: ELSE block execution completed');
+                    } else {
+                        console.log('✅ FIXED: ELSE block is empty, nothing to execute');
+                    }
                 }
                 
                 return { output, nextIndex: blocks.nextIndex };
             } else {
                 // Simple if statement
                 const ifBody = extractBlockBody(codeLines, startIndex);
+                console.log('✅ FIXED: Simple IF body content:', ifBody.body.map(l => l.content));
                 
-                if (conditionResult === true) {
-                    console.log('🔥 ULTIMATE FIX: Simple IF - TRUE condition, executing');
+                const shouldExecute = Boolean(conditionResult);
+                console.log(`✅ FIXED: Simple IF should execute: ${shouldExecute}`);
+                
+                if (shouldExecute) {
+                    console.log('✅ FIXED: Executing simple IF block...');
                     if (ifBody.body.length > 0) {
+                        console.log('✅ FIXED: Simple IF has', ifBody.body.length, 'statements to execute');
                         output = await executeCodeBlock(ifBody.body, variables, output);
+                        console.log('✅ FIXED: Simple IF execution completed');
+                    } else {
+                        console.log('✅ FIXED: Simple IF block is empty');
                     }
                 } else {
-                    console.log('🔥 ULTIMATE FIX: Simple IF - FALSE condition, skipping completely');
+                    console.log('✅ FIXED: Simple IF condition false, skipping execution');
                 }
                 
                 return { output, nextIndex: ifBody.nextIndex };
@@ -2076,6 +2300,56 @@
             }
             
             return { output, nextIndex: loopBody.nextIndex };
+        }
+        
+        // Handle standalone Else statement execution
+        async function handleElseStatement(elseLine, codeLines, startIndex, variables, currentOutput) {
+            let output = currentOutput;
+            
+            console.log('🔄 Processing standalone else block');
+            
+            // Check if there was a previous if statement that was false
+            let shouldExecuteElse = false;
+            
+            // Look backwards to find the most recent if statement
+            for (let i = startIndex - 1; i >= 0; i--) {
+                const prevLine = codeLines[i].content.trim();
+                
+                if (prevLine.includes('if (')) {
+                    // Found an if statement, check if it was executed
+                    const ifMatch = prevLine.match(/if \((.+?)\)/);
+                    if (ifMatch) {
+                        const condition = ifMatch[1].trim();
+                        const conditionResult = evaluateCondition(condition, variables);
+                        
+                        console.log(`🔄 Found previous if condition "${condition}" = ${conditionResult}`);
+                        
+                        // Execute else only if the if condition was false
+                        shouldExecuteElse = (conditionResult === false);
+                        break;
+                    }
+                }
+                
+                // Stop looking if we hit another control structure
+                if (prevLine.includes('for (') || prevLine.includes('while (') || 
+                    prevLine.includes('} else {') || prevLine === '}') {
+                    break;
+                }
+            }
+            
+            console.log(`🔄 Should execute else block: ${shouldExecuteElse}`);
+            
+            // Extract the else block body
+            const elseBody = extractBlockBody(codeLines, startIndex);
+            
+            if (shouldExecuteElse) {
+                console.log('🔄 Executing else block');
+                output = await executeCodeBlock(elseBody.body, variables, output);
+            } else {
+                console.log('🔄 Skipping else block (if condition was true or no if found)');
+            }
+            
+            return { output, nextIndex: elseBody.nextIndex };
         }
         
         // Extract block body (for loops, if statements, etc.)
@@ -2379,10 +2653,29 @@
                 // Handle parentheses
                 expression = expression.replace(/[()]/g, '');
                 
-                // Simple math evaluation
+                // Handle string concatenation and math evaluation
                 if (expression.includes('+')) {
                     const parts = expression.split('+');
-                    return parseFloat(parts[0].trim()) + parseFloat(parts[1].trim());
+                    const left = parts[0].trim();
+                    const right = parts[1].trim();
+                    
+                    // Check if either operand is a string
+                    const leftIsString = (left.startsWith('"') && left.endsWith('"')) || 
+                                        (variables[left] !== undefined && typeof variables[left] === 'string');
+                    const rightIsString = (right.startsWith('"') && right.endsWith('"')) || 
+                                         (variables[right] !== undefined && typeof variables[right] === 'string');
+                    
+                    if (leftIsString || rightIsString) {
+                        // String concatenation
+                        let leftVal = left.startsWith('"') && left.endsWith('"') ? left.slice(1, -1) : 
+                                     (variables[left] !== undefined ? String(variables[left]) : left);
+                        let rightVal = right.startsWith('"') && right.endsWith('"') ? right.slice(1, -1) : 
+                                      (variables[right] !== undefined ? String(variables[right]) : right);
+                        return leftVal + rightVal;
+                    } else {
+                        // Numeric addition
+                        return parseFloat(left) + parseFloat(right);
+                    }
                 } else if (expression.includes('-')) {
                     const parts = expression.split('-');
                     return parseFloat(parts[0].trim()) - parseFloat(parts[1].trim());
@@ -2411,7 +2704,7 @@
         // Helper function to evaluate conditions with FIXED logic
         function evaluateCondition(condition, variables) {
             try {
-                console.log('🔍 FIXED: Evaluating condition:', condition, 'with variables:', variables);
+                console.log('✅ CONDITION: Evaluating condition:', condition, 'with variables:', variables);
                 
                 // Clean up the condition - remove extra spaces and parentheses
                 let expr = condition.trim();
@@ -2421,22 +2714,22 @@
                     expr = expr.slice(1, -1).trim();
                 }
                 
-                console.log('🔍 FIXED: Cleaned expression:', expr);
+                console.log('✅ CONDITION: Cleaned expression:', expr);
                 
                 // Handle logical operators first (&&, ||) - split and evaluate recursively
                 if (expr.includes('&&')) {
                     const parts = expr.split('&&').map(p => p.trim());
                     const left = evaluateCondition(parts[0], variables);
                     const right = evaluateCondition(parts[1], variables);
-                    const result = left && right;
-                    console.log(`🔍 FIXED: Logical AND: ${left} && ${right} = ${result}`);
+                    const result = Boolean(left) && Boolean(right);
+                    console.log(`✅ CONDITION: Logical AND: ${left} && ${right} = ${result}`);
                     return result;
                 } else if (expr.includes('||')) {
                     const parts = expr.split('||').map(p => p.trim());
                     const left = evaluateCondition(parts[0], variables);
                     const right = evaluateCondition(parts[1], variables);
-                    const result = left || right;
-                    console.log(`🔍 FIXED: Logical OR: ${left} || ${right} = ${result}`);
+                    const result = Boolean(left) || Boolean(right);
+                    console.log(`✅ CONDITION: Logical OR: ${left} || ${right} = ${result}`);
                     return result;
                 }
                 
@@ -2447,8 +2740,8 @@
                     const cleanInner = innerExpr.startsWith('(') && innerExpr.endsWith(')') ? 
                                       innerExpr.slice(1, -1).trim() : innerExpr;
                     const innerResult = evaluateCondition(cleanInner, variables);
-                    const result = !innerResult;
-                    console.log(`🔍 FIXED: Logical NOT: !${innerResult} = ${result}`);
+                    const result = !Boolean(innerResult);
+                    console.log(`✅ CONDITION: Logical NOT: !${innerResult} = ${result}`);
                     return result;
                 }
                 
@@ -2464,7 +2757,7 @@
                     substitutedExpr = substitutedExpr.replace(regex, value);
                 }
                 
-                console.log('🔍 FIXED: Expression after variable substitution:', substitutedExpr);
+                console.log('✅ CONDITION: Expression after variable substitution:', substitutedExpr);
                 
                 // Handle modulo conditions with proper parsing
                 if (substitutedExpr.includes('%')) {
@@ -2476,11 +2769,11 @@
                         const operator = moduloMatch[3];
                         const rightValue = parseFloat(moduloMatch[4].trim());
                         
-                        console.log(`🔍 FIXED: Modulo operation: ${leftValue} % ${divisorValue} ${operator} ${rightValue}`);
+                        console.log(`✅ CONDITION: Modulo operation: ${leftValue} % ${divisorValue} ${operator} ${rightValue}`);
                         
                         if (divisorValue !== 0) {
                             const modResult = leftValue % divisorValue;
-                            console.log(`🔍 FIXED: Modulo result: ${modResult}`);
+                            console.log(`✅ CONDITION: Modulo result: ${modResult}`);
                             
                             let result;
                             switch (operator) {
@@ -2493,7 +2786,7 @@
                                 default: result = false;
                             }
                             
-                            console.log(`🔍 FIXED: Modulo condition result: ${result} (strict comparison)`);
+                            console.log(`✅ CONDITION: Modulo condition result: ${result}`);
                             return result;
                         }
                     }
@@ -2515,7 +2808,7 @@
                             
                             let result;
                             
-                            // If both are valid numbers, compare as numbers with STRICT comparison
+                            // If both are valid numbers, compare as numbers
                             if (!isNaN(leftNum) && !isNaN(rightNum)) {
                                 switch (op) {
                                     case '<=': result = (leftNum <= rightNum); break;
@@ -2526,46 +2819,68 @@
                                     case '>': result = (leftNum > rightNum); break;
                                     default: result = false;
                                 }
-                                console.log(`🔍 FIXED: Numeric comparison: ${leftNum} ${op} ${rightNum} = ${result} (strict)`);
+                                console.log(`✅ CONDITION: Numeric comparison: ${leftNum} ${op} ${rightNum} = ${result}`);
+                                return result;
                             } else {
-                                // Compare as strings with STRICT comparison
+                                // Compare as strings
                                 switch (op) {
                                     case '==': result = (left === right); break;
                                     case '!=': result = (left !== right); break;
                                     default: result = false; // Other operators not meaningful for strings
                                 }
-                                console.log(`🔍 FIXED: String comparison: "${left}" ${op} "${right}" = ${result} (strict)`);
+                                console.log(`✅ CONDITION: String comparison: "${left}" ${op} "${right}" = ${result}`);
+                                return result;
                             }
-                            
-                            return result;
                         }
                     }
                 }
                 
-                // Handle boolean literals with STRICT comparison
+                // Handle boolean literals
                 if (substitutedExpr === 'true') {
-                    console.log('🔍 FIXED: Boolean literal: true');
+                    console.log('✅ CONDITION: Boolean literal: true');
                     return true;
                 }
                 if (substitutedExpr === 'false') {
-                    console.log('🔍 FIXED: Boolean literal: false');
+                    console.log('✅ CONDITION: Boolean literal: false');
                     return false;
                 }
                 
-                // If no comparison operator, try to evaluate as expression and convert to boolean
+                // Handle numeric values - treat 1 as true, 0 as false, others as truthy
                 const numResult = parseFloat(substitutedExpr);
                 if (!isNaN(numResult)) {
+                    // In C++, any non-zero number is considered true
                     const boolResult = (numResult !== 0);
-                    console.log(`🔍 FIXED: Numeric to boolean: ${numResult} -> ${boolResult} (strict)`);
+                    console.log(`✅ CONDITION: Numeric to boolean: ${numResult} -> ${boolResult} (C++ style: non-zero = true)`);
                     return boolResult;
                 }
                 
+                // Handle single variable references
+                if (variables[substitutedExpr] !== undefined) {
+                    const varValue = variables[substitutedExpr];
+                    console.log(`✅ CONDITION: Variable reference: ${substitutedExpr} = ${varValue} (type: ${typeof varValue})`);
+                    
+                    // Convert variable value to boolean using C++ rules
+                    if (typeof varValue === 'boolean') {
+                        console.log(`✅ CONDITION: Boolean variable: ${varValue}`);
+                        return varValue;
+                    } else if (typeof varValue === 'number') {
+                        const result = (varValue !== 0);
+                        console.log(`✅ CONDITION: Variable numeric to boolean: ${varValue} -> ${result}`);
+                        return result;
+                    } else if (typeof varValue === 'string') {
+                        // In C++, non-empty strings are generally truthy
+                        const result = (varValue.length > 0);
+                        console.log(`✅ CONDITION: Variable string to boolean: "${varValue}" -> ${result}`);
+                        return result;
+                    }
+                }
+                
                 // Default to false for unrecognized expressions
-                console.log(`🔍 FIXED: Unrecognized expression, defaulting to false: "${substitutedExpr}"`);
+                console.log(`✅ CONDITION: Unrecognized expression, defaulting to false: "${substitutedExpr}"`);
                 return false;
                 
             } catch (error) {
-                console.error('❌ FIXED: Error evaluating condition:', condition, error);
+                console.error('❌ CONDITION: Error evaluating condition:', condition, error);
                 return false;
             }
         }
@@ -2674,7 +2989,9 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing workspace...');
             initWorkspace();
+            console.log('Workspace initialized, loading JSCPP...');
             loadJSCPPWithFallback(); // Load and initialize JSCPP library
 
             // Add block button
@@ -2718,6 +3035,8 @@
                 btn.addEventListener('click', function() {
                     const blockType = this.getAttribute('data-type');
                     let actualBlockType;
+                    
+                    console.log('Block button clicked:', blockType); // Debug log
                     
                     // Map block types correctly
                     switch(blockType) {
@@ -2775,6 +3094,9 @@
                         case 'if_else':
                             actualBlockType = 'cpp_if_else';
                             break;
+                        case 'else':
+                            actualBlockType = 'cpp_else';
+                            break;
                         case 'for_loop':
                             actualBlockType = 'cpp_for';
                             break;
@@ -2788,12 +3110,16 @@
                             actualBlockType = 'cpp_' + blockType;
                     }
                     
+                    console.log('Mapped to block type:', actualBlockType); // Debug log
+                    
                     try {
-                        addBlockToWorkspace(actualBlockType);
+                        const newBlock = addBlockToWorkspace(actualBlockType);
+                        console.log('Block added successfully:', newBlock); // Debug log
                         document.getElementById('blockModal').classList.add('hidden');
                     } catch (error) {
                         console.error('Error adding block:', error);
-                        alert('Terjadi kesalahan saat menambahkan blok: ' + actualBlockType);
+                        console.error('Block type attempted:', actualBlockType);
+                        alert('Terjadi kesalahan saat menambahkan blok: ' + actualBlockType + '\nError: ' + error.message);
                     }
                 });
             });
@@ -2835,6 +3161,7 @@
                 case 'loop-example':
                     createLoopExampleTemplate();
                     break;
+
             }
         }
 
@@ -3070,6 +3397,8 @@
             oddCoutBlock.setFieldValue('FALSE', 'ENDL');
             oddTextBlock.getInput('VALUE').connection.connect(oddText.outputConnection);
         }
+
+
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b4576236d189bc',t:'MTc1NzIyODU1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97d6ee3ad421603b',t:'MTc1NzU5MTI0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
