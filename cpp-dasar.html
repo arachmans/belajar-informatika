@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Learning App</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+        .slide-up-enter-active, .slide-up-leave-active {
+            transition: all 0.3s ease;
+        }
+        .slide-up-enter-from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .slide-up-leave-to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        .code-block {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border: 1px solid #475569;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            box-shadow: 20px 0 0 #f59e0b, 40px 0 0 #10b981;
+        }
+        .code-block pre {
+            margin-top: 20px;
+        }
+        .keyword { color: #60a5fa; font-weight: bold; }
+        .string { color: #34d399; }
+        .comment { color: #9ca3af; font-style: italic; }
+        .number { color: #fbbf24; font-weight: bold; }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .type-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .type-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+        .type-card:hover::before {
+            top: -10%;
+            right: -10%;
+        }
+        .type-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .rule-item {
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .rule-item:hover {
+            border-left-color: #3b82f6;
+            background-color: #f8fafc;
+            transform: translateX(5px);
+        }
+        
+        .example-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px dashed #cbd5e1;
+            position: relative;
+        }
+        .example-section::before {
+            content: '💡';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 8px;
+            font-size: 20px;
+        }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            to { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-animation {
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .word-correct {
+            animation: correctPulse 0.6s ease-in-out;
+        }
+        
+        .word-wrong {
+            animation: wrongShake 0.6s ease-in-out;
+        }
+        
+        .word-partial {
+            animation: partialBounce 0.6s ease-in-out;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes partialBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .analysis-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .analysis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .analysis-card:hover::before {
+            left: 100%;
+        }
+        
+        .error-item {
+            animation: fadeInLeft 0.5s ease-out;
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .quiz-correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #059669;
+            color: white;
+        }
+        
+        .quiz-wrong {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-color: #dc2626;
+            color: white;
+        }
+        
+        .quiz-selected-wrong {
+            background: linear-gradient(135deg, #fca5a5, #ef4444);
+            border-color: #ef4444;
+            color: white;
+        }
+        
+        .quiz-unselected {
+            opacity: 0.6;
+        }
+
+        .celebration {
+            animation: celebration 0.8s ease-out;
+        }
+        
+        @keyframes celebration {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            75% { transform: scale(1.1) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-white shadow-lg sticky top-0 z-50">
+            <div class="px-4 py-3">
+                <h1 class="text-xl font-bold text-gray-800 text-center">
+                    🚀 C++ Learning Hub
+                </h1>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="pb-20 px-4 py-6">
+            <transition name="fade" mode="out-in">
+                <!-- Materi Section -->
+                <div v-if="activeTab === 'materi'" key="materi">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="text-center mb-8">
+                            <h2 class="text-4xl font-bold gradient-text mb-4 floating-icon">📚 Materi Pembelajaran</h2>
+                            <p class="text-gray-600 text-lg">Pelajari konsep dasar C++ dengan cara yang menyenangkan!</p>
+                        </div>
+                        
+                        <!-- Progress Learning -->
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 mb-8 text-white pulse-glow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold flex items-center">
+                                    <span class="mr-2 text-2xl">🎯</span> Progress Belajar
+                                </h3>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">2/5 Materi</span>
+                            </div>
+                            <div class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" style="width: 40%"></div>
+                            </div>
+                            <p class="text-sm opacity-90">Terus semangat! Kamu sudah menguasai 40% materi dasar C++</p>
+                        </div>
+                        
+                        <!-- Variabel Section -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 card-hover">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-bold text-blue-600 flex items-center">
+                                    <span class="mr-3 text-3xl floating-icon">🔤</span> Variabel dalam C++
+                                </h3>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Materi 1</span>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-l-4 border-blue-500">
+                                    <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                                        <span class="mr-2 text-xl">🤔</span> Apa itu Variabel?
+                                    </h4>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Variabel adalah tempat penyimpanan data dalam memori komputer yang memiliki nama dan dapat berubah nilainya selama program berjalan. Bayangkan variabel seperti kotak yang diberi label untuk menyimpan berbagai jenis barang.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center text-xl">
+                                        <span class="mr-2 text-2xl">🎨</span> Tipe Data Dasar
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <div class="type-card bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-xl text-white">
+                                            <div class="flex items-center mb-2">
+                                                <span class="text-2xl mr-2">🔢</span>
+                                                <strong class="text-lg">int</strong>
+                                            </div>
+                                            <p class="mb-1">Bilangan bulat</p>
+                                            <small class="opacity-80">Contoh: 10, -5, 0</small>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-green-500 to-green-600 p-4 rounded-xl text-white">
+                                            <div class="flex items-center mb-2">
+                                                <span class="text-2xl mr-2">📊</span>
+                                                <strong class="text-lg">float/double</strong>
+                                            </div>
+                                            <p class="mb-1">Bilangan desimal</p>
+                                            <small class="opacity-80">Contoh: 3.14, -2.5</small>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-purple-500 to-purple-600 p-4 rounded-xl text-white">
+                                            <div class="flex items-center mb-2">
+                                                <span class="text-2xl mr-2">🔤</span>
+                                                <strong class="text-lg">char</strong>
+                                            </div>
+                                            <p class="mb-1">Karakter tunggal</p>
+                                            <small class="opacity-80">Contoh: 'A', 'x', '5'</small>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-yellow-500 to-orange-500 p-4 rounded-xl text-white">
+                                            <div class="flex items-center mb-2">
+                                                <span class="text-2xl mr-2">📝</span>
+                                                <strong class="text-lg">string</strong>
+                                            </div>
+                                            <p class="mb-1">Teks/kalimat</p>
+                                            <small class="opacity-80">Contoh: "Hello World"</small>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-red-500 to-pink-500 p-4 rounded-xl text-white">
+                                            <div class="flex items-center mb-2">
+                                                <span class="text-2xl mr-2">✅</span>
+                                                <strong class="text-lg">bool</strong>
+                                            </div>
+                                            <p class="mb-1">Nilai benar/salah</p>
+                                            <small class="opacity-80">Contoh: true, false</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="example-section p-6 rounded-xl">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">⚡</span> Cara Deklarasi Variabel
+                                    </h4>
+                                    <div class="code-block">
+<pre><span class="comment">// Format: tipe_data nama_variabel;</span>
+<span class="keyword">int</span> umur;
+<span class="keyword">float</span> tinggi;
+<span class="keyword">char</span> grade;
+<span class="keyword">string</span> nama;
+<span class="keyword">bool</span> lulus;
+
+<span class="comment">// Deklarasi dengan inisialisasi</span>
+<span class="keyword">int</span> umur = <span class="number">20</span>;
+<span class="keyword">float</span> tinggi = <span class="number">175.5</span>;
+<span class="keyword">char</span> grade = <span class="string">'A'</span>;
+<span class="keyword">string</span> nama = <span class="string">"Budi"</span>;
+<span class="keyword">bool</span> lulus = <span class="keyword">true</span>;</pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border-l-4 border-yellow-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">📋</span> Aturan Penulisan Variabel
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-semibold text-green-700 mb-2 flex items-center">
+                                                <span class="mr-2">✅</span> Boleh
+                                            </h5>
+                                            <div class="space-y-1">
+                                                <div class="rule-item">Dimulai dengan huruf atau underscore (_)</div>
+                                                <div class="rule-item">Mengandung huruf, angka, dan underscore</div>
+                                                <div class="rule-item">Case sensitive (umur ≠ Umur)</div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-red-700 mb-2 flex items-center">
+                                                <span class="mr-2">❌</span> Tidak Boleh
+                                            </h5>
+                                            <div class="space-y-1">
+                                                <div class="rule-item">Dimulai dengan angka</div>
+                                                <div class="rule-item">Menggunakan spasi</div>
+                                                <div class="rule-item">Menggunakan kata kunci C++</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-xl border-l-4 border-pink-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">🔒</span> Variabel Konstanta
+                                    </h4>
+                                    <div class="mb-4">
+                                        <p class="text-gray-700 leading-relaxed mb-3">
+                                            Konstanta adalah variabel yang nilainya tidak dapat diubah setelah dideklarasikan. Gunakan kata kunci <code class="bg-gray-200 px-2 py-1 rounded text-sm">const</code> untuk membuat konstanta.
+                                        </p>
+                                        <div class="bg-gradient-to-r from-red-50 to-pink-50 p-4 rounded-lg border-l-4 border-red-400 mb-4">
+                                            <h5 class="font-semibold text-red-700 mb-2 flex items-center">
+                                                <span class="mr-2">⚠️</span> Aturan Konstanta
+                                            </h5>
+                                            <ul class="list-disc list-inside text-red-700 space-y-1 text-sm">
+                                                <li>Harus diinisialisasi saat deklarasi</li>
+                                                <li>Nilai tidak dapat diubah setelah deklarasi</li>
+                                                <li>Biasanya ditulis dengan huruf KAPITAL</li>
+                                                <li>Membantu mencegah kesalahan dalam program</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="code-block">
+<pre><span class="comment">// Deklarasi konstanta</span>
+<span class="keyword">const int</span> MAX_SISWA = <span class="number">30</span>;
+<span class="keyword">const float</span> PI = <span class="number">3.14159</span>;
+<span class="keyword">const string</span> NAMA_SEKOLAH = <span class="string">"SMA Negeri 1"</span>;
+
+<span class="comment">// Konstanta harus diinisialisasi</span>
+<span class="keyword">const int</span> NILAI_LULUS = <span class="number">75</span>;
+
+<span class="comment">// ERROR: Tidak bisa mengubah nilai konstanta</span>
+<span class="comment">// MAX_SISWA = 35; // Ini akan error!</span></pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl border-l-4 border-indigo-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">🚀</span> Contoh Penggunaan Lengkap
+                                    </h4>
+                                    <div class="code-block">
+<pre><span class="keyword">#include</span> &lt;iostream&gt;
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main() {
+    <span class="comment">// Deklarasi konstanta</span>
+    <span class="keyword">const float</span> PI = <span class="number">3.14159</span>;
+    <span class="keyword">const int</span> NILAI_LULUS = <span class="number">75</span>;
+    
+    <span class="comment">// Deklarasi variabel</span>
+    <span class="keyword">string</span> nama = <span class="string">"Alice"</span>;
+    <span class="keyword">int</span> umur = <span class="number">25</span>;
+    <span class="keyword">float</span> ipk = <span class="number">3.75</span>;
+    <span class="keyword">bool</span> lulus = <span class="keyword">true</span>;
+    <span class="keyword">float</span> jari_jari = <span class="number">7.0</span>;
+    
+    <span class="comment">// Menghitung luas lingkaran menggunakan konstanta</span>
+    <span class="keyword">float</span> luas = PI * jari_jari * jari_jari;
+    
+    <span class="comment">// Menampilkan nilai variabel</span>
+    cout &lt;&lt; <span class="string">"Nama: "</span> &lt;&lt; nama &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Umur: "</span> &lt;&lt; umur &lt;&lt; <span class="string">" tahun"</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"IPK: "</span> &lt;&lt; ipk &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Status: "</span> &lt;&lt; (lulus ? <span class="string">"Lulus"</span> : <span class="string">"Tidak Lulus"</span>) &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Luas lingkaran: "</span> &lt;&lt; luas &lt;&lt; endl;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Operator Section -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-bold text-green-600 flex items-center">
+                                    <span class="mr-3 text-3xl floating-icon">🧮</span> Operator dalam C++
+                                </h3>
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Materi 2</span>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border-l-4 border-green-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center text-xl">
+                                        <span class="mr-2 text-2xl">⚡</span> Operator Aritmatika
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                                        <div class="type-card bg-gradient-to-br from-red-500 to-pink-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">+</div>
+                                                <div class="font-semibold mb-1">Penjumlahan</div>
+                                                <small class="opacity-80">5 + 3 = 8</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-blue-500 to-cyan-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">-</div>
+                                                <div class="font-semibold mb-1">Pengurangan</div>
+                                                <small class="opacity-80">10 - 4 = 6</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-green-500 to-emerald-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">*</div>
+                                                <div class="font-semibold mb-1">Perkalian</div>
+                                                <small class="opacity-80">6 * 7 = 42</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-purple-500 to-violet-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">/</div>
+                                                <div class="font-semibold mb-1">Pembagian</div>
+                                                <small class="opacity-80">15 / 3 = 5</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-yellow-500 to-orange-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">%</div>
+                                                <div class="font-semibold mb-1">Modulus</div>
+                                                <small class="opacity-80">17 % 5 = 2</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-indigo-500 to-purple-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">++</div>
+                                                <div class="font-semibold mb-1">Increment</div>
+                                                <small class="opacity-80">x++ atau ++x</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-gray-500 to-slate-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">--</div>
+                                                <div class="font-semibold mb-1">Decrement</div>
+                                                <small class="opacity-80">x-- atau --x</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Penjelasan Detail Operator -->
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <h5 class="font-semibold text-green-700 mb-3 flex items-center">
+                                            <span class="mr-2">📖</span> Penjelasan Detail Operator
+                                        </h5>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                            <div class="space-y-2">
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-red-600 mr-2 mt-1">+</span>
+                                                    <span class="text-gray-700">Menambahkan dua nilai atau lebih</span>
+                                                </div>
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-blue-600 mr-2 mt-1">-</span>
+                                                    <span class="text-gray-700">Mengurangi nilai pertama dengan nilai kedua</span>
+                                                </div>
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-green-600 mr-2 mt-1">*</span>
+                                                    <span class="text-gray-700">Mengalikan dua nilai atau lebih</span>
+                                                </div>
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-purple-600 mr-2 mt-1">/</span>
+                                                    <span class="text-gray-700">Membagi nilai pertama dengan nilai kedua</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-yellow-600 mr-2 mt-1">%</span>
+                                                    <span class="text-gray-700">Menghasilkan sisa pembagian (hanya untuk integer)</span>
+                                                </div>
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-indigo-600 mr-2 mt-1">++</span>
+                                                    <span class="text-gray-700">Menambah nilai variabel sebesar 1</span>
+                                                </div>
+                                                <div class="flex items-start">
+                                                    <span class="font-bold text-gray-600 mr-2 mt-1">--</span>
+                                                    <span class="text-gray-700">Mengurangi nilai variabel sebesar 1</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Operator Assignment Section -->
+                                <div class="bg-gradient-to-r from-cyan-50 to-blue-50 p-6 rounded-xl border-l-4 border-cyan-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center text-xl">
+                                        <span class="mr-2 text-2xl">📝</span> Operator Assignment (Penugasan)
+                                    </h4>
+                                    <div class="mb-4">
+                                        <p class="text-gray-700 leading-relaxed mb-3">
+                                            Operator assignment digunakan untuk memberikan nilai kepada variabel. Selain operator dasar <code class="bg-gray-200 px-2 py-1 rounded text-sm">=</code>, ada juga operator assignment gabungan yang lebih efisien.
+                                        </p>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                                        <div class="type-card bg-gradient-to-br from-cyan-500 to-blue-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">=</div>
+                                                <div class="font-semibold mb-1">Assignment</div>
+                                                <small class="opacity-80">x = 10</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-red-500 to-pink-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">+=</div>
+                                                <div class="font-semibold mb-1">Add & Assign</div>
+                                                <small class="opacity-80">x += 5</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-blue-500 to-indigo-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">-=</div>
+                                                <div class="font-semibold mb-1">Sub & Assign</div>
+                                                <small class="opacity-80">x -= 3</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-green-500 to-emerald-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">*=</div>
+                                                <div class="font-semibold mb-1">Mul & Assign</div>
+                                                <small class="opacity-80">x *= 2</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-purple-500 to-violet-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">/=</div>
+                                                <div class="font-semibold mb-1">Div & Assign</div>
+                                                <small class="opacity-80">x /= 4</small>
+                                            </div>
+                                        </div>
+                                        <div class="type-card bg-gradient-to-br from-yellow-500 to-orange-500 p-4 rounded-xl text-white">
+                                            <div class="text-center">
+                                                <div class="text-3xl font-bold mb-2">%=</div>
+                                                <div class="font-semibold mb-1">Mod & Assign</div>
+                                                <small class="opacity-80">x %= 3</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Penjelasan Detail Assignment -->
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <h5 class="font-semibold text-cyan-700 mb-3 flex items-center">
+                                            <span class="mr-2">💡</span> Cara Kerja Operator Assignment
+                                        </h5>
+                                        <div class="space-y-3 text-sm">
+                                            <div class="flex items-center justify-between bg-gray-50 p-3 rounded">
+                                                <code class="font-mono text-cyan-600">x += 5</code>
+                                                <span class="text-gray-500 mx-2">≡</span>
+                                                <code class="font-mono text-gray-700">x = x + 5</code>
+                                            </div>
+                                            <div class="flex items-center justify-between bg-gray-50 p-3 rounded">
+                                                <code class="font-mono text-cyan-600">x -= 3</code>
+                                                <span class="text-gray-500 mx-2">≡</span>
+                                                <code class="font-mono text-gray-700">x = x - 3</code>
+                                            </div>
+                                            <div class="flex items-center justify-between bg-gray-50 p-3 rounded">
+                                                <code class="font-mono text-cyan-600">x *= 2</code>
+                                                <span class="text-gray-500 mx-2">≡</span>
+                                                <code class="font-mono text-gray-700">x = x * 2</code>
+                                            </div>
+                                            <div class="flex items-center justify-between bg-gray-50 p-3 rounded">
+                                                <code class="font-mono text-cyan-600">x /= 4</code>
+                                                <span class="text-gray-500 mx-2">≡</span>
+                                                <code class="font-mono text-gray-700">x = x / 4</code>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="example-section p-6 rounded-xl">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">🎯</span> Contoh Program Lengkap
+                                    </h4>
+                                    <div class="code-block">
+<pre><span class="keyword">#include</span> &lt;iostream&gt;
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main() {
+    <span class="keyword">int</span> a = <span class="number">15</span>, b = <span class="number">4</span>;
+    <span class="keyword">int</span> x = <span class="number">10</span>;
+    
+    <span class="comment">// Operator Aritmatika</span>
+    cout &lt;&lt; <span class="string">"=== OPERATOR ARITMATIKA ==="</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"a = "</span> &lt;&lt; a &lt;&lt; <span class="string">", b = "</span> &lt;&lt; b &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"a + b = "</span> &lt;&lt; (a + b) &lt;&lt; endl;  <span class="comment">// 19</span>
+    cout &lt;&lt; <span class="string">"a - b = "</span> &lt;&lt; (a - b) &lt;&lt; endl;  <span class="comment">// 11</span>
+    cout &lt;&lt; <span class="string">"a * b = "</span> &lt;&lt; (a * b) &lt;&lt; endl;  <span class="comment">// 60</span>
+    cout &lt;&lt; <span class="string">"a / b = "</span> &lt;&lt; (a / b) &lt;&lt; endl;  <span class="comment">// 3</span>
+    cout &lt;&lt; <span class="string">"a % b = "</span> &lt;&lt; (a % b) &lt;&lt; endl;  <span class="comment">// 3</span>
+    
+    <span class="comment">// Increment dan Decrement</span>
+    cout &lt;&lt; <span class="string">"\n=== INCREMENT & DECREMENT ==="</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"a++ = "</span> &lt;&lt; a++ &lt;&lt; endl;      <span class="comment">// 15, lalu a menjadi 16</span>
+    cout &lt;&lt; <span class="string">"++b = "</span> &lt;&lt; ++b &lt;&lt; endl;      <span class="comment">// 5</span>
+    cout &lt;&lt; <span class="string">"--a = "</span> &lt;&lt; --a &lt;&lt; endl;      <span class="comment">// 15</span>
+    cout &lt;&lt; <span class="string">"b-- = "</span> &lt;&lt; b-- &lt;&lt; endl;      <span class="comment">// 5, lalu b menjadi 4</span>
+    
+    <span class="comment">// Operator Assignment</span>
+    cout &lt;&lt; <span class="string">"\n=== OPERATOR ASSIGNMENT ==="</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"x awal = "</span> &lt;&lt; x &lt;&lt; endl;    <span class="comment">// 10</span>
+    
+    x += <span class="number">5</span>;  <span class="comment">// x = x + 5</span>
+    cout &lt;&lt; <span class="string">"x += 5, x = "</span> &lt;&lt; x &lt;&lt; endl;  <span class="comment">// 15</span>
+    
+    x -= <span class="number">3</span>;  <span class="comment">// x = x - 3</span>
+    cout &lt;&lt; <span class="string">"x -= 3, x = "</span> &lt;&lt; x &lt;&lt; endl;  <span class="comment">// 12</span>
+    
+    x *= <span class="number">2</span>;  <span class="comment">// x = x * 2</span>
+    cout &lt;&lt; <span class="string">"x *= 2, x = "</span> &lt;&lt; x &lt;&lt; endl;  <span class="comment">// 24</span>
+    
+    x /= <span class="number">4</span>;  <span class="comment">// x = x / 4</span>
+    cout &lt;&lt; <span class="string">"x /= 4, x = "</span> &lt;&lt; x &lt;&lt; endl;  <span class="comment">// 6</span>
+    
+    x %= <span class="number">4</span>;  <span class="comment">// x = x % 4</span>
+    cout &lt;&lt; <span class="string">"x %= 4, x = "</span> &lt;&lt; x &lt;&lt; endl;  <span class="comment">// 2</span>
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                                    </div>
+                                </div>
+
+                                <!-- Tips & Tricks -->
+                                <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-xl border-l-4 border-pink-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">💡</span> Tips & Tricks
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <h5 class="font-semibold text-pink-700 mb-2">🔍 Operator Precedence</h5>
+                                            <p class="text-sm text-gray-600">Perkalian dan pembagian dikerjakan sebelum penjumlahan dan pengurangan</p>
+                                        </div>
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <h5 class="font-semibold text-pink-700 mb-2">⚠️ Pembagian Integer</h5>
+                                            <p class="text-sm text-gray-600">Pembagian antar integer menghasilkan integer (tanpa desimal)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Section -->
+                <div v-else-if="activeTab === 'game'" key="game">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="text-center mb-8">
+                            <h2 class="text-4xl font-bold gradient-text mb-4 floating-icon">🎮 Game Interaktif</h2>
+                            <p class="text-gray-600 text-lg">Susun kode C++ seperti Duolingo dan asah kemampuan programming!</p>
+                        </div>
+                        
+                        <!-- Progress Game -->
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl p-6 mb-8 text-white pulse-glow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold flex items-center">
+                                    <span class="mr-2 text-2xl">🧩</span> Susun Kode C++
+                                </h3>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">10 Level Tantangan</span>
+                            </div>
+                            <div v-if="gameStarted" class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" :style="{width: ((currentQuestion + 1) / 10) * 100 + '%'}"></div>
+                            </div>
+                            <div v-else class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                            </div>
+                            <p class="text-sm opacity-90">Klik kata-kata untuk menyusun perintah C++ yang benar!</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div v-if="!gameStarted" class="text-center">
+                                <div class="mb-8">
+                                    <div class="inline-flex items-center bg-gradient-to-r from-purple-100 to-pink-100 px-6 py-3 rounded-full mb-6">
+                                        <span class="text-3xl mr-3">🎯</span>
+                                        <span class="text-lg font-semibold text-purple-800">Siap untuk tantangan coding?</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border-l-4 border-purple-500">
+                                        <h4 class="font-bold text-purple-800 mb-3 flex items-center">
+                                            <span class="mr-2 text-2xl">🎮</span> Cara Bermain
+                                        </h4>
+                                        <ul class="text-sm text-gray-700 space-y-2">
+                                            <li>• Baca instruksi dengan teliti</li>
+                                            <li>• Klik kata-kata untuk menyusun kode</li>
+                                            <li>• Susun sesuai sintaks C++ yang benar</li>
+                                            <li>• Periksa jawaban dan lanjut ke level berikutnya</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border-l-4 border-blue-500">
+                                        <h4 class="font-bold text-blue-800 mb-3 flex items-center">
+                                            <span class="mr-2 text-2xl">🏆</span> Sistem Poin
+                                        </h4>
+                                        <ul class="text-sm text-gray-700 space-y-2">
+                                            <li>• Jawaban benar: +1 poin</li>
+                                            <li>• Jawaban salah: 0 poin</li>
+                                            <li>• Total: 10 soal</li>
+                                            <li>• Target: Skor 8+ untuk level mahir</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border-l-4 border-green-500">
+                                        <h4 class="font-bold text-green-800 mb-3 flex items-center">
+                                            <span class="mr-2 text-2xl">💡</span> Tips Sukses
+                                        </h4>
+                                        <ul class="text-sm text-gray-700 space-y-2">
+                                            <li>• Perhatikan tipe data yang diminta</li>
+                                            <li>• Ingat urutan sintaks C++</li>
+                                            <li>• Jangan lupa semicolon (;)</li>
+                                            <li>• Gunakan petik untuk string</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <button @click="startGame" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105 shadow-lg">
+                                    <span class="mr-2 text-2xl">🚀</span>
+                                    Mulai Petualangan Coding!
+                                </button>
+                            </div>
+
+                            <div v-else>
+                                <div class="mb-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-lg font-semibold">Skor: {{ gameScore }}</span>
+                                        <span class="text-lg font-semibold">Soal: {{ currentQuestion + 1 }}/10</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" :style="{width: ((currentQuestion + 1) / 10) * 100 + '%'}"></div>
+                                    </div>
+                                </div>
+
+                                <div v-if="!gameFinished">
+                                    <!-- Instruksi -->
+                                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                                        <h4 class="font-semibold text-blue-800 mb-2">📝 Instruksi:</h4>
+                                        <p class="text-blue-700">{{ currentGameQuestion.instruction }}</p>
+                                    </div>
+
+                                    <!-- Area Jawaban -->
+                                    <div class="mb-6">
+                                        <h4 class="font-semibold text-gray-700 mb-3">Susunan Anda:</h4>
+                                        <div class="min-h-16 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4">
+                                            <div class="flex flex-wrap gap-2">
+                                                <span v-for="(word, index) in selectedWords" :key="'selected-' + index"
+                                                      @click="removeWord(index)"
+                                                      class="bg-purple-500 text-white px-3 py-2 rounded-lg cursor-pointer hover:bg-purple-600 transition-colors font-mono text-sm"
+                                                      :class="showResult ? getWordStatusWithAnimation(word, index) : ''">
+                                                    {{ word }}
+                                                </span>
+                                                <span v-if="selectedWords.length === 0" class="text-gray-400 italic">
+                                                    Klik kata-kata di bawah untuk menyusun kode...
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Preview Code -->
+                                        <div v-if="selectedWords.length > 0" class="bg-gray-800 text-green-400 p-3 rounded-lg font-mono text-sm">
+                                            {{ selectedWords.join(' ') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Kata-kata yang tersedia -->
+                                    <div class="mb-6">
+                                        <h4 class="font-semibold text-gray-700 mb-3">Kata-kata tersedia:</h4>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span v-for="(word, index) in availableWords" :key="'available-' + index"
+                                                  @click="selectWord(index)"
+                                                  class="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-200 transition-colors font-mono text-sm border border-blue-300"
+                                                  :class="showResult ? 'opacity-50 cursor-not-allowed' : ''">
+                                                {{ word }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <button @click="checkAnswer" :disabled="selectedWords.length === 0 || showResult"
+                                                class="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold transition-colors mr-2">
+                                            Periksa Jawaban
+                                        </button>
+                                        <button @click="clearAnswer" :disabled="showResult" class="bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold transition-colors mr-2">
+                                            Hapus Semua
+                                        </button>
+                                        <button v-if="!showResult" @click="skipQuestion" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                                            Lewati
+                                        </button>
+                                        <button v-if="showResult" @click="nextGameQuestion" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                                            {{ currentQuestion === 9 ? 'Selesai' : 'Lanjut' }}
+                                        </button>
+                                    </div>
+
+                                    <div v-if="showResult" class="mt-6 result-animation">
+                                        <!-- Header Result -->
+                                        <div class="text-center mb-6">
+                                            <div v-if="isCorrect" class="inline-flex items-center bg-gradient-to-r from-green-400 to-emerald-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg transform hover:scale-105 transition-all celebration">
+                                                <span class="text-3xl mr-3 animate-bounce">🎉</span>
+                                                Jawaban Benar!
+                                            </div>
+                                            <div v-else class="inline-flex items-center bg-gradient-to-r from-red-400 to-pink-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg">
+                                                <span class="text-3xl mr-3">❌</span>
+                                                Jawaban Salah
+                                            </div>
+                                        </div>
+
+                                        <!-- Answer Analysis -->
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                                            <!-- Your Answer -->
+                                            <div class="analysis-card bg-white border-2 rounded-xl p-6 shadow-lg" :class="isCorrect ? 'border-green-300' : 'border-red-300'">
+                                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                                    <span class="mr-2 text-2xl">👤</span> Jawaban Anda
+                                                </h4>
+                                                <div class="bg-gray-900 rounded-lg p-4 mb-4 shadow-inner">
+                                                    <div class="flex flex-wrap gap-2">
+                                                        <span v-for="(word, index) in selectedWords" :key="'result-selected-' + index"
+                                                              class="px-3 py-2 rounded-md font-mono text-sm font-semibold transition-all transform hover:scale-105"
+                                                              :class="getWordStatusWithAnimation(word, index)">
+                                                            {{ word }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div v-if="selectedWords.length > 0" class="bg-gray-50 p-3 rounded-lg">
+                                                    <div class="text-sm text-gray-600 mb-1">
+                                                        <strong>📝 Kode Anda:</strong>
+                                                    </div>
+                                                    <code class="bg-white px-3 py-2 rounded border text-gray-800 font-mono text-sm block">{{ selectedWords.join(' ') }}</code>
+                                                </div>
+                                            </div>
+
+                                            <!-- Correct Answer -->
+                                            <div class="analysis-card bg-white border-2 border-green-300 rounded-xl p-6 shadow-lg">
+                                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                                    <span class="mr-2 text-2xl">✅</span> Jawaban Benar
+                                                </h4>
+                                                <div class="bg-gray-900 rounded-lg p-4 mb-4 shadow-inner">
+                                                    <div class="flex flex-wrap gap-2">
+                                                        <span v-for="(word, index) in currentGameQuestion.correctAnswer" :key="'result-correct-' + index"
+                                                              class="bg-green-500 text-white px-3 py-2 rounded-md font-mono text-sm font-semibold shadow-md word-correct">
+                                                            {{ word }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="bg-green-50 p-3 rounded-lg">
+                                                    <div class="text-sm text-green-700 mb-1">
+                                                        <strong>✨ Kode yang Benar:</strong>
+                                                    </div>
+                                                    <code class="bg-white px-3 py-2 rounded border border-green-200 text-gray-800 font-mono text-sm block">{{ currentGameQuestion.correctAnswer.join(' ') }}</code>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Detailed Analysis (only if wrong) -->
+                                        <div v-if="!isCorrect" class="analysis-card bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl p-6 mb-6 shadow-lg">
+                                            <h4 class="font-bold text-yellow-800 mb-4 flex items-center">
+                                                <span class="mr-2 text-2xl">🔍</span> Analisis Kesalahan Detail
+                                            </h4>
+                                            <div class="space-y-4">
+                                                <div v-if="selectedWords.length !== currentGameQuestion.correctAnswer.length" class="error-item flex items-start bg-white p-4 rounded-lg shadow-sm">
+                                                    <span class="text-red-500 mr-3 mt-1 text-lg">⚠️</span>
+                                                    <div>
+                                                        <strong class="text-red-700 text-lg">Jumlah kata tidak sesuai</strong>
+                                                        <p class="text-sm text-gray-700 mt-1">Anda menggunakan <span class="font-semibold text-red-600">{{ selectedWords.length }} kata</span>, seharusnya <span class="font-semibold text-green-600">{{ currentGameQuestion.correctAnswer.length }} kata</span></p>
+                                                    </div>
+                                                </div>
+                                                <div v-for="(error, index) in getDetailedErrors()" :key="'error-' + index" class="error-item flex items-start bg-white p-4 rounded-lg shadow-sm" :style="{ animationDelay: (index * 0.1) + 's' }">
+                                                    <span class="text-red-500 mr-3 mt-1 text-lg">🎯</span>
+                                                    <div>
+                                                        <strong class="text-red-700 text-lg">{{ error.type }}</strong>
+                                                        <p class="text-sm text-gray-700 mt-1">{{ error.message }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Explanation -->
+                                        <div class="analysis-card bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-6 mb-6 shadow-lg">
+                                            <h4 class="font-bold text-blue-800 mb-4 flex items-center">
+                                                <span class="mr-2 text-2xl">💡</span> Penjelasan & Tips
+                                            </h4>
+                                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                                <p class="text-blue-700 leading-relaxed text-lg">{{ currentGameQuestion.explanation }}</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Score Update -->
+                                        <div class="text-center">
+                                            <div class="inline-flex items-center bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-white px-8 py-4 rounded-full font-bold text-xl shadow-lg transform hover:scale-105 transition-all">
+                                                <span class="mr-3 text-2xl">🏆</span>
+                                                Skor: {{ gameScore }}/{{ currentQuestion + 1 }}
+                                                <span class="ml-3 text-2xl">{{ isCorrect ? '🎯' : '💪' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div v-else class="text-center">
+                                    <h3 class="text-2xl font-bold text-purple-600 mb-4">🎉 Game Selesai!</h3>
+                                    <p class="text-xl mb-4">Skor Akhir: {{ gameScore }}/10</p>
+                                    <p class="text-gray-600 mb-6">{{ getScoreMessage() }}</p>
+                                    <button @click="resetGame" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                                        Main Lagi
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Section -->
+                <div v-else-if="activeTab === 'quiz'" key="quiz">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="text-center mb-8">
+                            <h2 class="text-4xl font-bold gradient-text mb-4 floating-icon">📝 Kuis Pemahaman</h2>
+                            <p class="text-gray-600 text-lg">Uji pemahaman C++ dengan 20 soal pilihan ganda yang menantang!</p>
+                        </div>
+                        
+                        <!-- Progress Kuis -->
+                        <div class="bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl p-6 mb-8 text-white pulse-glow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold flex items-center">
+                                    <span class="mr-2 text-2xl">🧠</span> Uji Pemahaman C++
+                                </h3>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">20 Soal Pilihan Ganda</span>
+                            </div>
+                            <div v-if="quizStarted && !quizFinished" class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" :style="{width: ((currentQuizQuestion + 1) / 20) * 100 + '%'}"></div>
+                            </div>
+                            <div v-else class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                            </div>
+                            <p class="text-sm opacity-90">Jawab semua soal dengan benar untuk mendapat skor maksimal!</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div v-if="!quizStarted" class="text-center">
+                                <div class="mb-8">
+                                    <div class="inline-flex items-center bg-gradient-to-r from-blue-100 to-cyan-100 px-6 py-3 rounded-full mb-6">
+                                        <span class="text-3xl mr-3">🎓</span>
+                                        <span class="text-lg font-semibold text-blue-800">Siap menguji kemampuan C++?</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                    <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border-l-4 border-blue-500">
+                                        <h4 class="font-bold text-blue-800 mb-3 flex items-center">
+                                            <span class="mr-2 text-2xl">📋</span> Format Kuis
+                                        </h4>
+                                        <ul class="text-sm text-gray-700 space-y-2">
+                                            <li>• 20 soal pilihan ganda</li>
+                                            <li>• Waktu: 20 menit</li>
+                                            <li>• Materi: Variabel & Operator</li>
+                                            <li>• Satu jawaban per soal</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border-l-4 border-green-500">
+                                        <h4 class="font-bold text-green-800 mb-3 flex items-center">
+                                            <span class="mr-2 text-2xl">🏅</span> Sistem Nilai
+                                        </h4>
+                                        <ul class="text-sm text-gray-700 space-y-2">
+                                            <li>• A (90-100%): Excellent!</li>
+                                            <li>• B (80-89%): Very Good!</li>
+                                            <li>• C (70-79%): Good!</li>
+                                            <li>• D (60-69%): Fair</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-xl border-l-4 border-yellow-500">
+                                        <h4 class="font-bold text-yellow-800 mb-3 flex items-center">
+                                            <span class="mr-2 text-2xl">⚡</span> Tips Mengerjakan
+                                        </h4>
+                                        <ul class="text-sm text-gray-700 space-y-2">
+                                            <li>• Baca soal dengan teliti</li>
+                                            <li>• Perhatikan tipe data</li>
+                                            <li>• Ingat aturan operator</li>
+                                            <li>• Kelola waktu dengan baik</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl mb-8 border-l-4 border-indigo-500">
+                                    <h4 class="font-bold text-indigo-800 mb-3 flex items-center">
+                                        <span class="mr-2 text-2xl">📚</span> Materi yang Diujikan
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                        <div>
+                                            <strong class="text-indigo-700">Variabel:</strong>
+                                            <ul class="mt-1 space-y-1">
+                                                <li>• Tipe data (int, float, char, string, bool)</li>
+                                                <li>• Deklarasi dan inisialisasi</li>
+                                                <li>• Aturan penamaan variabel</li>
+                                                <li>• Konstanta (const)</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <strong class="text-indigo-700">Operator:</strong>
+                                            <ul class="mt-1 space-y-1">
+                                                <li>• Aritmatika (+, -, *, /, %)</li>
+                                                <li>• Assignment (=, +=, -=, *=, /=)</li>
+                                                <li>• Increment/Decrement (++, --)</li>
+                                                <li>• Precedence operator</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button @click="startQuiz" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-12 py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105 shadow-lg">
+                                    <span class="mr-2 text-2xl">🚀</span>
+                                    Mulai Kuis Sekarang!
+                                </button>
+                            </div>
+
+                            <div v-else-if="!quizFinished">
+                                <div class="mb-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-lg font-semibold">Soal {{ currentQuizQuestion + 1 }}/20</span>
+                                        <span class="text-lg font-semibold">Waktu: {{ formatTime(timeLeft) }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="{width: ((currentQuizQuestion + 1) / 20) * 100 + '%'}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-6">
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ quizQuestions[currentQuizQuestion].question }}</h4>
+                                    <div class="space-y-3">
+                                        <div v-for="(option, index) in quizQuestions[currentQuizQuestion].options" :key="index" 
+                                             @click="selectAnswer(index)"
+                                             class="p-4 border-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
+                                             :class="getQuizOptionClass(index)">
+                                            <span class="font-semibold" :class="getQuizOptionTextClass(index)">{{ String.fromCharCode(65 + index) }}.</span>
+                                            {{ option }}
+                                            <span v-if="showQuizResult && index === quizQuestions[currentQuizQuestion].correct" class="float-right text-green-600 font-bold">✓ Benar</span>
+                                            <span v-if="showQuizResult && selectedAnswer === index && index !== quizQuestions[currentQuizQuestion].correct" class="float-right text-red-600 font-bold">✗ Salah</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button @click="nextQuestion" :disabled="selectedAnswer === null" 
+                                            class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                                        {{ showQuizResult ? (currentQuizQuestion === 19 ? 'Selesai' : 'Lanjut') : 'Submit' }}
+                                    </button>
+                                </div>
+
+                                <!-- Quiz Result for current question -->
+                                <div v-if="showQuizResult" class="mt-6 result-animation">
+                                    <div class="text-center mb-4">
+                                        <div v-if="selectedAnswer === quizQuestions[currentQuizQuestion].correct" class="inline-flex items-center bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg celebration">
+                                            <span class="text-2xl mr-2 animate-bounce">🎉</span>
+                                            Benar!
+                                        </div>
+                                        <div v-else class="inline-flex items-center bg-gradient-to-r from-red-400 to-pink-500 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">
+                                            <span class="text-2xl mr-2">❌</span>
+                                            Salah
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <h5 class="font-semibold text-blue-800 mb-2">💡 Penjelasan:</h5>
+                                        <p class="text-blue-700">
+                                            Jawaban yang benar adalah <strong>{{ String.fromCharCode(65 + quizQuestions[currentQuizQuestion].correct) }}. {{ quizQuestions[currentQuizQuestion].options[quizQuestions[currentQuizQuestion].correct] }}</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-else class="text-center">
+                                <h3 class="text-2xl font-bold text-blue-600 mb-4">📊 Hasil Kuis</h3>
+                                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                    <p class="text-3xl font-bold text-gray-800 mb-2">{{ quizScore }}/30</p>
+                                    <p class="text-xl text-gray-600 mb-2">{{ Math.round((quizScore/30)*100) }}%</p>
+                                    <p class="text-gray-600">{{ getQuizGrade() }}</p>
+                                </div>
+                                <button @click="resetQuiz" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                                    Ulangi Kuis
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latihan Section -->
+                <div v-else-if="activeTab === 'latihan'" key="latihan">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="text-center mb-8">
+                            <h2 class="text-4xl font-bold gradient-text mb-4 floating-icon">💻 Latihan Praktik</h2>
+                            <p class="text-gray-600 text-lg">Praktikkan konsep yang telah dipelajari dengan soal-soal menarik!</p>
+                        </div>
+                        
+                        <!-- Progress Latihan -->
+                        <div class="bg-gradient-to-r from-orange-500 to-red-600 rounded-xl p-6 mb-8 text-white pulse-glow">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold flex items-center">
+                                    <span class="mr-2 text-2xl">🚀</span> Progress Latihan
+                                </h3>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">2 Soal Praktik</span>
+                            </div>
+                            <div class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" style="width: 100%"></div>
+                            </div>
+                            <p class="text-sm opacity-90">Siap untuk mengaplikasikan ilmu C++ dalam program nyata?</p>
+                        </div>
+                        
+                        <div class="space-y-8">
+                            <!-- Soal 1: Kalkulator Sederhana -->
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold text-orange-600 mb-4 flex items-center">
+                                    <span class="mr-2">🧮</span> Soal 1: Kalkulator Sederhana
+                                </h3>
+                                
+                                <div class="space-y-6">
+                                    <div class="bg-orange-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-orange-800 mb-2">📋 Deskripsi Tugas</h4>
+                                        <p class="text-gray-700 leading-relaxed">
+                                            Buatlah program kalkulator sederhana yang meminta input dua bilangan dari user, kemudian menampilkan hasil dari semua operasi aritmatika dasar (penjumlahan, pengurangan, perkalian, dan pembagian) sekaligus.
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-blue-800 mb-2">✅ Spesifikasi Program</h4>
+                                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                            <li>Program meminta input dua bilangan dari user</li>
+                                            <li>Program menampilkan hasil penjumlahan, pengurangan, perkalian, dan pembagian</li>
+                                            <li>Gunakan format output yang sesuai dengan contoh</li>
+                                            <li>Pastikan pembagian menghasilkan bilangan bulat</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="bg-green-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-green-800 mb-2">💡 Contoh Output yang Diharapkan</h4>
+                                        <div class="code-block text-sm">
+<pre>=== KALKULATOR SEDERHANA ===
+Masukkan bilangan pertama: 20
+Masukkan bilangan kedua: 5
+
+--- HASIL PERHITUNGAN ---
+Hasil Penjumlahan: 25
+Hasil Pengurangan: 15
+Hasil Perkalian: 100
+Hasil Pembagian: 4</pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-purple-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-purple-800 mb-2">💭 Tips Pengerjaan</h4>
+                                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                            <li>Gunakan tipe data <code class="bg-gray-200 px-1 rounded">int</code> untuk bilangan bulat</li>
+                                            <li>Gunakan operator aritmatika: +, -, *, /</li>
+                                            <li>Perhatikan format output yang diminta</li>
+                                            <li>Jangan lupa include <code class="bg-gray-200 px-1 rounded">&lt;iostream&gt;</code></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="bg-indigo-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-indigo-800 mb-2">📝 Contoh Struktur Program</h4>
+                                        <div class="code-block">
+<pre><span class="keyword">#include</span> &lt;iostream&gt;
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main() {
+    <span class="keyword">int</span> bilangan1, bilangan2;
+    
+    <span class="comment">// Header program</span>
+    cout &lt;&lt; <span class="string">"=== KALKULATOR SEDERHANA ==="</span> &lt;&lt; endl;
+    
+    <span class="comment">// Input dari user</span>
+    cout &lt;&lt; <span class="string">"Masukkan bilangan pertama: "</span>;
+    cin &gt;&gt; bilangan1;
+    cout &lt;&lt; <span class="string">"Masukkan bilangan kedua: "</span>;
+    cin &gt;&gt; bilangan2;
+    
+    <span class="comment">// Baris kosong</span>
+    cout &lt;&lt; endl;
+    
+    <span class="comment">// Header hasil</span>
+    cout &lt;&lt; <span class="string">"--- HASIL PERHITUNGAN ---"</span> &lt;&lt; endl;
+    
+    <span class="comment">// Tampilkan hasil operasi</span>
+    cout &lt;&lt; <span class="string">"Hasil Penjumlahan: "</span> &lt;&lt; (bilangan1 + bilangan2) &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Hasil Pengurangan: "</span> &lt;&lt; (bilangan1 - bilangan2) &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Hasil Perkalian: "</span> &lt;&lt; (bilangan1 * bilangan2) &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Hasil Pembagian: "</span> &lt;&lt; (bilangan1 / bilangan2) &lt;&lt; endl;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Soal 2: Konversi Detik -->
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold text-blue-600 mb-4 flex items-center">
+                                    <span class="mr-2">⏰</span> Soal 2: Program Konversi Detik
+                                </h3>
+                                
+                                <div class="space-y-6">
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-blue-800 mb-2">📋 Deskripsi Tugas</h4>
+                                        <p class="text-gray-700 leading-relaxed">
+                                            Buatlah program yang dapat mengkonversi total detik menjadi format jam, menit, dan detik. Program akan meminta input total detik dari user, kemudian menampilkan hasil konversi dalam format yang mudah dibaca.
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-green-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-green-800 mb-2">✅ Spesifikasi Program</h4>
+                                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                            <li>Program meminta input total detik dari user</li>
+                                            <li>Program menghitung jam, menit, dan sisa detik</li>
+                                            <li>Program menampilkan hasil dalam format "X Jam, Y Menit, Z Detik"</li>
+                                            <li>Gunakan operator pembagian (/) dan modulus (%) untuk perhitungan</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="bg-yellow-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-yellow-800 mb-2">💡 Contoh Output yang Diharapkan</h4>
+                                        <div class="code-block text-sm">
+<pre>=== PROGRAM KONVERSI DETIK ===
+Masukkan total detik: 3661
+
+Hasil Konversi:
+1 Jam, 1 Menit, 1 Detik</pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-pink-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-pink-800 mb-2">🧮 Rumus Perhitungan</h4>
+                                        <div class="space-y-2 text-gray-700">
+                                            <div class="flex items-center">
+                                                <span class="font-mono bg-white px-2 py-1 rounded mr-2">jam = total_detik / 3600</span>
+                                                <span class="text-sm text-gray-600">(1 jam = 3600 detik)</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <span class="font-mono bg-white px-2 py-1 rounded mr-2">menit = (total_detik % 3600) / 60</span>
+                                                <span class="text-sm text-gray-600">(sisa detik dibagi 60)</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <span class="font-mono bg-white px-2 py-1 rounded mr-2">detik = total_detik % 60</span>
+                                                <span class="text-sm text-gray-600">(sisa detik setelah menit)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-purple-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-purple-800 mb-2">💭 Tips Pengerjaan</h4>
+                                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                            <li>Gunakan tipe data <code class="bg-gray-200 px-1 rounded">int</code> untuk semua variabel</li>
+                                            <li>Manfaatkan operator pembagian (/) untuk mendapatkan hasil bagi</li>
+                                            <li>Manfaatkan operator modulus (%) untuk mendapatkan sisa bagi</li>
+                                            <li>Ingat: 1 jam = 3600 detik, 1 menit = 60 detik</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="bg-indigo-50 p-4 rounded-lg hidden">
+                                        <h4 class="font-semibold text-indigo-800 mb-2">📝 Contoh Struktur Program</h4>
+                                        <div class="code-block">
+<pre><span class="keyword">#include</span> &lt;iostream&gt;
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main() {
+    <span class="keyword">int</span> total_detik, jam, menit, detik;
+    
+    <span class="comment">// Header program</span>
+    cout &lt;&lt; <span class="string">"=== PROGRAM KONVERSI DETIK ==="</span> &lt;&lt; endl;
+    
+    <span class="comment">// Input dari user</span>
+    cout &lt;&lt; <span class="string">"Masukkan total detik: "</span>;
+    cin &gt;&gt; total_detik;
+    
+    <span class="comment">// Perhitungan konversi</span>
+    jam = total_detik / <span class="number">3600</span>;                    <span class="comment">// 1 jam = 3600 detik</span>
+    menit = (total_detik % <span class="number">3600</span>) / <span class="number">60</span>;         <span class="comment">// Sisa detik dibagi 60</span>
+    detik = total_detik % <span class="number">60</span>;                   <span class="comment">// Sisa detik setelah menit</span>
+    
+    <span class="comment">// Baris kosong</span>
+    cout &lt;&lt; endl;
+    
+    <span class="comment">// Tampilkan hasil</span>
+    cout &lt;&lt; <span class="string">"Hasil Konversi:"</span> &lt;&lt; endl;
+    cout &lt;&lt; jam &lt;&lt; <span class="string">" Jam, "</span> &lt;&lt; menit &lt;&lt; <span class="string">" Menit, "</span> &lt;&lt; detik &lt;&lt; <span class="string">" Detik"</span> &lt;&lt; endl;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Langkah Pengerjaan Umum -->
+                            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border-l-4 border-indigo-500">
+                                <h4 class="font-semibold text-indigo-800 mb-4 flex items-center text-lg">
+                                    <span class="mr-2 text-2xl">🔧</span> Langkah-langkah Pengerjaan
+                                </h4>
+                                <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                                    <li>Buka text editor atau IDE C++ favorit Anda (Dev-C++, Code::Blocks, Visual Studio, dll)</li>
+                                    <li>Buat file baru dengan nama sesuai soal (misal: "kalkulator.cpp", "konversi_detik.cpp")</li>
+                                    <li>Tulis program sesuai spesifikasi yang diminta</li>
+                                    <li>Compile dan jalankan program</li>
+                                    <li>Test program dengan input yang sama seperti contoh</li>
+                                    <li>Pastikan output sesuai dengan format yang diminta</li>
+                                    <li>Test dengan input lain untuk memastikan program berfungsi dengan baik</li>
+                                </ol>
+                            </div>
+
+                            <!-- Tujuan Pembelajaran -->
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border-l-4 border-green-500">
+                                <h4 class="font-semibold text-green-800 mb-4 flex items-center text-lg">
+                                    <span class="mr-2 text-2xl">🎓</span> Tujuan Pembelajaran
+                                </h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <h5 class="font-semibold text-green-700 mb-2">📚 Konsep yang Dipraktikkan</h5>
+                                        <ul class="text-sm text-gray-700 space-y-1">
+                                            <li>• Deklarasi dan inisialisasi variabel</li>
+                                            <li>• Penggunaan operator aritmatika</li>
+                                            <li>• Input dan output data</li>
+                                            <li>• Operator pembagian dan modulus</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <h5 class="font-semibold text-green-700 mb-2">🎯 Kemampuan yang Dikembangkan</h5>
+                                        <ul class="text-sm text-gray-700 space-y-1">
+                                            <li>• Pemecahan masalah matematis</li>
+                                            <li>• Logika pemrograman dasar</li>
+                                            <li>• Format output yang rapi</li>
+                                            <li>• Penggunaan rumus dalam program</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Motivasi -->
+                            <div class="text-center">
+                                <div class="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg transform hover:scale-105 transition-all">
+                                    <span class="mr-2 text-2xl">✨</span>
+                                    <span>Selamat mengerjakan! Semangat belajar!</span>
+                                    <span class="ml-2 text-2xl">🚀</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+            <div class="flex justify-around">
+                <button @click="activeTab = 'materi'" 
+                        class="flex flex-col items-center py-2 px-3 rounded-lg transition-colors"
+                        :class="activeTab === 'materi' ? 'text-blue-600 bg-blue-50' : 'text-gray-500'">
+                    <span class="text-xl mb-1">📚</span>
+                    <span class="text-xs font-medium">Materi</span>
+                </button>
+                <button @click="activeTab = 'game'" 
+                        class="flex flex-col items-center py-2 px-3 rounded-lg transition-colors"
+                        :class="activeTab === 'game' ? 'text-purple-600 bg-purple-50' : 'text-gray-500'">
+                    <span class="text-xl mb-1">🎮</span>
+                    <span class="text-xs font-medium">Game</span>
+                </button>
+                <button @click="activeTab = 'quiz'" 
+                        class="flex flex-col items-center py-2 px-3 rounded-lg transition-colors"
+                        :class="activeTab === 'quiz' ? 'text-blue-600 bg-blue-50' : 'text-gray-500'">
+                    <span class="text-xl mb-1">📝</span>
+                    <span class="text-xs font-medium">Kuis</span>
+                </button>
+                <button @click="activeTab = 'latihan'" 
+                        class="flex flex-col items-center py-2 px-3 rounded-lg transition-colors"
+                        :class="activeTab === 'latihan' ? 'text-orange-600 bg-orange-50' : 'text-gray-500'">
+                    <span class="text-xl mb-1">💻</span>
+                    <span class="text-xs font-medium">Latihan</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeTab: 'materi',
+                    
+                    // Game data
+                    gameStarted: false,
+                    gameFinished: false,
+                    currentQuestion: 0,
+                    gameScore: 0,
+                    selectedWords: [],
+                    availableWords: [],
+                    showResult: false,
+                    isCorrect: false,
+                    currentGameQuestion: {},
+                    gameQuestions: [
+                        {
+                            instruction: "Buat deklarasi variabel integer dengan nama 'umur' dan nilai 25",
+                            correctAnswer: ["int", "umur", "=", "25", ";"],
+                            shuffledWords: ["int", "umur", "=", "25", ";", "float", "string", "++"],
+                            explanation: "Deklarasi variabel integer: int nama_variabel = nilai;"
+                        },
+                        {
+                            instruction: "Buat deklarasi variabel string dengan nama 'nama' dan nilai \"Budi\"",
+                            correctAnswer: ["string", "nama", "=", "\"Budi\"", ";"],
+                            shuffledWords: ["string", "nama", "=", "\"Budi\"", ";", "int", "char", "cout"],
+                            explanation: "Deklarasi string: string nama_variabel = \"nilai\";"
+                        },
+                        {
+                            instruction: "Tampilkan teks 'Hello World' ke layar",
+                            correctAnswer: ["cout", "<<", "\"Hello World\"", ";"],
+                            shuffledWords: ["cout", "<<", "\"Hello World\"", ";", "cin", ">>", "endl", "int"],
+                            explanation: "Untuk output: cout << \"teks\";"
+                        },
+                        {
+                            instruction: "Buat operasi penjumlahan: a + b dan simpan ke variabel hasil",
+                            correctAnswer: ["hasil", "=", "a", "+", "b", ";"],
+                            shuffledWords: ["hasil", "=", "a", "+", "b", ";", "-", "*", "/", "int"],
+                            explanation: "Operasi aritmatika: variabel = operand1 operator operand2;"
+                        },
+                        {
+                            instruction: "Increment variabel x (tambah 1)",
+                            correctAnswer: ["x", "++", ";"],
+                            shuffledWords: ["x", "++", ";", "--", "+=", "=", "1", "int"],
+                            explanation: "Increment: variabel++ atau ++variabel"
+                        },
+                        {
+                            instruction: "Buat deklarasi variabel float dengan nama 'tinggi' tanpa nilai awal",
+                            correctAnswer: ["float", "tinggi", ";"],
+                            shuffledWords: ["float", "tinggi", ";", "=", "int", "double", "string", "0"],
+                            explanation: "Deklarasi tanpa inisialisasi: tipe_data nama_variabel;"
+                        },
+                        {
+                            instruction: "Input nilai dari user ke variabel angka",
+                            correctAnswer: ["cin", ">>", "angka", ";"],
+                            shuffledWords: ["cin", ">>", "angka", ";", "cout", "<<", "endl", "string"],
+                            explanation: "Untuk input: cin >> nama_variabel;"
+                        },
+                        {
+                            instruction: "Buat operasi modulus: 17 % 5 dan simpan ke variabel sisa",
+                            correctAnswer: ["sisa", "=", "17", "%", "5", ";"],
+                            shuffledWords: ["sisa", "=", "17", "%", "5", ";", "+", "-", "*", "/"],
+                            explanation: "Modulus menggunakan operator %"
+                        },
+                        {
+                            instruction: "Tampilkan nilai variabel umur dengan teks 'Umur: '",
+                            correctAnswer: ["cout", "<<", "\"Umur: \"", "<<", "umur", ";"],
+                            shuffledWords: ["cout", "<<", "\"Umur: \"", "<<", "umur", ";", "cin", ">>", "endl"],
+                            explanation: "Gabungan teks dan variabel: cout << \"teks\" << variabel;"
+                        },
+                        {
+                            instruction: "Buat deklarasi konstanta PI dengan nilai 3.14",
+                            correctAnswer: ["const", "float", "PI", "=", "3.14", ";"],
+                            shuffledWords: ["const", "float", "PI", "=", "3.14", ";", "int", "string", "double"],
+                            explanation: "Konstanta: const tipe_data NAMA = nilai;"
+                        }
+                    ],
+
+                    // Quiz data
+                    quizStarted: false,
+                    quizFinished: false,
+                    currentQuizQuestion: 0,
+                    quizScore: 0,
+                    selectedAnswer: null,
+                    showQuizResult: false,
+                    timeLeft: 1200, // 20 minutes
+                    quizTimer: null,
+                    quizQuestions: [
+                        {
+                            question: "Apa yang dimaksud dengan variabel dalam C++?",
+                            options: [
+                                "Tempat penyimpanan data dalam memori",
+                                "Fungsi untuk menampilkan output",
+                                "Operator untuk perhitungan",
+                                "Library untuk input/output"
+                            ],
+                            correct: 0
+                        },
+                        {
+                            question: "Tipe data mana yang digunakan untuk menyimpan bilangan bulat?",
+                            options: ["float", "char", "int", "string"],
+                            correct: 2
+                        },
+                        {
+                            question: "Manakah penulisan variabel yang BENAR?",
+                            options: ["int 2nilai;", "int nilai-siswa;", "int nilai_siswa;", "int nilai siswa;"],
+                            correct: 2
+                        },
+                        {
+                            question: "Hasil dari operasi 17 % 5 adalah:",
+                            options: ["3", "2", "4", "1"],
+                            correct: 1
+                        },
+                        {
+                            question: "Operator ++ dalam C++ berfungsi untuk:",
+                            options: ["Menambah nilai 2", "Mengurangi nilai 1", "Menambah nilai 1", "Mengalikan dengan 2"],
+                            correct: 2
+                        },
+                        {
+                            question: "Tipe data char digunakan untuk menyimpan:",
+                            options: ["Bilangan desimal", "Karakter tunggal", "Kalimat panjang", "Bilangan bulat"],
+                            correct: 1
+                        },
+                        {
+                            question: "Manakah yang TIDAK boleh digunakan sebagai nama variabel?",
+                            options: ["_nilai", "nilai1", "1nilai", "nilaiSiswa"],
+                            correct: 2
+                        },
+                        {
+                            question: "Hasil dari 15 / 4 dalam C++ (dengan tipe int) adalah:",
+                            options: ["3.75", "3", "4", "3.0"],
+                            correct: 1
+                        },
+                        {
+                            question: "Untuk mendeklarasikan variabel string, kita menggunakan:",
+                            options: ["str nama;", "string nama;", "text nama;", "char nama;"],
+                            correct: 1
+                        },
+                        {
+                            question: "Operator % (modulus) digunakan untuk:",
+                            options: ["Pembagian", "Perkalian", "Mencari sisa bagi", "Penjumlahan"],
+                            correct: 2
+                        },
+                        {
+                            question: "Manakah cara yang benar untuk menginisialisasi variabel?",
+                            options: ["int x = 10;", "int x == 10;", "int x := 10;", "int x <- 10;"],
+                            correct: 0
+                        },
+                        {
+                            question: "Tipe data double digunakan untuk:",
+                            options: ["Bilangan bulat", "Karakter", "Bilangan desimal presisi tinggi", "Boolean"],
+                            correct: 2
+                        },
+                        {
+                            question: "Hasil dari ++x jika x = 5 adalah:",
+                            options: ["5", "6", "4", "10"],
+                            correct: 1
+                        },
+                        {
+                            question: "Manakah yang merupakan operator aritmatika?",
+                            options: ["&&", "||", "*", "=="],
+                            correct: 2
+                        },
+                        {
+                            question: "Untuk mendeklarasikan konstanta, kita menggunakan:",
+                            options: ["const", "constant", "final", "static"],
+                            correct: 0
+                        },
+                        {
+                            question: "Hasil dari 20 % 3 adalah:",
+                            options: ["6", "2", "1", "3"],
+                            correct: 1
+                        },
+                        {
+                            question: "Tipe data mana yang memiliki ukuran paling kecil?",
+                            options: ["int", "double", "char", "float"],
+                            correct: 2
+                        },
+                        {
+                            question: "Operator -- berfungsi untuk:",
+                            options: ["Mengurangi 2", "Mengurangi 1", "Menambah 1", "Membagi 2"],
+                            correct: 1
+                        },
+                        {
+                            question: "Manakah penulisan komentar yang benar dalam C++?",
+                            options: ["/* komentar */", "// komentar", "# komentar", "Semua benar"],
+                            correct: 3
+                        },
+                        {
+                            question: "Hasil dari 8 * 7 + 3 adalah:",
+                            options: ["59", "77", "56", "80"],
+                            correct: 0
+                        }
+                    ]
+                }
+            },
+            methods: {
+                // Game methods
+                startGame() {
+                    this.gameStarted = true;
+                    this.gameFinished = false;
+                    this.currentQuestion = 0;
+                    this.gameScore = 0;
+                    this.generateQuestion();
+                },
+                
+                getWordStatus(word, index) {
+                    const correctAnswer = this.currentGameQuestion.correctAnswer;
+                    if (index < correctAnswer.length && word === correctAnswer[index]) {
+                        return 'bg-green-500 text-white'; // Correct word in correct position
+                    } else if (correctAnswer.includes(word)) {
+                        return 'bg-yellow-500 text-white'; // Correct word in wrong position
+                    } else {
+                        return 'bg-red-500 text-white'; // Wrong word
+                    }
+                },
+                
+                getWordStatusWithAnimation(word, index) {
+                    const correctAnswer = this.currentGameQuestion.correctAnswer;
+                    if (index < correctAnswer.length && word === correctAnswer[index]) {
+                        return 'bg-green-500 text-white word-correct shadow-lg'; // Correct word in correct position
+                    } else if (correctAnswer.includes(word)) {
+                        return 'bg-yellow-500 text-white word-partial shadow-md'; // Correct word in wrong position
+                    } else {
+                        return 'bg-red-500 text-white word-wrong shadow-md'; // Wrong word
+                    }
+                },
+                
+                getDetailedErrors() {
+                    const errors = [];
+                    const userAnswer = this.selectedWords;
+                    const correctAnswer = this.currentGameQuestion.correctAnswer;
+                    
+                    // Check for missing words
+                    const missingWords = correctAnswer.filter(word => !userAnswer.includes(word));
+                    if (missingWords.length > 0) {
+                        errors.push({
+                            type: 'Kata yang hilang',
+                            message: `Anda belum menggunakan: ${missingWords.join(', ')}`
+                        });
+                    }
+                    
+                    // Check for extra words
+                    const extraWords = userAnswer.filter(word => !correctAnswer.includes(word));
+                    if (extraWords.length > 0) {
+                        errors.push({
+                            type: 'Kata yang tidak diperlukan',
+                            message: `Kata ini tidak diperlukan: ${extraWords.join(', ')}`
+                        });
+                    }
+                    
+                    // Check for wrong order
+                    let wrongPositions = [];
+                    for (let i = 0; i < Math.min(userAnswer.length, correctAnswer.length); i++) {
+                        if (userAnswer[i] !== correctAnswer[i] && correctAnswer.includes(userAnswer[i])) {
+                            wrongPositions.push(`"${userAnswer[i]}" seharusnya di posisi ${correctAnswer.indexOf(userAnswer[i]) + 1}`);
+                        }
+                    }
+                    
+                    if (wrongPositions.length > 0) {
+                        errors.push({
+                            type: 'Urutan kata salah',
+                            message: wrongPositions.join(', ')
+                        });
+                    }
+                    
+                    return errors;
+                },
+                
+                generateQuestion() {
+                    this.currentGameQuestion = this.gameQuestions[this.currentQuestion];
+                    this.selectedWords = [];
+                    this.availableWords = [...this.currentGameQuestion.shuffledWords].sort(() => Math.random() - 0.5);
+                    this.showResult = false;
+                },
+                
+                selectWord(index) {
+                    if (this.showResult) return;
+                    const word = this.availableWords[index];
+                    this.selectedWords.push(word);
+                    this.availableWords.splice(index, 1);
+                },
+                
+                removeWord(index) {
+                    if (this.showResult) return;
+                    const word = this.selectedWords[index];
+                    this.selectedWords.splice(index, 1);
+                    this.availableWords.push(word);
+                },
+                
+                clearAnswer() {
+                    if (this.showResult) return;
+                    this.availableWords = [...this.availableWords, ...this.selectedWords].sort(() => Math.random() - 0.5);
+                    this.selectedWords = [];
+                },
+                
+                checkAnswer() {
+                    if (this.selectedWords.length === 0) return;
+                    
+                    const userAnswer = this.selectedWords.join(' ');
+                    const correctAnswer = this.currentGameQuestion.correctAnswer.join(' ');
+                    
+                    this.isCorrect = userAnswer === correctAnswer;
+                    if (this.isCorrect) {
+                        this.gameScore++;
+                    }
+                    
+                    this.showResult = true;
+                },
+                
+                skipQuestion() {
+                    this.isCorrect = false;
+                    this.showResult = true;
+                },
+                
+                nextGameQuestion() {
+                    this.currentQuestion++;
+                    if (this.currentQuestion >= 10) {
+                        this.gameFinished = true;
+                    } else {
+                        this.generateQuestion();
+                    }
+                },
+                
+                resetGame() {
+                    this.gameStarted = false;
+                    this.gameFinished = false;
+                    this.currentQuestion = 0;
+                    this.gameScore = 0;
+                    this.selectedWords = [];
+                    this.availableWords = [];
+                    this.showResult = false;
+                },
+                
+                getScoreMessage() {
+                    if (this.gameScore >= 9) return "Luar biasa! Anda menguasai materi dengan sangat baik! 🌟";
+                    if (this.gameScore >= 7) return "Bagus sekali! Pemahaman Anda sudah baik! 👏";
+                    if (this.gameScore >= 5) return "Cukup baik! Terus berlatih ya! 💪";
+                    return "Perlu belajar lebih giat lagi. Semangat! 📚";
+                },
+
+                // Quiz methods
+                startQuiz() {
+                    this.quizStarted = true;
+                    this.quizFinished = false;
+                    this.currentQuizQuestion = 0;
+                    this.quizScore = 0;
+                    this.selectedAnswer = null;
+                    this.showQuizResult = false;
+                    this.timeLeft = 1200;
+                    this.startTimer();
+                },
+                
+                startTimer() {
+                    this.quizTimer = setInterval(() => {
+                        this.timeLeft--;
+                        if (this.timeLeft <= 0) {
+                            this.finishQuiz();
+                        }
+                    }, 1000);
+                },
+                
+                selectAnswer(index) {
+                    if (this.showQuizResult) return;
+                    this.selectedAnswer = index;
+                },
+                
+                getQuizOptionClass(index) {
+                    if (!this.showQuizResult) {
+                        return this.selectedAnswer === index ? 'border-blue-500 bg-blue-50' : 'border-gray-200';
+                    }
+                    
+                    // Show results
+                    if (index === this.quizQuestions[this.currentQuizQuestion].correct) {
+                        return 'quiz-correct';
+                    } else if (this.selectedAnswer === index) {
+                        return 'quiz-selected-wrong';
+                    } else {
+                        return 'border-gray-200 quiz-unselected';
+                    }
+                },
+                
+                getQuizOptionTextClass(index) {
+                    if (!this.showQuizResult) {
+                        return this.selectedAnswer === index ? 'text-blue-600' : 'text-blue-600';
+                    }
+                    
+                    if (index === this.quizQuestions[this.currentQuizQuestion].correct) {
+                        return 'text-white';
+                    } else if (this.selectedAnswer === index) {
+                        return 'text-white';
+                    } else {
+                        return 'text-blue-600';
+                    }
+                },
+                
+                nextQuestion() {
+                    if (!this.showQuizResult) {
+                        // First click - show result
+                        if (this.selectedAnswer === this.quizQuestions[this.currentQuizQuestion].correct) {
+                            this.quizScore++;
+                        }
+                        this.showQuizResult = true;
+                        return;
+                    }
+                    
+                    // Second click - go to next question
+                    this.selectedAnswer = null;
+                    this.showQuizResult = false;
+                    this.currentQuizQuestion++;
+                    
+                    if (this.currentQuizQuestion >= 30) {
+                        this.finishQuiz();
+                    }
+                },
+                
+                finishQuiz() {
+                    this.quizFinished = true;
+                    if (this.quizTimer) {
+                        clearInterval(this.quizTimer);
+                    }
+                },
+                
+                resetQuiz() {
+                    this.quizStarted = false;
+                    this.quizFinished = false;
+                    this.currentQuizQuestion = 0;
+                    this.quizScore = 0;
+                    this.selectedAnswer = null;
+                    this.showQuizResult = false;
+                    this.timeLeft = 1200;
+                    if (this.quizTimer) {
+                        clearInterval(this.quizTimer);
+                    }
+                },
+                
+                formatTime(seconds) {
+                    const minutes = Math.floor(seconds / 60);
+                    const remainingSeconds = seconds % 60;
+                    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+                },
+                
+                getQuizGrade() {
+                    const percentage = (this.quizScore / 30) * 100;
+                    if (percentage >= 90) return "A - Excellent! 🌟";
+                    if (percentage >= 80) return "B - Very Good! 👏";
+                    if (percentage >= 70) return "C - Good! 👍";
+                    if (percentage >= 60) return "D - Fair 📚";
+                    return "E - Need More Study 💪";
+                }
+            },
+            
+            beforeUnmount() {
+                if (this.quizTimer) {
+                    clearInterval(this.quizTimer);
+                }
+            }
+        }).mount('#app');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9801649417d5fd8d',t:'MTc1ODAzNjQ5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
