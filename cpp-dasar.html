@@ -282,12 +282,12 @@
                                 <h3 class="text-xl font-bold flex items-center">
                                     <span class="mr-2 text-2xl">🎯</span> Progress Belajar
                                 </h3>
-                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">2/5 Materi</span>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">3/5 Materi</span>
                             </div>
                             <div class="w-full bg-white bg-opacity-20 rounded-full h-3 mb-2">
-                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" style="width: 40%"></div>
+                                <div class="bg-white h-3 rounded-full transition-all duration-1000 ease-out" style="width: 60%"></div>
                             </div>
-                            <p class="text-sm opacity-90">Terus semangat! Kamu sudah menguasai 40% materi dasar C++</p>
+                            <p class="text-sm opacity-90">Luar biasa! Kamu sudah menguasai 60% materi dasar C++</p>
                         </div>
                         
                         <!-- Variabel Section -->
@@ -304,9 +304,63 @@
                                     <h4 class="font-bold text-gray-800 mb-3 flex items-center">
                                         <span class="mr-2 text-xl">🤔</span> Apa itu Variabel?
                                     </h4>
-                                    <p class="text-gray-700 leading-relaxed">
+                                    <p class="text-gray-700 leading-relaxed mb-6">
                                         Variabel adalah tempat penyimpanan data dalam memori komputer yang memiliki nama dan dapat berubah nilainya selama program berjalan. Bayangkan variabel seperti kotak yang diberi label untuk menyimpan berbagai jenis barang.
                                     </p>
+                                    
+                                    <!-- Ilustrasi Kotak Variabel -->
+                                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-dashed border-blue-300">
+                                        <h5 class="font-semibold text-blue-800 mb-4 text-center">📦 Ilustrasi Variabel sebagai Kotak Penyimpanan</h5>
+                                        <div class="flex justify-center">
+                                            <svg width="500" height="200" viewBox="0 0 500 200" class="max-w-full h-auto">
+                                                <!-- Box 1: int umur -->
+                                                <g>
+                                                    <rect x="20" y="60" width="80" height="60" fill="#3B82F6" stroke="#1E40AF" stroke-width="2" rx="5"/>
+                                                    <text x="60" y="45" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="bold">int umur</text>
+                                                    <text x="60" y="95" text-anchor="middle" fill="white" font-size="16" font-weight="bold">25</text>
+                                                    <text x="60" y="145" text-anchor="middle" fill="#374151" font-size="10">Bilangan Bulat</text>
+                                                </g>
+                                                
+                                                <!-- Box 2: string nama -->
+                                                <g>
+                                                    <rect x="130" y="60" width="80" height="60" fill="#10B981" stroke="#047857" stroke-width="2" rx="5"/>
+                                                    <text x="170" y="45" text-anchor="middle" fill="#047857" font-size="12" font-weight="bold">string nama</text>
+                                                    <text x="170" y="95" text-anchor="middle" fill="white" font-size="14" font-weight="bold">"Alice"</text>
+                                                    <text x="170" y="145" text-anchor="middle" fill="#374151" font-size="10">Teks/Kalimat</text>
+                                                </g>
+                                                
+                                                <!-- Box 3: float tinggi -->
+                                                <g>
+                                                    <rect x="240" y="60" width="80" height="60" fill="#F59E0B" stroke="#D97706" stroke-width="2" rx="5"/>
+                                                    <text x="280" y="45" text-anchor="middle" fill="#D97706" font-size="12" font-weight="bold">float tinggi</text>
+                                                    <text x="280" y="95" text-anchor="middle" fill="white" font-size="14" font-weight="bold">175.5</text>
+                                                    <text x="280" y="145" text-anchor="middle" fill="#374151" font-size="10">Bilangan Desimal</text>
+                                                </g>
+                                                
+                                                <!-- Box 4: bool lulus -->
+                                                <g>
+                                                    <rect x="350" y="60" width="80" height="60" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2" rx="5"/>
+                                                    <text x="390" y="45" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="bold">bool lulus</text>
+                                                    <text x="390" y="95" text-anchor="middle" fill="white" font-size="14" font-weight="bold">true</text>
+                                                    <text x="390" y="145" text-anchor="middle" fill="#374151" font-size="10">Benar/Salah</text>
+                                                </g>
+                                                
+                                                <!-- Arrow pointing to boxes -->
+                                                <path d="M 250 20 L 250 35" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                                <text x="250" y="15" text-anchor="middle" fill="#374151" font-size="12" font-weight="bold">Memori Komputer</text>
+                                                
+                                                <!-- Arrow marker -->
+                                                <defs>
+                                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                                        <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                                                    </marker>
+                                                </defs>
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm text-gray-600 text-center mt-4 italic">
+                                            Setiap kotak (variabel) memiliki label (nama), tipe data, dan dapat menyimpan nilai sesuai jenisnya
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div>
@@ -477,13 +531,203 @@
                             </div>
                         </div>
 
+                        <!-- Komentar Section -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 card-hover">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-bold text-purple-600 flex items-center">
+                                    <span class="mr-3 text-3xl floating-icon">💬</span> Komentar dalam C++
+                                </h3>
+                                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">Materi 3</span>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-gradient-to-r from-purple-50 to-violet-50 p-6 rounded-xl border-l-4 border-purple-500">
+                                    <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                                        <span class="mr-2 text-xl">🤔</span> Apa itu Komentar?
+                                    </h4>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Komentar adalah teks dalam kode program yang tidak dieksekusi oleh kompiler. Komentar digunakan untuk memberikan penjelasan, dokumentasi, atau catatan tentang kode program agar lebih mudah dipahami oleh programmer lain atau diri sendiri di masa depan.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center text-xl">
+                                        <span class="mr-2 text-2xl">📝</span> Jenis-jenis Komentar
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="type-card bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-xl text-white">
+                                            <div class="flex items-center mb-4">
+                                                <span class="text-3xl mr-3">📄</span>
+                                                <strong class="text-xl">Single Line Comment</strong>
+                                            </div>
+                                            <p class="mb-3 opacity-90">Komentar satu baris menggunakan //</p>
+                                            <div class="bg-white bg-opacity-20 p-3 rounded-lg font-mono text-sm">
+                                                <span class="text-green-200">// Ini adalah komentar</span><br/>
+                                                <span class="text-white">int umur = 25;</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="type-card bg-gradient-to-br from-blue-500 to-cyan-600 p-6 rounded-xl text-white">
+                                            <div class="flex items-center mb-4">
+                                                <span class="text-3xl mr-3">📋</span>
+                                                <strong class="text-xl">Multi Line Comment</strong>
+                                            </div>
+                                            <p class="mb-3 opacity-90">Komentar multi baris menggunakan /* */</p>
+                                            <div class="bg-white bg-opacity-20 p-3 rounded-lg font-mono text-sm">
+                                                <span class="text-blue-200">/* Ini adalah komentar<br/>
+                                                &nbsp;&nbsp;&nbsp;yang lebih panjang */</span><br/>
+                                                <span class="text-white">int nilai = 100;</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="example-section p-6 rounded-xl">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">⚡</span> Contoh Penggunaan Komentar
+                                    </h4>
+                                    <div class="code-block">
+<pre><span class="comment">/*
+ * Program Kalkulator Sederhana
+ * Dibuat oleh: Nama Programmer
+ * Tanggal: 2024
+ */</span>
+
+<span class="keyword">#include</span> &lt;iostream&gt;
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main() {
+    <span class="comment">// Deklarasi variabel untuk menyimpan dua bilangan</span>
+    <span class="keyword">int</span> a, b;
+    
+    <span class="comment">// Input dari user</span>
+    cout &lt;&lt; <span class="string">"Masukkan bilangan pertama: "</span>;
+    cin &gt;&gt; a;  <span class="comment">// Membaca input pertama</span>
+    
+    cout &lt;&lt; <span class="string">"Masukkan bilangan kedua: "</span>;
+    cin &gt;&gt; b;  <span class="comment">// Membaca input kedua</span>
+    
+    <span class="comment">/* 
+     * Melakukan operasi aritmatika dasar
+     * dan menampilkan hasilnya
+     */</span>
+    cout &lt;&lt; <span class="string">"Hasil penjumlahan: "</span> &lt;&lt; (a + b) &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"Hasil pengurangan: "</span> &lt;&lt; (a - b) &lt;&lt; endl;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// Program berakhir dengan sukses</span>
+}</pre>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border-l-4 border-yellow-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">✨</span> Kegunaan dan Manfaat Komentar
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-semibold text-yellow-700 mb-2 flex items-center">
+                                                <span class="mr-2">📚</span> Dokumentasi
+                                            </h5>
+                                            <ul class="text-sm text-gray-700 space-y-1">
+                                                <li>• Menjelaskan tujuan program</li>
+                                                <li>• Mendokumentasikan algoritma</li>
+                                                <li>• Mencatat informasi pembuat</li>
+                                                <li>• Menjelaskan fungsi kompleks</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-yellow-700 mb-2 flex items-center">
+                                                <span class="mr-2">🔧</span> Debugging & Maintenance
+                                            </h5>
+                                            <ul class="text-sm text-gray-700 space-y-1">
+                                                <li>• Menonaktifkan kode sementara</li>
+                                                <li>• Menandai bagian yang bermasalah</li>
+                                                <li>• Memudahkan pemeliharaan kode</li>
+                                                <li>• Membantu kolaborasi tim</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-xl border-l-4 border-red-500 hidden">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">⚠️</span> Tips Penulisan Komentar yang Baik
+                                    </h4>
+                                    <div class="space-y-4">
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <h5 class="font-semibold text-green-700 mb-2 flex items-center">
+                                                <span class="mr-2">✅</span> Yang Sebaiknya Dilakukan
+                                            </h5>
+                                            <ul class="text-sm text-gray-700 space-y-1">
+                                                <li>• Tulis komentar yang jelas dan mudah dipahami</li>
+                                                <li>• Jelaskan "mengapa" bukan hanya "apa"</li>
+                                                <li>• Update komentar saat mengubah kode</li>
+                                                <li>• Gunakan bahasa yang konsisten</li>
+                                                <li>• Beri komentar pada bagian yang kompleks</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <h5 class="font-semibold text-red-700 mb-2 flex items-center">
+                                                <span class="mr-2">❌</span> Yang Sebaiknya Dihindari
+                                            </h5>
+                                            <ul class="text-sm text-gray-700 space-y-1">
+                                                <li>• Komentar yang terlalu obvious (misal: x = 5; // set x to 5)</li>
+                                                <li>• Komentar yang sudah tidak sesuai dengan kode</li>
+                                                <li>• Terlalu banyak komentar untuk kode sederhana</li>
+                                                <li>• Menggunakan komentar untuk kode yang buruk</li>
+                                                <li>• Komentar yang tidak informatif</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl border-l-4 border-indigo-500">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="mr-2 text-xl">🎯</span> Contoh Komentar yang Baik vs Buruk
+                                    </h4>
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                            <h5 class="font-semibold text-red-700 mb-3 flex items-center">
+                                                <span class="mr-2">❌</span> Contoh Buruk
+                                            </h5>
+                                            <div class="code-block text-sm">
+<pre><span class="comment">// increment x</span>
+x++;
+
+<span class="comment">// print hello</span>
+cout &lt;&lt; <span class="string">"Hello"</span>;
+
+<span class="comment">// set y to 10</span>
+<span class="keyword">int</span> y = <span class="number">10</span>;</pre>
+                                            </div>
+                                        </div>
+                                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                            <h5 class="font-semibold text-green-700 mb-3 flex items-center">
+                                                <span class="mr-2">✅</span> Contoh Baik
+                                            </h5>
+                                            <div class="code-block text-sm">
+<pre><span class="comment">// Menambah counter untuk menghitung iterasi</span>
+x++;
+
+<span class="comment">// Menampilkan pesan selamat datang kepada user</span>
+cout &lt;&lt; <span class="string">"Hello"</span>;
+
+<span class="comment">// Nilai maksimum yang diizinkan dalam sistem</span>
+<span class="keyword">int</span> maxValue = <span class="number">10</span>;</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Operator Section -->
                         <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-2xl font-bold text-green-600 flex items-center">
                                     <span class="mr-3 text-3xl floating-icon">🧮</span> Operator dalam C++
                                 </h3>
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Materi 2</span>
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Materi 4</span>
                             </div>
                             
                             <div class="space-y-6">
@@ -1169,8 +1413,8 @@
                             <div v-else class="text-center">
                                 <h3 class="text-2xl font-bold text-blue-600 mb-4">📊 Hasil Kuis</h3>
                                 <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                                    <p class="text-3xl font-bold text-gray-800 mb-2">{{ quizScore }}/30</p>
-                                    <p class="text-xl text-gray-600 mb-2">{{ Math.round((quizScore/30)*100) }}%</p>
+                                    <p class="text-3xl font-bold text-gray-800 mb-2">{{ quizScore }}/20</p>
+                                    <p class="text-xl text-gray-600 mb-2">{{ Math.round((quizScore/20)*100) }}%</p>
                                     <p class="text-gray-600">{{ getQuizGrade() }}</p>
                                 </div>
                                 <button @click="resetQuiz" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
@@ -1502,58 +1746,58 @@ Hasil Konversi:
                             explanation: "Deklarasi variabel integer: int nama_variabel = nilai;"
                         },
                         {
-                            instruction: "Buat deklarasi variabel string dengan nama 'nama' dan nilai \"Budi\"",
-                            correctAnswer: ["string", "nama", "=", "\"Budi\"", ";"],
-                            shuffledWords: ["string", "nama", "=", "\"Budi\"", ";", "int", "char", "cout"],
-                            explanation: "Deklarasi string: string nama_variabel = \"nilai\";"
+                            instruction: "Tulis komentar satu baris yang menjelaskan 'Deklarasi variabel'",
+                            correctAnswer: ["//", "Deklarasi", "variabel"],
+                            shuffledWords: ["//", "Deklarasi", "variabel", "/*", "*/", "int", "string", "cout"],
+                            explanation: "Komentar satu baris menggunakan // diikuti teks penjelasan"
                         },
                         {
-                            instruction: "Tampilkan teks 'Hello World' ke layar",
-                            correctAnswer: ["cout", "<<", "\"Hello World\"", ";"],
-                            shuffledWords: ["cout", "<<", "\"Hello World\"", ";", "cin", ">>", "endl", "int"],
-                            explanation: "Untuk output: cout << \"teks\";"
+                            instruction: "Buat operasi assignment gabungan: x = x + 5",
+                            correctAnswer: ["x", "+=", "5", ";"],
+                            shuffledWords: ["x", "+=", "5", ";", "-=", "*=", "/=", "=", "int"],
+                            explanation: "Operator assignment gabungan: x += 5 sama dengan x = x + 5"
                         },
                         {
-                            instruction: "Buat operasi penjumlahan: a + b dan simpan ke variabel hasil",
-                            correctAnswer: ["hasil", "=", "a", "+", "b", ";"],
-                            shuffledWords: ["hasil", "=", "a", "+", "b", ";", "-", "*", "/", "int"],
-                            explanation: "Operasi aritmatika: variabel = operand1 operator operand2;"
+                            instruction: "Buat deklarasi konstanta MAX_NILAI dengan nilai 100",
+                            correctAnswer: ["const", "int", "MAX_NILAI", "=", "100", ";"],
+                            shuffledWords: ["const", "int", "MAX_NILAI", "=", "100", ";", "float", "string", "var"],
+                            explanation: "Konstanta: const tipe_data NAMA = nilai; (biasanya huruf kapital)"
                         },
                         {
-                            instruction: "Increment variabel x (tambah 1)",
-                            correctAnswer: ["x", "++", ";"],
-                            shuffledWords: ["x", "++", ";", "--", "+=", "=", "1", "int"],
-                            explanation: "Increment: variabel++ atau ++variabel"
+                            instruction: "Tulis komentar multi baris untuk 'Program kalkulator'",
+                            correctAnswer: ["/*", "Program", "kalkulator", "*/"],
+                            shuffledWords: ["/*", "Program", "kalkulator", "*/", "//", "int", "string", "cout"],
+                            explanation: "Komentar multi baris menggunakan /* teks */"
                         },
                         {
-                            instruction: "Buat deklarasi variabel float dengan nama 'tinggi' tanpa nilai awal",
-                            correctAnswer: ["float", "tinggi", ";"],
-                            shuffledWords: ["float", "tinggi", ";", "=", "int", "double", "string", "0"],
-                            explanation: "Deklarasi tanpa inisialisasi: tipe_data nama_variabel;"
+                            instruction: "Buat operasi decrement untuk variabel y",
+                            correctAnswer: ["y", "--", ";"],
+                            shuffledWords: ["y", "--", ";", "++", "+=", "-=", "=", "1"],
+                            explanation: "Decrement: y-- atau --y mengurangi nilai y sebesar 1"
                         },
                         {
-                            instruction: "Input nilai dari user ke variabel angka",
-                            correctAnswer: ["cin", ">>", "angka", ";"],
-                            shuffledWords: ["cin", ">>", "angka", ";", "cout", "<<", "endl", "string"],
-                            explanation: "Untuk input: cin >> nama_variabel;"
+                            instruction: "Buat deklarasi variabel bool dengan nama 'lulus' dan nilai true",
+                            correctAnswer: ["bool", "lulus", "=", "true", ";"],
+                            shuffledWords: ["bool", "lulus", "=", "true", ";", "false", "int", "string", "char"],
+                            explanation: "Tipe bool hanya memiliki dua nilai: true atau false"
                         },
                         {
-                            instruction: "Buat operasi modulus: 17 % 5 dan simpan ke variabel sisa",
-                            correctAnswer: ["sisa", "=", "17", "%", "5", ";"],
-                            shuffledWords: ["sisa", "=", "17", "%", "5", ";", "+", "-", "*", "/"],
-                            explanation: "Modulus menggunakan operator %"
+                            instruction: "Buat operasi pembagian assignment: nilai = nilai / 2",
+                            correctAnswer: ["nilai", "/=", "2", ";"],
+                            shuffledWords: ["nilai", "/=", "2", ";", "*=", "+=", "-=", "%=", "="],
+                            explanation: "Operator /= : nilai /= 2 sama dengan nilai = nilai / 2"
                         },
                         {
-                            instruction: "Tampilkan nilai variabel umur dengan teks 'Umur: '",
-                            correctAnswer: ["cout", "<<", "\"Umur: \"", "<<", "umur", ";"],
-                            shuffledWords: ["cout", "<<", "\"Umur: \"", "<<", "umur", ";", "cin", ">>", "endl"],
-                            explanation: "Gabungan teks dan variabel: cout << \"teks\" << variabel;"
+                            instruction: "Tampilkan hasil operasi a * b ke layar",
+                            correctAnswer: ["cout", "<<", "a", "*", "b", ";"],
+                            shuffledWords: ["cout", "<<", "a", "*", "b", ";", "+", "-", "/", "%", "cin"],
+                            explanation: "Output operasi: cout << operand1 operator operand2;"
                         },
                         {
-                            instruction: "Buat deklarasi konstanta PI dengan nilai 3.14",
-                            correctAnswer: ["const", "float", "PI", "=", "3.14", ";"],
-                            shuffledWords: ["const", "float", "PI", "=", "3.14", ";", "int", "string", "double"],
-                            explanation: "Konstanta: const tipe_data NAMA = nilai;"
+                            instruction: "Buat deklarasi variabel char dengan nama 'grade' dan nilai 'A'",
+                            correctAnswer: ["char", "grade", "=", "'A'", ";"],
+                            shuffledWords: ["char", "grade", "=", "'A'", ";", "\"A\"", "int", "string", "bool"],
+                            explanation: "Char menggunakan tanda petik tunggal untuk karakter: 'A'"
                         }
                     ],
 
@@ -1567,6 +1811,7 @@ Hasil Konversi:
                     timeLeft: 1200, // 20 minutes
                     quizTimer: null,
                     quizQuestions: [
+                        // VARIABEL (5 soal)
                         {
                             question: "Apa yang dimaksud dengan variabel dalam C++?",
                             options: [
@@ -1583,23 +1828,8 @@ Hasil Konversi:
                             correct: 2
                         },
                         {
-                            question: "Manakah penulisan variabel yang BENAR?",
-                            options: ["int 2nilai;", "int nilai-siswa;", "int nilai_siswa;", "int nilai siswa;"],
-                            correct: 2
-                        },
-                        {
-                            question: "Hasil dari operasi 17 % 5 adalah:",
-                            options: ["3", "2", "4", "1"],
-                            correct: 1
-                        },
-                        {
-                            question: "Operator ++ dalam C++ berfungsi untuk:",
-                            options: ["Menambah nilai 2", "Mengurangi nilai 1", "Menambah nilai 1", "Mengalikan dengan 2"],
-                            correct: 2
-                        },
-                        {
-                            question: "Tipe data char digunakan untuk menyimpan:",
-                            options: ["Bilangan desimal", "Karakter tunggal", "Kalimat panjang", "Bilangan bulat"],
+                            question: "Tipe data bool dapat menyimpan nilai:",
+                            options: ["0 dan 1 saja", "true dan false saja", "Bilangan bulat", "Karakter"],
                             correct: 1
                         },
                         {
@@ -1608,29 +1838,45 @@ Hasil Konversi:
                             correct: 2
                         },
                         {
+                            question: "Tipe data char menggunakan tanda petik:",
+                            options: ["Ganda (\")", "Tunggal (')", "Kurung ()", "Kurung siku []"],
+                            correct: 1
+                        },
+                        
+                        // KOMENTAR (2 soal)
+                        {
+                            question: "Manakah penulisan komentar satu baris yang BENAR?",
+                            options: ["/* ini komentar", "// ini komentar", "# ini komentar", "-- ini komentar"],
+                            correct: 1
+                        },
+                        {
+                            question: "Manakah penulisan komentar multi baris yang BENAR?",
+                            options: ["// komentar //", "/* komentar */", "# komentar #", "-- komentar --"],
+                            correct: 1
+                        },
+                        
+                        // KONSTANTA (1 soal)
+                        {
+                            question: "Manakah cara yang benar untuk mendeklarasikan konstanta?",
+                            options: ["const int MAX = 100;", "constant int MAX = 100;", "final int MAX = 100;", "static int MAX = 100;"],
+                            correct: 0
+                        },
+                        
+                        // OPERATOR ARITMATIKA (7 soal)
+                        {
+                            question: "Hasil dari operasi 17 % 5 adalah:",
+                            options: ["3", "2", "4", "1"],
+                            correct: 1
+                        },
+                        {
                             question: "Hasil dari 15 / 4 dalam C++ (dengan tipe int) adalah:",
                             options: ["3.75", "3", "4", "3.0"],
                             correct: 1
                         },
                         {
-                            question: "Untuk mendeklarasikan variabel string, kita menggunakan:",
-                            options: ["str nama;", "string nama;", "text nama;", "char nama;"],
+                            question: "Operator -- (decrement) berfungsi untuk:",
+                            options: ["Menambah 1", "Mengurangi 1", "Mengalikan 2", "Membagi 2"],
                             correct: 1
-                        },
-                        {
-                            question: "Operator % (modulus) digunakan untuk:",
-                            options: ["Pembagian", "Perkalian", "Mencari sisa bagi", "Penjumlahan"],
-                            correct: 2
-                        },
-                        {
-                            question: "Manakah cara yang benar untuk menginisialisasi variabel?",
-                            options: ["int x = 10;", "int x == 10;", "int x := 10;", "int x <- 10;"],
-                            correct: 0
-                        },
-                        {
-                            question: "Tipe data double digunakan untuk:",
-                            options: ["Bilangan bulat", "Karakter", "Bilangan desimal presisi tinggi", "Boolean"],
-                            correct: 2
                         },
                         {
                             question: "Hasil dari ++x jika x = 5 adalah:",
@@ -1638,39 +1884,51 @@ Hasil Konversi:
                             correct: 1
                         },
                         {
-                            question: "Manakah yang merupakan operator aritmatika?",
-                            options: ["&&", "||", "*", "=="],
+                            question: "Operator % (modulus) hanya dapat digunakan pada tipe data:",
+                            options: ["float", "double", "integer", "string"],
                             correct: 2
                         },
                         {
-                            question: "Untuk mendeklarasikan konstanta, kita menggunakan:",
-                            options: ["const", "constant", "final", "static"],
+                            question: "Hasil dari operasi 8 * 3 + 2 adalah:",
+                            options: ["26", "30", "24", "22"],
                             correct: 0
                         },
                         {
-                            question: "Hasil dari 20 % 3 adalah:",
-                            options: ["6", "2", "1", "3"],
+                            question: "Perbedaan antara ++x dan x++ adalah:",
+                            options: [
+                                "Tidak ada perbedaan",
+                                "++x menambah sebelum digunakan, x++ menambah setelah digunakan",
+                                "++x lebih cepat dari x++",
+                                "x++ hanya untuk integer"
+                            ],
+                            correct: 1
+                        },
+                        
+                        // OPERATOR ASSIGNMENT (5 soal)
+                        {
+                            question: "Operator += dalam C++ berfungsi untuk:",
+                            options: ["Menambah dan assign", "Mengurangi nilai", "Mengalikan nilai", "Membagi nilai"],
+                            correct: 0
+                        },
+                        {
+                            question: "Operator *= sama dengan:",
+                            options: ["x = x + y", "x = x * y", "x = x / y", "x = x - y"],
                             correct: 1
                         },
                         {
-                            question: "Tipe data mana yang memiliki ukuran paling kecil?",
-                            options: ["int", "double", "char", "float"],
-                            correct: 2
-                        },
-                        {
-                            question: "Operator -- berfungsi untuk:",
-                            options: ["Mengurangi 2", "Mengurangi 1", "Menambah 1", "Membagi 2"],
-                            correct: 1
-                        },
-                        {
-                            question: "Manakah penulisan komentar yang benar dalam C++?",
-                            options: ["/* komentar */", "// komentar", "# komentar", "Semua benar"],
+                            question: "Operator /= sama dengan:",
+                            options: ["x = x + y", "x = x - y", "x = x * y", "x = x / y"],
                             correct: 3
                         },
                         {
-                            question: "Hasil dari 8 * 7 + 3 adalah:",
-                            options: ["59", "77", "56", "80"],
-                            correct: 0
+                            question: "Manakah yang merupakan operator assignment gabungan?",
+                            options: ["++", "--", "+=", "=="],
+                            correct: 2
+                        },
+                        {
+                            question: "Jika x = 10, maka setelah x %= 3, nilai x menjadi:",
+                            options: ["3", "1", "0", "10"],
+                            correct: 1
                         }
                     ]
                 }
@@ -1890,7 +2148,7 @@ Hasil Konversi:
                     this.showQuizResult = false;
                     this.currentQuizQuestion++;
                     
-                    if (this.currentQuizQuestion >= 30) {
+                    if (this.currentQuizQuestion >= 20) {
                         this.finishQuiz();
                     }
                 },
@@ -1922,7 +2180,7 @@ Hasil Konversi:
                 },
                 
                 getQuizGrade() {
-                    const percentage = (this.quizScore / 30) * 100;
+                    const percentage = (this.quizScore / 20) * 100;
                     if (percentage >= 90) return "A - Excellent! 🌟";
                     if (percentage >= 80) return "B - Very Good! 👏";
                     if (percentage >= 70) return "C - Good! 👍";
@@ -1938,5 +2196,5 @@ Hasil Konversi:
             }
         }).mount('#app');
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9801649417d5fd8d',t:'MTc1ODAzNjQ5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9803f92493f1ef72',t:'MTc1ODA2MzU1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
