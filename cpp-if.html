@@ -51,7 +51,7 @@
                         <div>
                             <h2 class="text-3xl font-bold mb-2 flex items-center">
                                 <span class="text-4xl mr-3">📚</span>
-                                Pembelajaran C++
+                                Materi Pembelajaran C++
                             </h2>
                             <p class="text-indigo-100 text-lg">Pelajari konsep percabangan dan kondisi dalam pemrograman</p>
                         </div>
@@ -91,8 +91,8 @@
                     </div>
                     
                     <div class="flex justify-between items-center gap-3">
-                        <button onclick="prevMobileTopic()" id="prev-topic-btn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" disabled>
-                            <span class="mr-2">←</span>
+                        <button onclick="prevMobileTopic()" id="prev-topic-btn" class="w-12 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-xl" disabled>
+                            ←
                         </button>
                         
                         <div class="flex space-x-1">
@@ -105,8 +105,8 @@
                             <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-6"></div>
                         </div>
                         
-                        <button onclick="nextMobileTopic()" id="next-topic-btn" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center">
-                            <span class="ml-2">→</span>
+                        <button onclick="nextMobileTopic()" id="next-topic-btn" class="w-12 h-12 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center text-xl">
+                            →
                         </button>
                     </div>
                 </div>
@@ -210,8 +210,8 @@
             <!-- Mobile Navigation Buttons - Bottom -->
             <div class="md:hidden bg-white rounded-xl shadow-lg p-4 mt-4" id="mobile-nav-bottom">
                 <div class="flex justify-between items-center gap-3">
-                    <button onclick="prevMobileTopic()" id="prev-topic-btn-bottom" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" disabled>
-                        <span class="mr-2">←</span>
+                    <button onclick="prevMobileTopic()" id="prev-topic-btn-bottom" class="w-12 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-xl" disabled>
+                        ←
                     </button>
                     
                     <div class="flex space-x-1">
@@ -224,8 +224,8 @@
                         <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-6"></div>
                     </div>
                     
-                    <button onclick="nextMobileTopic()" id="next-topic-btn-bottom" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center">
-                        <span class="ml-2">→</span>
+                    <button onclick="nextMobileTopic()" id="next-topic-btn-bottom" class="w-12 h-12 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center text-xl">
+                        →
                     </button>
                 </div>
             </div>
@@ -403,7 +403,6 @@
                             <li>Gunakan operator perbandingan untuk mengecek range nilai</li>
                             <li>Gunakan struktur if-else atau switch-case</li>
                             <li>Tambahkan validasi input (nilai harus 0-100)</li>
-                            <li>Program dapat dijalankan berulang kali</li>
                             <li>Tampilkan output yang user-friendly</li>
                         </ol>
                     </div>
@@ -415,9 +414,7 @@
                             <span class="syntax-string">Masukkan nilai siswa (0-100): 85</span><br>
                             <span class="syntax-string">Nilai: 85</span><br>
                             <span class="syntax-string">Grade: B</span><br>
-                            <span class="syntax-string">Status: Lulus dengan Baik</span><br><br>
-                            <span class="syntax-string">Ingin input nilai lagi? (y/n): n</span><br>
-                            <span class="syntax-string">Terima kasih!</span>
+                            <span class="syntax-string">Status: Lulus dengan Baik</span>
                         </div>
                     </div>
 
@@ -1020,11 +1017,11 @@
             nextBtn.disabled = currentMobileTopicIndex === topicOrder.length - 1;
             
             if (nextBtn.disabled) {
-                nextBtn.textContent = 'Selesai ✓';
+                nextBtn.textContent = '✓';
                 nextBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
                 nextBtn.classList.add('bg-green-500', 'hover:bg-green-600');
             } else {
-                nextBtn.innerHTML = 'Selanjutnya <span class="ml-2">→</span>';
+                nextBtn.textContent = '→';
                 nextBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
                 nextBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
             }
@@ -1038,11 +1035,11 @@
                 nextBtnBottom.disabled = currentMobileTopicIndex === topicOrder.length - 1;
                 
                 if (nextBtnBottom.disabled) {
-                    nextBtnBottom.textContent = 'Selesai ✓';
+                    nextBtnBottom.textContent = '✓';
                     nextBtnBottom.classList.remove('bg-blue-500', 'hover:bg-blue-600');
                     nextBtnBottom.classList.add('bg-green-500', 'hover:bg-green-600');
                 } else {
-                    nextBtnBottom.innerHTML = 'Selanjutnya <span class="ml-2">→</span>';
+                    nextBtnBottom.textContent = '→';
                     nextBtnBottom.classList.remove('bg-green-500', 'hover:bg-green-600');
                     nextBtnBottom.classList.add('bg-blue-500', 'hover:bg-blue-600');
                 }
@@ -1754,5 +1751,5 @@
             showTopic('operator-perbandingan');
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982b3b6536bad846',t:'MTc1ODQ3NTIxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982d52b12359dfb7',t:'MTc1ODQ5NzEzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
