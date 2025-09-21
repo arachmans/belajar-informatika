@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar C++ Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+        }
+        .syntax-keyword { color: #60a5fa; }
+        .syntax-string { color: #34d399; }
+        .syntax-comment { color: #9ca3af; }
+        .syntax-number { color: #fbbf24; }
+        .code-piece {
+            background: #f8fafc !important;
+            color: #1e293b !important;
+            border: 2px solid #cbd5e1 !important;
+        }
+        .code-piece:hover {
+            border-color: #3b82f6 !important;
+            background: #eff6ff !important;
+        }
+        .dropped-code {
+            background: #dbeafe !important;
+            color: #1e40af !important;
+            border: 1px solid #3b82f6 !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen pb-20">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <h1 class="text-2xl font-bold text-indigo-800 text-center">📚 Belajar C++ Interaktif</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Materi Section -->
+        <div id="materi" class="section">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-black opacity-10"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2 flex items-center">
+                                <span class="text-4xl mr-3">📚</span>
+                                Materi Pembelajaran C++
+                            </h2>
+                            <p class="text-indigo-100 text-lg">Pelajari konsep percabangan dan kondisi dalam pemrograman</p>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="text-6xl opacity-20">💻</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Overview -->
+                    <div class="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                        <div class="flex items-center justify-between text-sm">
+                            <span>Progress Pembelajaran</span>
+                            <span id="learning-progress">0/7 Topik</span>
+                        </div>
+                        <div class="w-full bg-white bg-opacity-30 rounded-full h-2 mt-2">
+                            <div id="learning-progress-bar" class="bg-white h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Operator Perbandingan -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-blue-500" onclick="showTopic('operator-perbandingan')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">🔍</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Operator Perbandingan</h3>
+                                <p class="text-sm text-gray-500">Dasar-dasar perbandingan</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Pelajari cara membandingkan nilai dengan operator ==, !=, >, <, >=, <=</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Pemula</span>
+                            <span class="text-blue-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operator Logika -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-green-500" onclick="showTopic('operator-logika')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">🧠</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Operator Logika</h3>
+                                <p class="text-sm text-gray-500">Kombinasi kondisi</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Menggabungkan kondisi dengan AND (&&), OR (||), dan NOT (!)</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Pemula</span>
+                            <span class="text-green-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IF Statement -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-purple-500" onclick="showTopic('if-statement')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">🛤️</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Percabangan IF</h3>
+                                <p class="text-sm text-gray-500">Kondisi sederhana</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Menjalankan kode berdasarkan kondisi tertentu</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Pemula</span>
+                            <span class="text-purple-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IF ELSE -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-pink-500" onclick="showTopic('if-else')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">🔀</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">IF ELSE</h3>
+                                <p class="text-sm text-gray-500">Alternatif pilihan</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Memberikan alternatif ketika kondisi tidak terpenuhi</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full">Menengah</span>
+                            <span class="text-pink-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nested IF -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-yellow-500" onclick="showTopic('nested-if')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-yellow-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">🪆</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Nested IF</h3>
+                                <p class="text-sm text-gray-500">IF bersarang</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">IF di dalam IF untuk kondisi yang lebih kompleks</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Menengah</span>
+                            <span class="text-yellow-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Switch Case -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-red-500" onclick="showTopic('switch')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">🎛️</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Switch Case</h3>
+                                <p class="text-sm text-gray-500">Multiple pilihan</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Alternatif efisien untuk banyak kondisi IF ELSE</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Menengah</span>
+                            <span class="text-red-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ternary Operator -->
+                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-indigo-500" onclick="showTopic('ternary')">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                                <span class="text-2xl">⚡</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Ternary Operator</h3>
+                                <p class="text-sm text-gray-500">IF singkat</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Cara singkat menulis IF ELSE dalam satu baris</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">Lanjutan</span>
+                            <span class="text-indigo-500 text-sm font-medium">Mulai Belajar →</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic Content -->
+            <div id="topic-content" class="bg-white rounded-2xl shadow-xl p-8 min-h-96 transition-all duration-500">
+                <div class="text-center text-gray-500 flex flex-col items-center justify-center h-64">
+                    <div class="bg-gradient-to-br from-blue-100 to-purple-100 rounded-full p-8 mb-6">
+                        <div class="text-6xl">🎯</div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-700 mb-2">Selamat Datang!</h3>
+                    <p class="text-lg text-gray-500 mb-4">Pilih salah satu topik di atas untuk mulai belajar</p>
+                    <div class="flex items-center space-x-2 text-sm text-gray-400">
+                        <span>💡</span>
+                        <span>Tip: Mulai dari Operator Perbandingan untuk pemula</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mencoba Section -->
+        <div id="mencoba" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    🎮 Game Interaktif
+                </h2>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-6 text-white mb-6">
+                    <h3 class="text-xl font-bold mb-2">🧩 Susun Kode</h3>
+                    <p class="mb-4">Susun potongan kode menjadi program yang benar!</p>
+                    <div id="game-score" class="text-lg font-semibold">Skor: 0</div>
+                </div>
+
+                <div id="game-content">
+                    <div class="bg-blue-50 rounded-lg p-6 mb-4">
+                        <h4 class="font-bold text-lg mb-3">🎯 Tantangan 1</h4>
+                        <p class="mb-4" id="game-question">Susun kode untuk mengecek apakah angka lebih besar dari 10:</p>
+                        
+                        <div class="bg-white rounded-lg p-4 mb-4">
+                            <h5 class="font-semibold mb-2 text-gray-700">📝 Target Program:</h5>
+                            <p class="text-sm text-gray-600 mb-2">Program mengecek angka 15. Jika lebih dari 10, tampilkan "Angka besar".</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-semibold mb-2 text-gray-700">🔧 Potongan Kode (Seret untuk menyusun):</h5>
+                            <div id="code-pieces" class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
+                                <!-- Code pieces will be inserted here -->
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-semibold mb-2 text-gray-700">📋 Susunan Anda:</h5>
+                            <div id="drop-zone" class="min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4">
+                                <p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button onclick="checkCodeArrangement()" id="check-code-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">
+                                Periksa Kode
+                            </button>
+                            <button onclick="resetCodePieces()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                    <div id="game-feedback" class="hidden p-4 rounded-lg mb-4"></div>
+                    <button onclick="nextGameQuestion()" id="next-game-btn" class="hidden bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium">
+                        Tantangan Berikutnya
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kuis Section -->
+        <div id="kuis" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    📝 Kuis Pemahaman
+                </h2>
+                
+                <div class="bg-gradient-to-r from-green-500 to-blue-500 rounded-lg p-4 text-white mb-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span id="quiz-progress">Soal 1 dari 20</span>
+                        </div>
+                        <div>
+                            <span id="quiz-score">Skor: 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-white bg-opacity-30 rounded-full h-2 mt-2">
+                        <div id="quiz-progress-bar" class="bg-white h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="quiz-content">
+                    <div class="bg-gray-50 rounded-lg p-6 mb-4">
+                        <h4 class="font-bold text-lg mb-3" id="quiz-question-title">Soal 1</h4>
+                        <p class="mb-4" id="quiz-question">Operator mana yang digunakan untuk membandingkan kesamaan dalam C++?</p>
+                        <div class="space-y-3" id="quiz-options">
+                            <button onclick="selectQuizAnswer(0, this)" class="quiz-option w-full bg-white hover:bg-blue-50 border-2 border-gray-200 rounded-lg p-3 text-left transition-colors">
+                                A. =
+                            </button>
+                            <button onclick="selectQuizAnswer(1, this)" class="quiz-option w-full bg-white hover:bg-blue-50 border-2 border-gray-200 rounded-lg p-3 text-left transition-colors">
+                                B. ==
+                            </button>
+                            <button onclick="selectQuizAnswer(2, this)" class="quiz-option w-full bg-white hover:bg-blue-50 border-2 border-gray-200 rounded-lg p-3 text-left transition-colors">
+                                C. ===
+                            </button>
+                            <button onclick="selectQuizAnswer(3, this)" class="quiz-option w-full bg-white hover:bg-blue-50 border-2 border-gray-200 rounded-lg p-3 text-left transition-colors">
+                                D. !=
+                            </button>
+                        </div>
+                    </div>
+                    <div id="quiz-feedback" class="hidden p-4 rounded-lg mb-4"></div>
+                    <div class="flex justify-between">
+                        <button onclick="prevQuizQuestion()" id="prev-quiz-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50" disabled>
+                            Sebelumnya
+                        </button>
+                        <button onclick="nextQuizQuestion()" id="next-quiz-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">
+                            Selanjutnya
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-result" class="hidden text-center">
+                    <div class="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-8 text-white">
+                        <div class="text-6xl mb-4">🎉</div>
+                        <h3 class="text-2xl font-bold mb-2">Kuis Selesai!</h3>
+                        <p class="text-xl mb-4">Skor Akhir: <span id="final-score">0</span>/20</p>
+                        <p id="score-message" class="mb-4"></p>
+                        <button onclick="restartQuiz()" class="bg-white text-blue-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-100">
+                            Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latihan Section -->
+        <div id="latihan" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    💻 Latihan Praktik
+                </h2>
+                
+                <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-lg p-6 text-white mb-6">
+                    <h3 class="text-xl font-bold mb-2">🚀 Studi Kasus</h3>
+                    <p>Praktikkan langsung di komputer Anda!</p>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <span class="text-2xl">⚠️</span>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                <strong>Petunjuk:</strong> Buka text editor (seperti Notepad++, VS Code) dan compiler C++ di komputer Anda untuk mengerjakan latihan ini.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">📋 Soal: Sistem Penilaian Siswa</h3>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-2 text-gray-700">Deskripsi:</h4>
+                        <p class="text-gray-600 mb-4">
+                            Buatlah program C++ yang dapat menentukan grade (nilai huruf) siswa berdasarkan nilai numerik yang diinputkan. Program juga harus memberikan keterangan status kelulusan.
+                        </p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-2 text-gray-700">Kriteria Penilaian:</h4>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Nilai 90-100: Grade A (Lulus dengan Pujian)</li>
+                            <li>Nilai 80-89: Grade B (Lulus dengan Baik)</li>
+                            <li>Nilai 70-79: Grade C (Lulus)</li>
+                            <li>Nilai 60-69: Grade D (Lulus Bersyarat)</li>
+                            <li>Nilai 0-59: Grade E (Tidak Lulus)</li>
+                            <li>Nilai di luar range 0-100: Input tidak valid</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-2 text-gray-700">Persyaratan Program:</h4>
+                        <ol class="list-decimal list-inside text-gray-600 space-y-1">
+                            <li>Gunakan operator perbandingan untuk mengecek range nilai</li>
+                            <li>Gunakan struktur if-else atau switch-case</li>
+                            <li>Tambahkan validasi input (nilai harus 0-100)</li>
+                            <li>Program dapat dijalankan berulang kali</li>
+                            <li>Tampilkan output yang user-friendly</li>
+                        </ol>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-2 text-gray-700">Contoh Output:</h4>
+                        <div class="code-block rounded-lg p-4 text-sm">
+                            <div class="syntax-comment">// Contoh jalannya program</div><br>
+                            <span class="syntax-string">Masukkan nilai siswa (0-100): 85</span><br>
+                            <span class="syntax-string">Nilai: 85</span><br>
+                            <span class="syntax-string">Grade: B</span><br>
+                            <span class="syntax-string">Status: Lulus dengan Baik</span><br><br>
+                            <span class="syntax-string">Ingin input nilai lagi? (y/n): n</span><br>
+                            <span class="syntax-string">Terima kasih!</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2 text-blue-800">💡 Tips Pengerjaan:</h4>
+                        <ul class="list-disc list-inside text-blue-700 space-y-1 text-sm">
+                            <li>Mulai dengan membuat kerangka program (include, main function)</li>
+                            <li>Gunakan variabel int untuk menyimpan nilai</li>
+                            <li>Implementasikan validasi input terlebih dahulu</li>
+                            <li>Gunakan nested if atau if-else if untuk menentukan grade</li>
+                            <li>Jangan lupa compile dan test program Anda!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-around">
+                <button onclick="showSection('materi')" class="nav-btn flex flex-col items-center py-2 px-3 text-gray-600 hover:text-indigo-600 transition-colors">
+                    <span class="text-xl mb-1">📖</span>
+                    <span class="text-xs font-medium">Materi</span>
+                </button>
+                <button onclick="showSection('mencoba')" class="nav-btn flex flex-col items-center py-2 px-3 text-gray-600 hover:text-indigo-600 transition-colors">
+                    <span class="text-xl mb-1">🎮</span>
+                    <span class="text-xs font-medium">Mencoba</span>
+                </button>
+                <button onclick="showSection('kuis')" class="nav-btn flex flex-col items-center py-2 px-3 text-gray-600 hover:text-indigo-600 transition-colors">
+                    <span class="text-xl mb-1">📝</span>
+                    <span class="text-xs font-medium">Kuis</span>
+                </button>
+                <button onclick="showSection('latihan')" class="nav-btn flex flex-col items-center py-2 px-3 text-gray-600 hover:text-indigo-600 transition-colors">
+                    <span class="text-xl mb-1">💻</span>
+                    <span class="text-xs font-medium">Latihan</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-indigo-600');
+                btn.classList.add('text-gray-600');
+            });
+            
+            event.target.closest('.nav-btn').classList.remove('text-gray-600');
+            event.target.closest('.nav-btn').classList.add('text-indigo-600');
+        }
+
+        // Topic content data
+        const topics = {
+            'operator-perbandingan': {
+                title: 'Operator Perbandingan',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-blue-600">🔍 Operator Perbandingan</h3>
+                    <p class="mb-4 text-gray-700">Operator perbandingan digunakan untuk membandingkan dua nilai. Hasilnya selalu berupa <strong>true</strong> (benar) atau <strong>false</strong> (salah).</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-blue-500">
+                        <h4 class="font-semibold mb-2">Jenis-jenis Operator Perbandingan:</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">==</code> : Sama dengan</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">!=</code> : Tidak sama dengan</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">></code> : Lebih besar dari</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded"><</code> : Lebih kecil dari</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">>=</code> : Lebih besar atau sama dengan</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded"><=</code> : Lebih kecil atau sama dengan</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh penggunaan operator perbandingan</div><br>
+                            <span class="syntax-keyword">int</span> a = <span class="syntax-number">10</span>;<br>
+                            <span class="syntax-keyword">int</span> b = <span class="syntax-number">5</span>;<br><br>
+                            
+                            <span class="syntax-comment">// Hasil: true (benar)</span><br>
+                            <span class="syntax-keyword">bool</span> hasil1 = a > b;<br><br>
+                            
+                            <span class="syntax-comment">// Hasil: false (salah)</span><br>
+                            <span class="syntax-keyword">bool</span> hasil2 = a == b;<br><br>
+                            
+                            <span class="syntax-comment">// Hasil: true (benar)</span><br>
+                            <span class="syntax-keyword">bool</span> hasil3 = a >= <span class="syntax-number">10</span>;
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold mb-2 text-green-800">💡 Tips Penting:</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Jangan bingung antara <code>=</code> (assignment) dan <code>==</code> (comparison)</li>
+                            <li>• Hasil operator perbandingan selalu boolean (true/false)</li>
+                            <li>• Bisa digunakan langsung dalam kondisi if</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'operator-logika': {
+                title: 'Operator Logika',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-green-600">🧠 Operator Logika</h3>
+                    <p class="mb-4 text-gray-700">Operator logika digunakan untuk menggabungkan atau memodifikasi kondisi boolean. Sangat berguna untuk membuat kondisi yang kompleks.</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold mb-2">Jenis-jenis Operator Logika:</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">&&</code> : AND (dan) - true jika kedua kondisi true</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">||</code> : OR (atau) - true jika salah satu kondisi true</li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">!</code> : NOT (tidak) - membalik nilai boolean</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh operator AND (&&)</div><br>
+                            <span class="syntax-keyword">int</span> umur = <span class="syntax-number">20</span>;<br>
+                            <span class="syntax-keyword">bool</span> punyaSIM = <span class="syntax-keyword">true</span>;<br><br>
+                            
+                            <span class="syntax-comment">// Boleh nyetir jika umur >= 17 DAN punya SIM</span><br>
+                            <span class="syntax-keyword">bool</span> bolehNyetir = (umur >= <span class="syntax-number">17</span>) && punyaSIM;<br><br>
+                            
+                            <div class="syntax-comment">// Contoh operator OR (||)</div><br>
+                            <span class="syntax-keyword">bool</span> weekend = <span class="syntax-keyword">true</span>;<br>
+                            <span class="syntax-keyword">bool</span> libur = <span class="syntax-keyword">false</span>;<br><br>
+                            
+                            <span class="syntax-comment">// Bisa santai jika weekend ATAU libur</span><br>
+                            <span class="syntax-keyword">bool</span> bisaSantai = weekend || libur;<br><br>
+                            
+                            <div class="syntax-comment">// Contoh operator NOT (!)</div><br>
+                            <span class="syntax-keyword">bool</span> hujan = <span class="syntax-keyword">false</span>;<br>
+                            <span class="syntax-keyword">bool</span> cerah = !hujan; <span class="syntax-comment">// true</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4 border-l-4 border-blue-500">
+                        <h4 class="font-semibold mb-2 text-blue-800">📊 Tabel Kebenaran:</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="px-3 py-2 text-left">A</th>
+                                        <th class="px-3 py-2 text-left">B</th>
+                                        <th class="px-3 py-2 text-left">A && B</th>
+                                        <th class="px-3 py-2 text-left">A || B</th>
+                                        <th class="px-3 py-2 text-left">!A</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="px-3 py-1">true</td><td class="px-3 py-1">true</td><td class="px-3 py-1 text-green-600">true</td><td class="px-3 py-1 text-green-600">true</td><td class="px-3 py-1 text-red-600">false</td></tr>
+                                    <tr><td class="px-3 py-1">true</td><td class="px-3 py-1">false</td><td class="px-3 py-1 text-red-600">false</td><td class="px-3 py-1 text-green-600">true</td><td class="px-3 py-1 text-red-600">false</td></tr>
+                                    <tr><td class="px-3 py-1">false</td><td class="px-3 py-1">true</td><td class="px-3 py-1 text-red-600">false</td><td class="px-3 py-1 text-green-600">true</td><td class="px-3 py-1 text-green-600">true</td></tr>
+                                    <tr><td class="px-3 py-1">false</td><td class="px-3 py-1">false</td><td class="px-3 py-1 text-red-600">false</td><td class="px-3 py-1 text-red-600">false</td><td class="px-3 py-1 text-green-600">true</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            'if-statement': {
+                title: 'Percabangan IF',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-purple-600">🛤️ Percabangan IF</h3>
+                    <p class="mb-4 text-gray-700">Statement IF digunakan untuk menjalankan kode tertentu hanya jika kondisi yang diberikan bernilai true (benar).</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-purple-500">
+                        <h4 class="font-semibold mb-2">Struktur Dasar IF:</h4>
+                        <div class="code-block rounded-lg p-3 text-sm">
+                            <span class="syntax-keyword">if</span> (kondisi) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode yang dijalankan jika kondisi true</span><br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh sederhana</div><br>
+                            <span class="syntax-keyword">int</span> nilai = <span class="syntax-number">85</span>;<br><br>
+                            
+                            <span class="syntax-keyword">if</span> (nilai >= <span class="syntax-number">70</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Selamat! Anda lulus!"</span> << endl;<br>
+                            }<br><br>
+                            
+                            <div class="syntax-comment">// Contoh dengan operator logika</div><br>
+                            <span class="syntax-keyword">int</span> umur = <span class="syntax-number">18</span>;<br>
+                            <span class="syntax-keyword">bool</span> punyaKTP = <span class="syntax-keyword">true</span>;<br><br>
+                            
+                            <span class="syntax-keyword">if</span> (umur >= <span class="syntax-number">17</span> && punyaKTP) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Boleh membuat rekening bank"</span> << endl;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 rounded-lg p-4 mb-4 border-l-4 border-yellow-500">
+                        <h4 class="font-semibold mb-2 text-yellow-800">🎯 Analogi Sederhana:</h4>
+                        <p class="text-yellow-700 text-sm">
+                            Bayangkan IF seperti penjaga pintu. Jika Anda memenuhi syarat (kondisi = true), 
+                            penjaga akan membuka pintu dan Anda bisa masuk (kode dijalankan). 
+                            Jika tidak memenuhi syarat (kondisi = false), pintu tetap tertutup (kode tidak dijalankan).
+                        </p>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold mb-2 text-green-800">💡 Tips Penggunaan:</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Gunakan tanda kurung () untuk kondisi</li>
+                            <li>• Gunakan kurung kurawal {} untuk blok kode</li>
+                            <li>• Kondisi harus menghasilkan nilai boolean (true/false)</li>
+                            <li>• Bisa menggunakan multiple kondisi dengan operator logika</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'if-else': {
+                title: 'IF ELSE',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-pink-600">🔀 IF ELSE</h3>
+                    <p class="mb-4 text-gray-700">IF ELSE memberikan alternatif. Jika kondisi IF tidak terpenuhi (false), maka kode di blok ELSE akan dijalankan.</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-pink-500">
+                        <h4 class="font-semibold mb-2">Struktur IF ELSE:</h4>
+                        <div class="code-block rounded-lg p-3 text-sm">
+                            <span class="syntax-keyword">if</span> (kondisi) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode jika kondisi true</span><br>
+                            } <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode jika kondisi false</span><br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh sederhana</div><br>
+                            <span class="syntax-keyword">int</span> nilai = <span class="syntax-number">65</span>;<br><br>
+                            
+                            <span class="syntax-keyword">if</span> (nilai >= <span class="syntax-number">70</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Lulus!"</span> << endl;<br>
+                            } <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Tidak lulus, belajar lagi!"</span> << endl;<br>
+                            }<br><br>
+                            
+                            <div class="syntax-comment">// Contoh dengan IF ELSE IF</div><br>
+                            <span class="syntax-keyword">int</span> skor = <span class="syntax-number">85</span>;<br><br>
+                            
+                            <span class="syntax-keyword">if</span> (skor >= <span class="syntax-number">90</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Grade A - Excellent!"</span> << endl;<br>
+                            } <span class="syntax-keyword">else if</span> (skor >= <span class="syntax-number">80</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Grade B - Good!"</span> << endl;<br>
+                            } <span class="syntax-keyword">else if</span> (skor >= <span class="syntax-number">70</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Grade C - Fair"</span> << endl;<br>
+                            } <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Grade D - Need improvement"</span> << endl;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4 border-l-4 border-blue-500">
+                        <h4 class="font-semibold mb-2 text-blue-800">🎯 Analogi Sederhana:</h4>
+                        <p class="text-blue-700 text-sm">
+                            IF ELSE seperti persimpangan jalan dengan dua arah. Jika kondisi terpenuhi, 
+                            Anda belok kiri (blok IF). Jika tidak, Anda belok kanan (blok ELSE). 
+                            Anda pasti akan memilih salah satu jalan, tidak mungkin diam di tempat.
+                        </p>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold mb-2 text-green-800">💡 Keuntungan IF ELSE:</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Memberikan alternatif jika kondisi tidak terpenuhi</li>
+                            <li>• Bisa menggunakan ELSE IF untuk multiple kondisi</li>
+                            <li>• Memastikan ada aksi yang diambil dalam setiap situasi</li>
+                            <li>• Membuat program lebih lengkap dan user-friendly</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'nested-if': {
+                title: 'Nested IF',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-yellow-600">🪆 Nested IF (IF Bersarang)</h3>
+                    <p class="mb-4 text-gray-700">Nested IF adalah IF di dalam IF. Digunakan ketika kita perlu mengecek kondisi tambahan setelah kondisi pertama terpenuhi.</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-yellow-500">
+                        <h4 class="font-semibold mb-2">Struktur Nested IF:</h4>
+                        <div class="code-block rounded-lg p-3 text-sm">
+                            <span class="syntax-keyword">if</span> (kondisi1) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">if</span> (kondisi2) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode jika kedua kondisi true</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;} <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode jika kondisi1 true, kondisi2 false</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            } <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode jika kondisi1 false</span><br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh: Sistem penerimaan beasiswa</div><br>
+                            <span class="syntax-keyword">float</span> ipk = <span class="syntax-number">3.5</span>;<br>
+                            <span class="syntax-keyword">int</span> penghasilan_ortu = <span class="syntax-number">2000000</span>;<br>
+                            <span class="syntax-keyword">bool</span> aktif_organisasi = <span class="syntax-keyword">true</span>;<br><br>
+                            
+                            <span class="syntax-keyword">if</span> (ipk >= <span class="syntax-number">3.0</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"IPK memenuhi syarat"</span> << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">if</span> (penghasilan_ortu <= <span class="syntax-number">3000000</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Penghasilan orang tua memenuhi"</span> << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">if</span> (aktif_organisasi) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"SELAMAT! Anda dapat beasiswa penuh!"</span> << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Anda dapat beasiswa 50%"</span> << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;} <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Penghasilan orang tua terlalu tinggi"</span> << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            } <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"IPK tidak memenuhi syarat"</span> << endl;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="bg-orange-50 rounded-lg p-4 mb-4 border-l-4 border-orange-500">
+                        <h4 class="font-semibold mb-2 text-orange-800">⚠️ Kapan Menggunakan Nested IF:</h4>
+                        <ul class="text-sm text-orange-700 space-y-1">
+                            <li>• Ketika kondisi kedua hanya perlu dicek jika kondisi pertama true</li>
+                            <li>• Untuk membuat logika bertingkat yang kompleks</li>
+                            <li>• Ketika operator logika (&&, ||) tidak cukup ekspresif</li>
+                            <li>• Untuk memberikan feedback yang lebih detail</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-500">
+                        <h4 class="font-semibold mb-2 text-red-800">🚨 Hati-hati:</h4>
+                        <ul class="text-sm text-red-700 space-y-1">
+                            <li>• Jangan terlalu banyak nested (maksimal 3-4 level)</li>
+                            <li>• Perhatikan indentasi agar mudah dibaca</li>
+                            <li>• Pertimbangkan menggunakan operator logika jika memungkinkan</li>
+                            <li>• Pastikan setiap { memiliki pasangan }</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'switch': {
+                title: 'Switch Case',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-red-600">🎛️ Switch Case</h3>
+                    <p class="mb-4 text-gray-700">Switch case adalah alternatif dari multiple IF ELSE. Lebih efisien dan rapi ketika kita perlu membandingkan satu variabel dengan banyak nilai yang berbeda.</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-red-500">
+                        <h4 class="font-semibold mb-2">Struktur Switch Case:</h4>
+                        <div class="code-block rounded-lg p-3 text-sm">
+                            <span class="syntax-keyword">switch</span> (variabel) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">case</span> nilai1:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode untuk nilai1</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">case</span> nilai2:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode untuk nilai2</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">default</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-comment">// kode jika tidak ada yang cocok</span><br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh: Menu kalkulator sederhana</div><br>
+                            <span class="syntax-keyword">char</span> operasi = <span class="syntax-string">'+'</span>;<br>
+                            <span class="syntax-keyword">int</span> a = <span class="syntax-number">10</span>, b = <span class="syntax-number">5</span>;<br>
+                            <span class="syntax-keyword">int</span> hasil;<br><br>
+                            
+                            <span class="syntax-keyword">switch</span> (operasi) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">case</span> <span class="syntax-string">'+'</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasil = a + b;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Hasil: "</span> << hasil << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">case</span> <span class="syntax-string">'-'</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasil = a - b;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Hasil: "</span> << hasil << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">case</span> <span class="syntax-string">'*'</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasil = a * b;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Hasil: "</span> << hasil << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">case</span> <span class="syntax-string">'/'</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">if</span> (b != <span class="syntax-number">0</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasil = a / b;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Hasil: "</span> << hasil << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Error: Tidak bisa bagi dengan 0!"</span> << endl;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="syntax-keyword">default</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << <span class="syntax-string">"Operasi tidak dikenal!"</span> << endl;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4 border-l-4 border-blue-500">
+                        <h4 class="font-semibold mb-2 text-blue-800">🔑 Komponen Penting:</h4>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• <strong>case:</strong> Nilai yang akan dibandingkan</li>
+                            <li>• <strong>break:</strong> Menghentikan eksekusi, keluar dari switch</li>
+                            <li>• <strong>default:</strong> Dijalankan jika tidak ada case yang cocok (opsional)</li>
+                            <li>• Hanya bisa membandingkan nilai konstan (int, char, enum)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold mb-2 text-green-800">✅ Kapan Menggunakan Switch:</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Ketika membandingkan satu variabel dengan banyak nilai</li>
+                            <li>• Untuk menu pilihan (1, 2, 3, dst.)</li>
+                            <li>• Ketika nilai yang dibandingkan adalah konstanta</li>
+                            <li>• Lebih efisien daripada banyak IF ELSE untuk kasus ini</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'ternary': {
+                title: 'Ternary Operator',
+                content: `
+                    <h3 class="text-xl font-bold mb-4 text-indigo-600">⚡ Ternary Operator</h3>
+                    <p class="mb-4 text-gray-700">Ternary operator adalah cara singkat untuk menulis IF ELSE sederhana dalam satu baris. Sangat berguna untuk kondisi yang simpel.</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-indigo-500">
+                        <h4 class="font-semibold mb-2">Struktur Ternary Operator:</h4>
+                        <div class="code-block rounded-lg p-3 text-sm">
+                            kondisi ? nilai_jika_true : nilai_jika_false
+                        </div>
+                    </div>
+
+                    <div class="code-block rounded-lg p-4 mb-4">
+                        <div class="text-sm">
+                            <div class="syntax-comment">// Contoh sederhana</div><br>
+                            <span class="syntax-keyword">int</span> umur = <span class="syntax-number">20</span>;<br>
+                            <span class="syntax-keyword">string</span> status = (umur >= <span class="syntax-number">18</span>) ? <span class="syntax-string">"Dewasa"</span> : <span class="syntax-string">"Anak-anak"</span>;<br>
+                            cout << status << endl; <span class="syntax-comment">// Output: Dewasa</span><br><br>
+                            
+                            <div class="syntax-comment">// Bandingkan dengan IF ELSE biasa:</div><br>
+                            <span class="syntax-keyword">string</span> status2;<br>
+                            <span class="syntax-keyword">if</span> (umur >= <span class="syntax-number">18</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;status2 = <span class="syntax-string">"Dewasa"</span>;<br>
+                            } <span class="syntax-keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;status2 = <span class="syntax-string">"Anak-anak"</span>;<br>
+                            }<br><br>
+                            
+                            <div class="syntax-comment">// Contoh lain: mencari nilai maksimum</div><br>
+                            <span class="syntax-keyword">int</span> a = <span class="syntax-number">15</span>, b = <span class="syntax-number">25</span>;<br>
+                            <span class="syntax-keyword">int</span> maksimum = (a > b) ? a : b;<br>
+                            cout << <span class="syntax-string">"Nilai terbesar: "</span> << maksimum << endl;<br><br>
+                            
+                            <div class="syntax-comment">// Ternary dalam output langsung</div><br>
+                            <span class="syntax-keyword">int</span> nilai = <span class="syntax-number">75</span>;<br>
+                            cout << <span class="syntax-string">"Status: "</span> << ((nilai >= <span class="syntax-number">70</span>) ? <span class="syntax-string">"Lulus"</span> : <span class="syntax-string">"Tidak Lulus"</span>) << endl;
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-4 mb-4 border-l-4 border-green-500">
+                        <h4 class="font-semibold mb-2 text-green-800">✅ Keuntungan Ternary:</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Kode lebih singkat dan ringkas</li>
+                            <li>• Cocok untuk kondisi sederhana</li>
+                            <li>• Bisa langsung digunakan dalam assignment atau output</li>
+                            <li>• Membuat kode terlihat lebih elegan</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 rounded-lg p-4 mb-4 border-l-4 border-yellow-500">
+                        <h4 class="font-semibold mb-2 text-yellow-800">⚠️ Kapan Sebaiknya Tidak Digunakan:</h4>
+                        <ul class="text-sm text-yellow-700 space-y-1">
+                            <li>• Ketika kondisi atau aksi terlalu kompleks</li>
+                            <li>• Jika membuat kode sulit dibaca</li>
+                            <li>• Ketika perlu multiple statement dalam satu kondisi</li>
+                            <li>• Untuk nested ternary (ternary di dalam ternary)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+                        <h4 class="font-semibold mb-2 text-blue-800">💡 Tips Penggunaan:</h4>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• Gunakan untuk kondisi sederhana dengan 2 pilihan</li>
+                            <li>• Pastikan kedua nilai return memiliki tipe data yang sama</li>
+                            <li>• Gunakan tanda kurung untuk kondisi yang kompleks</li>
+                            <li>• Prioritaskan readability (keterbacaan) kode</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        // Track visited topics
+        let visitedTopics = new Set();
+
+        // Show topic content
+        function showTopic(topicId) {
+            const topic = topics[topicId];
+            if (topic) {
+                document.getElementById('topic-content').innerHTML = topic.content;
+                
+                // Mark topic as visited
+                visitedTopics.add(topicId);
+                updateLearningProgress();
+                
+                // Update card states
+                document.querySelectorAll('.topic-card').forEach(card => {
+                    card.classList.remove('ring-2', 'ring-blue-400', 'bg-blue-50');
+                });
+                
+                // Highlight selected card
+                const selectedCard = event.target.closest('.topic-card');
+                if (selectedCard) {
+                    selectedCard.classList.add('ring-2', 'ring-blue-400', 'bg-blue-50');
+                }
+                
+                // Add completion checkmark to visited topics
+                updateTopicCards();
+            }
+        }
+
+        function updateLearningProgress() {
+            const totalTopics = Object.keys(topics).length;
+            const completedTopics = visitedTopics.size;
+            const progressPercentage = (completedTopics / totalTopics) * 100;
+            
+            document.getElementById('learning-progress').textContent = `${completedTopics}/${totalTopics} Topik`;
+            document.getElementById('learning-progress-bar').style.width = `${progressPercentage}%`;
+        }
+
+        function updateTopicCards() {
+            document.querySelectorAll('.topic-card').forEach(card => {
+                const topicId = card.getAttribute('onclick').match(/'([^']+)'/)[1];
+                
+                if (visitedTopics.has(topicId)) {
+                    // Add completion indicator if not already present
+                    if (!card.querySelector('.completion-badge')) {
+                        const completionBadge = document.createElement('div');
+                        completionBadge.className = 'completion-badge absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs';
+                        completionBadge.innerHTML = '✓';
+                        card.style.position = 'relative';
+                        card.appendChild(completionBadge);
+                    }
+                }
+            });
+        }
+
+        // Game functionality - Code Arrangement
+        let gameScore = 0;
+        let currentGameQuestion = 0;
+        let draggedElement = null;
+        
+        const gameQuestions = [
+            {
+                question: "Susun kode untuk mengecek apakah angka lebih besar dari 10:",
+                description: "Program mengecek angka 15. Jika lebih dari 10, tampilkan \"Angka besar\".",
+                pieces: [
+                    "int angka = 15;",
+                    "if (angka > 10) {",
+                    "    cout << \"Angka besar\" << endl;",
+                    "}"
+                ],
+                correctOrder: [0, 1, 2, 3],
+                explanation: "Urutan: buat variabel angka, cek dengan if, tampilkan pesan, tutup kurung."
+            },
+            {
+                question: "Susun kode untuk mengecek apakah seseorang dewasa atau anak-anak:",
+                description: "Jika umur >= 18, tampilkan \"Dewasa\". Jika tidak, tampilkan \"Anak-anak\".",
+                pieces: [
+                    "int umur = 20;",
+                    "if (umur >= 18) {",
+                    "    cout << \"Dewasa\" << endl;",
+                    "} else {",
+                    "    cout << \"Anak-anak\" << endl;",
+                    "}"
+                ],
+                correctOrder: [0, 1, 2, 3, 4, 5],
+                explanation: "Urutan: buat variabel umur, cek dengan if, tampilkan \"Dewasa\", else, tampilkan \"Anak-anak\", tutup."
+            },
+            {
+                question: "Susun kode untuk menampilkan nama hari menggunakan switch:",
+                description: "Jika hari = 1, tampilkan \"Senin\". Jika hari = 2, tampilkan \"Selasa\".",
+                pieces: [
+                    "int hari = 1;",
+                    "switch (hari) {",
+                    "    case 1: cout << \"Senin\" << endl; break;",
+                    "    case 2: cout << \"Selasa\" << endl; break;",
+                    "}"
+                ],
+                correctOrder: [0, 1, 2, 3, 4],
+                explanation: "Urutan: buat variabel hari, mulai switch, case 1 untuk Senin, case 2 untuk Selasa, tutup switch."
+            },
+            {
+                question: "Susun kode untuk mengecek dua kondisi sekaligus:",
+                description: "Jika nilai >= 70 DAN kehadiran >= 80, tampilkan \"Lulus\".",
+                pieces: [
+                    "int nilai = 80, kehadiran = 85;",
+                    "if (nilai >= 70 && kehadiran >= 80) {",
+                    "    cout << \"Lulus\" << endl;",
+                    "}"
+                ],
+                correctOrder: [0, 1, 2, 3],
+                explanation: "Urutan: buat dua variabel, cek kedua kondisi dengan &&, tampilkan \"Lulus\", tutup."
+            },
+            {
+                question: "Susun kode menggunakan ternary operator:",
+                description: "Jika angka > 5, tampilkan \"Besar\", jika tidak tampilkan \"Kecil\".",
+                pieces: [
+                    "int angka = 8;",
+                    "cout << (angka > 5 ? \"Besar\" : \"Kecil\") << endl;"
+                ],
+                correctOrder: [0, 1],
+                explanation: "Ternary operator: kondisi ? nilai_jika_benar : nilai_jika_salah - cara singkat if-else."
+            }
+        ];
+
+        function loadGameQuestion() {
+            const question = gameQuestions[currentGameQuestion];
+            document.getElementById('game-question').textContent = question.question;
+            
+            // Update description
+            document.querySelector('.bg-white.rounded-lg.p-4.mb-4 p').textContent = question.description;
+            
+            // Load code pieces
+            const codePiecesContainer = document.getElementById('code-pieces');
+            const shuffledPieces = [...question.pieces].sort(() => Math.random() - 0.5);
+            
+            codePiecesContainer.innerHTML = '';
+            shuffledPieces.forEach((piece, index) => {
+                const pieceElement = document.createElement('div');
+                pieceElement.className = 'code-piece bg-white border-2 border-gray-300 rounded-lg p-3 cursor-move hover:border-blue-400 transition-colors text-sm font-mono';
+                pieceElement.draggable = true;
+                pieceElement.dataset.piece = piece;
+                pieceElement.textContent = piece;
+                
+                pieceElement.addEventListener('dragstart', dragStart);
+                pieceElement.addEventListener('dragend', dragEnd);
+                
+                codePiecesContainer.appendChild(pieceElement);
+            });
+            
+            // Reset drop zone
+            resetDropZone();
+            
+            // Hide feedback and next button
+            document.getElementById('game-feedback').classList.add('hidden');
+            document.getElementById('next-game-btn').classList.add('hidden');
+        }
+
+        function dragStart(event) {
+            draggedElement = event.target;
+            event.target.style.opacity = '0.5';
+        }
+
+        function dragEnd(event) {
+            event.target.style.opacity = '1';
+            draggedElement = null;
+        }
+
+        function resetDropZone() {
+            const dropZone = document.getElementById('drop-zone');
+            dropZone.innerHTML = '<p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>';
+            dropZone.className = 'min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4';
+            
+            // Remove existing event listeners by cloning the element
+            const newDropZone = dropZone.cloneNode(true);
+            dropZone.parentNode.replaceChild(newDropZone, dropZone);
+            
+            // Add drop zone event listeners to the new element
+            const finalDropZone = document.getElementById('drop-zone');
+            
+            finalDropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('border-blue-400', 'bg-blue-50');
+            });
+            
+            finalDropZone.addEventListener('dragleave', function(e) {
+                this.classList.remove('border-blue-400', 'bg-blue-50');
+            });
+            
+            finalDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('border-blue-400', 'bg-blue-50');
+                
+                if (draggedElement) {
+                    // Clear placeholder text if exists
+                    if (this.querySelector('p')) {
+                        this.innerHTML = '';
+                    }
+                    
+                    // Create dropped element with proper escaping
+                    const droppedElement = document.createElement('div');
+                    droppedElement.className = 'dropped-code bg-blue-100 border border-blue-300 rounded p-2 mb-2 text-sm font-mono flex justify-between items-center';
+                    
+                    const codeSpan = document.createElement('span');
+                    codeSpan.textContent = draggedElement.dataset.piece;
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = '✕';
+                    removeButton.className = 'text-red-500 hover:text-red-700 ml-2';
+                    removeButton.onclick = function() { removeFromDropZone(this); };
+                    
+                    droppedElement.appendChild(codeSpan);
+                    droppedElement.appendChild(removeButton);
+                    droppedElement.dataset.piece = draggedElement.dataset.piece;
+                    
+                    this.appendChild(droppedElement);
+                    
+                    // Remove from original location
+                    draggedElement.remove();
+                }
+            });
+        }
+
+        function removeFromDropZone(button) {
+            const droppedElement = button.parentElement;
+            const piece = droppedElement.dataset.piece;
+            
+            // Add back to code pieces
+            const codePiecesContainer = document.getElementById('code-pieces');
+            const newPiece = document.createElement('div');
+            newPiece.className = 'code-piece bg-white border-2 border-gray-300 rounded-lg p-3 cursor-move hover:border-blue-400 transition-colors text-sm font-mono';
+            newPiece.draggable = true;
+            newPiece.dataset.piece = piece;
+            newPiece.textContent = piece;
+            newPiece.addEventListener('dragstart', dragStart);
+            newPiece.addEventListener('dragend', dragEnd);
+            
+            codePiecesContainer.appendChild(newPiece);
+            
+            // Remove from drop zone
+            droppedElement.remove();
+            
+            // Check if drop zone is empty
+            const dropZone = document.getElementById('drop-zone');
+            if (dropZone.children.length === 0) {
+                dropZone.innerHTML = '<p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>';
+            }
+        }
+
+        function checkCodeArrangement() {
+            const dropZone = document.getElementById('drop-zone');
+            const droppedElements = dropZone.querySelectorAll('.dropped-code');
+            
+            if (droppedElements.length === 0) {
+                alert('Silakan susun kode terlebih dahulu!');
+                return;
+            }
+            
+            const question = gameQuestions[currentGameQuestion];
+            const userOrder = Array.from(droppedElements).map(el => el.dataset.piece);
+            const correctOrder = question.correctOrder.map(index => question.pieces[index]);
+            
+            const isCorrect = JSON.stringify(userOrder) === JSON.stringify(correctOrder);
+            
+            // Show feedback
+            const feedback = document.getElementById('game-feedback');
+            feedback.classList.remove('hidden');
+            
+            if (isCorrect) {
+                gameScore += 20;
+                feedback.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">✅</span>
+                        <div>
+                            <strong>Benar! Kode tersusun dengan sempurna!</strong><br>
+                            <small>${question.explanation}</small>
+                        </div>
+                    </div>
+                `;
+            } else {
+                feedback.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">❌</span>
+                        <div>
+                            <strong>Belum tepat! Coba periksa urutan kode Anda.</strong><br>
+                            <small>Hint: ${question.explanation}</small>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update score
+            document.getElementById('game-score').textContent = `Skor: ${gameScore}`;
+            
+            // Show next button
+            document.getElementById('next-game-btn').classList.remove('hidden');
+        }
+
+        function resetCodePieces() {
+            loadGameQuestion();
+        }
+
+        function nextGameQuestion() {
+            currentGameQuestion++;
+            
+            if (currentGameQuestion < gameQuestions.length) {
+                loadGameQuestion();
+            } else {
+                // Game finished
+                document.getElementById('game-content').innerHTML = `
+                    <div class="text-center bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-8 text-white">
+                        <div class="text-6xl mb-4">🎉</div>
+                        <h3 class="text-2xl font-bold mb-2">Game Selesai!</h3>
+                        <p class="text-xl mb-4">Skor Akhir: ${gameScore}/100</p>
+                        <p class="mb-4">${gameScore >= 80 ? 'Excellent! Anda menguasai struktur kode dengan baik!' : gameScore >= 60 ? 'Good job! Terus berlatih menyusun kode!' : 'Keep learning! Pelajari lagi urutan struktur kode yang benar!'}</p>
+                        <button onclick="restartGame()" class="bg-white text-purple-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-100">
+                            Main Lagi
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function restartGame() {
+            gameScore = 0;
+            currentGameQuestion = 0;
+            document.getElementById('game-score').textContent = 'Skor: 0';
+            
+            // Reload the initial game content
+            document.getElementById('game-content').innerHTML = `
+                <div class="bg-blue-50 rounded-lg p-6 mb-4">
+                    <h4 class="font-bold text-lg mb-3">🎯 Tantangan 1</h4>
+                    <p class="mb-4" id="game-question">Susun kode untuk mengecek apakah angka lebih besar dari 10:</p>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4">
+                        <h5 class="font-semibold mb-2 text-gray-700">📝 Target Program:</h5>
+                        <p class="text-sm text-gray-600 mb-2">Program mengecek angka 15. Jika lebih dari 10, tampilkan "Angka besar".</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="font-semibold mb-2 text-gray-700">🔧 Potongan Kode (Seret untuk menyusun):</h5>
+                        <div id="code-pieces" class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
+                            <!-- Code pieces will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="font-semibold mb-2 text-gray-700">📋 Susunan Anda:</h5>
+                        <div id="drop-zone" class="min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4">
+                            <p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="checkCodeArrangement()" id="check-code-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">
+                            Periksa Kode
+                        </button>
+                        <button onclick="resetCodePieces()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+                <div id="game-feedback" class="hidden p-4 rounded-lg mb-4"></div>
+                <button onclick="nextGameQuestion()" id="next-game-btn" class="hidden bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium">
+                    Tantangan Berikutnya
+                </button>
+            `;
+            
+            loadGameQuestion();
+        }
+
+        // Quiz functionality
+        let quizScore = 0;
+        let currentQuizQuestion = 0;
+        let userAnswers = [];
+        
+        const quizQuestions = [
+            {
+                question: "Operator mana yang digunakan untuk membandingkan kesamaan dalam C++?",
+                options: ["=", "==", "===", "!="],
+                correct: 1
+            },
+            {
+                question: "Apa hasil dari: 10 > 5 && 3 < 2?",
+                options: ["true", "false", "error", "10"],
+                correct: 1
+            },
+            {
+                question: "Operator logika mana yang berarti 'ATAU'?",
+                options: ["&&", "||", "!", "=="],
+                correct: 1
+            },
+            {
+                question: "Dalam struktur if-else, kapan blok else dijalankan?",
+                options: ["Selalu", "Ketika kondisi if true", "Ketika kondisi if false", "Tidak pernah"],
+                correct: 2
+            },
+            {
+                question: "Apa fungsi dari 'break' dalam switch case?",
+                options: ["Memulai case", "Keluar dari switch", "Melanjutkan ke case berikutnya", "Menghentikan program"],
+                correct: 1
+            },
+            {
+                question: "Apa hasil dari ternary operator: (5 > 3) ? 'Benar' : 'Salah'?",
+                options: ["Benar", "Salah", "5", "3"],
+                correct: 0
+            },
+            {
+                question: "Operator mana yang digunakan untuk 'tidak sama dengan'?",
+                options: ["!=", "==", "!==", "<>"],
+                correct: 0
+            },
+            {
+                question: "Apa hasil dari: !(true && false)?",
+                options: ["true", "false", "error", "null"],
+                correct: 0
+            },
+            {
+                question: "Dalam nested if, kondisi kedua dicek ketika:",
+                options: ["Selalu", "Kondisi pertama false", "Kondisi pertama true", "Tidak pernah"],
+                correct: 2
+            },
+            {
+                question: "Switch case dapat digunakan untuk tipe data:",
+                options: ["Hanya int", "int dan char", "Semua tipe data", "Hanya string"],
+                correct: 1
+            },
+            {
+                question: "Apa hasil dari: 7 >= 7?",
+                options: ["true", "false", "7", "error"],
+                correct: 0
+            },
+            {
+                question: "Operator logika mana yang membalik nilai boolean?",
+                options: ["&&", "||", "!", "=="],
+                correct: 2
+            },
+            {
+                question: "Dalam if-else if-else, berapa maksimal blok yang bisa dijalankan?",
+                options: ["Tidak terbatas", "2", "1", "3"],
+                correct: 2
+            },
+            {
+                question: "Apa yang terjadi jika tidak ada 'break' dalam switch case?",
+                options: ["Error", "Program berhenti", "Fall-through ke case berikutnya", "Tidak ada efek"],
+                correct: 2
+            },
+            {
+                question: "Ternary operator terdiri dari berapa bagian?",
+                options: ["2", "3", "4", "1"],
+                correct: 1
+            },
+            {
+                question: "Apa hasil dari: 0 || 1?",
+                options: ["0", "1", "true", "false"],
+                correct: 2
+            },
+            {
+                question: "Kondisi dalam if statement harus bertipe:",
+                options: ["int", "string", "boolean", "float"],
+                correct: 2
+            },
+            {
+                question: "Default case dalam switch bersifat:",
+                options: ["Wajib", "Opsional", "Error jika tidak ada", "Harus di awal"],
+                correct: 1
+            },
+            {
+                question: "Apa hasil dari: 5 < 3 || 2 == 2?",
+                options: ["true", "false", "5", "2"],
+                correct: 0
+            },
+            {
+                question: "Nested if maksimal sebaiknya berapa level?",
+                options: ["Tidak terbatas", "2-3 level", "1 level", "10 level"],
+                correct: 1
+            }
+        ];
+
+        function loadQuizQuestion() {
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('quiz-question-title').textContent = `Soal ${currentQuizQuestion + 1}`;
+            document.getElementById('quiz-question').textContent = question.question;
+            document.getElementById('quiz-progress').textContent = `Soal ${currentQuizQuestion + 1} dari ${quizQuestions.length}`;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = question.options.map((option, index) => 
+                `<button onclick="selectQuizAnswer(${index}, this)" class="quiz-option w-full bg-white hover:bg-blue-50 border-2 border-gray-200 rounded-lg p-3 text-left transition-colors">
+                    ${String.fromCharCode(65 + index)}. ${option}
+                </button>`
+            ).join('');
+            
+            // Update progress bar
+            const progress = ((currentQuizQuestion + 1) / quizQuestions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
+            
+            // Update navigation buttons
+            document.getElementById('prev-quiz-btn').disabled = currentQuizQuestion === 0;
+            document.getElementById('next-quiz-btn').textContent = currentQuizQuestion === quizQuestions.length - 1 ? 'Selesai' : 'Selanjutnya';
+            document.getElementById('next-quiz-btn').className = 'bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium';
+            
+            // Clear feedback
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            
+            // If question was already answered, show the feedback immediately
+            if (userAnswers[currentQuizQuestion] !== undefined) {
+                const answerIndex = userAnswers[currentQuizQuestion];
+                const isCorrect = answerIndex === question.correct;
+                
+                // Show feedback for all options
+                document.querySelectorAll('.quiz-option').forEach((btn, index) => {
+                    btn.style.pointerEvents = 'none'; // Disable clicks
+                    
+                    if (index === question.correct) {
+                        // Correct answer - green
+                        btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                        btn.innerHTML = btn.innerHTML + ' <span class="float-right text-green-600">✓ Benar</span>';
+                    } else if (index === answerIndex) {
+                        // User's wrong answer - red
+                        btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                        btn.innerHTML = btn.innerHTML + ' <span class="float-right text-red-600">✗ Salah</span>';
+                    } else {
+                        // Other options - gray out
+                        btn.classList.add('bg-gray-100', 'border-gray-300', 'text-gray-500');
+                    }
+                });
+                
+                // Show detailed feedback
+                const feedback = document.getElementById('quiz-feedback');
+                feedback.classList.remove('hidden');
+                
+                if (isCorrect) {
+                    feedback.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4';
+                    feedback.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🎉</span>
+                            <div>
+                                <strong>Benar!</strong> Jawaban Anda tepat sekali!
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    feedback.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+                    feedback.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">📚</span>
+                            <div>
+                                <strong>Kurang tepat.</strong> Jawaban yang benar adalah: <strong>${question.options[question.correct]}</strong>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function selectQuizAnswer(answerIndex, button) {
+            // Prevent multiple selections
+            if (userAnswers[currentQuizQuestion] !== undefined) {
+                return;
+            }
+            
+            // Store answer
+            userAnswers[currentQuizQuestion] = answerIndex;
+            
+            const question = quizQuestions[currentQuizQuestion];
+            const isCorrect = answerIndex === question.correct;
+            
+            // Show feedback for all options
+            document.querySelectorAll('.quiz-option').forEach((btn, index) => {
+                btn.style.pointerEvents = 'none'; // Disable further clicks
+                
+                if (index === question.correct) {
+                    // Correct answer - green
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                    btn.innerHTML = btn.innerHTML + ' <span class="float-right text-green-600">✓ Benar</span>';
+                } else if (index === answerIndex) {
+                    // User's wrong answer - red
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                    btn.innerHTML = btn.innerHTML + ' <span class="float-right text-red-600">✗ Salah</span>';
+                } else {
+                    // Other options - gray out
+                    btn.classList.add('bg-gray-100', 'border-gray-300', 'text-gray-500');
+                }
+            });
+            
+            // Show detailed feedback
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+            
+            if (isCorrect) {
+                quizScore++;
+                feedback.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">🎉</span>
+                        <div>
+                            <strong>Benar!</strong> Jawaban Anda tepat sekali!
+                        </div>
+                    </div>
+                `;
+            } else {
+                feedback.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">📚</span>
+                        <div>
+                            <strong>Kurang tepat.</strong> Jawaban yang benar adalah: <strong>${question.options[question.correct]}</strong>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update score display
+            document.getElementById('quiz-score').textContent = `Skor: ${quizScore}`;
+            
+            // Auto advance after 2 seconds
+            setTimeout(() => {
+                if (currentQuizQuestion < quizQuestions.length - 1) {
+                    nextQuizQuestion();
+                } else {
+                    // Show finish button for last question
+                    document.getElementById('next-quiz-btn').textContent = 'Lihat Hasil';
+                    document.getElementById('next-quiz-btn').classList.add('bg-green-500', 'hover:bg-green-600');
+                    document.getElementById('next-quiz-btn').classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                }
+            }, 2000);
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizQuestion === quizQuestions.length - 1) {
+                // Finish quiz
+                finishQuiz();
+            } else {
+                currentQuizQuestion++;
+                loadQuizQuestion();
+            }
+        }
+
+        function prevQuizQuestion() {
+            if (currentQuizQuestion > 0) {
+                currentQuizQuestion--;
+                loadQuizQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            // Calculate score
+            quizScore = 0;
+            for (let i = 0; i < quizQuestions.length; i++) {
+                if (userAnswers[i] === quizQuestions[i].correct) {
+                    quizScore++;
+                }
+            }
+            
+            // Show results
+            document.getElementById('quiz-content').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('final-score').textContent = quizScore;
+            
+            let message = '';
+            if (quizScore >= 18) {
+                message = 'Luar biasa! Anda menguasai materi dengan sangat baik! 🌟';
+            } else if (quizScore >= 15) {
+                message = 'Bagus sekali! Pemahaman Anda sudah sangat baik! 👏';
+            } else if (quizScore >= 12) {
+                message = 'Cukup baik! Terus belajar untuk hasil yang lebih optimal! 📚';
+            } else {
+                message = 'Perlu belajar lebih giat lagi. Jangan menyerah! 💪';
+            }
+            
+            document.getElementById('score-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            quizScore = 0;
+            currentQuizQuestion = 0;
+            userAnswers = [];
+            
+            document.getElementById('quiz-content').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-score').textContent = 'Skor: 0';
+            
+            loadQuizQuestion();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial navigation state
+            document.querySelector('.nav-btn').classList.add('text-indigo-600');
+            
+            // Load first quiz question
+            loadQuizQuestion();
+            
+            // Initialize game when page loads
+            loadGameQuestion();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982b19a671eca027',t:'MTc1ODQ3MzgzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
