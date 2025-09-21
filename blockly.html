@@ -71,9 +71,8 @@
             </div>
             <div class="flex space-x-2 md:space-x-3">
                 <button id="addBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <i data-lucide="plus" class="w-4 h-4 text-white"></i>
                     <span class="mobile-hidden">Add Blocks</span>
-                    <span class="md:hidden">Add</span>
                 </button>
                 <div class="relative">
                     <button id="quickActionBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
@@ -267,23 +266,54 @@
                     </button>
                 </div>
             </div>
+            <!-- Mobile Tab Navigation -->
+            <div class="md:hidden bg-gray-700 px-4 py-2">
+                <div class="flex space-x-1">
+                    <button id="mobilePreviewTab" class="mobile-tab-btn flex-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg transition-colors">
+                        <i data-lucide="monitor" class="w-4 h-4 inline mr-1"></i>
+                        Preview
+                    </button>
+                    <button id="mobileCodeTab" class="mobile-tab-btn flex-1 px-3 py-2 text-sm font-medium text-gray-300 bg-gray-600 rounded-lg transition-colors">
+                        <i data-lucide="code-2" class="w-4 h-4 inline mr-1"></i>
+                        Code
+                    </button>
+                </div>
+            </div>
+
             <div class="flex-1 flex flex-col md:flex-row min-h-0">
-                <div class="w-full md:w-1/2 p-2 md:p-4 flex flex-col min-h-0">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <i data-lucide="code-2" class="w-4 h-4 text-white"></i>
-                        <h3 class="text-white font-semibold text-sm md:text-base">Generated HTML Code:</h3>
+                <!-- Mobile Preview Section -->
+                <div id="mobilePreviewSection" class="w-full p-2 h-screen flex flex-col min-h-0 md:hidden">
+                    <div class="preview-container flex-1 min-h-0" style="height: calc(100vh - 160px);">
+                        <iframe id="previewFrame" class="w-full h-full border-0"></iframe>
                     </div>
-                    <div id="generatedCode" class="code-container flex-1 min-h-0" style="height: calc(100vh - 200px);">
+                </div>
+
+                <!-- Mobile Code Section -->
+                <div id="mobileCodeSection" class="w-full p-2 h-screen flex flex-col min-h-0 md:hidden hidden">
+                    <div id="generatedCode" class="code-container flex-1 min-h-0" style="height: calc(100vh - 160px);">
                         <pre><code class="language-html"></code></pre>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 p-2 md:p-4 flex flex-col min-h-0">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <i data-lucide="monitor" class="w-4 h-4 text-white"></i>
-                        <h3 class="text-white font-semibold text-sm md:text-base">Live Preview:</h3>
+
+                <!-- Desktop Layout (unchanged) -->
+                <div class="hidden md:flex w-full min-h-0">
+                    <div class="w-1/2 p-4 flex flex-col min-h-0">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="code-2" class="w-4 h-4 text-white"></i>
+                            <h3 class="text-white font-semibold text-base">Generated HTML Code:</h3>
+                        </div>
+                        <div id="generatedCodeDesktop" class="code-container flex-1 min-h-0" style="height: calc(100vh - 200px);">
+                            <pre><code class="language-html"></code></pre>
+                        </div>
                     </div>
-                    <div class="preview-container flex-1 min-h-0" style="height: calc(100vh - 200px);">
-                        <iframe id="previewFrame" class="w-full h-full border-0"></iframe>
+                    <div class="w-1/2 p-4 flex flex-col min-h-0">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="monitor" class="w-4 h-4 text-white"></i>
+                            <h3 class="text-white font-semibold text-base">Live Preview:</h3>
+                        </div>
+                        <div class="preview-container flex-1 min-h-0" style="height: calc(100vh - 200px);">
+                            <iframe id="previewFrameDesktop" class="w-full h-full border-0"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1990,15 +2020,23 @@
                 const rawCode = generateWorkspaceHTML();
                 const beautifiedCode = beautifyHTML(rawCode);
                 
-                // Update the code display with syntax highlighting
-                const codeElement = document.querySelector('#generatedCode code');
-                codeElement.textContent = beautifiedCode;
+                // Update both mobile and desktop code displays
+                const mobileCodeElement = document.querySelector('#mobileCodeSection #generatedCode code');
+                const desktopCodeElement = document.querySelector('#generatedCodeDesktop code');
                 
-                // Apply syntax highlighting
-                Prism.highlightElement(codeElement);
+                mobileCodeElement.textContent = beautifiedCode;
+                desktopCodeElement.textContent = beautifiedCode;
                 
-                const iframe = document.getElementById('previewFrame');
-                iframe.srcdoc = rawCode; // Use raw code for preview
+                // Apply syntax highlighting to both
+                Prism.highlightElement(mobileCodeElement);
+                Prism.highlightElement(desktopCodeElement);
+                
+                // Update both iframes
+                const mobileIframe = document.getElementById('previewFrame');
+                const desktopIframe = document.getElementById('previewFrameDesktop');
+                
+                mobileIframe.srcdoc = rawCode;
+                desktopIframe.srcdoc = rawCode;
                 
                 document.getElementById('previewModal').classList.remove('hidden');
             } catch (error) {
@@ -2011,9 +2049,43 @@
             document.getElementById('previewModal').classList.add('hidden');
         });
 
+        // Mobile tab functionality
+        document.getElementById('mobilePreviewTab').addEventListener('click', function() {
+            // Switch to preview tab
+            document.getElementById('mobilePreviewSection').classList.remove('hidden');
+            document.getElementById('mobileCodeSection').classList.add('hidden');
+            
+            // Update tab styles
+            this.classList.remove('bg-gray-600', 'text-gray-300');
+            this.classList.add('bg-blue-600', 'text-white');
+            
+            document.getElementById('mobileCodeTab').classList.remove('bg-blue-600', 'text-white');
+            document.getElementById('mobileCodeTab').classList.add('bg-gray-600', 'text-gray-300');
+        });
+
+        document.getElementById('mobileCodeTab').addEventListener('click', function() {
+            // Switch to code tab
+            document.getElementById('mobileCodeSection').classList.remove('hidden');
+            document.getElementById('mobilePreviewSection').classList.add('hidden');
+            
+            // Update tab styles
+            this.classList.remove('bg-gray-600', 'text-gray-300');
+            this.classList.add('bg-blue-600', 'text-white');
+            
+            document.getElementById('mobilePreviewTab').classList.remove('bg-blue-600', 'text-white');
+            document.getElementById('mobilePreviewTab').classList.add('bg-gray-600', 'text-gray-300');
+        });
+
         document.getElementById('copyCode').addEventListener('click', function() {
             try {
-                const codeElement = document.querySelector('#generatedCode code');
+                // Get code from the appropriate element based on screen size
+                let codeElement;
+                if (window.innerWidth < 768) {
+                    codeElement = document.querySelector('#mobileCodeSection #generatedCode code');
+                } else {
+                    codeElement = document.querySelector('#generatedCodeDesktop code');
+                }
+                
                 const htmlCode = codeElement.textContent;
                 
                 // Copy to clipboard
@@ -2081,5 +2153,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982a7ab54302ce6a',t:'MTc1ODQ2NzMyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982a9b3f4005252c',t:'MTc1ODQ2ODY1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
