@@ -73,144 +73,122 @@
                 </div>
             </div>
 
-            <!-- Topic Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Operator Perbandingan -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-blue-500" onclick="showTopic('operator-perbandingan')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-blue-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">🔍</span>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800">Operator Perbandingan</h3>
-                                <p class="text-sm text-gray-500">Dasar-dasar perbandingan</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-4">Pelajari cara membandingkan nilai dengan operator ==, !=, >, <, >=, <=</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Pemula</span>
-                            <span class="text-blue-500 text-sm font-medium">Mulai Belajar →</span>
+            <!-- Topic Navigation - Mobile Friendly -->
+            <div class="bg-white rounded-xl shadow-lg p-4 mb-4">
+                <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center">
+                    <span class="text-xl mr-2">📋</span>
+                    Pilih Topik Pembelajaran
+                </h3>
+                
+                <!-- Mobile: Navigation Buttons -->
+                <div class="md:hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg p-4 text-white mb-3">
+                        <div class="text-center">
+                            <div class="text-sm opacity-90">Topik <span id="mobile-topic-number">1</span> dari 7</div>
+                            <div class="text-lg font-bold" id="mobile-topic-title">Operator Perbandingan</div>
+                            <div class="text-xs opacity-75" id="mobile-topic-subtitle">🔍 Membandingkan nilai</div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Operator Logika -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-green-500" onclick="showTopic('operator-logika')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-green-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">🧠</span>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800">Operator Logika</h3>
-                                <p class="text-sm text-gray-500">Kombinasi kondisi</p>
-                            </div>
+                    
+                    <div class="flex justify-between items-center gap-3">
+                        <button onclick="prevMobileTopic()" id="prev-topic-btn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" disabled>
+                            <span class="mr-2">←</span>
+                            Sebelumnya
+                        </button>
+                        
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 rounded-full bg-blue-500" id="dot-0"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-1"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-2"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-3"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-4"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-5"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-6"></div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4">Menggabungkan kondisi dengan AND (&&), OR (||), dan NOT (!)</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Pemula</span>
-                            <span class="text-green-500 text-sm font-medium">Mulai Belajar →</span>
-                        </div>
+                        
+                        <button onclick="nextMobileTopic()" id="next-topic-btn" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center">
+                            Selanjutnya
+                            <span class="ml-2">→</span>
+                        </button>
                     </div>
                 </div>
-
-                <!-- IF Statement -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-purple-500" onclick="showTopic('if-statement')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-purple-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">🛤️</span>
-                            </div>
+                
+                <!-- Desktop: Button Grid -->
+                <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <button onclick="showTopic('operator-perbandingan')" class="topic-btn bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 hover:border-blue-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">🔍</span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-800">Percabangan IF</h3>
-                                <p class="text-sm text-gray-500">Kondisi sederhana</p>
+                                <div class="font-semibold text-sm text-blue-800">Operator Perbandingan</div>
+                                <div class="text-xs text-blue-600">==, !=, >, <</div>
                             </div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4">Menjalankan kode berdasarkan kondisi tertentu</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Pemula</span>
-                            <span class="text-purple-500 text-sm font-medium">Mulai Belajar →</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- IF ELSE -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-pink-500" onclick="showTopic('if-else')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-pink-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">🔀</span>
-                            </div>
+                    </button>
+                    
+                    <button onclick="showTopic('operator-logika')" class="topic-btn bg-green-50 hover:bg-green-100 border-2 border-green-200 hover:border-green-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">🧠</span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-800">IF ELSE</h3>
-                                <p class="text-sm text-gray-500">Alternatif pilihan</p>
+                                <div class="font-semibold text-sm text-green-800">Operator Logika</div>
+                                <div class="text-xs text-green-600">&&, ||, !</div>
                             </div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4">Memberikan alternatif ketika kondisi tidak terpenuhi</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full">Menengah</span>
-                            <span class="text-pink-500 text-sm font-medium">Mulai Belajar →</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Nested IF -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-yellow-500" onclick="showTopic('nested-if')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-yellow-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">🪆</span>
-                            </div>
+                    </button>
+                    
+                    <button onclick="showTopic('if-statement')" class="topic-btn bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 hover:border-purple-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">🛤️</span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-800">Nested IF</h3>
-                                <p class="text-sm text-gray-500">IF bersarang</p>
+                                <div class="font-semibold text-sm text-purple-800">Percabangan IF</div>
+                                <div class="text-xs text-purple-600">Kondisi dasar</div>
                             </div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4">IF di dalam IF untuk kondisi yang lebih kompleks</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Menengah</span>
-                            <span class="text-yellow-500 text-sm font-medium">Mulai Belajar →</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Switch Case -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-red-500" onclick="showTopic('switch')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-red-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">🎛️</span>
-                            </div>
+                    </button>
+                    
+                    <button onclick="showTopic('if-else')" class="topic-btn bg-pink-50 hover:bg-pink-100 border-2 border-pink-200 hover:border-pink-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">🔀</span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-800">Switch Case</h3>
-                                <p class="text-sm text-gray-500">Multiple pilihan</p>
+                                <div class="font-semibold text-sm text-pink-800">IF ELSE</div>
+                                <div class="text-xs text-pink-600">Alternatif</div>
                             </div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4">Alternatif efisien untuk banyak kondisi IF ELSE</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Menengah</span>
-                            <span class="text-red-500 text-sm font-medium">Mulai Belajar →</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ternary Operator -->
-                <div class="topic-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border-l-4 border-indigo-500" onclick="showTopic('ternary')">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-indigo-100 rounded-full p-3 mr-4">
-                                <span class="text-2xl">⚡</span>
-                            </div>
+                    </button>
+                    
+                    <button onclick="showTopic('nested-if')" class="topic-btn bg-yellow-50 hover:bg-yellow-100 border-2 border-yellow-200 hover:border-yellow-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">🪆</span>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-800">Ternary Operator</h3>
-                                <p class="text-sm text-gray-500">IF singkat</p>
+                                <div class="font-semibold text-sm text-yellow-800">Nested IF</div>
+                                <div class="text-xs text-yellow-600">IF bersarang</div>
                             </div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4">Cara singkat menulis IF ELSE dalam satu baris</p>
-                        <div class="flex items-center justify-between">
-                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">Lanjutan</span>
-                            <span class="text-indigo-500 text-sm font-medium">Mulai Belajar →</span>
+                    </button>
+                    
+                    <button onclick="showTopic('switch')" class="topic-btn bg-red-50 hover:bg-red-100 border-2 border-red-200 hover:border-red-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">🎛️</span>
+                            <div>
+                                <div class="font-semibold text-sm text-red-800">Switch Case</div>
+                                <div class="text-xs text-red-600">Multiple pilihan</div>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="showTopic('ternary')" class="topic-btn bg-indigo-50 hover:bg-indigo-100 border-2 border-indigo-200 hover:border-indigo-400 rounded-lg p-3 text-left transition-all">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-2">⚡</span>
+                            <div>
+                                <div class="font-semibold text-sm text-indigo-800">Ternary Operator</div>
+                                <div class="text-xs text-indigo-600">IF singkat</div>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <div class="flex items-center justify-center bg-gray-50 rounded-lg p-3 border-2 border-dashed border-gray-300">
+                        <div class="text-center text-gray-500">
+                            <div class="text-sm font-medium">Progress</div>
+                            <div class="text-xs" id="topic-progress">0/7 selesai</div>
                         </div>
                     </div>
                 </div>
@@ -228,6 +206,31 @@
                         <span>💡</span>
                         <span>Tip: Mulai dari Operator Perbandingan untuk pemula</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Buttons - Bottom -->
+            <div class="md:hidden bg-white rounded-xl shadow-lg p-4 mt-4" id="mobile-nav-bottom">
+                <div class="flex justify-between items-center gap-3">
+                    <button onclick="prevMobileTopic()" id="prev-topic-btn-bottom" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" disabled>
+                        <span class="mr-2">←</span>
+                        Sebelumnya
+                    </button>
+                    
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 rounded-full bg-blue-500" id="dot-bottom-0"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-1"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-2"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-3"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-4"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-5"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-bottom-6"></div>
+                    </div>
+                    
+                    <button onclick="nextMobileTopic()" id="next-topic-btn-bottom" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center">
+                        Selanjutnya
+                        <span class="ml-2">→</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -256,16 +259,16 @@
                         </div>
 
                         <div class="mb-4">
-                            <h5 class="font-semibold mb-2 text-gray-700">🔧 Potongan Kode (Seret untuk menyusun):</h5>
+                            <h5 class="font-semibold mb-2 text-gray-700">🔧 Potongan Kode (Klik untuk memindah ke susunan):</h5>
                             <div id="code-pieces" class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                                 <!-- Code pieces will be inserted here -->
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <h5 class="font-semibold mb-2 text-gray-700">📋 Susunan Anda:</h5>
+                            <h5 class="font-semibold mb-2 text-gray-700">📋 Susunan Anda (Klik untuk mengembalikan ke potongan kode):</h5>
                             <div id="drop-zone" class="min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4">
-                                <p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>
+                                <p class="text-gray-500 text-center">Klik potongan kode di atas untuk menyusun program</p>
                             </div>
                         </div>
 
@@ -927,6 +930,27 @@
 
         // Track visited topics
         let visitedTopics = new Set();
+        let currentMobileTopicIndex = 0;
+        
+        const topicOrder = [
+            'operator-perbandingan',
+            'operator-logika', 
+            'if-statement',
+            'if-else',
+            'nested-if',
+            'switch',
+            'ternary'
+        ];
+        
+        const topicTitles = {
+            'operator-perbandingan': { title: 'Operator Perbandingan', subtitle: '🔍 Membandingkan nilai' },
+            'operator-logika': { title: 'Operator Logika', subtitle: '🧠 AND, OR, NOT' },
+            'if-statement': { title: 'Percabangan IF', subtitle: '🛤️ Kondisi dasar' },
+            'if-else': { title: 'IF ELSE', subtitle: '🔀 Pilihan alternatif' },
+            'nested-if': { title: 'Nested IF', subtitle: '🪆 IF bersarang' },
+            'switch': { title: 'Switch Case', subtitle: '🎛️ Multiple pilihan' },
+            'ternary': { title: 'Ternary Operator', subtitle: '⚡ IF singkat' }
+        };
 
         // Show topic content
         function showTopic(topicId) {
@@ -937,20 +961,123 @@
                 // Mark topic as visited
                 visitedTopics.add(topicId);
                 updateLearningProgress();
+                updateTopicProgress();
                 
-                // Update card states
-                document.querySelectorAll('.topic-card').forEach(card => {
-                    card.classList.remove('ring-2', 'ring-blue-400', 'bg-blue-50');
+                // Update button states (desktop)
+                document.querySelectorAll('.topic-btn').forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-blue-400');
                 });
                 
-                // Highlight selected card
-                const selectedCard = event.target.closest('.topic-card');
-                if (selectedCard) {
-                    selectedCard.classList.add('ring-2', 'ring-blue-400', 'bg-blue-50');
+                // Highlight selected button (desktop)
+                if (event && event.target) {
+                    const selectedBtn = event.target.closest('.topic-btn');
+                    if (selectedBtn) {
+                        selectedBtn.classList.add('ring-2', 'ring-blue-400');
+                    }
                 }
                 
-                // Add completion checkmark to visited topics
-                updateTopicCards();
+                // Update mobile navigation
+                currentMobileTopicIndex = topicOrder.indexOf(topicId);
+                updateMobileTopicDisplay();
+                
+                // Scroll to content on mobile
+                if (window.innerWidth < 768) {
+                    document.getElementById('topic-content').scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        }
+
+        // Mobile topic navigation functions
+        function nextMobileTopic() {
+            if (currentMobileTopicIndex < topicOrder.length - 1) {
+                currentMobileTopicIndex++;
+                const topicId = topicOrder[currentMobileTopicIndex];
+                showTopic(topicId);
+            }
+        }
+        
+        function prevMobileTopic() {
+            if (currentMobileTopicIndex > 0) {
+                currentMobileTopicIndex--;
+                const topicId = topicOrder[currentMobileTopicIndex];
+                showTopic(topicId);
+            }
+        }
+        
+        function updateMobileTopicDisplay() {
+            const topicId = topicOrder[currentMobileTopicIndex];
+            const topicInfo = topicTitles[topicId];
+            
+            // Update topic info
+            document.getElementById('mobile-topic-number').textContent = currentMobileTopicIndex + 1;
+            document.getElementById('mobile-topic-title').textContent = topicInfo.title;
+            document.getElementById('mobile-topic-subtitle').textContent = topicInfo.subtitle;
+            
+            // Update navigation buttons (top)
+            const prevBtn = document.getElementById('prev-topic-btn');
+            const nextBtn = document.getElementById('next-topic-btn');
+            
+            prevBtn.disabled = currentMobileTopicIndex === 0;
+            nextBtn.disabled = currentMobileTopicIndex === topicOrder.length - 1;
+            
+            if (nextBtn.disabled) {
+                nextBtn.textContent = 'Selesai ✓';
+                nextBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                nextBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya <span class="ml-2">→</span>';
+                nextBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                nextBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            }
+            
+            // Update navigation buttons (bottom)
+            const prevBtnBottom = document.getElementById('prev-topic-btn-bottom');
+            const nextBtnBottom = document.getElementById('next-topic-btn-bottom');
+            
+            if (prevBtnBottom && nextBtnBottom) {
+                prevBtnBottom.disabled = currentMobileTopicIndex === 0;
+                nextBtnBottom.disabled = currentMobileTopicIndex === topicOrder.length - 1;
+                
+                if (nextBtnBottom.disabled) {
+                    nextBtnBottom.textContent = 'Selesai ✓';
+                    nextBtnBottom.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                    nextBtnBottom.classList.add('bg-green-500', 'hover:bg-green-600');
+                } else {
+                    nextBtnBottom.innerHTML = 'Selanjutnya <span class="ml-2">→</span>';
+                    nextBtnBottom.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    nextBtnBottom.classList.add('bg-blue-500', 'hover:bg-blue-600');
+                }
+            }
+            
+            // Update progress dots (top)
+            for (let i = 0; i < topicOrder.length; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    if (i === currentMobileTopicIndex) {
+                        dot.className = 'w-2 h-2 rounded-full bg-blue-500';
+                    } else if (visitedTopics.has(topicOrder[i])) {
+                        dot.className = 'w-2 h-2 rounded-full bg-green-500';
+                    } else {
+                        dot.className = 'w-2 h-2 rounded-full bg-gray-300';
+                    }
+                }
+            }
+            
+            // Update progress dots (bottom)
+            for (let i = 0; i < topicOrder.length; i++) {
+                const dotBottom = document.getElementById(`dot-bottom-${i}`);
+                if (dotBottom) {
+                    if (i === currentMobileTopicIndex) {
+                        dotBottom.className = 'w-2 h-2 rounded-full bg-blue-500';
+                    } else if (visitedTopics.has(topicOrder[i])) {
+                        dotBottom.className = 'w-2 h-2 rounded-full bg-green-500';
+                    } else {
+                        dotBottom.className = 'w-2 h-2 rounded-full bg-gray-300';
+                    }
+                }
             }
         }
 
@@ -963,27 +1090,52 @@
             document.getElementById('learning-progress-bar').style.width = `${progressPercentage}%`;
         }
 
+        function updateTopicProgress() {
+            const totalTopics = Object.keys(topics).length;
+            const completedTopics = visitedTopics.size;
+            
+            const topicProgressElement = document.getElementById('topic-progress');
+            if (topicProgressElement) {
+                topicProgressElement.textContent = `${completedTopics}/${totalTopics} selesai`;
+            }
+        }
+
         function updateTopicCards() {
-            document.querySelectorAll('.topic-card').forEach(card => {
-                const topicId = card.getAttribute('onclick').match(/'([^']+)'/)[1];
-                
-                if (visitedTopics.has(topicId)) {
-                    // Add completion indicator if not already present
-                    if (!card.querySelector('.completion-badge')) {
-                        const completionBadge = document.createElement('div');
-                        completionBadge.className = 'completion-badge absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs';
-                        completionBadge.innerHTML = '✓';
-                        card.style.position = 'relative';
-                        card.appendChild(completionBadge);
+            // Update desktop buttons with completion indicators
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                const onclickAttr = btn.getAttribute('onclick');
+                if (onclickAttr) {
+                    const topicId = onclickAttr.match(/'([^']+)'/)[1];
+                    
+                    if (visitedTopics.has(topicId)) {
+                        // Add completion indicator if not already present
+                        if (!btn.querySelector('.completion-badge')) {
+                            const completionBadge = document.createElement('div');
+                            completionBadge.className = 'completion-badge absolute top-1 right-1 bg-green-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs';
+                            completionBadge.innerHTML = '✓';
+                            btn.style.position = 'relative';
+                            btn.appendChild(completionBadge);
+                        }
                     }
                 }
             });
+            
+            // Update mobile dropdown options
+            const mobileSelect = document.getElementById('topic-select-mobile');
+            if (mobileSelect) {
+                Array.from(mobileSelect.options).forEach(option => {
+                    if (option.value && visitedTopics.has(option.value)) {
+                        if (!option.textContent.includes('✓')) {
+                            option.textContent = option.textContent + ' ✓';
+                        }
+                    }
+                });
+            }
         }
 
         // Game functionality - Code Arrangement
         let gameScore = 0;
         let currentGameQuestion = 0;
-        let draggedElement = null;
         
         const gameQuestions = [
             {
@@ -1063,13 +1215,13 @@
             codePiecesContainer.innerHTML = '';
             shuffledPieces.forEach((piece, index) => {
                 const pieceElement = document.createElement('div');
-                pieceElement.className = 'code-piece bg-white border-2 border-gray-300 rounded-lg p-3 cursor-move hover:border-blue-400 transition-colors text-sm font-mono';
-                pieceElement.draggable = true;
+                pieceElement.className = 'code-piece bg-white border-2 border-gray-300 rounded-lg p-3 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors text-sm font-mono';
                 pieceElement.dataset.piece = piece;
                 pieceElement.textContent = piece;
                 
-                pieceElement.addEventListener('dragstart', dragStart);
-                pieceElement.addEventListener('dragend', dragEnd);
+                pieceElement.addEventListener('click', function() {
+                    moveToDropZone(this);
+                });
                 
                 codePiecesContainer.appendChild(pieceElement);
             });
@@ -1082,96 +1234,73 @@
             document.getElementById('next-game-btn').classList.add('hidden');
         }
 
-        function dragStart(event) {
-            draggedElement = event.target;
-            event.target.style.opacity = '0.5';
-        }
-
-        function dragEnd(event) {
-            event.target.style.opacity = '1';
-            draggedElement = null;
-        }
-
-        function resetDropZone() {
+        function moveToDropZone(element) {
             const dropZone = document.getElementById('drop-zone');
-            dropZone.innerHTML = '<p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>';
-            dropZone.className = 'min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4';
             
-            // Remove existing event listeners by cloning the element
-            const newDropZone = dropZone.cloneNode(true);
-            dropZone.parentNode.replaceChild(newDropZone, dropZone);
+            // Clear placeholder text if exists
+            if (dropZone.querySelector('p')) {
+                dropZone.innerHTML = '';
+            }
             
-            // Add drop zone event listeners to the new element
-            const finalDropZone = document.getElementById('drop-zone');
+            // Create dropped element
+            const droppedElement = document.createElement('div');
+            droppedElement.className = 'dropped-code bg-blue-100 border border-blue-300 rounded p-2 mb-2 text-sm font-mono flex justify-between items-center cursor-pointer hover:bg-blue-200 transition-colors';
             
-            finalDropZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('border-blue-400', 'bg-blue-50');
+            const codeSpan = document.createElement('span');
+            codeSpan.textContent = element.dataset.piece;
+            
+            const removeIcon = document.createElement('span');
+            removeIcon.textContent = '↩️';
+            removeIcon.className = 'text-blue-600 ml-2';
+            
+            droppedElement.appendChild(codeSpan);
+            droppedElement.appendChild(removeIcon);
+            droppedElement.dataset.piece = element.dataset.piece;
+            
+            // Add click event to move back
+            droppedElement.addEventListener('click', function() {
+                moveBackToCodePieces(this);
             });
             
-            finalDropZone.addEventListener('dragleave', function(e) {
-                this.classList.remove('border-blue-400', 'bg-blue-50');
-            });
+            dropZone.appendChild(droppedElement);
             
-            finalDropZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('border-blue-400', 'bg-blue-50');
-                
-                if (draggedElement) {
-                    // Clear placeholder text if exists
-                    if (this.querySelector('p')) {
-                        this.innerHTML = '';
-                    }
-                    
-                    // Create dropped element with proper escaping
-                    const droppedElement = document.createElement('div');
-                    droppedElement.className = 'dropped-code bg-blue-100 border border-blue-300 rounded p-2 mb-2 text-sm font-mono flex justify-between items-center';
-                    
-                    const codeSpan = document.createElement('span');
-                    codeSpan.textContent = draggedElement.dataset.piece;
-                    
-                    const removeButton = document.createElement('button');
-                    removeButton.textContent = '✕';
-                    removeButton.className = 'text-red-500 hover:text-red-700 ml-2';
-                    removeButton.onclick = function() { removeFromDropZone(this); };
-                    
-                    droppedElement.appendChild(codeSpan);
-                    droppedElement.appendChild(removeButton);
-                    droppedElement.dataset.piece = draggedElement.dataset.piece;
-                    
-                    this.appendChild(droppedElement);
-                    
-                    // Remove from original location
-                    draggedElement.remove();
-                }
-            });
+            // Remove from original location
+            element.remove();
         }
 
-        function removeFromDropZone(button) {
-            const droppedElement = button.parentElement;
-            const piece = droppedElement.dataset.piece;
+        function moveBackToCodePieces(element) {
+            const piece = element.dataset.piece;
             
             // Add back to code pieces
             const codePiecesContainer = document.getElementById('code-pieces');
             const newPiece = document.createElement('div');
-            newPiece.className = 'code-piece bg-white border-2 border-gray-300 rounded-lg p-3 cursor-move hover:border-blue-400 transition-colors text-sm font-mono';
-            newPiece.draggable = true;
+            newPiece.className = 'code-piece bg-white border-2 border-gray-300 rounded-lg p-3 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors text-sm font-mono';
             newPiece.dataset.piece = piece;
             newPiece.textContent = piece;
-            newPiece.addEventListener('dragstart', dragStart);
-            newPiece.addEventListener('dragend', dragEnd);
+            
+            newPiece.addEventListener('click', function() {
+                moveToDropZone(this);
+            });
             
             codePiecesContainer.appendChild(newPiece);
             
             // Remove from drop zone
-            droppedElement.remove();
+            element.remove();
             
             // Check if drop zone is empty
             const dropZone = document.getElementById('drop-zone');
             if (dropZone.children.length === 0) {
-                dropZone.innerHTML = '<p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>';
+                dropZone.innerHTML = '<p class="text-gray-500 text-center">Klik potongan kode di atas untuk menyusun program</p>';
             }
         }
+
+        function resetDropZone() {
+            const dropZone = document.getElementById('drop-zone');
+            dropZone.innerHTML = '<p class="text-gray-500 text-center">Klik potongan kode di atas untuk menyusun program</p>';
+            dropZone.className = 'min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4';
+        }
+
+
 
         function checkCodeArrangement() {
             const dropZone = document.getElementById('drop-zone');
@@ -1266,16 +1395,16 @@
                     </div>
 
                     <div class="mb-4">
-                        <h5 class="font-semibold mb-2 text-gray-700">🔧 Potongan Kode (Seret untuk menyusun):</h5>
+                        <h5 class="font-semibold mb-2 text-gray-700">🔧 Potongan Kode (Klik untuk memindah ke susunan):</h5>
                         <div id="code-pieces" class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                             <!-- Code pieces will be inserted here -->
                         </div>
                     </div>
 
                     <div class="mb-4">
-                        <h5 class="font-semibold mb-2 text-gray-700">📋 Susunan Anda:</h5>
+                        <h5 class="font-semibold mb-2 text-gray-700">📋 Susunan Anda (Klik untuk mengembalikan ke potongan kode):</h5>
                         <div id="drop-zone" class="min-h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4">
-                            <p class="text-gray-500 text-center">Seret potongan kode ke sini untuk menyusun program</p>
+                            <p class="text-gray-500 text-center">Klik potongan kode di atas untuk menyusun program</p>
                         </div>
                     </div>
 
@@ -1621,7 +1750,13 @@
             
             // Initialize game when page loads
             loadGameQuestion();
+            
+            // Initialize mobile topic navigation
+            updateMobileTopicDisplay();
+            
+            // Show first topic by default
+            showTopic('operator-perbandingan');
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982b19a671eca027',t:'MTc1ODQ3MzgzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982b3b6536bad846',t:'MTc1ODQ3NTIxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
