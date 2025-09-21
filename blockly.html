@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Editor with Blockly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .blocklyToolboxDiv {
+            background-color: #f8fafc !important;
+            border-right: 1px solid #e2e8f0 !important;
+        }
+        .blocklyFlyout {
+            fill: #f8fafc !important;
+        }
+        #blocklyDiv {
+            height: calc(100vh - 64px);
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            #blocklyDiv {
+                height: calc(100vh - 80px);
+            }
+            .mobile-hidden {
+                display: none;
+            }
+        }
+        .preview-container {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .code-container {
+            background: #2d3748;
+            border-radius: 8px;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 100%;
+        }
+        .code-container pre {
+            margin: 0 !important;
+            padding: 16px !important;
+            background: transparent !important;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .code-container code {
+            font-family: 'Fira Code', 'Courier New', monospace !important;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 px-4 md:px-6 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="code" class="w-6 h-6 text-blue-600"></i>
+                <h1 class="text-lg md:text-xl font-semibold text-gray-800">HTML Editor</h1>
+            </div>
+            <div class="flex space-x-2 md:space-x-3">
+                <button id="addBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span class="mobile-hidden">Add Blocks</span>
+                    <span class="md:hidden">Add</span>
+                </button>
+                <div class="relative">
+                    <button id="quickActionBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                        <span class="mobile-hidden">Quick</span>
+                    </button>
+                    <div id="quickActionMenu" class="absolute right-0 top-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-48 z-50 hidden">
+                        <button class="template-btn w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center space-x-2" data-template="simple">
+                            <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                            <span>HTML Sederhana</span>
+                        </button>
+                        <button class="template-btn w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center space-x-2" data-template="table">
+                            <i data-lucide="table" class="w-4 h-4 text-green-600"></i>
+                            <span>Contoh Tabel</span>
+                        </button>
+                        <button class="template-btn w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center space-x-2" data-template="form">
+                            <i data-lucide="form-input" class="w-4 h-4 text-orange-600"></i>
+                            <span>Contoh Form</span>
+                        </button>
+                    </div>
+                </div>
+                <button id="clearBtn" class="bg-red-600 hover:bg-red-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <span class="mobile-hidden">Clear</span>
+                </button>
+                <button id="runBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    <span class="mobile-hidden">Run</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <div id="blocklyDiv"></div>
+
+    <!-- Modal for Toolbox -->
+    <div id="toolboxModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-2 md:p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] md:max-h-[80vh] overflow-hidden">
+                <div class="flex items-center justify-between p-3 md:p-4 border-b border-gray-200">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="blocks" class="w-5 h-5 text-blue-600"></i>
+                        <h2 class="text-base md:text-lg font-semibold text-gray-800">Select HTML Blocks</h2>
+                    </div>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <div class="p-3 md:p-6 overflow-y-auto max-h-[75vh] md:max-h-[60vh]">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+
+                        <!-- Structure Category -->
+                        <div class="bg-blue-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="layout" class="w-4 h-4 text-blue-800"></i>
+                                <h3 class="font-semibold text-blue-800">Structure</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-blue-50 text-sm" data-type="html">HTML Document</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-blue-50 text-sm" data-type="head">Head</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-blue-50 text-sm" data-type="title">Title</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-blue-50 text-sm" data-type="link_rel">Link Rel</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-blue-50 text-sm" data-type="body">Body</button>
+                            </div>
+                        </div>
+
+                        <!-- Text Category -->
+                        <div class="bg-green-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="type" class="w-4 h-4 text-green-800"></i>
+                                <h3 class="font-semibold text-green-800">Text</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-green-50 text-sm" data-type="heading">Heading</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-green-50 text-sm" data-type="p">Paragraph</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-green-50 text-sm" data-type="strong">Bold</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-green-50 text-sm" data-type="em">Italic</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-green-50 text-sm" data-type="br">Break</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-green-50 text-sm" data-type="hr">HR</button>
+                            </div>
+                        </div>
+
+                        <!-- Media Category -->
+                        <div class="bg-purple-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="image" class="w-4 h-4 text-purple-800"></i>
+                                <h3 class="font-semibold text-purple-800">Media</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-purple-50 text-sm" data-type="a">Link</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-purple-50 text-sm" data-type="img">Image</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-purple-50 text-sm" data-type="audio">Audio</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-purple-50 text-sm" data-type="video">Video</button>
+                            </div>
+                        </div>
+
+                        <!-- Forms Category -->
+                        <div class="bg-yellow-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="form-input" class="w-4 h-4 text-yellow-800"></i>
+                                <h3 class="font-semibold text-yellow-800">Forms</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="form">Form</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="label">Label</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="input">Input</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="textarea">Textarea</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="select">Select</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="option">Option</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-yellow-50 text-sm" data-type="button">Button</button>
+                            </div>
+                        </div>
+
+                        <!-- Lists Category -->
+                        <div class="bg-red-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="list" class="w-4 h-4 text-red-800"></i>
+                                <h3 class="font-semibold text-red-800">Lists</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-red-50 text-sm" data-type="ul">Unordered List</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-red-50 text-sm" data-type="ol">Ordered List</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-red-50 text-sm" data-type="li">List Item</button>
+                            </div>
+                        </div>
+
+                        <!-- Table Category -->
+                        <div class="bg-orange-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="table" class="w-4 h-4 text-orange-800"></i>
+                                <h3 class="font-semibold text-orange-800">Table</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-orange-50 text-sm" data-type="table">Table</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-orange-50 text-sm" data-type="tr">Table Row</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-orange-50 text-sm" data-type="th">Table Header</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-orange-50 text-sm" data-type="td">Table Data</button>
+                            </div>
+                        </div>
+
+                        <!-- CDN Category -->
+                        <div class="bg-cyan-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="cloud" class="w-4 h-4 text-cyan-800"></i>
+                                <h3 class="font-semibold text-cyan-800">CDN</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-cyan-50 text-sm" data-type="cdn_bootstrap">Bootstrap CSS</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-cyan-50 text-sm" data-type="cdn_fontawesome">FontAwesome</button>
+                            </div>
+                        </div>
+
+                        <!-- Container Category -->
+                        <div class="bg-indigo-50 p-3 md:p-4 rounded-lg">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <i data-lucide="box" class="w-4 h-4 text-indigo-800"></i>
+                                <h3 class="font-semibold text-indigo-800">Container</h3>
+                            </div>
+                            <div class="space-y-2">
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-indigo-50 text-sm" data-type="div">Div</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-indigo-50 text-sm" data-type="span">Span</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-indigo-50 text-sm" data-type="nav">Nav</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-indigo-50 text-sm" data-type="header">Header</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-indigo-50 text-sm" data-type="main">Main</button>
+                                <button class="block-btn w-full text-left p-2 bg-white rounded border hover:bg-indigo-50 text-sm" data-type="footer">Footer</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center justify-between p-3 md:p-4 bg-gray-800 text-white">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="eye" class="w-5 h-5"></i>
+                    <h2 class="text-base md:text-lg font-semibold">HTML Preview & Code</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="copyCode" class="text-white hover:text-gray-300 p-1" title="Copy HTML Code">
+                        <i data-lucide="copy" class="w-6 h-6"></i>
+                    </button>
+                    <button id="closePreview" class="text-white hover:text-gray-300 p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col md:flex-row min-h-0">
+                <div class="w-full md:w-1/2 p-2 md:p-4 flex flex-col min-h-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i data-lucide="code-2" class="w-4 h-4 text-white"></i>
+                        <h3 class="text-white font-semibold text-sm md:text-base">Generated HTML Code:</h3>
+                    </div>
+                    <div id="generatedCode" class="code-container flex-1 min-h-0" style="height: calc(100vh - 200px);">
+                        <pre><code class="language-html"></code></pre>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 p-2 md:p-4 flex flex-col min-h-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i data-lucide="monitor" class="w-4 h-4 text-white"></i>
+                        <h3 class="text-white font-semibold text-sm md:text-base">Live Preview:</h3>
+                    </div>
+                    <div class="preview-container flex-1 min-h-0" style="height: calc(100vh - 200px);">
+                        <iframe id="previewFrame" class="w-full h-full border-0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Blockly workspace
+        let workspace;
+
+        // Define custom blocks for HTML elements
+        function defineBlocks() {
+
+
+            // HTML Document block
+            Blockly.Blocks['html'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<html>");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</html>");
+                    this.setColour(230);
+                    this.setTooltip("HTML document container");
+                }
+            };
+
+            // Head block
+            Blockly.Blocks['head'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<head>");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</head>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                }
+            };
+
+            // Body block
+            Blockly.Blocks['body'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<body")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</body>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                }
+            };
+
+            // Div block
+            Blockly.Blocks['div'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<div")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</div>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(160);
+                }
+            };
+
+            // Span block
+            Blockly.Blocks['span'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<span")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</span>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(160);
+                }
+            };
+
+            // CDN Bootstrap block
+            Blockly.Blocks['cdn_bootstrap'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("Bootstrap CSS CDN link");
+                }
+            };
+
+            // CDN FontAwesome block
+            Blockly.Blocks['cdn_fontawesome'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(330);
+                    this.setTooltip("FontAwesome CSS CDN link");
+                }
+            };
+
+            // Strong block
+            Blockly.Blocks['strong'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<strong>")
+                        .appendField(new Blockly.FieldTextInput("Bold"), "TEXT")
+                        .appendField("</strong>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                }
+            };
+
+            // Em block
+            Blockly.Blocks['em'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<em>")
+                        .appendField(new Blockly.FieldTextInput("Italic"), "TEXT")
+                        .appendField("</em>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                }
+            };
+
+            // Video block
+            Blockly.Blocks['video'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<video")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("src:")
+                        .appendField(new Blockly.FieldTextInput(""), "SRC")
+                        .appendField(">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(290);
+                }
+            };
+
+            // Audio block
+            Blockly.Blocks['audio'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<audio")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("src:")
+                        .appendField(new Blockly.FieldTextInput(""), "SRC")
+                        .appendField(">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(290);
+                }
+            };
+
+            // Form block
+            Blockly.Blocks['form'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<form")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</form>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                }
+            };
+
+            // Label block
+            Blockly.Blocks['label'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<label")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("for:")
+                        .appendField(new Blockly.FieldTextInput(""), "FOR")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Label Text"), "TEXT")
+                        .appendField("</label>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                    this.setTooltip("HTML label element for form inputs");
+                }
+            };
+
+            // Input block
+            Blockly.Blocks['input'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<input")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("type:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["text", "text"],
+                            ["email", "email"],
+                            ["password", "password"],
+                            ["number", "number"],
+                            ["date", "date"],
+                            ["time", "time"],
+                            ["datetime-local", "datetime-local"],
+                            ["tel", "tel"],
+                            ["url", "url"],
+                            ["search", "search"],
+                            ["color", "color"],
+                            ["range", "range"],
+                            ["file", "file"],
+                            ["checkbox", "checkbox"],
+                            ["radio", "radio"]
+                        ]), "TYPE")
+                        .appendField("name:")
+                        .appendField(new Blockly.FieldTextInput(""), "NAME")
+                        .appendField("placeholder:")
+                        .appendField(new Blockly.FieldTextInput(""), "PLACEHOLDER")
+                        .appendField(">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                }
+            };
+
+            // Textarea block
+            Blockly.Blocks['textarea'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<textarea")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("name:")
+                        .appendField(new Blockly.FieldTextInput(""), "NAME")
+                        .appendField("placeholder:")
+                        .appendField(new Blockly.FieldTextInput(""), "PLACEHOLDER")
+                        .appendField("></textarea>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                }
+            };
+
+            // Select block
+            Blockly.Blocks['select'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<select")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("name:")
+                        .appendField(new Blockly.FieldTextInput(""), "NAME")
+                        .appendField(">");
+                    this.appendStatementInput("OPTIONS")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</select>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                }
+            };
+
+            // Title block
+            Blockly.Blocks['title'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<title>")
+                        .appendField(new Blockly.FieldTextInput("Page Title"), "TEXT")
+                        .appendField("</title>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                    this.setTooltip("HTML page title");
+                }
+            };
+
+            // Link Rel block
+            Blockly.Blocks['link_rel'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<link")
+                        .appendField("rel:")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["stylesheet", "stylesheet"],
+                            ["icon", "icon"],
+                            ["canonical", "canonical"],
+                            ["preload", "preload"],
+                            ["prefetch", "prefetch"]
+                        ]), "REL")
+                        .appendField("href:")
+                        .appendField(new Blockly.FieldTextInput(""), "HREF")
+                        .appendField(">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(230);
+                    this.setTooltip("HTML link element for external resources");
+                }
+            };
+
+            // Break block
+            Blockly.Blocks['br'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<br>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Line break");
+                }
+            };
+
+            // HR block
+            Blockly.Blocks['hr'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<hr>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("Horizontal rule");
+                }
+            };
+
+            // Option block
+            Blockly.Blocks['option'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<option")
+                        .appendField("value:")
+                        .appendField(new Blockly.FieldTextInput(""), "VALUE")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Option"), "TEXT")
+                        .appendField("</option>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                }
+            };
+
+            // Table block
+            Blockly.Blocks['table'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<table")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</table>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                }
+            };
+
+            // Table Row block
+            Blockly.Blocks['tr'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<tr")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</tr>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                }
+            };
+
+            // Table Header block
+            Blockly.Blocks['th'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<th")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</th>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                }
+            };
+
+            // Table Data block
+            Blockly.Blocks['td'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<td")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</td>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(45);
+                }
+            };
+
+            // Header block
+            Blockly.Blocks['header'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<header")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</header>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(160);
+                }
+            };
+
+            // Main block
+            Blockly.Blocks['main'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<main")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</main>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(160);
+                }
+            };
+
+            // Footer block
+            Blockly.Blocks['footer'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<footer")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</footer>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(160);
+                }
+            };
+
+            // Nav block
+            Blockly.Blocks['nav'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<nav")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("CONTENT")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</nav>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(200);
+                }
+            };
+
+            // Heading block (unified for h1-h6)
+            Blockly.Blocks['heading'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<h")
+                        .appendField(new Blockly.FieldDropdown([
+                            ["1", "1"],
+                            ["2", "2"],
+                            ["3", "3"],
+                            ["4", "4"],
+                            ["5", "5"],
+                            ["6", "6"]
+                        ]), "LEVEL")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Title"), "TEXT")
+                        .appendField("</h>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                    this.setTooltip("HTML heading element (h1-h6)");
+                }
+            };
+
+            // Paragraph block
+            Blockly.Blocks['p'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<p")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Text"), "TEXT")
+                        .appendField("</p>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(120);
+                }
+            };
+
+            // Image block
+            Blockly.Blocks['img'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<img")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("src:")
+                        .appendField(new Blockly.FieldTextInput(""), "SRC")
+                        .appendField("alt:")
+                        .appendField(new Blockly.FieldTextInput(""), "ALT")
+                        .appendField(">");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(290);
+                }
+            };
+
+            // Button block
+            Blockly.Blocks['button'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<button")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Click me"), "TEXT")
+                        .appendField("</button>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(65);
+                }
+            };
+
+            // Link block
+            Blockly.Blocks['a'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<a")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField("href:")
+                        .appendField(new Blockly.FieldTextInput("#"), "HREF")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Link"), "TEXT")
+                        .appendField("</a>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(200);
+                }
+            };
+
+            // List blocks
+            Blockly.Blocks['ul'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<ul")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("ITEMS")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</ul>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(20);
+                }
+            };
+
+            Blockly.Blocks['ol'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<ol")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">");
+                    this.appendStatementInput("ITEMS")
+                        .setCheck(null);
+                    this.appendDummyInput()
+                        .appendField("</ol>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(20);
+                }
+            };
+
+            Blockly.Blocks['li'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("<li")
+                        .appendField("class:")
+                        .appendField(new Blockly.FieldTextInput(""), "CLASS")
+                        .appendField(">")
+                        .appendField(new Blockly.FieldTextInput("Item"), "TEXT")
+                        .appendField("</li>");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(20);
+                }
+            };
+        }
+
+        // HTML Beautifier function
+        function beautifyHTML(html) {
+            let result = '';
+            let indent = 0;
+            const indentSize = 2;
+            
+            // Split by tags and process each part
+            const tokens = html.split(/(<\/?[^>]+>)/);
+            
+            for (let i = 0; i < tokens.length; i++) {
+                const token = tokens[i].trim();
+                if (!token) continue;
+                
+                if (token.startsWith('</')) {
+                    // Closing tag - decrease indent first
+                    indent = Math.max(0, indent - indentSize);
+                    result += ' '.repeat(indent) + token + '\n';
+                } else if (token.startsWith('<')) {
+                    // Opening tag
+                    result += ' '.repeat(indent) + token + '\n';
+                    // Increase indent for next content (unless it's self-closing)
+                    if (!token.endsWith('/>') && !token.includes('<img') && !token.includes('<input') && !token.includes('<br') && !token.includes('<hr')) {
+                        indent += indentSize;
+                    }
+                } else {
+                    // Text content
+                    if (token.length > 0) {
+                        result += ' '.repeat(indent) + token + '\n';
+                    }
+                }
+            }
+            
+            return result.trim();
+        }
+
+        // Custom HTML generator function
+        function generateHTML(block) {
+            if (!block) return '';
+            
+            let html = '';
+            
+            switch (block.type) {
+                case 'html':
+                    const htmlContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    html = `<!DOCTYPE html>\n<html>\n${htmlContent}</html>\n`;
+                    break;
+                    
+                case 'head':
+                    const headContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    html = `<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n${headContent}</head>\n`;
+                    break;
+                    
+                case 'body':
+                    const bodyClass = block.getFieldValue('CLASS');
+                    const bodyContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const bodyClassAttr = bodyClass ? ` class="${bodyClass}"` : '';
+                    html = `<body${bodyClassAttr}>\n${bodyContent}</body>\n`;
+                    break;
+                    
+                case 'div':
+                    const divClass = block.getFieldValue('CLASS');
+                    const divContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const divClassAttr = divClass ? ` class="${divClass}"` : '';
+                    html = `<div${divClassAttr}>\n${divContent}</div>\n`;
+                    break;
+                    
+                case 'span':
+                    const spanClass = block.getFieldValue('CLASS');
+                    const spanContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const spanClassAttr = spanClass ? ` class="${spanClass}"` : '';
+                    html = `<span${spanClassAttr}>${spanContent}</span>\n`;
+                    break;
+                    
+                case 'heading':
+                    const level = block.getFieldValue('LEVEL');
+                    const headingClass = block.getFieldValue('CLASS');
+                    const headingText = block.getFieldValue('TEXT');
+                    const headingClassAttr = headingClass ? ` class="${headingClass}"` : '';
+                    html = `<h${level}${headingClassAttr}>${headingText}</h${level}>\n`;
+                    break;
+                    
+                case 'p':
+                    const pClass = block.getFieldValue('CLASS');
+                    const pText = block.getFieldValue('TEXT');
+                    const pClassAttr = pClass ? ` class="${pClass}"` : '';
+                    html = `<p${pClassAttr}>${pText}</p>\n`;
+                    break;
+                    
+                case 'strong':
+                    html = `<strong>${block.getFieldValue('TEXT')}</strong>\n`;
+                    break;
+                    
+                case 'em':
+                    html = `<em>${block.getFieldValue('TEXT')}</em>\n`;
+                    break;
+                    
+                case 'img':
+                    const imgClass = block.getFieldValue('CLASS');
+                    const src = block.getFieldValue('SRC');
+                    const alt = block.getFieldValue('ALT');
+                    const imgClassAttr = imgClass ? ` class="${imgClass}"` : '';
+                    html = `<img${imgClassAttr} src="${src}" alt="${alt}">\n`;
+                    break;
+                    
+                case 'video':
+                    const videoClass = block.getFieldValue('CLASS');
+                    const videoSrc = block.getFieldValue('SRC');
+                    const videoClassAttr = videoClass ? ` class="${videoClass}"` : '';
+                    html = `<video${videoClassAttr} controls><source src="${videoSrc}" type="video/mp4"></video>\n`;
+                    break;
+                    
+                case 'audio':
+                    const audioClass = block.getFieldValue('CLASS');
+                    const audioSrc = block.getFieldValue('SRC');
+                    const audioClassAttr = audioClass ? ` class="${audioClass}"` : '';
+                    html = `<audio${audioClassAttr} controls><source src="${audioSrc}" type="audio/mpeg"></audio>\n`;
+                    break;
+                    
+                case 'form':
+                    const formClass = block.getFieldValue('CLASS');
+                    const formContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const formClassAttr = formClass ? ` class="${formClass}"` : '';
+                    html = `<form${formClassAttr}>\n${formContent}</form>\n`;
+                    break;
+                    
+                case 'label':
+                    const labelClass = block.getFieldValue('CLASS');
+                    const labelFor = block.getFieldValue('FOR');
+                    const labelText = block.getFieldValue('TEXT');
+                    const labelClassAttr = labelClass ? ` class="${labelClass}"` : '';
+                    const forAttr = labelFor ? ` for="${labelFor}"` : '';
+                    html = `<label${labelClassAttr}${forAttr}>${labelText}</label>\n`;
+                    break;
+                    
+                case 'input':
+                    const inputClass = block.getFieldValue('CLASS');
+                    const inputType = block.getFieldValue('TYPE');
+                    const inputName = block.getFieldValue('NAME');
+                    const placeholder = block.getFieldValue('PLACEHOLDER');
+                    const inputClassAttr = inputClass ? ` class="${inputClass}"` : '';
+                    const nameAttr = inputName ? ` name="${inputName}" id="${inputName}"` : '';
+                    html = `<input${inputClassAttr} type="${inputType}"${nameAttr} placeholder="${placeholder}">\n`;
+                    break;
+                    
+                case 'textarea':
+                    const textareaClass = block.getFieldValue('CLASS');
+                    const textareaName = block.getFieldValue('NAME');
+                    const textareaPlaceholder = block.getFieldValue('PLACEHOLDER');
+                    const textareaClassAttr = textareaClass ? ` class="${textareaClass}"` : '';
+                    const textareaNameAttr = textareaName ? ` name="${textareaName}" id="${textareaName}"` : '';
+                    html = `<textarea${textareaClassAttr}${textareaNameAttr} placeholder="${textareaPlaceholder}"></textarea>\n`;
+                    break;
+                    
+                case 'button':
+                    const buttonClass = block.getFieldValue('CLASS');
+                    const buttonText = block.getFieldValue('TEXT');
+                    const buttonClassAttr = buttonClass ? ` class="${buttonClass}"` : '';
+                    html = `<button${buttonClassAttr}>${buttonText}</button>\n`;
+                    break;
+                    
+                case 'select':
+                    const selectClass = block.getFieldValue('CLASS');
+                    const selectName = block.getFieldValue('NAME');
+                    const selectContent = generateHTMLFromStatements(block.getInput('OPTIONS'));
+                    const selectClassAttr = selectClass ? ` class="${selectClass}"` : '';
+                    const selectNameAttr = selectName ? ` name="${selectName}" id="${selectName}"` : '';
+                    html = `<select${selectClassAttr}${selectNameAttr}>\n${selectContent}</select>\n`;
+                    break;
+                    
+                case 'a':
+                    const aClass = block.getFieldValue('CLASS');
+                    const href = block.getFieldValue('HREF');
+                    const linkText = block.getFieldValue('TEXT');
+                    const aClassAttr = aClass ? ` class="${aClass}"` : '';
+                    html = `<a${aClassAttr} href="${href}" target="_blank" rel="noopener noreferrer">${linkText}</a>\n`;
+                    break;
+                    
+                case 'nav':
+                    const navClass = block.getFieldValue('CLASS');
+                    const navContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const navClassAttr = navClass ? ` class="${navClass}"` : '';
+                    html = `<nav${navClassAttr}>\n${navContent}</nav>\n`;
+                    break;
+                    
+                case 'ul':
+                    const ulClass = block.getFieldValue('CLASS');
+                    const ulItems = generateHTMLFromStatements(block.getInput('ITEMS'));
+                    const ulClassAttr = ulClass ? ` class="${ulClass}"` : '';
+                    html = `<ul${ulClassAttr}>\n${ulItems}</ul>\n`;
+                    break;
+                    
+                case 'ol':
+                    const olClass = block.getFieldValue('CLASS');
+                    const olItems = generateHTMLFromStatements(block.getInput('ITEMS'));
+                    const olClassAttr = olClass ? ` class="${olClass}"` : '';
+                    html = `<ol${olClassAttr}>\n${olItems}</ol>\n`;
+                    break;
+                    
+                case 'li':
+                    const liClass = block.getFieldValue('CLASS');
+                    const liText = block.getFieldValue('TEXT');
+                    const liClassAttr = liClass ? ` class="${liClass}"` : '';
+                    html = `<li${liClassAttr}>${liText}</li>\n`;
+                    break;
+                    
+                case 'title':
+                    html = `<title>${block.getFieldValue('TEXT')}</title>\n`;
+                    break;
+                    
+                case 'link_rel':
+                    const rel = block.getFieldValue('REL');
+                    const linkHref = block.getFieldValue('HREF');
+                    html = `<link rel="${rel}" href="${linkHref}">\n`;
+                    break;
+                    
+                case 'br':
+                    html = `<br>\n`;
+                    break;
+                    
+                case 'hr':
+                    html = `<hr>\n`;
+                    break;
+                    
+                case 'option':
+                    const optionValue = block.getFieldValue('VALUE');
+                    const optionText = block.getFieldValue('TEXT');
+                    html = `<option value="${optionValue}">${optionText}</option>\n`;
+                    break;
+                    
+                case 'table':
+                    const tableClass = block.getFieldValue('CLASS');
+                    const tableContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const tableClassAttr = tableClass ? ` class="${tableClass}"` : '';
+                    html = `<table${tableClassAttr}>\n${tableContent}</table>\n`;
+                    break;
+                    
+                case 'tr':
+                    const trClass = block.getFieldValue('CLASS');
+                    const trContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const trClassAttr = trClass ? ` class="${trClass}"` : '';
+                    html = `<tr${trClassAttr}>\n${trContent}</tr>\n`;
+                    break;
+                    
+                case 'th':
+                    const thClass = block.getFieldValue('CLASS');
+                    const thContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const thClassAttr = thClass ? ` class="${thClass}"` : '';
+                    html = `<th${thClassAttr}>\n${thContent}</th>\n`;
+                    break;
+                    
+                case 'td':
+                    const tdClass = block.getFieldValue('CLASS');
+                    const tdContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const tdClassAttr = tdClass ? ` class="${tdClass}"` : '';
+                    html = `<td${tdClassAttr}>\n${tdContent}</td>\n`;
+                    break;
+                    
+                case 'header':
+                    const headerClass = block.getFieldValue('CLASS');
+                    const headerContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const headerClassAttr = headerClass ? ` class="${headerClass}"` : '';
+                    html = `<header${headerClassAttr}>\n${headerContent}</header>\n`;
+                    break;
+                    
+                case 'main':
+                    const mainClass = block.getFieldValue('CLASS');
+                    const mainContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
+                    html = `<main${mainClassAttr}>\n${mainContent}</main>\n`;
+                    break;
+                    
+                case 'footer':
+                    const footerClass = block.getFieldValue('CLASS');
+                    const footerContent = generateHTMLFromStatements(block.getInput('CONTENT'));
+                    const footerClassAttr = footerClass ? ` class="${footerClass}"` : '';
+                    html = `<footer${footerClassAttr}>\n${footerContent}</footer>\n`;
+                    break;
+                    
+                case 'cdn_bootstrap':
+                    html = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">\n`;
+                    break;
+                    
+                case 'cdn_fontawesome':
+                    html = `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">\n`;
+                    break;
+                    
+                default:
+                    html = '';
+            }
+            
+            return html;
+        }
+        
+        function generateHTMLFromStatements(input) {
+            if (!input || !input.connection || !input.connection.targetBlock()) {
+                return '';
+            }
+            
+            let html = '';
+            let currentBlock = input.connection.targetBlock();
+            
+            while (currentBlock) {
+                html += generateHTML(currentBlock);
+                currentBlock = currentBlock.getNextBlock();
+            }
+            
+            return html;
+        }
+        
+        function generateWorkspaceHTML() {
+            const topBlocks = workspace.getTopBlocks();
+            let html = '';
+            
+            for (let block of topBlocks) {
+                html += generateHTML(block);
+            }
+            
+            return html;
+        }
+
+        // Template functions
+        function createSimpleHTMLTemplate() {
+            workspace.clear();
+            clearSavedWorkspace(); // Clear saved data when creating new template
+            
+            // Create HTML block
+            const htmlBlock = workspace.newBlock('html');
+            htmlBlock.initSvg();
+            htmlBlock.render();
+            htmlBlock.moveBy(50, 50);
+            
+            // Create head block
+            const headBlock = workspace.newBlock('head');
+            headBlock.initSvg();
+            headBlock.render();
+            htmlBlock.getInput('CONTENT').connection.connect(headBlock.previousConnection);
+            
+            // Create title block
+            const titleBlock = workspace.newBlock('title');
+            titleBlock.initSvg();
+            titleBlock.render();
+            titleBlock.setFieldValue('Halaman Saya', 'TEXT');
+            headBlock.getInput('CONTENT').connection.connect(titleBlock.previousConnection);
+            
+            // Create body block
+            const bodyBlock = workspace.newBlock('body');
+            bodyBlock.initSvg();
+            bodyBlock.render();
+            headBlock.nextConnection.connect(bodyBlock.previousConnection);
+            
+            // Create heading
+            const h1Block = workspace.newBlock('heading');
+            h1Block.initSvg();
+            h1Block.render();
+            h1Block.setFieldValue('1', 'LEVEL');
+            h1Block.setFieldValue('Selamat Datang', 'TEXT');
+            bodyBlock.getInput('CONTENT').connection.connect(h1Block.previousConnection);
+            
+            // Create paragraph
+            const pBlock = workspace.newBlock('p');
+            pBlock.initSvg();
+            pBlock.render();
+            pBlock.setFieldValue('Ini adalah halaman HTML sederhana yang dibuat dengan editor visual.', 'TEXT');
+            h1Block.nextConnection.connect(pBlock.previousConnection);
+        }
+        
+        function createTableTemplate() {
+            workspace.clear();
+            clearSavedWorkspace(); // Clear saved data when creating new template
+            
+            // Create HTML block
+            const htmlBlock = workspace.newBlock('html');
+            htmlBlock.initSvg();
+            htmlBlock.render();
+            htmlBlock.moveBy(50, 50);
+            
+            // Create head block
+            const headBlock = workspace.newBlock('head');
+            headBlock.initSvg();
+            headBlock.render();
+            htmlBlock.getInput('CONTENT').connection.connect(headBlock.previousConnection);
+            
+            // Create title block
+            const titleBlock = workspace.newBlock('title');
+            titleBlock.initSvg();
+            titleBlock.render();
+            titleBlock.setFieldValue('Contoh Tabel Bootstrap', 'TEXT');
+            headBlock.getInput('CONTENT').connection.connect(titleBlock.previousConnection);
+            
+            // Add Bootstrap CDN
+            const bootstrapCDN = workspace.newBlock('cdn_bootstrap');
+            bootstrapCDN.initSvg();
+            bootstrapCDN.render();
+            titleBlock.nextConnection.connect(bootstrapCDN.previousConnection);
+            
+            // Add FontAwesome CDN
+            const fontAwesomeCDN = workspace.newBlock('cdn_fontawesome');
+            fontAwesomeCDN.initSvg();
+            fontAwesomeCDN.render();
+            bootstrapCDN.nextConnection.connect(fontAwesomeCDN.previousConnection);
+            
+            // Create body block
+            const bodyBlock = workspace.newBlock('body');
+            bodyBlock.initSvg();
+            bodyBlock.render();
+            bodyBlock.setFieldValue('bg-light', 'CLASS');
+            headBlock.nextConnection.connect(bodyBlock.previousConnection);
+            
+            // Create container div
+            const containerDiv = workspace.newBlock('div');
+            containerDiv.initSvg();
+            containerDiv.render();
+            containerDiv.setFieldValue('container mt-5', 'CLASS');
+            bodyBlock.getInput('CONTENT').connection.connect(containerDiv.previousConnection);
+            
+            // Create heading with icon
+            const h1Block = workspace.newBlock('heading');
+            h1Block.initSvg();
+            h1Block.render();
+            h1Block.setFieldValue('1', 'LEVEL');
+            h1Block.setFieldValue('text-center mb-4 text-primary', 'CLASS');
+            h1Block.setFieldValue('📊 Data Siswa', 'TEXT');
+            containerDiv.getInput('CONTENT').connection.connect(h1Block.previousConnection);
+            
+            // Create table with Bootstrap classes
+            const tableBlock = workspace.newBlock('table');
+            tableBlock.initSvg();
+            tableBlock.render();
+            tableBlock.setFieldValue('table table-striped table-hover table-bordered', 'CLASS');
+            h1Block.nextConnection.connect(tableBlock.previousConnection);
+            
+            // Create header row
+            const headerRow = workspace.newBlock('tr');
+            headerRow.initSvg();
+            headerRow.render();
+            headerRow.setFieldValue('table-dark', 'CLASS');
+            tableBlock.getInput('CONTENT').connection.connect(headerRow.previousConnection);
+            
+            // Create header cells
+            const th1 = workspace.newBlock('th');
+            th1.initSvg();
+            th1.render();
+            headerRow.getInput('CONTENT').connection.connect(th1.previousConnection);
+            
+            const th1Text = workspace.newBlock('p');
+            th1Text.initSvg();
+            th1Text.render();
+            th1Text.setFieldValue('m-0', 'CLASS');
+            th1Text.setFieldValue('👤 Nama', 'TEXT');
+            th1.getInput('CONTENT').connection.connect(th1Text.previousConnection);
+            
+            const th2 = workspace.newBlock('th');
+            th2.initSvg();
+            th2.render();
+            th1.nextConnection.connect(th2.previousConnection);
+            
+            const th2Text = workspace.newBlock('p');
+            th2Text.initSvg();
+            th2Text.render();
+            th2Text.setFieldValue('m-0', 'CLASS');
+            th2Text.setFieldValue('🏫 Kelas', 'TEXT');
+            th2.getInput('CONTENT').connection.connect(th2Text.previousConnection);
+            
+            const th3 = workspace.newBlock('th');
+            th3.initSvg();
+            th3.render();
+            th2.nextConnection.connect(th3.previousConnection);
+            
+            const th3Text = workspace.newBlock('p');
+            th3Text.initSvg();
+            th3Text.render();
+            th3Text.setFieldValue('m-0', 'CLASS');
+            th3Text.setFieldValue('📧 Email', 'TEXT');
+            th3.getInput('CONTENT').connection.connect(th3Text.previousConnection);
+            
+            // Create data row 1
+            const dataRow1 = workspace.newBlock('tr');
+            dataRow1.initSvg();
+            dataRow1.render();
+            headerRow.nextConnection.connect(dataRow1.previousConnection);
+            
+            // Create data cells for row 1
+            const td1_1 = workspace.newBlock('td');
+            td1_1.initSvg();
+            td1_1.render();
+            dataRow1.getInput('CONTENT').connection.connect(td1_1.previousConnection);
+            
+            const td1_1Text = workspace.newBlock('p');
+            td1_1Text.initSvg();
+            td1_1Text.render();
+            td1_1Text.setFieldValue('m-0 fw-bold', 'CLASS');
+            td1_1Text.setFieldValue('Ahmad Rizki', 'TEXT');
+            td1_1.getInput('CONTENT').connection.connect(td1_1Text.previousConnection);
+            
+            const td1_2 = workspace.newBlock('td');
+            td1_2.initSvg();
+            td1_2.render();
+            td1_1.nextConnection.connect(td1_2.previousConnection);
+            
+            const td1_2Text = workspace.newBlock('p');
+            td1_2Text.initSvg();
+            td1_2Text.render();
+            td1_2Text.setFieldValue('m-0 badge bg-primary', 'CLASS');
+            td1_2Text.setFieldValue('10A', 'TEXT');
+            td1_2.getInput('CONTENT').connection.connect(td1_2Text.previousConnection);
+            
+            const td1_3 = workspace.newBlock('td');
+            td1_3.initSvg();
+            td1_3.render();
+            td1_2.nextConnection.connect(td1_3.previousConnection);
+            
+            const td1_3Text = workspace.newBlock('p');
+            td1_3Text.initSvg();
+            td1_3Text.render();
+            td1_3Text.setFieldValue('m-0 text-muted', 'CLASS');
+            td1_3Text.setFieldValue('ahmad@email.com', 'TEXT');
+            td1_3.getInput('CONTENT').connection.connect(td1_3Text.previousConnection);
+            
+            // Create data row 2
+            const dataRow2 = workspace.newBlock('tr');
+            dataRow2.initSvg();
+            dataRow2.render();
+            dataRow1.nextConnection.connect(dataRow2.previousConnection);
+            
+            // Create data cells for row 2
+            const td2_1 = workspace.newBlock('td');
+            td2_1.initSvg();
+            td2_1.render();
+            dataRow2.getInput('CONTENT').connection.connect(td2_1.previousConnection);
+            
+            const td2_1Text = workspace.newBlock('p');
+            td2_1Text.initSvg();
+            td2_1Text.render();
+            td2_1Text.setFieldValue('m-0 fw-bold', 'CLASS');
+            td2_1Text.setFieldValue('Siti Nurhaliza', 'TEXT');
+            td2_1.getInput('CONTENT').connection.connect(td2_1Text.previousConnection);
+            
+            const td2_2 = workspace.newBlock('td');
+            td2_2.initSvg();
+            td2_2.render();
+            td2_1.nextConnection.connect(td2_2.previousConnection);
+            
+            const td2_2Text = workspace.newBlock('p');
+            td2_2Text.initSvg();
+            td2_2Text.render();
+            td2_2Text.setFieldValue('m-0 badge bg-success', 'CLASS');
+            td2_2Text.setFieldValue('10B', 'TEXT');
+            td2_2.getInput('CONTENT').connection.connect(td2_2Text.previousConnection);
+            
+            const td2_3 = workspace.newBlock('td');
+            td2_3.initSvg();
+            td2_3.render();
+            td2_2.nextConnection.connect(td2_3.previousConnection);
+            
+            const td2_3Text = workspace.newBlock('p');
+            td2_3Text.initSvg();
+            td2_3Text.render();
+            td2_3Text.setFieldValue('m-0 text-muted', 'CLASS');
+            td2_3Text.setFieldValue('siti@email.com', 'TEXT');
+            td2_3.getInput('CONTENT').connection.connect(td2_3Text.previousConnection);
+        }
+        
+        function createFormTemplate() {
+            workspace.clear();
+            clearSavedWorkspace(); // Clear saved data when creating new template
+            
+            // Create HTML block
+            const htmlBlock = workspace.newBlock('html');
+            htmlBlock.initSvg();
+            htmlBlock.render();
+            htmlBlock.moveBy(50, 50);
+            
+            // Create head block
+            const headBlock = workspace.newBlock('head');
+            headBlock.initSvg();
+            headBlock.render();
+            htmlBlock.getInput('CONTENT').connection.connect(headBlock.previousConnection);
+            
+            // Create title block
+            const titleBlock = workspace.newBlock('title');
+            titleBlock.initSvg();
+            titleBlock.render();
+            titleBlock.setFieldValue('Form Kontak Bootstrap', 'TEXT');
+            headBlock.getInput('CONTENT').connection.connect(titleBlock.previousConnection);
+            
+            // Add Bootstrap CDN
+            const bootstrapCDN = workspace.newBlock('cdn_bootstrap');
+            bootstrapCDN.initSvg();
+            bootstrapCDN.render();
+            titleBlock.nextConnection.connect(bootstrapCDN.previousConnection);
+            
+            // Add FontAwesome CDN
+            const fontAwesomeCDN = workspace.newBlock('cdn_fontawesome');
+            fontAwesomeCDN.initSvg();
+            fontAwesomeCDN.render();
+            bootstrapCDN.nextConnection.connect(fontAwesomeCDN.previousConnection);
+            
+            // Create body block
+            const bodyBlock = workspace.newBlock('body');
+            bodyBlock.initSvg();
+            bodyBlock.render();
+            bodyBlock.setFieldValue('bg-gradient', 'CLASS');
+            headBlock.nextConnection.connect(bodyBlock.previousConnection);
+            
+            // Create container div
+            const containerDiv = workspace.newBlock('div');
+            containerDiv.initSvg();
+            containerDiv.render();
+            containerDiv.setFieldValue('container py-5', 'CLASS');
+            bodyBlock.getInput('CONTENT').connection.connect(containerDiv.previousConnection);
+            
+            // Create row div
+            const rowDiv = workspace.newBlock('div');
+            rowDiv.initSvg();
+            rowDiv.render();
+            rowDiv.setFieldValue('row justify-content-center', 'CLASS');
+            containerDiv.getInput('CONTENT').connection.connect(rowDiv.previousConnection);
+            
+            // Create column div
+            const colDiv = workspace.newBlock('div');
+            colDiv.initSvg();
+            colDiv.render();
+            colDiv.setFieldValue('col-md-6 col-lg-5', 'CLASS');
+            rowDiv.getInput('CONTENT').connection.connect(colDiv.previousConnection);
+            
+            // Create card div
+            const cardDiv = workspace.newBlock('div');
+            cardDiv.initSvg();
+            cardDiv.render();
+            cardDiv.setFieldValue('card shadow-lg border-0', 'CLASS');
+            colDiv.getInput('CONTENT').connection.connect(cardDiv.previousConnection);
+            
+            // Create card header
+            const cardHeader = workspace.newBlock('div');
+            cardHeader.initSvg();
+            cardHeader.render();
+            cardHeader.setFieldValue('card-header bg-primary text-white text-center', 'CLASS');
+            cardDiv.getInput('CONTENT').connection.connect(cardHeader.previousConnection);
+            
+            // Create heading with icon
+            const h1Block = workspace.newBlock('heading');
+            h1Block.initSvg();
+            h1Block.render();
+            h1Block.setFieldValue('3', 'LEVEL');
+            h1Block.setFieldValue('mb-0', 'CLASS');
+            h1Block.setFieldValue('📧 Hubungi Kami', 'TEXT');
+            cardHeader.getInput('CONTENT').connection.connect(h1Block.previousConnection);
+            
+            // Create card body
+            const cardBody = workspace.newBlock('div');
+            cardBody.initSvg();
+            cardBody.render();
+            cardBody.setFieldValue('card-body p-4', 'CLASS');
+            cardHeader.nextConnection.connect(cardBody.previousConnection);
+            
+            // Create form
+            const formBlock = workspace.newBlock('form');
+            formBlock.initSvg();
+            formBlock.render();
+            cardBody.getInput('CONTENT').connection.connect(formBlock.previousConnection);
+            
+            // Create name form group
+            const nameGroup = workspace.newBlock('div');
+            nameGroup.initSvg();
+            nameGroup.render();
+            nameGroup.setFieldValue('mb-3', 'CLASS');
+            formBlock.getInput('CONTENT').connection.connect(nameGroup.previousConnection);
+            
+            // Create name label
+            const nameLabel = workspace.newBlock('label');
+            nameLabel.initSvg();
+            nameLabel.render();
+            nameLabel.setFieldValue('form-label fw-bold', 'CLASS');
+            nameLabel.setFieldValue('nama', 'FOR');
+            nameLabel.setFieldValue('👤 Nama Lengkap', 'TEXT');
+            nameGroup.getInput('CONTENT').connection.connect(nameLabel.previousConnection);
+            
+            // Create name input
+            const nameInput = workspace.newBlock('input');
+            nameInput.initSvg();
+            nameInput.render();
+            nameInput.setFieldValue('form-control form-control-lg', 'CLASS');
+            nameInput.setFieldValue('text', 'TYPE');
+            nameInput.setFieldValue('nama', 'NAME');
+            nameInput.setFieldValue('Masukkan nama lengkap Anda', 'PLACEHOLDER');
+            nameLabel.nextConnection.connect(nameInput.previousConnection);
+            
+            // Create email form group
+            const emailGroup = workspace.newBlock('div');
+            emailGroup.initSvg();
+            emailGroup.render();
+            emailGroup.setFieldValue('mb-3', 'CLASS');
+            nameGroup.nextConnection.connect(emailGroup.previousConnection);
+            
+            // Create email label
+            const emailLabel = workspace.newBlock('label');
+            emailLabel.initSvg();
+            emailLabel.render();
+            emailLabel.setFieldValue('form-label fw-bold', 'CLASS');
+            emailLabel.setFieldValue('email', 'FOR');
+            emailLabel.setFieldValue('📧 Email Address', 'TEXT');
+            emailGroup.getInput('CONTENT').connection.connect(emailLabel.previousConnection);
+            
+            // Create email input
+            const emailInput = workspace.newBlock('input');
+            emailInput.initSvg();
+            emailInput.render();
+            emailInput.setFieldValue('form-control form-control-lg', 'CLASS');
+            emailInput.setFieldValue('email', 'TYPE');
+            emailInput.setFieldValue('email', 'NAME');
+            emailInput.setFieldValue('nama@email.com', 'PLACEHOLDER');
+            emailLabel.nextConnection.connect(emailInput.previousConnection);
+            
+            // Create subject form group
+            const subjectGroup = workspace.newBlock('div');
+            subjectGroup.initSvg();
+            subjectGroup.render();
+            subjectGroup.setFieldValue('mb-3', 'CLASS');
+            emailGroup.nextConnection.connect(subjectGroup.previousConnection);
+            
+            // Create subject label
+            const subjectLabel = workspace.newBlock('label');
+            subjectLabel.initSvg();
+            subjectLabel.render();
+            subjectLabel.setFieldValue('form-label fw-bold', 'CLASS');
+            subjectLabel.setFieldValue('subjek', 'FOR');
+            subjectLabel.setFieldValue('📝 Subjek', 'TEXT');
+            subjectGroup.getInput('CONTENT').connection.connect(subjectLabel.previousConnection);
+            
+            // Create subject select
+            const subjectSelect = workspace.newBlock('select');
+            subjectSelect.initSvg();
+            subjectSelect.render();
+            subjectSelect.setFieldValue('form-select form-select-lg', 'CLASS');
+            subjectSelect.setFieldValue('subjek', 'NAME');
+            subjectLabel.nextConnection.connect(subjectSelect.previousConnection);
+            
+            // Create select options
+            const option1 = workspace.newBlock('option');
+            option1.initSvg();
+            option1.render();
+            option1.setFieldValue('', 'VALUE');
+            option1.setFieldValue('Pilih subjek...', 'TEXT');
+            subjectSelect.getInput('OPTIONS').connection.connect(option1.previousConnection);
+            
+            const option2 = workspace.newBlock('option');
+            option2.initSvg();
+            option2.render();
+            option2.setFieldValue('pertanyaan', 'VALUE');
+            option2.setFieldValue('❓ Pertanyaan Umum', 'TEXT');
+            option1.nextConnection.connect(option2.previousConnection);
+            
+            const option3 = workspace.newBlock('option');
+            option3.initSvg();
+            option3.render();
+            option3.setFieldValue('saran', 'VALUE');
+            option3.setFieldValue('💡 Saran & Masukan', 'TEXT');
+            option2.nextConnection.connect(option3.previousConnection);
+            
+            // Create message form group
+            const messageGroup = workspace.newBlock('div');
+            messageGroup.initSvg();
+            messageGroup.render();
+            messageGroup.setFieldValue('mb-4', 'CLASS');
+            subjectGroup.nextConnection.connect(messageGroup.previousConnection);
+            
+            // Create message label
+            const messageLabel = workspace.newBlock('label');
+            messageLabel.initSvg();
+            messageLabel.render();
+            messageLabel.setFieldValue('form-label fw-bold', 'CLASS');
+            messageLabel.setFieldValue('pesan', 'FOR');
+            messageLabel.setFieldValue('💬 Pesan', 'TEXT');
+            messageGroup.getInput('CONTENT').connection.connect(messageLabel.previousConnection);
+            
+            // Create textarea
+            const textarea = workspace.newBlock('textarea');
+            textarea.initSvg();
+            textarea.render();
+            textarea.setFieldValue('form-control', 'CLASS');
+            textarea.setFieldValue('pesan', 'NAME');
+            textarea.setFieldValue('Tulis pesan Anda di sini...', 'PLACEHOLDER');
+            messageLabel.nextConnection.connect(textarea.previousConnection);
+            
+            // Create button group
+            const buttonGroup = workspace.newBlock('div');
+            buttonGroup.initSvg();
+            buttonGroup.render();
+            buttonGroup.setFieldValue('d-grid gap-2', 'CLASS');
+            messageGroup.nextConnection.connect(buttonGroup.previousConnection);
+            
+            // Create submit button
+            const submitBtn = workspace.newBlock('button');
+            submitBtn.initSvg();
+            submitBtn.render();
+            submitBtn.setFieldValue('btn btn-primary btn-lg', 'CLASS');
+            submitBtn.setFieldValue('🚀 Kirim Pesan', 'TEXT');
+            buttonGroup.getInput('CONTENT').connection.connect(submitBtn.previousConnection);
+        }
+
+        // Local Storage Functions
+        function saveWorkspace() {
+            try {
+                const xml = Blockly.Xml.workspaceToDom(workspace);
+                const xmlText = Blockly.Xml.domToText(xml);
+                localStorage.setItem('blocklyWorkspace', xmlText);
+                console.log('Workspace saved to local storage');
+            } catch (error) {
+                console.error('Error saving workspace:', error);
+            }
+        }
+
+        function loadWorkspace() {
+            try {
+                const xmlText = localStorage.getItem('blocklyWorkspace');
+                if (xmlText) {
+                    const xml = Blockly.Xml.textToDom(xmlText);
+                    Blockly.Xml.domToWorkspace(xml, workspace);
+                    console.log('Workspace loaded from local storage');
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error loading workspace:', error);
+                localStorage.removeItem('blocklyWorkspace'); // Remove corrupted data
+            }
+            return false;
+        }
+
+        function clearSavedWorkspace() {
+            localStorage.removeItem('blocklyWorkspace');
+            console.log('Saved workspace cleared');
+        }
+
+        // Workspace drag functionality
+        function addWorkspaceDragSupport() {
+            const blocklyDiv = document.getElementById('blocklyDiv');
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragStartY = 0;
+            let initialScrollX = 0;
+            let initialScrollY = 0;
+
+            // Mouse events
+            blocklyDiv.addEventListener('mousedown', function(e) {
+                // Only start dragging if clicking on empty workspace (not on blocks or UI elements)
+                if (e.target.classList.contains('blocklyMainBackground') || 
+                    e.target.classList.contains('blocklyWorkspace') ||
+                    e.target.tagName === 'svg' && e.target.classList.contains('blocklySvg')) {
+                    
+                    isDragging = true;
+                    dragStartX = e.clientX;
+                    dragStartY = e.clientY;
+                    
+                    const metrics = workspace.getMetrics();
+                    initialScrollX = metrics.viewLeft;
+                    initialScrollY = metrics.viewTop;
+                    
+                    blocklyDiv.style.cursor = 'grabbing';
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging) {
+                    const deltaX = dragStartX - e.clientX;
+                    const deltaY = dragStartY - e.clientY;
+                    
+                    const scale = workspace.scale;
+                    const newScrollX = initialScrollX + (deltaX / scale);
+                    const newScrollY = initialScrollY + (deltaY / scale);
+                    
+                    workspace.scroll(newScrollX, newScrollY);
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('mouseup', function(e) {
+                if (isDragging) {
+                    isDragging = false;
+                    blocklyDiv.style.cursor = '';
+                }
+            });
+
+            // Touch events for mobile support
+            blocklyDiv.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    if (e.target.classList.contains('blocklyMainBackground') || 
+                        e.target.classList.contains('blocklyWorkspace') ||
+                        e.target.tagName === 'svg' && e.target.classList.contains('blocklySvg')) {
+                        
+                        isDragging = true;
+                        dragStartX = touch.clientX;
+                        dragStartY = touch.clientY;
+                        
+                        const metrics = workspace.getMetrics();
+                        initialScrollX = metrics.viewLeft;
+                        initialScrollY = metrics.viewTop;
+                        
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            document.addEventListener('touchmove', function(e) {
+                if (isDragging && e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    const deltaX = dragStartX - touch.clientX;
+                    const deltaY = dragStartY - touch.clientY;
+                    
+                    const scale = workspace.scale;
+                    const newScrollX = initialScrollX + (deltaX / scale);
+                    const newScrollY = initialScrollY + (deltaY / scale);
+                    
+                    workspace.scroll(newScrollX, newScrollY);
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('touchend', function(e) {
+                if (isDragging) {
+                    isDragging = false;
+                }
+            });
+
+            // Add visual feedback for draggable areas
+            blocklyDiv.addEventListener('mouseenter', function() {
+                blocklyDiv.style.cursor = 'grab';
+            });
+
+            blocklyDiv.addEventListener('mouseleave', function() {
+                if (!isDragging) {
+                    blocklyDiv.style.cursor = '';
+                }
+            });
+        }
+
+        // Initialize the application
+        function init() {
+            defineBlocks();
+
+            workspace = Blockly.inject('blocklyDiv', {
+                grid: {
+                    spacing: 20,
+                    length: 3,
+                    colour: '#ccc',
+                    snap: true
+                },
+                zoom: {
+                    controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                },
+                trashcan: true,
+                move: {
+                    scrollbars: {
+                        horizontal: true,
+                        vertical: true
+                    },
+                    drag: true,
+                    wheel: true
+                }
+            });
+
+            // Add workspace drag support
+            addWorkspaceDragSupport();
+
+            // Load saved workspace
+            const loaded = loadWorkspace();
+            
+            // Add auto-save functionality
+            workspace.addChangeListener(function(event) {
+                // Only save on meaningful changes (not just selection changes)
+                if (event.type !== Blockly.Events.SELECTED && 
+                    event.type !== Blockly.Events.CLICK &&
+                    event.type !== Blockly.Events.MARKER_MOVE &&
+                    event.type !== Blockly.Events.THEME_CHANGE) {
+                    // Debounce saves to avoid too frequent saving
+                    clearTimeout(window.saveTimeout);
+                    window.saveTimeout = setTimeout(saveWorkspace, 500);
+                }
+            });
+
+            // Show welcome message if no saved workspace
+            if (!loaded) {
+                console.log('No saved workspace found. Starting fresh!');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('addBtn').addEventListener('click', function() {
+            document.getElementById('toolboxModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('toolboxModal').classList.add('hidden');
+        });
+
+        // Quick Action Menu
+        document.getElementById('quickActionBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('quickActionMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Template buttons
+        document.querySelectorAll('.template-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const template = this.getAttribute('data-template');
+                
+                switch(template) {
+                    case 'simple':
+                        createSimpleHTMLTemplate();
+                        break;
+                    case 'table':
+                        createTableTemplate();
+                        break;
+                    case 'form':
+                        createFormTemplate();
+                        break;
+                }
+                
+                document.getElementById('quickActionMenu').classList.add('hidden');
+            });
+        });
+
+        // Close quick action menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('quickActionMenu');
+            const btn = document.getElementById('quickActionBtn');
+            
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua blok? Data yang tersimpan juga akan dihapus.')) {
+                workspace.clear();
+                clearSavedWorkspace();
+            }
+        });
+
+        document.getElementById('runBtn').addEventListener('click', function() {
+            try {
+                const rawCode = generateWorkspaceHTML();
+                const beautifiedCode = beautifyHTML(rawCode);
+                
+                // Update the code display with syntax highlighting
+                const codeElement = document.querySelector('#generatedCode code');
+                codeElement.textContent = beautifiedCode;
+                
+                // Apply syntax highlighting
+                Prism.highlightElement(codeElement);
+                
+                const iframe = document.getElementById('previewFrame');
+                iframe.srcdoc = rawCode; // Use raw code for preview
+                
+                document.getElementById('previewModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error generating code:', error);
+                alert('Error generating HTML code. Please check your blocks.');
+            }
+        });
+
+        document.getElementById('closePreview').addEventListener('click', function() {
+            document.getElementById('previewModal').classList.add('hidden');
+        });
+
+        document.getElementById('copyCode').addEventListener('click', function() {
+            try {
+                const codeElement = document.querySelector('#generatedCode code');
+                const htmlCode = codeElement.textContent;
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(htmlCode).then(function() {
+                    // Show success feedback
+                    const copyBtn = document.getElementById('copyCode');
+                    const originalIcon = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i data-lucide="check" class="w-6 h-6"></i>';
+                    copyBtn.classList.add('text-green-400');
+                    
+                    // Reinitialize the new icon
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                    
+                    // Reset after 2 seconds
+                    setTimeout(function() {
+                        copyBtn.innerHTML = originalIcon;
+                        copyBtn.classList.remove('text-green-400');
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy code to clipboard');
+                });
+            } catch (error) {
+                console.error('Error copying code:', error);
+                alert('Error copying code');
+            }
+        });
+
+        // Add block buttons
+        document.querySelectorAll('.block-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const blockType = this.getAttribute('data-type');
+                const block = workspace.newBlock(blockType);
+                block.initSvg();
+                block.render();
+                block.moveBy(50, 50);
+                document.getElementById('toolboxModal').classList.add('hidden');
+            });
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('toolboxModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('previewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            init();
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982a7ab54302ce6a',t:'MTc1ODQ2NzMyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
