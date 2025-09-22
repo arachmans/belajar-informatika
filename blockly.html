@@ -71,11 +71,12 @@
             </div>
             <div class="flex space-x-2 md:space-x-3">
                 <button id="addBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
-                    <i data-lucide="plus" class="w-4 h-4 text-white"></i>
+                    <i data-lucide="plus" class="w-4 h-4"></i>
                     <span class="mobile-hidden">Add Blocks</span>
+                    <span class="md:hidden">Add</span>
                 </button>
                 <div class="relative">
-                    <button id="quickActionBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
+                    <button id="quickActionBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 md:space-x-2">
                         <i data-lucide="zap" class="w-4 h-4"></i>
                         <span class="mobile-hidden">Quick</span>
                     </button>
@@ -282,14 +283,14 @@
 
             <div class="flex-1 flex flex-col md:flex-row min-h-0">
                 <!-- Mobile Preview Section -->
-                <div id="mobilePreviewSection" class="w-full p-2 h-screen flex flex-col min-h-0 md:hidden">
+                <div id="mobilePreviewSection" class="w-full p-2 flex flex-col min-h-0 md:hidden">
                     <div class="preview-container flex-1 min-h-0" style="height: calc(100vh - 160px);">
                         <iframe id="previewFrame" class="w-full h-full border-0"></iframe>
                     </div>
                 </div>
 
                 <!-- Mobile Code Section -->
-                <div id="mobileCodeSection" class="w-full p-2 h-screen flex flex-col min-h-0 md:hidden hidden">
+                <div id="mobileCodeSection" class="w-full p-2 flex flex-col min-h-0 md:hidden hidden">
                     <div id="generatedCode" class="code-container flex-1 min-h-0" style="height: calc(100vh - 160px);">
                         <pre><code class="language-html"></code></pre>
                     </div>
@@ -469,7 +470,7 @@
                         .appendField("class:")
                         .appendField(new Blockly.FieldTextInput(""), "CLASS")
                         .appendField("src:")
-                        .appendField(new Blockly.FieldTextInput(""), "SRC")
+                        .appendField(new Blockly.FieldTextInput("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), "SRC")
                         .appendField(">");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
@@ -485,7 +486,7 @@
                         .appendField("class:")
                         .appendField(new Blockly.FieldTextInput(""), "CLASS")
                         .appendField("src:")
-                        .appendField(new Blockly.FieldTextInput(""), "SRC")
+                        .appendField(new Blockly.FieldTextInput("https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"), "SRC")
                         .appendField(">");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
@@ -874,9 +875,9 @@
                         .appendField("class:")
                         .appendField(new Blockly.FieldTextInput(""), "CLASS")
                         .appendField("src:")
-                        .appendField(new Blockly.FieldTextInput(""), "SRC")
+                        .appendField(new Blockly.FieldTextInput("https://picsum.photos/300/200"), "SRC")
                         .appendField("alt:")
-                        .appendField(new Blockly.FieldTextInput(""), "ALT")
+                        .appendField(new Blockly.FieldTextInput("Sample Image"), "ALT")
                         .appendField(">");
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
@@ -1810,17 +1811,24 @@
             let dragStartY = 0;
             let initialScrollX = 0;
             let initialScrollY = 0;
+            let touchStartTime = 0;
+            let hasMoved = false;
 
-            // Mouse events
+            // Helper function to check if target is empty workspace
+            function isEmptyWorkspace(target) {
+                return target.classList.contains('blocklyMainBackground') || 
+                       target.classList.contains('blocklyWorkspace') ||
+                       (target.tagName === 'svg' && target.classList.contains('blocklySvg')) ||
+                       target.classList.contains('blocklyScrollbarBackground');
+            }
+
+            // Mouse events for desktop
             blocklyDiv.addEventListener('mousedown', function(e) {
-                // Only start dragging if clicking on empty workspace (not on blocks or UI elements)
-                if (e.target.classList.contains('blocklyMainBackground') || 
-                    e.target.classList.contains('blocklyWorkspace') ||
-                    e.target.tagName === 'svg' && e.target.classList.contains('blocklySvg')) {
-                    
+                if (isEmptyWorkspace(e.target)) {
                     isDragging = true;
                     dragStartX = e.clientX;
                     dragStartY = e.clientY;
+                    hasMoved = false;
                     
                     const metrics = workspace.getMetrics();
                     initialScrollX = metrics.viewLeft;
@@ -1836,11 +1844,15 @@
                     const deltaX = dragStartX - e.clientX;
                     const deltaY = dragStartY - e.clientY;
                     
-                    const scale = workspace.scale;
-                    const newScrollX = initialScrollX + (deltaX / scale);
-                    const newScrollY = initialScrollY + (deltaY / scale);
-                    
-                    workspace.scroll(newScrollX, newScrollY);
+                    // Only start scrolling if moved more than 5 pixels
+                    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+                        hasMoved = true;
+                        const scale = workspace.scale;
+                        const newScrollX = initialScrollX + (deltaX / scale);
+                        const newScrollY = initialScrollY + (deltaY / scale);
+                        
+                        workspace.scroll(newScrollX, newScrollY);
+                    }
                     e.preventDefault();
                 }
             });
@@ -1852,26 +1864,32 @@
                 }
             });
 
-            // Touch events for mobile support
+            // Enhanced touch events for mobile
+            let touchTimeout;
+            
             blocklyDiv.addEventListener('touchstart', function(e) {
+                // Clear any existing timeout
+                clearTimeout(touchTimeout);
+                
                 if (e.touches.length === 1) {
                     const touch = e.touches[0];
-                    if (e.target.classList.contains('blocklyMainBackground') || 
-                        e.target.classList.contains('blocklyWorkspace') ||
-                        e.target.tagName === 'svg' && e.target.classList.contains('blocklySvg')) {
-                        
-                        isDragging = true;
-                        dragStartX = touch.clientX;
-                        dragStartY = touch.clientY;
-                        
-                        const metrics = workspace.getMetrics();
-                        initialScrollX = metrics.viewLeft;
-                        initialScrollY = metrics.viewTop;
-                        
-                        e.preventDefault();
-                    }
+                    touchStartTime = Date.now();
+                    
+                    // Use a small delay to distinguish from quick taps
+                    touchTimeout = setTimeout(() => {
+                        if (isEmptyWorkspace(e.target)) {
+                            isDragging = true;
+                            dragStartX = touch.clientX;
+                            dragStartY = touch.clientY;
+                            hasMoved = false;
+                            
+                            const metrics = workspace.getMetrics();
+                            initialScrollX = metrics.viewLeft;
+                            initialScrollY = metrics.viewTop;
+                        }
+                    }, 100); // 100ms delay to avoid conflicts with taps
                 }
-            });
+            }, { passive: false });
 
             document.addEventListener('touchmove', function(e) {
                 if (isDragging && e.touches.length === 1) {
@@ -1879,31 +1897,65 @@
                     const deltaX = dragStartX - touch.clientX;
                     const deltaY = dragStartY - touch.clientY;
                     
-                    const scale = workspace.scale;
-                    const newScrollX = initialScrollX + (deltaX / scale);
-                    const newScrollY = initialScrollY + (deltaY / scale);
+                    // Only start scrolling if moved more than 10 pixels (larger threshold for mobile)
+                    if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+                        hasMoved = true;
+                        const scale = workspace.scale;
+                        const newScrollX = initialScrollX + (deltaX / scale);
+                        const newScrollY = initialScrollY + (deltaY / scale);
+                        
+                        workspace.scroll(newScrollX, newScrollY);
+                        e.preventDefault(); // Prevent scrolling the page
+                    }
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', function(e) {
+                clearTimeout(touchTimeout);
+                
+                if (isDragging) {
+                    isDragging = false;
                     
-                    workspace.scroll(newScrollX, newScrollY);
-                    e.preventDefault();
+                    // If we haven't moved much, it might be a tap - let Blockly handle it
+                    if (!hasMoved) {
+                        // Reset any prevented default behavior
+                        const touchDuration = Date.now() - touchStartTime;
+                        if (touchDuration < 200) { // Quick tap
+                            // Let Blockly handle the tap
+                        }
+                    }
                 }
             });
 
-            document.addEventListener('touchend', function(e) {
+            // Handle touch cancel (when user drags outside the area)
+            document.addEventListener('touchcancel', function(e) {
+                clearTimeout(touchTimeout);
                 if (isDragging) {
                     isDragging = false;
                 }
             });
 
-            // Add visual feedback for draggable areas
-            blocklyDiv.addEventListener('mouseenter', function() {
-                blocklyDiv.style.cursor = 'grab';
-            });
-
-            blocklyDiv.addEventListener('mouseleave', function() {
-                if (!isDragging) {
-                    blocklyDiv.style.cursor = '';
+            // Prevent context menu on long press for better mobile experience
+            blocklyDiv.addEventListener('contextmenu', function(e) {
+                if (isDragging || hasMoved) {
+                    e.preventDefault();
                 }
             });
+
+            // Add visual feedback for draggable areas (desktop only)
+            if (!('ontouchstart' in window)) {
+                blocklyDiv.addEventListener('mouseenter', function() {
+                    if (!isDragging) {
+                        blocklyDiv.style.cursor = 'grab';
+                    }
+                });
+
+                blocklyDiv.addEventListener('mouseleave', function() {
+                    if (!isDragging) {
+                        blocklyDiv.style.cursor = '';
+                    }
+                });
+            }
         }
 
         // Initialize the application
@@ -2153,5 +2205,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982a9b3f4005252c',t:'MTc1ODQ2ODY1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9831aaf363bbfd23',t:'MTc1ODU0MjY5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
