@@ -213,6 +213,52 @@
         .token.important {
             color: #ffb86c;
         }
+        
+        /* Array Visualization Styles */
+        .array-box {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .array-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .array-box.highlighted {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .memory-block {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .memory-block:hover {
+            background: #fbbf24;
+            transform: scale(1.05);
+        }
+        
+        .arrow-animation {
+            animation: arrowMove 2s infinite;
+        }
+        
+        @keyframes arrowMove {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -258,18 +304,185 @@
                     </div>
                 </div>
 
-                <!-- Materi Array -->
+                <!-- Materi Array dengan Ilustrasi -->
                 <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
-                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-6 flex items-center gap-2">
                         <i class="fas fa-book text-blue-500"></i>
                         Materi Array
                     </h2>
-                    <div class="space-y-4">
-                        <div class="bg-purple-50 p-4 rounded-lg">
-                            <h3 class="font-semibold text-purple-700 mb-2">Pengertian Array</h3>
-                            <p class="text-gray-700">Array adalah struktur data yang menyimpan koleksi elemen dengan tipe data yang sama dalam urutan kontigu di memori. Setiap elemen dapat diakses menggunakan indeks numerik.</p>
-                        </div>
+                    
+                    <!-- Pengertian Array dengan Ilustrasi -->
+                    <div class="bg-purple-50 p-6 rounded-lg mb-6">
+                        <h3 class="font-semibold text-purple-700 mb-4 text-lg">Pengertian Array</h3>
+                        <p class="text-gray-700 mb-6">Array adalah struktur data yang menyimpan koleksi elemen dengan tipe data yang sama dalam urutan kontigu di memori. Setiap elemen dapat diakses menggunakan indeks numerik.</p>
                         
+                        <!-- Ilustrasi Array Visual -->
+                        <div class="bg-white p-6 rounded-lg shadow-inner">
+                            <p class="text-center text-sm text-gray-600 mb-4">Visualisasi Array Satu Dimensi</p>
+                            
+                            <!-- Array Boxes -->
+                            <div class="flex justify-center items-center gap-2 mb-6">
+                                <div class="text-center">
+                                    <div class="array-box bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-4 w-16 h-16 flex items-center justify-center font-bold text-xl shadow-lg"
+                                         @mouseover="highlightIndex = 0"
+                                         @mouseout="highlightIndex = -1"
+                                         :class="{ 'highlighted': highlightIndex === 0 }">
+                                        10
+                                    </div>
+                                    <div class="text-xs mt-2 font-semibold text-gray-600">[0]</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="array-box bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-4 w-16 h-16 flex items-center justify-center font-bold text-xl shadow-lg"
+                                         @mouseover="highlightIndex = 1"
+                                         @mouseout="highlightIndex = -1"
+                                         :class="{ 'highlighted': highlightIndex === 1 }">
+                                        20
+                                    </div>
+                                    <div class="text-xs mt-2 font-semibold text-gray-600">[1]</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="array-box bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-4 w-16 h-16 flex items-center justify-center font-bold text-xl shadow-lg"
+                                         @mouseover="highlightIndex = 2"
+                                         @mouseout="highlightIndex = -1"
+                                         :class="{ 'highlighted': highlightIndex === 2 }">
+                                        30
+                                    </div>
+                                    <div class="text-xs mt-2 font-semibold text-gray-600">[2]</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="array-box bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-4 w-16 h-16 flex items-center justify-center font-bold text-xl shadow-lg"
+                                         @mouseover="highlightIndex = 3"
+                                         @mouseout="highlightIndex = -1"
+                                         :class="{ 'highlighted': highlightIndex === 3 }">
+                                        40
+                                    </div>
+                                    <div class="text-xs mt-2 font-semibold text-gray-600">[3]</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="array-box bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-4 w-16 h-16 flex items-center justify-center font-bold text-xl shadow-lg"
+                                         @mouseover="highlightIndex = 4"
+                                         @mouseout="highlightIndex = -1"
+                                         :class="{ 'highlighted': highlightIndex === 4 }">
+                                        50
+                                    </div>
+                                    <div class="text-xs mt-2 font-semibold text-gray-600">[4]</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pointer Visualization -->
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="text-center">
+                                    <div class="bg-purple-500 text-white rounded-lg px-4 py-2 font-semibold">
+                                        int arr[5]
+                                    </div>
+                                    <div class="text-xs mt-2 text-gray-600">Nama Array</div>
+                                </div>
+                                <i class="fas fa-arrow-right text-purple-500 arrow-animation"></i>
+                                <div class="text-center">
+                                    <div class="bg-gray-200 rounded-lg p-2">
+                                        <i class="fas fa-memory text-2xl text-gray-600"></i>
+                                    </div>
+                                    <div class="text-xs mt-2 text-gray-600">Memory Address</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Info Box -->
+                            <div v-if="highlightIndex >= 0" class="mt-4 p-3 bg-purple-100 rounded-lg text-center slide-up">
+                                <p class="text-sm text-purple-700">
+                                    <strong>Elemen [{{ highlightIndex }}]</strong> bernilai <strong>{{ [10, 20, 30, 40, 50][highlightIndex] }}</strong>
+                                </p>
+                                <p class="text-xs text-purple-600 mt-1">Alamat: 0x{{ (1000 + highlightIndex * 4).toString(16).toUpperCase() }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Memory Layout Visualization -->
+                    <div class="bg-indigo-50 p-6 rounded-lg mb-6">
+                        <h3 class="font-semibold text-indigo-700 mb-4 text-lg">Layout Memori Array</h3>
+                        <p class="text-gray-700 mb-4">Array disimpan secara kontigu (berurutan) dalam memori komputer:</p>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-4">
+                                    <div class="text-xs font-mono text-gray-500 w-20">0x1000</div>
+                                    <div class="memory-block bg-yellow-300 rounded px-3 py-2 text-sm font-semibold w-16 text-center">10</div>
+                                    <div class="text-xs text-gray-600">arr[0]</div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-xs font-mono text-gray-500 w-20">0x1004</div>
+                                    <div class="memory-block bg-yellow-300 rounded px-3 py-2 text-sm font-semibold w-16 text-center">20</div>
+                                    <div class="text-xs text-gray-600">arr[1]</div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-xs font-mono text-gray-500 w-20">0x1008</div>
+                                    <div class="memory-block bg-yellow-300 rounded px-3 py-2 text-sm font-semibold w-16 text-center">30</div>
+                                    <div class="text-xs text-gray-600">arr[2]</div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-xs font-mono text-gray-500 w-20">0x100C</div>
+                                    <div class="memory-block bg-yellow-300 rounded px-3 py-2 text-sm font-semibold w-16 text-center">40</div>
+                                    <div class="text-xs text-gray-600">arr[3]</div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-xs font-mono text-gray-500 w-20">0x1010</div>
+                                    <div class="memory-block bg-yellow-300 rounded px-3 py-2 text-sm font-semibold w-16 text-center">50</div>
+                                    <div class="text-xs text-gray-600">arr[4]</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-indigo-100 rounded-lg">
+                                <p class="text-xs text-indigo-700">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Setiap elemen integer menempati 4 byte (32-bit) dalam memori
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Index Access Visualization -->
+                    <div class="bg-pink-50 p-6 rounded-lg mb-6">
+                        <h3 class="font-semibold text-pink-700 mb-4 text-lg">Cara Kerja Indeks</h3>
+                        <p class="text-gray-700 mb-4">Indeks digunakan untuk mengakses elemen spesifik dalam array:</p>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <div class="grid grid-cols-5 gap-2 mb-4">
+                                <div v-for="(val, idx) in [10, 20, 30, 40, 50]" :key="idx" 
+                                     class="text-center">
+                                    <div class="bg-gradient-to-br from-pink-400 to-purple-500 text-white rounded-lg p-3 font-bold">
+                                        {{ val }}
+                                    </div>
+                                    <div class="text-xs mt-1 font-semibold text-gray-600">[{{ idx }}]</div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                    <code class="bg-gray-800 text-green-400 px-2 py-1 rounded text-sm">arr[0]</code>
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                    <span class="font-semibold text-gray-700">Mengakses elemen pertama (10)</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                    <code class="bg-gray-800 text-green-400 px-2 py-1 rounded text-sm">arr[2]</code>
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                    <span class="font-semibold text-gray-700">Mengakses elemen ketiga (30)</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                    <code class="bg-gray-800 text-green-400 px-2 py-1 rounded text-sm">arr[4]</code>
+                                    <i class="fas fa-arrow-right text-gray-400"></i>
+                                    <span class="font-semibold text-gray-700">Mengakses elemen kelima (50)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-red-100 rounded-lg">
+                                <p class="text-xs text-red-700">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                                    Indeks dimulai dari 0, bukan 1!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
                         <div class="bg-blue-50 p-4 rounded-lg">
                             <h3 class="font-semibold text-blue-700 mb-2">Deklarasi Array</h3>
                             <div class="code-container">
@@ -1006,6 +1219,7 @@ int main() {
                     correctAnswers: 0,
                     answeredQuestions: 0,
                     showResult: false,
+                    highlightIndex: -1,
                     questions: [
                         {
                             instruction: "Susun kode untuk mendeklarasikan array integer dengan 5 elemen",
