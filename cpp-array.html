@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Master - Belajar Array C++ Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Prism.js untuk syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .word-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .word-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.5s ease;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .code-editor {
+            background: #2d2d2d;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .nav-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .correct-answer {
+            background: #10b981 !important;
+            color: white !important;
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .wrong-answer {
+            background: #ef4444 !important;
+            color: white !important;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Prism.js styling */
+        pre[class*="language-"] {
+            border-radius: 8px;
+            margin: 0;
+            padding: 1.5rem;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #2d2d2d !important;
+        }
+        
+        code[class*="language-"] {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #f8f8f2;
+        }
+        
+        .code-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .code-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0 8px 0 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 10;
+        }
+        
+        .output-box {
+            background: #1e1e1e;
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            color: #e5e5e5;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Custom syntax highlighting colors */
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata {
+            color: #6272a4;
+        }
+        
+        .token.punctuation {
+            color: #f8f8f2;
+        }
+        
+        .token.property,
+        .token.tag,
+        .token.constant,
+        .token.symbol,
+        .token.deleted {
+            color: #ff79c6;
+        }
+        
+        .token.boolean,
+        .token.number {
+            color: #bd93f9;
+        }
+        
+        .token.selector,
+        .token.attr-name,
+        .token.string,
+        .token.char,
+        .token.builtin,
+        .token.inserted {
+            color: #50fa7b;
+        }
+        
+        .token.operator,
+        .token.entity,
+        .token.url,
+        .language-css .token.string,
+        .style .token.string,
+        .token.variable {
+            color: #f8f8f2;
+        }
+        
+        .token.atrule,
+        .token.attr-value,
+        .token.function,
+        .token.class-name {
+            color: #66d9ef;
+        }
+        
+        .token.keyword {
+            color: #ff79c6;
+        }
+        
+        .token.regex,
+        .token.important {
+            color: #ffb86c;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div id="app">
+        <!-- Header -->
+        <header class="gradient-bg text-white p-6 shadow-lg">
+            <div class="container mx-auto">
+                <h1 class="text-3xl font-bold flex items-center gap-3">
+                    <i class="fas fa-code"></i>
+                    Array Master
+                </h1>
+                <p class="text-purple-100 mt-2">Belajar Array C++ dengan Cara yang Menyenangkan</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 pb-24 pt-6 min-h-screen">
+            <!-- Menu Materi -->
+            <div v-if="activeMenu === 'materi'" class="space-y-6">
+                <!-- Kenapa Belajar Array -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-yellow-500"></i>
+                        Kenapa Harus Mempelajari Array?
+                    </h2>
+                    <div class="space-y-3 text-gray-700">
+                        <p class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Array memungkinkan penyimpanan banyak data dengan tipe yang sama dalam satu variabel</span>
+                        </p>
+                        <p class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Memudahkan pengelolaan data dalam jumlah besar seperti daftar nilai, inventory game, atau data sensor</span>
+                        </p>
+                        <p class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Dasar untuk struktur data yang lebih kompleks seperti matriks, graf, dan tree</span>
+                        </p>
+                        <p class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Performa akses data yang cepat dengan indeks langsung</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Materi Array -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                        <i class="fas fa-book text-blue-500"></i>
+                        Materi Array
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-purple-700 mb-2">Pengertian Array</h3>
+                            <p class="text-gray-700">Array adalah struktur data yang menyimpan koleksi elemen dengan tipe data yang sama dalam urutan kontigu di memori. Setiap elemen dapat diakses menggunakan indeks numerik.</p>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-blue-700 mb-2">Deklarasi Array</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">// Deklarasi array satu dimensi
+int angka[5]; // Array dengan 5 elemen integer
+double nilai[10]; // Array dengan 10 elemen double
+char nama[20]; // Array karakter (string)</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-green-700 mb-2">Inisialisasi Array</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">// Inisialisasi saat deklarasi
+int angka[5] = {10, 20, 30, 40, 50};
+char nama[] = "Array Master"; // Otomatis menentukan ukuran
+
+// Inisialisasi sebagian
+int nilai[5] = {100, 90}; // Sisanya otomatis 0</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-yellow-700 mb-2">Akses Elemen Array</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">// Mengakses elemen (indeks dimulai dari 0)
+int arr[5] = {10, 20, 30, 40, 50};
+
+cout << arr[0]; // Output: 10
+cout << arr[2]; // Output: 30
+
+// Mengubah nilai elemen
+arr[1] = 25; // Mengubah elemen kedua</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh Penggunaan -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                        <i class="fas fa-laptop-code text-indigo-500"></i>
+                        Contoh Penggunaan Array
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <h3 class="font-semibold mb-2">1. Menghitung Rata-rata Nilai</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int nilai[5] = {85, 90, 78, 92, 88};
+    int total = 0;
+    
+    for(int i = 0; i < 5; i++) {
+        total += nilai[i];
+    }
+    
+    double rata = (double)total / 5;
+    cout << "Rata-rata: " << rata << endl;
+    
+    return 0;
+}</code></pre>
+                            </div>
+                            <div class="output-box">
+                                <strong>Output:</strong><br>
+                                Rata-rata: 86.6
+                            </div>
+                        </div>
+
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h3 class="font-semibold mb-2">2. Mencari Nilai Maksimum</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int data[6] = {23, 45, 12, 67, 34, 89};
+    int maks = data[0];
+    
+    for(int i = 1; i < 6; i++) {
+        if(data[i] > maks) {
+            maks = data[i];
+        }
+    }
+    
+    cout << "Nilai maksimum: " << maks << endl;
+    return 0;
+}</code></pre>
+                            </div>
+                            <div class="output-box">
+                                <strong>Output:</strong><br>
+                                Nilai maksimum: 89
+                            </div>
+                        </div>
+
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h3 class="font-semibold mb-2">3. Array 2 Dimensi (Matriks)</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int matriks[2][3] = {
+        {1, 2, 3},
+        {4, 5, 6}
+    };
+    
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 3; j++) {
+            cout << matriks[i][j] << " ";
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                            </div>
+                            <div class="output-box">
+                                <strong>Output:</strong><br>
+                                1 2 3 <br>
+                                4 5 6
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Mencoba -->
+            <div v-if="activeMenu === 'mencoba'" class="space-y-6">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                        <i class="fas fa-gamepad text-pink-500"></i>
+                        Game Susun Kata
+                    </h2>
+                    <p class="text-gray-600 mb-6">Susun kata-kata di bawah untuk membentuk kode C++ yang benar!</p>
+                    
+                    <!-- Progress -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm text-gray-600 mb-2">
+                            <span>Pertanyaan {{ currentQuestion + 1 }} dari {{ questions.length }}</span>
+                            <span>Skor: {{ score }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="gradient-bg h-3 rounded-full transition-all duration-500" 
+                                 :style="`width: ${(currentQuestion / questions.length) * 100}%`"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-lg mb-6">
+                        <p class="font-semibold text-gray-800 mb-4">{{ questions[currentQuestion].instruction }}</p>
+                        
+                        <!-- Answer Area -->
+                        <div class="bg-white border-2 border-dashed border-purple-300 rounded-lg p-4 min-h-[80px] mb-4">
+                            <div class="flex flex-wrap gap-2">
+                                <span v-for="(word, index) in userAnswer" 
+                                      :key="index"
+                                      @click="moveToQuestion(index)"
+                                      class="px-4 py-2 bg-purple-500 text-white rounded-lg word-item bounce-in">
+                                    {{ word }}
+                                </span>
+                            </div>
+                            <div v-if="userAnswer.length === 0" class="text-gray-400 text-center py-4">
+                                Klik kata di bawah untuk memulai
+                            </div>
+                        </div>
+
+                        <!-- Question Words -->
+                        <div class="flex flex-wrap gap-2">
+                            <span v-for="(word, index) in shuffledWords" 
+                                  :key="index"
+                                  @click="moveToAnswer(index)"
+                                  class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg word-item hover:shadow-lg">
+                                {{ word }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4">
+                        <button @click="checkAnswer" 
+                                class="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                            <i class="fas fa-check mr-2"></i>
+                            Periksa Jawaban
+                        </button>
+                        <button @click="resetQuestion" 
+                                class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                            <i class="fas fa-redo mr-2"></i>
+                            Reset
+                        </button>
+                        <button v-if="currentQuestion < questions.length - 1" 
+                                @click="nextQuestion" 
+                                class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                            <i class="fas fa-arrow-right mr-2"></i>
+                            Lanjut
+                        </button>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div v-if="feedback" 
+                         :class="feedback.type === 'success' ? 'bg-green-100 border-green-500 text-green-700' : 'bg-red-100 border-red-500 text-red-700'"
+                         class="mt-4 p-4 rounded-lg border-2 slide-up">
+                        <div class="flex items-center gap-2">
+                            <i :class="feedback.type === 'success' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                            <span class="font-semibold">{{ feedback.message }}</span>
+                        </div>
+                        <div v-if="feedback.correctAnswer" class="mt-2 text-sm">
+                            Jawaban benar: <code class="bg-gray-200 px-2 py-1 rounded">{{ feedback.correctAnswer }}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Score Summary -->
+                <div v-if="currentQuestion === questions.length - 1 && score > 0" 
+                     class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg p-6 text-center">
+                    <i class="fas fa-trophy text-5xl mb-4 pulse"></i>
+                    <h3 class="text-2xl font-bold mb-2">Selamat!</h3>
+                    <p class="text-xl">Skor Akhir: {{ score }} / {{ questions.length * 10 }}</p>
+                </div>
+            </div>
+
+            <!-- Menu Kuis -->
+            <div v-if="activeMenu === 'kuis'" class="space-y-6">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                        <i class="fas fa-question-circle text-orange-500"></i>
+                        Kuis Array C++
+                    </h2>
+                    
+                    <!-- Progress -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm text-gray-600 mb-2">
+                            <span>Soal {{ currentQuiz + 1 }} dari {{ quizQuestions.length }}</span>
+                            <span>Benar: {{ correctAnswers }} / {{ answeredQuestions }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="gradient-bg h-3 rounded-full transition-all duration-500" 
+                                 :style="`width: ${(currentQuiz / quizQuestions.length) * 100}%`"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Question -->
+                    <div class="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                            {{ quizQuestions[currentQuiz].question }}
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <div v-for="(option, index) in quizQuestions[currentQuiz].options" 
+                                 :key="index"
+                                 @click="selectAnswer(index)"
+                                 :class="[
+                                     'p-4 rounded-lg border-2 cursor-pointer transition-all duration-300',
+                                     selectedAnswer === index ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300',
+                                     quizQuestions[currentQuiz].answered && index === quizQuestions[currentQuiz].correct ? 'correct-answer' : '',
+                                     quizQuestions[currentQuiz].answered && selectedAnswer === index && index !== quizQuestions[currentQuiz].correct ? 'wrong-answer' : ''
+                                 ]">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-semibold">
+                                        {{ String.fromCharCode(65 + index) }}
+                                    </span>
+                                    <span>{{ option }}</span>
+                                    <i v-if="quizQuestions[currentQuiz].answered && index === quizQuestions[currentQuiz].correct" 
+                                       class="fas fa-check-circle text-white ml-auto"></i>
+                                    <i v-if="quizQuestions[currentQuiz].answered && selectedAnswer === index && index !== quizQuestions[currentQuiz].correct" 
+                                       class="fas fa-times-circle text-white ml-auto"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="flex justify-between">
+                        <button v-if="currentQuiz > 0" 
+                                @click="previousQuiz" 
+                                class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Sebelumnya
+                        </button>
+                        <div v-else></div>
+                        
+                        <button v-if="currentQuiz < quizQuestions.length - 1" 
+                                @click="nextQuiz" 
+                                class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                            Selanjutnya
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                        
+                        <button v-else 
+                                @click="showQuizResult" 
+                                class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                            <i class="fas fa-flag-checkered mr-2"></i>
+                            Lihat Hasil
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Result Modal -->
+                <div v-if="showResult" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full bounce-in">
+                        <div class="text-center">
+                            <i class="fas fa-trophy text-6xl text-yellow-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold mb-4">Hasil Kuis</h3>
+                            <div class="text-4xl font-bold text-purple-600 mb-2">
+                                {{ correctAnswers }} / {{ quizQuestions.length }}
+                            </div>
+                            <p class="text-gray-600 mb-6">
+                                Nilai: {{ Math.round((correctAnswers / quizQuestions.length) * 100) }}%
+                            </p>
+                            <button @click="resetQuiz" 
+                                    class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                                <i class="fas fa-redo mr-2"></i>
+                                Ulangi Kuis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Latihan -->
+            <div v-if="activeMenu === 'latihan'" class="space-y-6">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-purple-600 mb-4 flex items-center gap-2">
+                        <i class="fas fa-laptop-code text-teal-500"></i>
+                        Latihan Praktik
+                    </h2>
+                    <p class="text-gray-600 mb-6">Kerjakan soal-soal berikut menggunakan editor kode Anda!</p>
+
+                    <!-- Latihan 1 -->
+                    <div class="mb-8 border-l-4 border-teal-500 pl-4">
+                        <h3 class="text-xl font-semibold mb-3 text-teal-700">
+                            <i class="fas fa-pencil-alt mr-2"></i>
+                            Latihan 1: Kalkulator Array
+                        </h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-700 mb-3"><strong>Soal:</strong></p>
+                            <p class="text-gray-700 mb-4">Buat program yang meminta input 5 bilangan bulat dari user, simpan dalam array, kemudian tampilkan:</p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4">
+                                <li>Jumlah total semua bilangan</li>
+                                <li>Rata-rata dari semua bilangan</li>
+                                <li>Bilangan terbesar dan terkecil</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-blue-700 font-semibold mb-2"><i class="fas fa-play-circle mr-2"></i>Contoh Output Program:</p>
+                            <div class="output-box">
+                                Masukkan 5 bilangan:<br>
+                                Bilangan 1: 10<br>
+                                Bilangan 2: 25<br>
+                                Bilangan 3: 15<br>
+                                Bilangan 4: 30<br>
+                                Bilangan 5: 20<br>
+                                <br>
+                                Hasil:<br>
+                                Jumlah Total: 100<br>
+                                Rata-rata: 20<br>
+                                Terbesar: 30<br>
+                                Terkecil: 10
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Latihan 2 -->
+                    <div class="mb-8 border-l-4 border-purple-500 pl-4">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">
+                            <i class="fas fa-pencil-alt mr-2"></i>
+                            Latihan 2: Pencarian Elemen
+                        </h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-700 mb-3"><strong>Soal:</strong></p>
+                            <p class="text-gray-700 mb-4">Buat program yang:</p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4">
+                                <li>Mendefinisikan array dengan 10 elemen (isi sesuai keinginan)</li>
+                                <li>Meminta user memasukkan bilangan yang ingin dicari</li>
+                                <li>Mencari bilangan tersebut dalam array</li>
+                                <li>Menampilkan posisi indeks jika ditemukan, atau pesan tidak ditemukan</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-blue-700 font-semibold mb-2"><i class="fas fa-play-circle mr-2"></i>Contoh Output Program:</p>
+                            <div class="output-box">
+                                Array: [5, 12, 7, 3, 9, 15, 2, 8, 11, 6]<br>
+                                <br>
+                                Masukkan bilangan yang dicari: 9<br>
+                                Bilangan 9 ditemukan pada indeks 4<br>
+                                <br>
+                                Masukkan bilangan yang dicari: 4<br>
+                                Bilangan 4 tidak ditemukan dalam array
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Latihan 3 -->
+                    <div class="mb-8 border-l-4 border-orange-500 pl-4">
+                        <h3 class="text-xl font-semibold mb-3 text-orange-700">
+                            <i class="fas fa-pencil-alt mr-2"></i>
+                            Latihan 3: Matriks Penjumlahan
+                        </h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-700 mb-3"><strong>Soal:</strong></p>
+                            <p class="text-gray-700 mb-4">Buat program yang:</p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4">
+                                <li>Membuat matriks 3x3 (array 2 dimensi)</li>
+                                <li>Meminta user mengisi setiap elemen matriks</li>
+                                <li>Menampilkan matriks yang telah diisi</li>
+                                <li>Menghitung dan menampilkan jumlah setiap baris dan kolom</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-blue-700 font-semibold mb-2"><i class="fas fa-play-circle mr-2"></i>Contoh Output Program:</p>
+                            <div class="output-box">
+                                Matriks 3x3:<br>
+                                [1] [2] [3]<br>
+                                [4] [5] [6]<br>
+                                [7] [8] [9]<br>
+                                <br>
+                                Jumlah per baris:<br>
+                                Baris 1: 6<br>
+                                Baris 2: 15<br>
+                                Baris 3: 24<br>
+                                <br>
+                                Jumlah per kolom:<br>
+                                Kolom 1: 12<br>
+                                Kolom 2: 15<br>
+                                Kolom 3: 18
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips -->
+                    <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-lg">
+                        <h3 class="font-semibold text-purple-700 mb-3">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            Tips Pengerjaan:
+                        </h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-green-500 mt-1"></i>
+                                <span>Gunakan loop for untuk mengakses setiap elemen array</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-green-500 mt-1"></i>
+                                <span>Ingat bahwa indeks array dimulai dari 0</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-green-500 mt-1"></i>
+                                <span>Untuk matriks, gunakan nested loop (loop di dalam loop)</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-green-500 mt-1"></i>
+                                <span>Test program Anda dengan berbagai input untuk memastikan berjalan benar</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+            <div class="container mx-auto">
+                <div class="flex justify-around">
+                    <button @click="setActiveMenu('materi')" 
+                            :class="activeMenu === 'materi' ? 'nav-active' : 'text-gray-600'"
+                            class="flex flex-col items-center py-3 px-6 transition-all duration-300 hover:bg-gray-50">
+                        <i class="fas fa-book text-xl mb-1"></i>
+                        <span class="text-xs font-medium">Materi</span>
+                    </button>
+                    <button @click="setActiveMenu('mencoba')" 
+                            :class="activeMenu === 'mencoba' ? 'nav-active' : 'text-gray-600'"
+                            class="flex flex-col items-center py-3 px-6 transition-all duration-300 hover:bg-gray-50">
+                        <i class="fas fa-gamepad text-xl mb-1"></i>
+                        <span class="text-xs font-medium">Mencoba</span>
+                    </button>
+                    <button @click="setActiveMenu('kuis')" 
+                            :class="activeMenu === 'kuis' ? 'nav-active' : 'text-gray-600'"
+                            class="flex flex-col items-center py-3 px-6 transition-all duration-300 hover:bg-gray-50">
+                        <i class="fas fa-question-circle text-xl mb-1"></i>
+                        <span class="text-xs font-medium">Kuis</span>
+                    </button>
+                    <button @click="setActiveMenu('latihan')" 
+                            :class="activeMenu === 'latihan' ? 'nav-active' : 'text-gray-600'"
+                            class="flex flex-col items-center py-3 px-6 transition-all duration-300 hover:bg-gray-50">
+                        <i class="fas fa-laptop-code text-xl mb-1"></i>
+                        <span class="text-xs font-medium">Latihan</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeMenu: 'materi',
+                    score: 0,
+                    currentQuestion: 0,
+                    userAnswer: [],
+                    feedback: null,
+                    currentQuiz: 0,
+                    selectedAnswer: null,
+                    correctAnswers: 0,
+                    answeredQuestions: 0,
+                    showResult: false,
+                    questions: [
+                        {
+                            instruction: "Susun kode untuk mendeklarasikan array integer dengan 5 elemen",
+                            words: ["int", "arr", "[", "5", "]", ";"],
+                            correctAnswer: "int [ 5 ] arr ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk mengakses elemen ketiga dari array",
+                            words: ["cout", "<<", "arr", "[", "2", "]", ";"],
+                            correctAnswer: "cout << arr [ 2 ] ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk inisialisasi array dengan nilai 1,2,3",
+                            words: ["int", "num", "[", "3", "]", "=", "{", "1", ",", "2", ",", "3", "}", ";"],
+                            correctAnswer: "int [ 3 ] num = { 1 , 2 , 3 } ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk loop for yang mengiterasi array",
+                            words: ["for", "(", "int", "i", "=", "0", ";", "i", "<", "5", ";", "i", "++", ")", "{"],
+                            correctAnswer: "for ( int i = 0 ; i < 5 ; i ++ ) {"
+                        },
+                        {
+                            instruction: "Susun kode untuk menginput nilai ke array",
+                            words: ["cin", ">>", "arr", "[", "i", "]", ";"],
+                            correctAnswer: "cin >> arr [ i ] ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk mendeklarasikan array 2 dimensi",
+                            words: ["int", "matrix", "[", "3", "]", "[", "3", "]", ";"],
+                            correctAnswer: "int matrix [ 3 ] [ 3 ] ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk mengakses elemen matriks baris 2 kolom 1",
+                            words: ["matrix", "[", "1", "]", "[", "0", "]"],
+                            correctAnswer: "matrix [ 1 ] [ 0 ]"
+                        },
+                        {
+                            instruction: "Susun kode untuk mendeklarasikan array karakter",
+                            words: ["char", "name", "[", "20", "]", ";"],
+                            correctAnswer: "char name [ 20 ] ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk inisialisasi string",
+                            words: ["char", "str", "[", "]", "=", "\"", "Hello", "\"", ";"],
+                            correctAnswer: "char [ ] str = \" Hello \" ;"
+                        },
+                        {
+                            instruction: "Susun kode untuk menampilkan panjang array",
+                            words: ["sizeof", "(", "arr", ")", "/", "sizeof", "(", "int", ")"],
+                            correctAnswer: "sizeof ( arr ) / sizeof ( int )"
+                        }
+                    ],
+                    quizQuestions: [
+                        {
+                            question: "Apa itu array dalam pemrograman?",
+                            options: [
+                                "Variabel tunggal untuk menyimpan satu nilai",
+                                "Struktur data yang menyimpan koleksi elemen dengan tipe sama",
+                                "Fungsi untuk melakukan perulangan",
+                                "Operator untuk perbandingan"
+                            ],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Indeks array dalam C++ dimulai dari:",
+                            options: ["0", "1", "-1", "Bebas"],
+                            correct: 0,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara mendeklarasikan array dengan 10 elemen integer?",
+                            options: [
+                                "int array(10);",
+                                "integer array[10];",
+                                "int array[10];",
+                                "array[10] int;"
+                            ],
+                            correct: 2,
+                            answered: false
+                        },
+                        {
+                            question: "Apa yang terjadi jika kita mengakses array[10] pada array dengan 10 elemen?",
+                            options: [
+                                "Error compile time",
+                                "Undefined behavior",
+                                "Mengembalikan 0",
+                                "Mengembalikan null"
+                            ],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara menginisialisasi array dengan nilai 0 untuk semua elemen?",
+                            options: [
+                                "int arr[5] = {0};",
+                                "int arr[5] = {0,0,0,0,0};",
+                                "int arr[5] = {};",
+                                "Semua benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Apa output dari kode: int arr[3] = {1,2,3}; cout << arr[1];",
+                            options: ["1", "2", "3", "Error"],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Berapa ukuran dari int arr[5] dalam byte (asumsi int = 4 byte)?",
+                            options: ["5", "10", "20", "40"],
+                            correct: 2,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara mendeklarasikan array 2 dimensi 3x4?",
+                            options: [
+                                "int arr[3][4];",
+                                "int arr[4][3];",
+                                "int arr[3,4];",
+                                "int arr[12];"
+                            ],
+                            correct: 0,
+                            answered: false
+                        },
+                        {
+                            question: "Apa fungsi dari sizeof(arr)/sizeof(arr[0])?",
+                            options: [
+                                "Menghitung total byte array",
+                                "Menghitung jumlah elemen array",
+                                "Mengakses elemen pertama",
+                                "Menginisialisasi array"
+                            ],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara passing array ke fungsi?",
+                            options: [
+                                "void func(int arr[])",
+                                "void func(int arr[10])",
+                                "void func(int* arr)",
+                                "Semua benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Apa yang dimaksud dengan array multidimensi?",
+                            options: [
+                                "Array dengan berbagai tipe data",
+                                "Array yang berisi array lain",
+                                "Array yang bisa berubah ukuran",
+                                "Array dengan elemen unik"
+                            ],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara mengurutkan array secara ascending?",
+                            options: [
+                                "Menggunakan sort() function",
+                                "Menggunakan bubble sort manual",
+                                "Menggunakan std::sort dari algorithm",
+                                "B dan C benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Apa output dari: int arr[] = {5}; cout << sizeof(arr);",
+                            options: ["1", "4", "5", "20"],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara mendeklarasikan array string?",
+                            options: [
+                                "string arr[5];",
+                                "char arr[5][20];",
+                                "char* arr[5];",
+                                "Semua benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Apa keuntungan menggunakan array?",
+                            options: [
+                                "Mudah mengakses data dengan indeks",
+                                "Efisien dalam memori",
+                                "Mendukung operasi batch",
+                                "Semua benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara mencari elemen dalam array?",
+                            options: [
+                                "Linear search",
+                                "Binary search",
+                                "Hash table",
+                                "A dan B benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Apa yang terjadi jika array diinisialisasi dengan kurang dari ukurannya?",
+                            options: [
+                                "Error",
+                                "Sisanya diisi 0",
+                                "Sisanya diisi random",
+                                "Sisanya kosong"
+                            ],
+                            correct: 1,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara meng-copy array?",
+                            options: [
+                                "Menggunakan assignment operator",
+                                "Menggunakan loop",
+                                "Menggunakan memcpy",
+                                "B dan C benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Apa perbedaan array dan linked list?",
+                            options: [
+                                "Array fixed size, linked list dynamic",
+                                "Array random access, linked list sequential",
+                                "Array memory contiguous, linked list tidak",
+                                "Semua benar"
+                            ],
+                            correct: 3,
+                            answered: false
+                        },
+                        {
+                            question: "Bagaimana cara menghapus elemen dari array?",
+                            options: [
+                                "Menggunakan delete keyword",
+                                "Tidak bisa, array fixed size",
+                                "Menggeser elemen dan mengurangi ukuran logis",
+                                "Menggunakan remove() function"
+                            ],
+                            correct: 2,
+                            answered: false
+                        }
+                    ]
+                }
+            },
+            computed: {
+                shuffledWords() {
+                    const availableWords = this.questions[this.currentQuestion].words.filter(word => 
+                        !this.userAnswer.includes(word)
+                    );
+                    return availableWords.sort(() => Math.random() - 0.5);
+                }
+            },
+            methods: {
+                setActiveMenu(menu) {
+                    this.activeMenu = menu;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Re-highlight code when switching tabs
+                    this.$nextTick(() => {
+                        Prism.highlightAll();
+                    });
+                },
+                moveToAnswer(index) {
+                    const word = this.shuffledWords[index];
+                    this.userAnswer.push(word);
+                },
+                moveToQuestion(index) {
+                    this.userAnswer.splice(index, 1);
+                },
+                checkAnswer() {
+                    const userAnswerStr = this.userAnswer.join(' ');
+                    const correctAnswerStr = this.questions[this.currentQuestion].correctAnswer;
+                    
+                    if (userAnswerStr === correctAnswerStr) {
+                        this.feedback = {
+                            type: 'success',
+                            message: 'Benar! Jawaban Anda tepat!'
+                        };
+                        this.score += 10;
+                    } else {
+                        this.feedback = {
+                            type: 'error',
+                            message: 'Salah! Coba lagi.',
+                            correctAnswer: correctAnswerStr
+                        };
+                    }
+                },
+                resetQuestion() {
+                    this.userAnswer = [];
+                    this.feedback = null;
+                },
+                nextQuestion() {
+                    if (this.currentQuestion < this.questions.length - 1) {
+                        this.currentQuestion++;
+                        this.userAnswer = [];
+                        this.feedback = null;
+                    }
+                },
+                selectAnswer(index) {
+                    if (!this.quizQuestions[this.currentQuiz].answered) {
+                        this.selectedAnswer = index;
+                        this.quizQuestions[this.currentQuiz].answered = true;
+                        this.answeredQuestions++;
+                        
+                        if (index === this.quizQuestions[this.currentQuiz].correct) {
+                            this.correctAnswers++;
+                        }
+                    }
+                },
+                nextQuiz() {
+                    if (this.currentQuiz < this.quizQuestions.length - 1) {
+                        this.currentQuiz++;
+                        this.selectedAnswer = null;
+                    }
+                },
+                previousQuiz() {
+                    if (this.currentQuiz > 0) {
+                        this.currentQuiz--;
+                        this.selectedAnswer = null;
+                    }
+                },
+                showQuizResult() {
+                    this.showResult = true;
+                },
+                resetQuiz() {
+                    this.currentQuiz = 0;
+                    this.selectedAnswer = null;
+                    this.correctAnswers = 0;
+                    this.answeredQuestions = 0;
+                    this.showResult = false;
+                    this.quizQuestions.forEach(q => q.answered = false);
+                }
+            },
+            mounted() {
+                // Initialize Prism.js for syntax highlighting
+                this.$nextTick(() => {
+                    Prism.highlightAll();
+                });
+            },
+            updated() {
+                // Re-highlight code when Vue updates the DOM
+                this.$nextTick(() => {
+                    Prism.highlightAll();
+                });
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
