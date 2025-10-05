@@ -308,6 +308,167 @@ cout << arr[2]; // Output: 30
 arr[1] = 25; // Mengubah elemen kedua</code></pre>
                             </div>
                         </div>
+
+                        <!-- NEW: Mengetahui Jumlah Isi Array -->
+                        <div class="bg-indigo-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-indigo-700 mb-2">Mengetahui Jumlah Isi Array</h3>
+                            <p class="text-gray-700 mb-3">Ada beberapa cara untuk mengetahui jumlah elemen dalam array:</p>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Metode 1: Menggunakan sizeof()</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">int arr[5] = {10, 20, 30, 40, 50};
+int jumlahElemen = sizeof(arr) / sizeof(arr[0]);
+
+cout << "Jumlah elemen: " << jumlahElemen; // Output: 5</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Metode 2: Untuk array karakter (string)</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">#include &lt;cstring&gt; // Untuk strlen()
+
+char kata[] = "Hello";
+int panjang = strlen(kata);
+
+cout << "Panjang string: " << panjang; // Output: 5</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Metode 3: Menggunakan konstanta</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">const int UKURAN = 10;
+int arr[UKURAN];
+
+for(int i = 0; i < UKURAN; i++) {
+    cout << "Elemen ke-" << i << endl;
+}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NEW: Menggunakan Looping untuk Mengakses Array -->
+                        <div class="bg-pink-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-pink-700 mb-2">Menggunakan Looping untuk Mengakses Array</h3>
+                            <p class="text-gray-700 mb-3">Looping sangat berguna untuk mengakses semua elemen array secara efisien:</p>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">1. Menampilkan Semua Elemen</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">int nilai[5] = {85, 90, 78, 92, 88};
+
+cout << "Daftar Nilai:" << endl;
+for(int i = 0; i < 5; i++) {
+    cout << "Nilai ke-" << (i+1) << ": " << nilai[i] << endl;
+}</code></pre>
+                                    </div>
+                                    <div class="output-box">
+                                        <strong>Output:</strong><br>
+                                        Daftar Nilai:<br>
+                                        Nilai ke-1: 85<br>
+                                        Nilai ke-2: 90<br>
+                                        Nilai ke-3: 78<br>
+                                        Nilai ke-4: 92<br>
+                                        Nilai ke-5: 88
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">2. Menginput Nilai ke Array</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">int data[5];
+
+cout << "Masukkan 5 bilangan:" << endl;
+for(int i = 0; i < 5; i++) {
+    cout << "Bilangan ke-" << (i+1) << ": ";
+    cin >> data[i];
+}
+
+cout << "\nData yang dimasukkan:" << endl;
+for(int i = 0; i < 5; i++) {
+    cout << data[i] << " ";
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">3. Loop dengan sizeof() untuk Array Dinamis</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">int angka[] = {2, 4, 6, 8, 10, 12, 14};
+int n = sizeof(angka) / sizeof(angka[0]);
+
+cout << "Genap: ";
+for(int i = 0; i < n; i++) {
+    cout << angka[i] << " ";
+}</code></pre>
+                                    </div>
+                                    <div class="output-box">
+                                        <strong>Output:</strong><br>
+                                        Genap: 2 4 6 8 10 12 14
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">4. Loop untuk Mencari Nilai</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">int arr[6] = {23, 45, 12, 67, 34, 89};
+int cari = 67;
+bool ketemu = false;
+
+for(int i = 0; i < 6; i++) {
+    if(arr[i] == cari) {
+        cout << cari << " ditemukan di indeks " << i << endl;
+        ketemu = true;
+        break;
+    }
+}
+
+if(!ketemu) {
+    cout << cari << " tidak ditemukan" << endl;
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 mb-1">5. Loop untuk Array 2 Dimensi</p>
+                                    <div class="code-container">
+                                        <span class="code-label">C++</span>
+                                        <pre><code class="language-cpp">int matriks[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+cout << "Matriks 3x3:" << endl;
+for(int i = 0; i < 3; i++) {
+    for(int j = 0; j < 3; j++) {
+        cout << matriks[i][j] << "\t";
+    }
+    cout << endl;
+}</code></pre>
+                                    </div>
+                                    <div class="output-box">
+                                        <strong>Output:</strong><br>
+                                        Matriks 3x3:<br>
+                                        1&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;3<br>
+                                        4&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;6<br>
+                                        7&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;9
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -328,12 +489,13 @@ using namespace std;
 int main() {
     int nilai[5] = {85, 90, 78, 92, 88};
     int total = 0;
+    int n = sizeof(nilai) / sizeof(nilai[0]);
     
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < n; i++) {
         total += nilai[i];
     }
     
-    double rata = (double)total / 5;
+    double rata = (double)total / n;
     cout << "Rata-rata: " << rata << endl;
     
     return 0;
@@ -355,8 +517,9 @@ using namespace std;
 int main() {
     int data[6] = {23, 45, 12, 67, 34, 89};
     int maks = data[0];
+    int n = sizeof(data) / sizeof(data[0]);
     
-    for(int i = 1; i < 6; i++) {
+    for(int i = 1; i < n; i++) {
         if(data[i] > maks) {
             maks = data[i];
         }
@@ -399,6 +562,61 @@ int main() {
                                 <strong>Output:</strong><br>
                                 1 2 3 <br>
                                 4 5 6
+                            </div>
+                        </div>
+
+                        <!-- NEW: Contoh Tambahan -->
+                        <div class="border-l-4 border-orange-500 pl-4">
+                            <h3 class="font-semibold mb-2">4. Program Input dan Output Array Dinamis</h3>
+                            <div class="code-container">
+                                <span class="code-label">C++</span>
+                                <pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Masukkan jumlah elemen: ";
+    cin >> n;
+    
+    int arr[n];
+    
+    // Input elemen
+    cout << "Masukkan " << n << " bilangan:" << endl;
+    for(int i = 0; i < n; i++) {
+        cout << "Elemen ke-" << (i+1) << ": ";
+        cin >> arr[i];
+    }
+    
+    // Menampilkan elemen
+    cout << "\nArray yang dimasukkan:" << endl;
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    
+    // Mencari nilai terbesar
+    int maks = arr[0];
+    for(int i = 1; i < n; i++) {
+        if(arr[i] > maks) {
+            maks = arr[i];
+        }
+    }
+    cout << "\nNilai terbesar: " << maks << endl;
+    
+    return 0;
+}</code></pre>
+                            </div>
+                            <div class="output-box">
+                                <strong>Output:</strong><br>
+                                Masukkan jumlah elemen: 4<br>
+                                Masukkan 4 bilangan:<br>
+                                Elemen ke-1: 15<br>
+                                Elemen ke-2: 27<br>
+                                Elemen ke-3: 8<br>
+                                Elemen ke-4: 42<br>
+                                <br>
+                                Array yang dimasukkan:<br>
+                                15 27 8 42<br>
+                                Nilai terbesar: 42
                             </div>
                         </div>
                     </div>
