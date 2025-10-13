@@ -96,6 +96,10 @@
             animation: robotPlant 0.5s ease-in-out;
         }
         
+        .robot.error {
+            animation: robotError 0.5s ease-in-out;
+        }
+        
         @keyframes robotMove {
             0% { transform: scale(1); }
             50% { transform: scale(1.2) translateY(-10px); }
@@ -119,6 +123,12 @@
             50% { transform: translateY(-15px); }
         }
         
+        @keyframes robotError {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+        
         /* Cell Content Animation */
         .cell-content {
             transition: all 0.3s ease;
@@ -135,6 +145,10 @@
         
         .cell-content.planted {
             animation: plantSeed 0.5s ease-out;
+        }
+        
+        .cell-content.error {
+            animation: cellError 0.5s ease-out;
         }
         
         @keyframes grow {
@@ -155,6 +169,12 @@
             100% { transform: scale(1) translateY(0); opacity: 1; }
         }
         
+        @keyframes cellError {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(0.9) rotate(-3deg); }
+            75% { transform: scale(0.9) rotate(3deg); }
+        }
+        
         /* Particle Effects */
         .particle {
             position: absolute;
@@ -167,6 +187,11 @@
             animation: floatUp 1s ease-out forwards;
         }
         
+        .particle.error {
+            color: #ef4444;
+            animation: errorFloat 1s ease-out forwards;
+        }
+        
         @keyframes floatUp {
             0% { 
                 transform: translateY(0) scale(1) rotate(0deg); 
@@ -174,6 +199,21 @@
             }
             100% { 
                 transform: translateY(-80px) scale(1.8) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes errorFloat {
+            0% { 
+                transform: translateY(0) scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: translateY(-20px) scale(1.2) rotate(-10deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(-60px) scale(0.8) rotate(10deg); 
                 opacity: 0; 
             }
         }
@@ -394,6 +434,80 @@
             background: linear-gradient(135deg, #6b7280, #4b5563);
             animation: none;
         }
+
+        /* Code validation styles */
+        .code-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .error-line {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            padding-left: 8px;
+            margin-left: -8px;
+        }
+
+        .syntax-highlight {
+            position: relative;
+        }
+
+        .error-tooltip {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            background: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Penalty indicator */
+        .penalty-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.95);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: penaltyShow 2s ease-out forwards;
+        }
+
+        @keyframes penaltyShow {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.5); 
+            }
+            20% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1.1); 
+            }
+            30% { 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+            80% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.9); 
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen overflow-x-hidden">
@@ -409,10 +523,10 @@
                         </div>
                         <div>
                             <h1 class="text-2xl md:text-3xl font-bold gradient-text bg-gradient-to-r from-cyan-400 to-blue-500" style="-webkit-text-fill-color: white;">
-                                Farm Bot Academy
+                                Akademi Farm Bot
                             </h1>
                             <p class="text-xs md:text-sm text-gray-300">
-                                <i class="fas fa-code mr-1"></i> Master C++ Programming Through Gaming
+                                <i class="fas fa-code mr-1"></i> Kuasai Pemrograman C++ Melalui Permainan
                             </p>
                         </div>
                     </div>
@@ -427,23 +541,31 @@
                         
                         <!-- Score Badge -->
                         <div class="glass px-4 py-2 rounded-xl text-center">
-                            <div class="text-xs text-gray-400">Score</div>
+                            <div class="text-xs text-gray-400">Skor</div>
                             <div class="text-2xl font-bold text-green-400">
                                 <i class="fas fa-star mr-1"></i>{{ score }}
                             </div>
                         </div>
                         
+                        <!-- Penalty Badge -->
+                        <div class="glass px-4 py-2 rounded-xl text-center" :class="penalties > 0 ? 'border-red-500' : ''">
+                            <div class="text-xs text-gray-400">Pinalti</div>
+                            <div class="text-2xl font-bold" :class="penalties > 0 ? 'text-red-400' : 'text-gray-400'">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>{{ penalties }}
+                            </div>
+                        </div>
+                        
                         <!-- Attempts Badge -->
                         <div class="attempts-badge px-4 py-2 rounded-xl text-center" :class="{ 'used': hasRunCode }">
-                            <div class="text-xs text-white">Attempt</div>
+                            <div class="text-xs text-white">Kesempatan</div>
                             <div class="text-2xl font-bold text-white">
-                                {{ hasRunCode ? 'Used' : '1/1' }}
+                                {{ hasRunCode ? 'Terpakai' : '1/1' }}
                             </div>
                         </div>
                         
                         <!-- Progress Badge -->
                         <div class="glass px-4 py-2 rounded-xl text-center hidden md:block">
-                            <div class="text-xs text-gray-400">Progress</div>
+                            <div class="text-xs text-gray-400">Progres</div>
                             <div class="text-2xl font-bold text-purple-400">{{ currentLevel }}/{{ levels.length }}</div>
                         </div>
                     </div>
@@ -464,7 +586,7 @@
                                 📋
                             </div>
                             <div>
-                                <h2 class="text-xl font-bold text-gray-800">Mission</h2>
+                                <h2 class="text-xl font-bold text-gray-800">Misi</h2>
                                 <p class="text-xs text-gray-500">Level {{ currentLevel }}</p>
                             </div>
                         </div>
@@ -477,7 +599,17 @@
                             <div class="flex items-center gap-2">
                                 <i class="fas fa-exclamation-triangle text-yellow-600"></i>
                                 <span class="text-sm font-semibold text-yellow-800">
-                                    One attempt only! Plan your code carefully.
+                                    Hanya satu kesempatan! Rencanakan kode dengan hati-hati.
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Penalty Warning -->
+                        <div v-if="penalties > 0" class="bg-red-100 border-2 border-red-400 rounded-xl p-3 mb-4">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-exclamation-circle text-red-600"></i>
+                                <span class="text-sm font-semibold text-red-800">
+                                    {{ penalties }} pinalti diberikan. Skor berkurang!
                                 </span>
                             </div>
                         </div>
@@ -486,7 +618,7 @@
                         <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-xl p-3 border-2 border-yellow-300">
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-semibold text-gray-700">
-                                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>Reward
+                                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>Hadiah
                                 </span>
                                 <span class="text-lg font-bold text-yellow-600">
                                     +{{ levels[currentLevel - 1].reward }} XP
@@ -501,7 +633,7 @@
                             <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl">
                                 🎯
                             </div>
-                            <h2 class="text-xl font-bold text-gray-800">Targets</h2>
+                            <h2 class="text-xl font-bold text-gray-800">Target</h2>
                         </div>
                         
                         <div class="space-y-3">
@@ -541,7 +673,7 @@
                             <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-2xl">
                                 🎒
                             </div>
-                            <h2 class="text-xl font-bold text-gray-800">Inventory</h2>
+                            <h2 class="text-xl font-bold text-gray-800">Inventori</h2>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-3">
@@ -567,8 +699,8 @@
                                     🌾
                                 </div>
                                 <div>
-                                    <h2 class="text-xl font-bold text-gray-800">Farm Grid</h2>
-                                    <p class="text-xs text-gray-500">{{ gridSize }}x{{ gridSize }} Interactive Field</p>
+                                    <h2 class="text-xl font-bold text-gray-800">Ladang Pertanian</h2>
+                                    <p class="text-xs text-gray-500">{{ gridSize }}x{{ gridSize }} Area Interaktif</p>
                                 </div>
                             </div>
                             
@@ -630,7 +762,7 @@
                             <button @click="runCode" :disabled="isRunning || hasRunCode" 
                                     class="neon-button col-span-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 disabled:scale-100 shadow-lg relative overflow-hidden">
                                 <i :class="isRunning ? 'fas fa-spinner fa-spin' : hasRunCode ? 'fas fa-lock' : 'fas fa-play'" class="mr-2"></i>
-                                {{ isRunning ? 'Running...' : hasRunCode ? 'Attempt Used' : 'Run Code' }}
+                                {{ isRunning ? 'Berjalan...' : hasRunCode ? 'Kesempatan Terpakai' : 'Jalankan Kode' }}
                             </button>
                             <button @click="stopCode" :disabled="!isRunning" 
                                     class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 disabled:scale-100 shadow-lg">
@@ -640,7 +772,7 @@
                         
                         <button @click="resetLevel" 
                                 class="w-full mt-3 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
-                            <i class="fas fa-redo mr-2"></i>Reset Level
+                            <i class="fas fa-redo mr-1"></i>Reset Level
                         </button>
                     </div>
                     
@@ -650,7 +782,7 @@
                             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center text-2xl">
                                 📚
                             </div>
-                            <h2 class="text-xl font-bold text-gray-800">Tutorial & Learning</h2>
+                            <h2 class="text-xl font-bold text-gray-800">Tutorial & Pembelajaran</h2>
                         </div>
                         <div class="prose prose-sm max-w-none text-gray-700">
                             <div v-html="levels[currentLevel - 1].tutorial"></div>
@@ -662,14 +794,17 @@
                 <div class="xl:col-span-3 space-y-6">
                     
                     <!-- Code Editor Card -->
-                    <div class="glass-dark rounded-2xl p-6 shadow-2xl border-2 border-indigo-500">
+                    <div class="glass-dark rounded-2xl p-6 shadow-2xl border-2" :class="codeErrors.length > 0 ? 'border-red-500' : 'border-indigo-500'">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl">
                                 💻
                             </div>
-                            <div>
-                                <h2 class="text-xl font-bold text-white">Code Editor</h2>
-                                <p class="text-xs text-gray-400">Write your C++ code</p>
+                            <div class="flex-1">
+                                <h2 class="text-xl font-bold text-white">Editor Kode</h2>
+                                <p class="text-xs text-gray-400">Tulis kode C++ Anda</p>
+                            </div>
+                            <div v-if="codeErrors.length > 0" class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                {{ codeErrors.length }} Error
                             </div>
                         </div>
                         
@@ -682,16 +817,43 @@
                             </div>
                         </div>
                         
-                        <textarea 
-                            v-model="code" 
-                            class="code-editor w-full h-64 bg-gray-900 text-green-400 p-4 rounded-xl border-2 border-gray-700 focus:border-indigo-500 focus:outline-none resize-none shadow-inner"
-                            placeholder="// Your C++ code here...&#10;// Example:&#10;move();&#10;harvest();"
-                            :disabled="isRunning || hasRunCode"
-                        ></textarea>
+                        <div class="relative">
+                            <textarea 
+                                v-model="code" 
+                                class="code-editor w-full h-64 bg-gray-900 text-green-400 p-4 rounded-xl border-2 focus:outline-none resize-none shadow-inner transition-all"
+                                :class="codeErrors.length > 0 ? 'border-red-500' : 'border-gray-700 focus:border-indigo-500'"
+                                placeholder="// Kode C++ Anda di sini...&#10;// Contoh:&#10;move();&#10;harvest();"
+                                :disabled="isRunning || hasRunCode"
+                                @input="validateCode"
+                                @blur="validateCode"
+                            ></textarea>
+                            
+                            <!-- Error indicators -->
+                            <div v-if="codeErrors.length > 0" class="absolute top-2 right-2 text-red-400">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
                         
                         <div class="code-editor text-gray-500 text-xs mt-3 space-y-1">
                             <div class="flex"><span class="text-gray-600 w-8"></span>    <span class="text-purple-400">return</span> <span class="text-orange-400">0</span>;</div>
                             <div class="flex"><span class="text-gray-600 w-8"></span>}</div>
+                        </div>
+
+                        <!-- Error Messages -->
+                        <div v-if="codeErrors.length > 0" class="mt-4 space-y-2">
+                            <div v-for="(error, index) in codeErrors" :key="index" 
+                                 class="bg-red-900 bg-opacity-50 border border-red-500 rounded-lg p-3">
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-400 mt-0.5"></i>
+                                    <div class="flex-1">
+                                        <div class="text-red-300 text-sm font-semibold">Baris {{ error.line }}: {{ error.type }}</div>
+                                        <div class="text-red-400 text-xs mt-1">{{ error.message }}</div>
+                                        <div v-if="error.suggestion" class="text-yellow-300 text-xs mt-1">
+                                            <i class="fas fa-lightbulb mr-1"></i>Saran: {{ error.suggestion }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -702,8 +864,8 @@
                                 📟
                             </div>
                             <div class="flex-1">
-                                <h2 class="text-xl font-bold text-white">Console</h2>
-                                <p class="text-xs text-gray-400">{{ logs.length }} messages</p>
+                                <h2 class="text-xl font-bold text-white">Konsol</h2>
+                                <p class="text-xs text-gray-400">{{ logs.length }} pesan</p>
                             </div>
                             <button @click="logs = []" class="text-gray-400 hover:text-white transition">
                                 <i class="fas fa-trash"></i>
@@ -719,7 +881,7 @@
                             </div>
                             <div v-if="logs.length === 0" class="text-gray-600 text-center py-8">
                                 <i class="fas fa-terminal text-4xl mb-2"></i>
-                                <div>Console output will appear here...</div>
+                                <div>Output konsol akan muncul di sini...</div>
                             </div>
                         </div>
                     </div>
@@ -730,7 +892,7 @@
                             <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl">
                                 ⚡
                             </div>
-                            <h2 class="text-xl font-bold text-gray-800">Commands</h2>
+                            <h2 class="text-xl font-bold text-gray-800">Perintah</h2>
                         </div>
                         
                         <div class="space-y-2">
@@ -758,9 +920,9 @@
                     <div class="text-center">
                         <div class="text-6xl mb-4 floating">🎉</div>
                         <h2 class="text-4xl font-bold mb-2 gradient-text bg-gradient-to-r from-yellow-400 to-orange-500" style="-webkit-text-fill-color: transparent;">
-                            Level Complete!
+                            Level Selesai!
                         </h2>
-                        <p class="text-gray-600 mb-6">Congratulations! You've completed level {{ currentLevel }}!</p>
+                        <p class="text-gray-600 mb-6">Selamat! Anda telah menyelesaikan level {{ currentLevel }}!</p>
                         
                         <!-- Stars -->
                         <div class="flex justify-center gap-2 mb-6">
@@ -771,7 +933,7 @@
                         
                         <!-- Reward -->
                         <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-6 mb-6 border-2 border-yellow-300">
-                            <div class="text-sm text-gray-600 mb-2">XP Earned</div>
+                            <div class="text-sm text-gray-600 mb-2">XP Diperoleh</div>
                             <div class="text-5xl font-bold text-yellow-600">
                                 +{{ levels[currentLevel - 1].reward }}
                             </div>
@@ -780,11 +942,11 @@
                         <!-- Stats -->
                         <div class="grid grid-cols-2 gap-4 mb-6">
                             <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200">
-                                <div class="text-xs text-gray-600 mb-1">Total Score</div>
+                                <div class="text-xs text-gray-600 mb-1">Total Skor</div>
                                 <div class="text-2xl font-bold text-blue-600">{{ score }}</div>
                             </div>
                             <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200">
-                                <div class="text-xs text-gray-600 mb-1">Progress</div>
+                                <div class="text-xs text-gray-600 mb-1">Progres</div>
                                 <div class="text-2xl font-bold text-purple-600">{{ currentLevel }}/{{ levels.length }}</div>
                             </div>
                         </div>
@@ -792,14 +954,14 @@
                         <!-- Buttons -->
                         <button v-if="currentLevel < levels.length" @click="nextLevel" 
                                 class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 shadow-lg mb-3">
-                            <i class="fas fa-arrow-right mr-2"></i>Next Level
+                            <i class="fas fa-arrow-right mr-2"></i>Level Selanjutnya
                         </button>
                         <button v-else @click="resetToLevel1" 
                                 class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 shadow-lg mb-3">
-                            <i class="fas fa-trophy mr-2"></i>Play Again
+                            <i class="fas fa-trophy mr-2"></i>Main Lagi
                         </button>
                         <button @click="showVictory = false" class="text-gray-500 hover:text-gray-700 text-sm">
-                            Close
+                            Tutup
                         </button>
                     </div>
                 </div>
@@ -813,13 +975,13 @@
                     <div class="text-center">
                         <div class="text-6xl mb-4">😔</div>
                         <h2 class="text-4xl font-bold mb-2 text-red-600">
-                            Mission Failed!
+                            Misi Gagal!
                         </h2>
-                        <p class="text-gray-600 mb-6">You didn't complete all targets. Try again!</p>
+                        <p class="text-gray-600 mb-6">Anda tidak menyelesaikan semua target. Coba lagi!</p>
                         
                         <!-- Failed Targets -->
                         <div class="bg-red-50 rounded-2xl p-4 mb-6 border-2 border-red-200">
-                            <div class="text-sm font-semibold text-red-700 mb-2">Missing Targets:</div>
+                            <div class="text-sm font-semibold text-red-700 mb-2">Target yang Belum Tercapai:</div>
                             <div v-for="(target, key) in getFailedTargets()" :key="key" 
                                  class="flex items-center justify-between text-sm text-gray-700 mb-1">
                                 <span>{{ getTargetIcon(key) }} {{ key }}</span>
@@ -830,7 +992,7 @@
                         <!-- Button -->
                         <button @click="resetLevel" 
                                 class="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
-                            <i class="fas fa-redo mr-2"></i>Try Again
+                            <i class="fas fa-redo mr-2"></i>Coba Lagi
                         </button>
                     </div>
                 </div>
@@ -846,11 +1008,11 @@
                 return {
                     gridSize: 8,
                     grid: [],
-                    initialGrid: null, // Store initial grid state
+                    initialGrid: null,
                     robotPos: 0,
-                    initialRobotPos: 0, // Store initial robot position
+                    initialRobotPos: 0,
                     robotDirection: 'right',
-                    initialRobotDirection: 'right', // Store initial robot direction
+                    initialRobotDirection: 'right',
                     robotAnimation: '',
                     cellAnimations: {},
                     highlightedCell: null,
@@ -860,47 +1022,49 @@
                         wood: 0,
                         stone: 0
                     },
-                    initialInventory: null, // Store initial inventory
+                    initialInventory: null,
                     code: '',
+                    codeErrors: [],
                     logs: [],
                     isRunning: false,
                     currentLevel: 1,
                     score: 0,
+                    penalties: 0,
                     showVictory: false,
                     showFailure: false,
                     animationSpeed: 1,
-                    hasRunCode: false, // Track if code has been run
-                    levelSeeds: {}, // Store seeds for each level to ensure consistency
+                    hasRunCode: false,
+                    levelSeeds: {},
                     
                     levels: [
                         {
-                            description: 'Learn basic commands! Move your robot and harvest 3 wheat.',
+                            description: 'Pelajari perintah dasar! Pindahkan robot dan panen 3 gandum.',
                             targets: { wheat: 3 },
                             reward: 100,
                             tutorial: `
-                                <h3 class="font-bold mb-2 text-lg">🌾 Level 1: Basic Movement</h3>
-                                <p class="mb-2">Use <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">move()</code> to move forward.</p>
-                                <p class="mb-2">Use <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">harvest()</code> to collect resources.</p>
-                                <p class="mb-2"><strong>C++ Concept:</strong> Function Calls</p>
+                                <h3 class="font-bold mb-2 text-lg">🌾 Level 1: Gerakan Dasar</h3>
+                                <p class="mb-2">Gunakan <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">move()</code> untuk bergerak maju.</p>
+                                <p class="mb-2">Gunakan <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">harvest()</code> untuk mengumpulkan sumber daya.</p>
+                                <p class="mb-2"><strong>Konsep C++:</strong> Pemanggilan Fungsi</p>
                                 <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
-<span class="text-gray-500">// Example:</span>
+<span class="text-gray-500">// Contoh:</span>
 move();
 move();
 harvest();
                                 </div>
                             `,
-                            seed: 12345 // Fixed seed for level 1
+                            seed: 12345
                         },
                         {
-                            description: 'Master loops! Plant and harvest 5 wheat using a for loop.',
+                            description: 'Kuasai loop! Tanam dan panen 5 gandum menggunakan for loop.',
                             targets: { wheat: 5 },
                             reward: 200,
                             tutorial: `
-                                <h3 class="font-bold mb-2 text-lg">🔄 Level 2: For Loops</h3>
-                                <p class="mb-2">Use loops to repeat commands efficiently!</p>
-                                <p class="mb-2"><strong>C++ Concept:</strong> For Loop</p>
+                                <h3 class="font-bold mb-2 text-lg">🔄 Level 2: For Loop</h3>
+                                <p class="mb-2">Gunakan loop untuk mengulang perintah secara efisien!</p>
+                                <p class="mb-2"><strong>Konsep C++:</strong> For Loop</p>
                                 <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
-<span class="text-gray-500">// Example:</span>
+<span class="text-gray-500">// Contoh:</span>
 <span class="text-purple-400">for</span>(<span class="text-blue-400">int</span> i=<span class="text-orange-400">0</span>; i<<span class="text-orange-400">5</span>; i++) {
     plant();
     wait(<span class="text-orange-400">100</span>);
@@ -909,18 +1073,18 @@ harvest();
 }
                                 </div>
                             `,
-                            seed: 23456 // Fixed seed for level 2
+                            seed: 23456
                         },
                         {
-                            description: 'Learn variables! Collect 3 wheat and 3 carrots.',
+                            description: 'Pelajari variabel! Kumpulkan 3 gandum dan 3 wortel.',
                             targets: { wheat: 3, carrot: 3 },
                             reward: 300,
                             tutorial: `
-                                <h3 class="font-bold mb-2 text-lg">📦 Level 3: Variables</h3>
-                                <p class="mb-2">Store values in variables for better code!</p>
-                                <p class="mb-2"><strong>C++ Concept:</strong> Variables & Data Types</p>
+                                <h3 class="font-bold mb-2 text-lg">📦 Level 3: Variabel</h3>
+                                <p class="mb-2">Simpan nilai dalam variabel untuk kode yang lebih baik!</p>
+                                <p class="mb-2"><strong>Konsep C++:</strong> Variabel & Tipe Data</p>
                                 <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
-<span class="text-gray-500">// Example:</span>
+<span class="text-gray-500">// Contoh:</span>
 <span class="text-blue-400">int</span> count = <span class="text-orange-400">3</span>;
 <span class="text-purple-400">for</span>(<span class="text-blue-400">int</span> i=<span class="text-orange-400">0</span>; i<count; i++) {
     plant();
@@ -929,19 +1093,19 @@ harvest();
 }
                                 </div>
                             `,
-                            seed: 34567 // Fixed seed for level 3
+                            seed: 34567
                         },
                         {
-                            description: 'Master conditions! Only harvest when plants are fully grown.',
+                            description: 'Kuasai kondisi! Hanya panen saat tanaman sudah siap dipanen.',
                             targets: { wheat: 5, carrot: 3 },
                             reward: 400,
                             tutorial: `
-                                <h3 class="font-bold mb-2 text-lg">❓ Level 4: Conditionals</h3>
-                                <p class="mb-2">Make decisions with if statements!</p>
-                                <p class="mb-2">Use <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">canHarvest()</code> to check readiness.</p>
-                                <p class="mb-2"><strong>C++ Concept:</strong> If/Else Statements</p>
+                                <h3 class="font-bold mb-2 text-lg">❓ Level 4: Kondisional</h3>
+                                <p class="mb-2">Buat keputusan dengan pernyataan if!</p>
+                                <p class="mb-2">Gunakan <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">canHarvest()</code> untuk memeriksa kesiapan.</p>
+                                <p class="mb-2"><strong>Konsep C++:</strong> Pernyataan If/Else</p>
                                 <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
-<span class="text-gray-500">// Example:</span>
+<span class="text-gray-500">// Contoh:</span>
 <span class="text-purple-400">if</span>(canHarvest()) {
     harvest();
 } <span class="text-purple-400">else</span> {
@@ -949,35 +1113,35 @@ harvest();
 }
                                 </div>
                             `,
-                            seed: 45678 // Fixed seed for level 4
+                            seed: 45678
                         },
                         {
-                            description: 'Final challenge! Collect all resources: 10 wheat, 5 carrot, 3 wood, 2 stone.',
+                            description: 'Tantangan final! Kumpulkan semua sumber daya: 10 gandum, 5 wortel, 3 kayu, 2 batu.',
                             targets: { wheat: 10, carrot: 5, wood: 3, stone: 2 },
                             reward: 1000,
                             tutorial: `
-                                <h3 class="font-bold mb-2 text-lg">🏆 Level 5: Master Challenge</h3>
-                                <p class="mb-2">Combine everything you've learned!</p>
-                                <p class="mb-2"><strong>Required Skills:</strong> Loops, Variables, Conditions, Functions</p>
+                                <h3 class="font-bold mb-2 text-lg">🏆 Level 5: Tantangan Master</h3>
+                                <p class="mb-2">Gabungkan semua yang telah Anda pelajari!</p>
+                                <p class="mb-2"><strong>Keterampilan yang Diperlukan:</strong> Loop, Variabel, Kondisi, Fungsi</p>
                                 <ul class="list-disc list-inside text-sm space-y-1">
-                                    <li>Use nested loops for efficiency</li>
-                                    <li>Rotate to change direction</li>
-                                    <li>Check resources before harvesting</li>
-                                    <li>Plan your path strategically</li>
+                                    <li>Gunakan nested loop untuk efisiensi</li>
+                                    <li>Rotasi untuk mengubah arah</li>
+                                    <li>Periksa sumber daya sebelum memanen</li>
+                                    <li>Rencanakan jalur secara strategis</li>
                                 </ul>
                             `,
-                            seed: 56789 // Fixed seed for level 5
+                            seed: 56789
                         }
                     ],
 
                     availableCommands: [
-                        { name: 'move', syntax: 'move()', description: 'Move forward in current direction', icon: 'fas fa-arrow-up' },
-                        { name: 'rotate', syntax: 'rotate()', description: 'Rotate 90° clockwise', icon: 'fas fa-redo' },
-                        { name: 'plant', syntax: 'plant()', description: 'Plant a seed at current position', icon: 'fas fa-seedling' },
-                        { name: 'harvest', syntax: 'harvest()', description: 'Harvest grown crops', icon: 'fas fa-cut' },
-                        { name: 'wait', syntax: 'wait(time)', description: 'Wait for crops to grow (ms)', icon: 'fas fa-clock' },
-                        { name: 'canHarvest', syntax: 'canHarvest()', description: 'Check if harvest is ready (bool)', icon: 'fas fa-check-circle' },
-                        { name: 'getResource', syntax: 'getResource()', description: 'Collect wood/stone resources', icon: 'fas fa-gem' },
+                        { name: 'move', syntax: 'move()', description: 'Bergerak maju ke arah saat ini', icon: 'fas fa-arrow-up' },
+                        { name: 'rotate', syntax: 'rotate()', description: 'Rotasi 90° searah jarum jam', icon: 'fas fa-redo' },
+                        { name: 'plant', syntax: 'plant()', description: 'Tanam benih di posisi saat ini', icon: 'fas fa-seedling' },
+                        { name: 'harvest', syntax: 'harvest()', description: 'Panen tanaman yang sudah dewasa', icon: 'fas fa-cut' },
+                        { name: 'wait', syntax: 'wait(time)', description: 'Tunggu tanaman tumbuh (ms)', icon: 'fas fa-clock' },
+                        { name: 'canHarvest', syntax: 'canHarvest()', description: 'Periksa apakah siap dipanen (bool)', icon: 'fas fa-check-circle' },
+                        { name: 'getResource', syntax: 'getResource()', description: 'Kumpulkan sumber daya kayu/batu', icon: 'fas fa-gem' },
                     ]
                 }
             },
@@ -987,7 +1151,6 @@ harvest();
             },
 
             methods: {
-                // Seeded random number generator for consistent level generation
                 seededRandom(seed) {
                     const x = Math.sin(seed) * 10000;
                     return x - Math.floor(x);
@@ -999,7 +1162,6 @@ harvest();
                     this.cellAnimations = {};
                     const size = this.gridSize * this.gridSize;
                     
-                    // Generate grid using seeded random for consistency
                     for (let i = 0; i < size; i++) {
                         let cell = { type: 'empty', growth: 0 };
                         const rand = this.seededRandom(levelSeed + i);
@@ -1018,20 +1180,159 @@ harvest();
                         this.cellAnimations[i] = '';
                     }
                     
-                    // Store initial state
                     this.initialGrid = JSON.parse(JSON.stringify(this.grid));
                     this.initialRobotPos = 0;
                     this.initialRobotDirection = 'right';
                     this.initialInventory = { wheat: 0, carrot: 0, wood: 0, stone: 0 };
                     
-                    // Reset current state
                     this.robotPos = 0;
                     this.robotDirection = 'right';
                     this.inventory = { wheat: 0, carrot: 0, wood: 0, stone: 0 };
+                    this.penalties = 0;
                     this.hasRunCode = false;
+                    this.codeErrors = [];
                     this.logs = [];
-                    this.addLog(`Level ${this.currentLevel} initialized. Good luck! 🚀`);
-                    this.addLog('⚠️ You have only ONE attempt to complete this level!');
+                    this.addLog(`Level ${this.currentLevel} diinisialisasi. Semoga berhasil! 🚀`);
+                    this.addLog('⚠️ Anda hanya memiliki SATU kesempatan untuk menyelesaikan level ini!');
+                },
+
+                validateCode() {
+                    this.codeErrors = [];
+                    const lines = this.code.split('\n');
+                    let braceBalance = 0;
+                    let parenBalance = 0;
+                    
+                    lines.forEach((line, index) => {
+                        const lineNumber = index + 5;
+                        const trimmedLine = line.trim();
+                        
+                        if (!trimmedLine || trimmedLine.startsWith('//')) {
+                            return;
+                        }
+                        
+                        for (let char of trimmedLine) {
+                            if (char === '{') braceBalance++;
+                            else if (char === '}') braceBalance--;
+                            else if (char === '(') parenBalance++;
+                            else if (char === ')') parenBalance--;
+                        }
+                        
+                        if (this.isFunctionCall(trimmedLine) && !trimmedLine.endsWith(';') && !trimmedLine.endsWith('{')) {
+                            this.codeErrors.push({
+                                line: lineNumber,
+                                type: 'Syntax Error',
+                                message: `Kurang titik koma ';' setelah pemanggilan fungsi`,
+                                suggestion: `Tambahkan ';' di akhir baris`
+                            });
+                        }
+                        
+                        if (this.isVariableDeclaration(trimmedLine) && !trimmedLine.endsWith(';')) {
+                            this.codeErrors.push({
+                                line: lineNumber,
+                                type: 'Syntax Error',
+                                message: `Kurang titik koma ';' setelah deklarasi variabel`,
+                                suggestion: `Tambahkan ';' di akhir baris`
+                            });
+                        }
+                        
+                        const functionMatch = trimmedLine.match(/(\w+)\s*\(/);
+                        if (functionMatch) {
+                            const functionName = functionMatch[1];
+                            if (!this.isValidFunction(functionName) && !this.isControlStatement(functionName)) {
+                                this.codeErrors.push({
+                                    line: lineNumber,
+                                    type: 'Error',
+                                    message: `Fungsi tidak dikenal '${functionName}'`,
+                                    suggestion: `Gunakan fungsi yang tersedia: ${this.availableCommands.map(c => c.name).join(', ')}`
+                                });
+                            }
+                        }
+                        
+                        if (trimmedLine.startsWith('int ') && !this.isValidVariableDeclaration(trimmedLine)) {
+                            this.codeErrors.push({
+                                line: lineNumber,
+                                type: 'Syntax Error',
+                                message: `Deklarasi variabel tidak valid`,
+                                suggestion: `Gunakan format: int namaVariabel = nilai;`
+                            });
+                        }
+                        
+                        if (trimmedLine.startsWith('for ')) {
+                            if (!trimmedLine.match(/for\s*\(\s*int\s+\w+\s*=\s*\d+\s*;\s*\w+\s*[<>=!]+\s*\d+\s*;\s*\w+\+\+\s*\)\s*\{?/)) {
+                                this.codeErrors.push({
+                                    line: lineNumber,
+                                    type: 'Syntax Error',
+                                    message: `Sintaks for loop tidak valid`,
+                                    suggestion: `Gunakan format: for(int i=0; i<5; i++) { ... } atau for(int i=0; i<5; i++) ...`
+                                });
+                            }
+                        }
+                        
+                        if (trimmedLine.startsWith('if ') && !trimmedLine.match(/if\s*\(.+\)\s*\{?/)) {
+                            this.codeErrors.push({
+                                line: lineNumber,
+                                type: 'Syntax Error',
+                                message: `Sintaks pernyataan if tidak valid`,
+                                suggestion: `Gunakan format: if(kondisi) { ... } atau if(kondisi) ...`
+                            });
+                        }
+                        
+                        const waitMatch = trimmedLine.match(/wait\s*\(\s*(\w+)\s*\)/);
+                        if (waitMatch) {
+                            const param = waitMatch[1];
+                            if (isNaN(param) && !this.isValidVariable(param)) {
+                                this.codeErrors.push({
+                                    line: lineNumber,
+                                    type: 'Error',
+                                    message: `Parameter tidak valid untuk fungsi wait()`,
+                                    suggestion: `Gunakan angka (misal: wait(100)) atau variabel integer yang valid`
+                                });
+                            }
+                        }
+                    });
+                    
+                    if (braceBalance !== 0) {
+                        this.codeErrors.push({
+                            line: 'Multiple',
+                            type: 'Syntax Error',
+                            message: `Kurung kurawal tidak seimbang dalam kode (${braceBalance > 0 ? 'kurung tutup hilang' : 'kelebihan kurung tutup'})`,
+                            suggestion: `Pastikan semua kurung buka '{' memiliki kurung tutup '}' yang sesuai`
+                        });
+                    }
+                    
+                    if (parenBalance !== 0) {
+                        this.codeErrors.push({
+                            line: 'Multiple',
+                            type: 'Syntax Error',
+                            message: `Kurung tidak seimbang dalam kode (${parenBalance > 0 ? 'kurung tutup hilang' : 'kelebihan kurung tutup'})`,
+                            suggestion: `Pastikan semua kurung buka '(' memiliki kurung tutup ')' yang sesuai`
+                        });
+                    }
+                },
+
+                isFunctionCall(line) {
+                    const functionNames = this.availableCommands.map(c => c.name);
+                    return functionNames.some(name => line.startsWith(name + '('));
+                },
+
+                isVariableDeclaration(line) {
+                    return line.startsWith('int ') && line.includes('=');
+                },
+
+                isValidFunction(name) {
+                    return this.availableCommands.some(c => c.name === name);
+                },
+
+                isControlStatement(name) {
+                    return ['for', 'if', 'else', 'while', 'do'].includes(name);
+                },
+
+                isValidVariableDeclaration(line) {
+                    return line.match(/int\s+[a-zA-Z_]\w*\s*=\s*\d+/);
+                },
+
+                isValidVariable(name) {
+                    return name.match(/^[a-zA-Z_]\w*$/);
                 },
 
                 getRobotPosition() {
@@ -1115,7 +1416,7 @@ harvest();
 
                 debugCell(index) {
                     const cell = this.grid[index];
-                    this.addLog(`Cell ${index}: ${cell.type} (${cell.growth}%)`);
+                    this.addLog(`Sel ${index}: ${cell.type} (${cell.growth}%)`);
                     this.highlightCell(index);
                 },
 
@@ -1136,9 +1437,9 @@ harvest();
                     });
                 },
 
-                createParticle(icon, x, y) {
+                createParticle(icon, x, y, isError = false) {
                     const particle = document.createElement('div');
-                    particle.className = 'particle float-up';
+                    particle.className = `particle ${isError ? 'error' : 'float-up'}`;
                     particle.textContent = icon;
                     particle.style.left = x + 'px';
                     particle.style.top = y + 'px';
@@ -1148,6 +1449,22 @@ harvest();
                     setTimeout(() => {
                         particle.remove();
                     }, 1000);
+                },
+
+                showPenalty(message, points) {
+                    this.penalties++;
+                    this.score = Math.max(0, this.score - points);
+                    
+                    const indicator = document.createElement('div');
+                    indicator.className = 'penalty-indicator';
+                    indicator.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i>${message}<br><small>-${points} poin</small>`;
+                    document.body.appendChild(indicator);
+                    
+                    setTimeout(() => {
+                        indicator.remove();
+                    }, 2000);
+                    
+                    this.addLog(`❌ ${message} (-${points} poin)`, 'error');
                 },
 
                 createConfetti() {
@@ -1172,17 +1489,31 @@ harvest();
                 async runCode() {
                     if (this.isRunning || this.hasRunCode) return;
                     
+                    this.validateCode();
+                    if (this.codeErrors.length > 0) {
+                        this.addLog('❌ Tidak dapat menjalankan kode dengan error sintaks!', 'error');
+                        this.addLog(`Ditemukan ${this.codeErrors.length} error. Perbaiki terlebih dahulu.`, 'error');
+                        
+                        const editor = document.querySelector('textarea');
+                        if (editor) {
+                            editor.classList.add('error-shake');
+                            setTimeout(() => {
+                                editor.classList.remove('error-shake');
+                            }, 300);
+                        }
+                        return;
+                    }
+                    
                     this.isRunning = true;
-                    this.hasRunCode = true; // Mark as used immediately
+                    this.hasRunCode = true;
                     this.logs = [];
-                    this.addLog('Starting program execution...');
-                    this.addLog('⚠️ This is your only attempt for this level!');
+                    this.addLog('Memulai eksekusi program...');
+                    this.addLog('⚠️ Ini adalah satu-satunya kesempatan Anda untuk level ini!');
                     
                     try {
                         await this.executeCode(this.code);
-                        this.addLog('Program finished successfully! ✅', 'success');
+                        this.addLog('Program selesai berhasil! ✅', 'success');
                         
-                        // Check victory after a short delay
                         setTimeout(() => {
                             this.checkVictory();
                         }, 500);
@@ -1235,7 +1566,7 @@ harvest();
                     const match = forLine.match(/for\s*\(\s*int\s+\w+\s*=\s*(\d+)\s*;\s*\w+\s*<\s*(\d+)\s*;\s*\w+\+\+\s*\)/);
                     
                     if (!match) {
-                        throw new Error(`Invalid for loop syntax at line ${startIndex + 1}`);
+                        throw new Error(`Sintaks for loop tidak valid di baris ${startIndex + 1}`);
                     }
                     
                     const start = parseInt(match[1]);
@@ -1264,6 +1595,14 @@ harvest();
                         }
                     }
                     
+                    if (!foundOpenBrace && endIndex === startIndex + 1) {
+                        const nextLine = lines[startIndex].replace(/for\s*\([^)]+\)\s*\{?\s*/, '').replace(/\}?/, '').trim();
+                        if (nextLine && nextLine !== '') {
+                            body.push(nextLine);
+                            endIndex = startIndex + 1;
+                        }
+                    }
+                    
                     return { iterations, body, endIndex };
                 },
 
@@ -1272,7 +1611,7 @@ harvest();
                     const match = ifLine.match(/if\s*\(\s*(.+?)\s*\)/);
                     
                     if (!match) {
-                        throw new Error(`Invalid if syntax at line ${startIndex + 1}`);
+                        throw new Error(`Sintaks if tidak valid di baris ${startIndex + 1}`);
                     }
                     
                     const condition = match[1];
@@ -1305,6 +1644,14 @@ harvest();
                             } else {
                                 ifBody.push(lines[i]);
                             }
+                        }
+                    }
+                    
+                    if (!foundOpenBrace && endIndex === startIndex + 1) {
+                        const nextLine = lines[startIndex].replace(/if\s*\([^)]+\)\s*\{?\s*/, '').replace(/\}?/, '').trim();
+                        if (nextLine && nextLine !== '') {
+                            ifBody.push(nextLine);
+                            endIndex = startIndex + 1;
                         }
                     }
                     
@@ -1358,7 +1705,7 @@ harvest();
                             await this.robotGetResource();
                             break;
                         default:
-                            this.addLog(`Unknown command: ${funcName}`, 'warning');
+                            this.addLog(`Perintah tidak dikenal: ${funcName}`, 'warning');
                     }
                 },
 
@@ -1373,16 +1720,16 @@ harvest();
                     const newPos = this.robotPos + directions[this.robotDirection];
                     
                     if (newPos < 0 || newPos >= this.gridSize * this.gridSize) {
-                        this.addLog('Cannot move: out of bounds! ⚠️', 'warning');
+                        this.addLog('Tidak dapat bergerak: keluar batas! ⚠️', 'warning');
                         return;
                     }
                     
                     if (this.robotDirection === 'right' && this.robotPos % this.gridSize === this.gridSize - 1) {
-                        this.addLog('Cannot move: edge of map! ⚠️', 'warning');
+                        this.addLog('Tidak dapat bergerak: tepi peta! ⚠️', 'warning');
                         return;
                     }
                     if (this.robotDirection === 'left' && this.robotPos % this.gridSize === 0) {
-                        this.addLog('Cannot move: edge of map! ⚠️', 'warning');
+                        this.addLog('Tidak dapat bergerak: tepi peta! ⚠️', 'warning');
                         return;
                     }
                     
@@ -1392,7 +1739,7 @@ harvest();
                     await this.sleep(400 / this.animationSpeed);
                     
                     this.robotPos = newPos;
-                    this.addLog(`Moved ${this.robotDirection} to position ${newPos}`);
+                    this.addLog(`Bergerak ${this.robotDirection} ke posisi ${newPos}`);
                     
                     await this.sleep(100 / this.animationSpeed);
                     this.robotAnimation = '';
@@ -1405,7 +1752,7 @@ harvest();
                     const currentIndex = rotations.indexOf(this.robotDirection);
                     this.robotDirection = rotations[(currentIndex + 1) % 4];
                     
-                    this.addLog(`Rotated to face ${this.robotDirection}`);
+                    this.addLog(`Rotasi menghadap ${this.robotDirection}`);
                     
                     await this.sleep(300 / this.animationSpeed);
                     this.robotAnimation = '';
@@ -1415,7 +1762,23 @@ harvest();
                     const cell = this.grid[this.robotPos];
                     
                     if (cell.type !== 'empty') {
-                        this.addLog('Cannot plant: cell not empty! ⚠️', 'warning');
+                        // Apply penalty for planting on non-empty cell
+                        this.robotAnimation = 'error';
+                        this.cellAnimations[this.robotPos] = 'error';
+                        
+                        await this.sleep(500 / this.animationSpeed);
+                        
+                        this.showPenalty('Menanam di lahan tidak kosong!', 50);
+                        
+                        // Create error particle
+                        const cellElement = this.$refs['cell-' + this.robotPos];
+                        if (cellElement && cellElement[0]) {
+                            const rect = cellElement[0].getBoundingClientRect();
+                            this.createParticle('❌', rect.left + rect.width / 2, rect.top + rect.height / 2, true);
+                        }
+                        
+                        this.robotAnimation = '';
+                        this.cellAnimations[this.robotPos] = '';
                         return;
                     }
                     
@@ -1427,7 +1790,7 @@ harvest();
                     this.grid[this.robotPos] = { type: 'planted', growth: 0, plantType };
                     this.cellAnimations[this.robotPos] = 'planted';
                     
-                    this.addLog(`Planted ${plantType} seed 🌱`, 'success');
+                    this.addLog(`Menanam benih ${plantType} 🌱`, 'success');
                     
                     await this.sleep(250 / this.animationSpeed);
                     this.robotAnimation = '';
@@ -1438,12 +1801,44 @@ harvest();
                     const cell = this.grid[this.robotPos];
                     
                     if (cell.type !== 'wheat' && cell.type !== 'carrot' && cell.type !== 'planted') {
-                        this.addLog('Cannot harvest: nothing to harvest! ⚠️', 'warning');
+                        // Apply penalty for harvesting non-crop
+                        this.robotAnimation = 'error';
+                        this.cellAnimations[this.robotPos] = 'error';
+                        
+                        await this.sleep(500 / this.animationSpeed);
+                        
+                        this.showPenalty('Memanen bukan tanaman!', 50);
+                        
+                        // Create error particle
+                        const cellElement = this.$refs['cell-' + this.robotPos];
+                        if (cellElement && cellElement[0]) {
+                            const rect = cellElement[0].getBoundingClientRect();
+                            this.createParticle('❌', rect.left + rect.width / 2, rect.top + rect.height / 2, true);
+                        }
+                        
+                        this.robotAnimation = '';
+                        this.cellAnimations[this.robotPos] = '';
                         return;
                     }
                     
                     if (cell.type === 'planted' && cell.growth < 100) {
-                        this.addLog(`Cannot harvest: plant not ready (${cell.growth}%)! ⚠️`, 'warning');
+                        // Apply penalty for harvesting unripe crop
+                        this.robotAnimation = 'error';
+                        this.cellAnimations[this.robotPos] = 'error';
+                        
+                        await this.sleep(500 / this.animationSpeed);
+                        
+                        this.showPenalty(`Memanen tanaman belum siap (${cell.growth}%)!`, 30);
+                        
+                        // Create error particle
+                        const cellElement = this.$refs['cell-' + this.robotPos];
+                        if (cellElement && cellElement[0]) {
+                            const rect = cellElement[0].getBoundingClientRect();
+                            this.createParticle('❌', rect.left + rect.width / 2, rect.top + rect.height / 2, true);
+                        }
+                        
+                        this.robotAnimation = '';
+                        this.cellAnimations[this.robotPos] = '';
                         return;
                     }
                     
@@ -1464,7 +1859,7 @@ harvest();
                         this.createParticle(icon, rect.left + rect.width / 2, rect.top + rect.height / 2);
                     }
                     
-                    this.addLog(`Harvested ${harvestType}! Total: ${this.inventory[harvestType]} ✅`, 'success');
+                    this.addLog(`Memanen ${harvestType}! Total: ${this.inventory[harvestType]} ✅`, 'success');
                     
                     this.robotAnimation = '';
                     this.cellAnimations[this.robotPos] = '';
@@ -1488,13 +1883,13 @@ harvest();
                         cell.growth = Math.round(growthIncrease);
                         this.cellAnimations[this.robotPos] = '';
                         
-                        this.addLog(`Waited ${time}ms. Plant growth: ${cell.growth}% 🌱`);
+                        this.addLog(`Menunggu ${time}ms. Pertumbuhan tanaman: ${cell.growth}% 🌱`);
                         
                         if (cell.growth >= 100) {
-                            this.addLog('Plant fully grown! Ready to harvest! 🌾', 'success');
+                            this.addLog('Tanaman sepenuhnya tumbuh! Siap dipanen! 🌾', 'success');
                         }
                     } else {
-                        this.addLog(`Waited ${time}ms ⏳`);
+                        this.addLog(`Menunggu ${time}ms ⏳`);
                         await this.sleep(time / this.animationSpeed);
                     }
                 },
@@ -1517,7 +1912,7 @@ harvest();
                             this.createParticle('🪵', rect.left + rect.width / 2, rect.top + rect.height / 2);
                         }
                         
-                        this.addLog(`Got wood! Total: ${this.inventory.wood} 🪵`, 'success');
+                        this.addLog(`Mendapat kayu! Total: ${this.inventory.wood} 🪵`, 'success');
                         
                         this.robotAnimation = '';
                         this.cellAnimations[this.robotPos] = '';
@@ -1536,12 +1931,12 @@ harvest();
                             this.createParticle('🪨', rect.left + rect.width / 2, rect.top + rect.height / 2);
                         }
                         
-                        this.addLog(`Got stone! Total: ${this.inventory.stone} 🪨`, 'success');
+                        this.addLog(`Mendapat batu! Total: ${this.inventory.stone} 🪨`, 'success');
                         
                         this.robotAnimation = '';
                         this.cellAnimations[this.robotPos] = '';
                     } else {
-                        this.addLog('No resource here! ⚠️', 'warning');
+                        this.addLog('Tidak ada sumber daya di sini! ⚠️', 'warning');
                     }
                 },
 
@@ -1566,10 +1961,10 @@ harvest();
                         this.score += this.levels[this.currentLevel - 1].reward;
                         this.showVictory = true;
                         this.createConfetti();
-                        this.addLog('🎉 LEVEL COMPLETE! 🎉', 'success');
+                        this.addLog('🎉 LEVEL SELESAI! 🎉', 'success');
                     } else {
                         this.showFailure = true;
-                        this.addLog('❌ Mission Failed! Try again! ❌', 'error');
+                        this.addLog('❌ Misi Gagal! Coba lagi! ❌', 'error');
                     }
                 },
 
@@ -1582,7 +1977,6 @@ harvest();
                 },
 
                 resetLevel() {
-                    // Restore to initial state
                     this.grid = JSON.parse(JSON.stringify(this.initialGrid));
                     this.robotPos = this.initialRobotPos;
                     this.robotDirection = this.initialRobotDirection;
@@ -1591,16 +1985,16 @@ harvest();
                     this.isRunning = false;
                     this.showFailure = false;
                     this.showVictory = false;
+                    this.codeErrors = [];
                     this.logs = [];
                     this.robotAnimation = '';
                     this.cellAnimations = {};
                     
-                    // Re-initialize cell animations
                     for (let i = 0; i < this.grid.length; i++) {
                         this.cellAnimations[i] = '';
                     }
                     
-                    this.addLog(`Level ${this.currentLevel} reset. Try again! 🔄`);
+                    this.addLog(`Level ${this.currentLevel} direset. Coba lagi! 🔄`);
                 },
 
                 resetToLevel1() {
@@ -1613,7 +2007,7 @@ harvest();
                 stopCode() {
                     this.isRunning = false;
                     this.robotAnimation = '';
-                    this.addLog('Program stopped by user! ⏹️', 'warning');
+                    this.addLog('Program dihentikan oleh pengguna! ⏹️', 'warning');
                 },
 
                 sleep(ms) {
