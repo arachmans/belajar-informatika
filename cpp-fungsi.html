@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunC++ - Belajar Fungsi C++ Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .word-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .word-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .word-card:active {
+            transform: scale(0.95);
+        }
+        
+        .drop-zone {
+            min-height: 60px;
+            transition: all 0.3s ease;
+        }
+        
+        .correct-answer {
+            animation: correctPulse 0.5s ease;
+            background-color: #10b981 !important;
+        }
+        
+        .wrong-answer {
+            animation: wrongShake 0.5s ease;
+            background-color: #ef4444 !important;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.5s;
+        }
+        
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+        
+        .slide-up-enter-active {
+            transition: all 0.3s ease-out;
+        }
+        
+        .slide-up-enter-from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .code-editor {
+            background: #2d2d2d;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .floating-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .output-terminal {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .output-terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #333;
+        }
+
+        .output-terminal::after {
+            content: '● ● ●';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            color: #ff5f56;
+            font-size: 12px;
+            letter-spacing: 3px;
+        }
+
+        .output-content {
+            padding-top: 40px;
+        }
+
+        .word-move-animation {
+            animation: wordMove 0.3s ease;
+        }
+
+        @keyframes wordMove {
+            0% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+            100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(147, 51, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+            }
+        }
+
+        /* Enhanced code highlighting */
+        pre[class*="language-"] {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            overflow: auto;
+            margin: 0;
+        }
+
+        code[class*="language-"] {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Custom syntax highlighting colors */
+        .token.comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .token.string {
+            color: #ce9178;
+        }
+
+        .token.number {
+            color: #b5cea8;
+        }
+
+        .token.keyword {
+            color: #569cd6;
+            font-weight: 500;
+        }
+
+        .token.function {
+            color: #dcdcaa;
+        }
+
+        .token.operator {
+            color: #d4d4d4;
+        }
+
+        .token.punctuation {
+            color: #d4d4d4;
+        }
+
+        .token.namespace {
+            color: #4ec9b0;
+        }
+
+        .token.type {
+            color: #4ec9b0;
+        }
+
+        .token.variable {
+            color: #9cdcfe;
+        }
+
+        .token.parameter {
+            color: #9cdcfe;
+        }
+
+        .token.class-name {
+            color: #4ec9b0;
+        }
+
+        .code-block-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: #2d2d2d;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .code-block-title {
+            color: #9cdcfe;
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .code-block-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .code-block-action {
+            color: #9cdcfe;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .code-block-action:hover {
+            color: #ffffff;
+        }
+
+        .code-block-content {
+            background: #1e1e1e;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        /* Line numbers */
+        .line-numbers .line-numbers-rows {
+            border-right: 1px solid #444;
+        }
+
+        .line-numbers-rows > span:before {
+            color: #858585;
+        }
+
+        /* Definition box animation */
+        .definition-box {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #a78bfa 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .void-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+        }
+
+        .comparison-card {
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .flow-arrow {
+            animation: flowAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes flowAnimation {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+        }
+
+        .structure-example {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .structure-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .structure-title i {
+            margin-right: 0.5rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app">
+        <!-- Header -->
+        <header class="gradient-bg text-white p-4 shadow-lg">
+            <div class="container mx-auto flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-code text-3xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">FunC++</h1>
+                        <p class="text-xs opacity-90">Belajar Fungsi C++ dengan Seru</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-xs opacity-90">Level</p>
+                        <p class="font-semibold">{{ userLevel }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs opacity-90">XP</p>
+                        <p class="font-semibold">{{ userXP }}</p>
+                    </div>
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-purple-600"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-6 mb-20 min-h-screen">
+            <!-- Materi Section -->
+            <section v-if="activeMenu === 'materi'" class="fade-enter-active">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-book-open text-purple-600 mr-2"></i>
+                        Materi Fungsi C++
+                    </h2>
+                    <p class="text-gray-600">Pelajari konsep dasar fungsi dalam pemrograman C++</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <button 
+                        v-for="(tab, index) in materiTabs" 
+                        :key="index"
+                        @click="activeMateriTab = index"
+                        :class="['px-4 py-2 rounded-lg font-medium transition-all', 
+                                activeMateriTab === index ? 
+                                'bg-purple-600 text-white shadow-lg' : 
+                                'bg-white text-gray-700 hover:bg-gray-100']">
+                        <i :class="tab.icon + ' mr-2'"></i>{{ tab.title }}
+                    </button>
+                </div>
+
+                <!-- Tab Content -->
+                <transition name="slide-up">
+                    <div :key="activeMateriTab" class="bg-white rounded-xl shadow-lg p-6">
+                        <!-- Kenapa Fungsi -->
+                        <div v-if="activeMateriTab === 0">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                                <i class="fas fa-question-circle text-purple-600 mr-2"></i>
+                                Kenapa Kita Harus Menggunakan Fungsi?
+                            </h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div class="card-hover bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg">
+                                    <div class="text-4xl mb-3">🔄</div>
+                                    <h4 class="font-semibold text-lg mb-2">Reusability</h4>
+                                    <p class="text-gray-600">Fungsi dapat digunakan berulang kali tanpa menulis ulang kode yang sama.</p>
+                                </div>
+                                <div class="card-hover bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-lg">
+                                    <div class="text-4xl mb-3">🧩</div>
+                                    <h4 class="font-semibold text-lg mb-2">Modularitas</h4>
+                                    <p class="text-gray-600">Program dibagi menjadi bagian-bagian kecil yang lebih mudah dikelola.</p>
+                                </div>
+                                <div class="card-hover bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg">
+                                    <div class="text-4xl mb-3">🔧</div>
+                                    <h4 class="font-semibold text-lg mb-2">Maintenance</h4>
+                                    <p class="text-gray-600">Memperbaiki bug atau mengubah fitur menjadi lebih mudah.</p>
+                                </div>
+                                <div class="card-hover bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg">
+                                    <div class="text-4xl mb-3">📖</div>
+                                    <h4 class="font-semibold text-lg mb-2">Readability</h4>
+                                    <p class="text-gray-600">Kode menjadi lebih mudah dibaca dan dipahami.</p>
+                                </div>
+                            </div>
+
+                            <div class="code-block-container">
+                                <div class="code-block-header">
+                                    <div class="code-block-title">main.cpp</div>
+                                    <div class="code-block-actions">
+                                        <i class="fas fa-copy code-block-action" @click="copyCode('code1')"></i>
+                                    </div>
+                                </div>
+                                <div class="code-block-content">
+                                    <pre id="code1"><code class="language-cpp">// Tanpa fungsi - kode berulang
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    // Menghitung luas persegi panjang 1
+    int panjang1 = 5, lebar1 = 3;
+    int luas1 = panjang1 * lebar1;
+    cout &lt;&lt; "Luas 1: " &lt;&lt; luas1 &lt;&lt; endl;
+    
+    // Menghitung luas persegi panjang 2
+    int panjang2 = 7, lebar2 = 4;
+    int luas2 = panjang2 * lebar2;
+    cout &lt;&lt; "Luas 2: " &lt;&lt; luas2 &lt;&lt; endl;
+    
+    return 0;
+}</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <h4 class="font-semibold text-lg mb-3 text-gray-800">
+                                    <i class="fas fa-terminal text-green-500 mr-2"></i>
+                                    Output Program
+                                </h4>
+                                <div class="output-terminal rounded-lg overflow-hidden">
+                                    <div class="output-content p-4">
+                                        <pre class="text-green-400 font-mono text-sm"><code>Luas 1: 15
+Luas 2: 28</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Membuat Fungsi -->
+                        <div v-if="activeMateriTab === 1">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                                <i class="fas fa-tools text-purple-600 mr-2"></i>
+                                Cara Membuat dan Menjalankan Fungsi
+                            </h3>
+                            
+                            <!-- Definition Section -->
+                            <div class="definition-box bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-xl p-6 mb-6 border border-purple-200">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-function text-white text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-xl font-bold text-gray-800 mb-3">Apa itu Fungsi?</h4>
+                                        <p class="text-gray-700 mb-4 leading-relaxed">
+                                            <span class="highlight-text">Fungsi</span> adalah blok kode yang terorganisir dan diberi nama untuk melakukan tugas tertentu. 
+                                            Dalam matematika, fungsi memetakan input ke output, dan konsep serupa berlaku dalam pemrograman.
+                                        </p>
+                                        <div class="bg-white/70 backdrop-blur rounded-lg p-4 mb-4">
+                                            <p class="text-sm text-gray-600 mb-2">
+                                                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                                <strong>Analogi Sederhana:</strong> Fungsi itu seperti <span class="font-semibold text-purple-600">mesin kopi</span>:
+                                            </p>
+                                            <ul class="text-sm text-gray-600 space-y-1 ml-6">
+                                                <li>• <strong>Input:</strong> Kopi bubuk, air, gula (parameter)</li>
+                                                <li>• <strong>Proses:</strong> Menggiling, memanaskan, mencampur (kode di dalam fungsi)</li>
+                                                <li>• <strong>Output:</strong> Kopi siap minum (return value)</li>
+                                            </ul>
+                                        </div>
+                                        <div class="grid md:grid-cols-3 gap-4">
+                                            <div class="bg-white/70 backdrop-blur rounded-lg p-3 text-center">
+                                                <div class="text-2xl mb-2">📥</div>
+                                                <p class="text-sm font-semibold text-gray-700">Input</p>
+                                                <p class="text-xs text-gray-600">Menerima data</p>
+                                            </div>
+                                            <div class="bg-white/70 backdrop-blur rounded-lg p-3 text-center">
+                                                <div class="text-2xl mb-2">⚙️</div>
+                                                <p class="text-sm font-semibold text-gray-700">Proses</p>
+                                                <p class="text-xs text-gray-600">Eksekusi kode</p>
+                                            </div>
+                                            <div class="bg-white/70 backdrop-blur rounded-lg p-3 text-center">
+                                                <div class="text-2xl mb-2">📤</div>
+                                                <p class="text-sm font-semibold text-gray-700">Output</p>
+                                                <p class="text-xs text-gray-600">Mengembalikan hasil</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Void Explanation Section -->
+                            <div class="void-box rounded-xl p-6 mb-6">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white font-bold text-xl">void</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-xl font-bold text-gray-800 mb-3">
+                                            <span class="text-amber-600">void</span> - Fungsi Tanpa Nilai Kembalian
+                                        </h4>
+                                        <p class="text-gray-700 mb-4 leading-relaxed">
+                                            <span class="font-semibold text-amber-600">void</span> adalah tipe data khusus dalam C++ yang menunjukkan bahwa fungsi 
+                                            <strong>tidak mengembalikan nilai apapun</strong>. Fungsi void digunakan ketika kita hanya ingin 
+                                            menjalankan proses tertentu tanpa perlu hasil kembali.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Structure Section -->
+                            <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-lg mb-6">
+                                <h4 class="font-semibold text-lg mb-3">Struktur Fungsi</h4>
+                                
+                                <!-- Void tanpa parameter -->
+                                <div class="structure-example">
+                                    <div class="structure-title">
+                                        <i class="fas fa-code text-purple-600"></i>
+                                        Fungsi void tanpa parameter
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow-inner">
+                                        <code class="text-purple-700 font-mono text-sm">
+                                            void namaFungsi() {<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Kode fungsi<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Tidak ada return<br>
+                                            }
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="code-block-container">
+                                    <div class="code-block-header">
+                                        <div class="code-block-title">hello.cpp</div>
+                                        <div class="code-block-actions">
+                                            <i class="fas fa-copy code-block-action" @click="copyCode('code2')"></i>
+                                        </div>
+                                    </div>
+                                    <div class="code-block-content">
+                                        <pre id="code2"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// Deklarasi fungsi void
+void sapa() {
+    cout &lt;&lt; "Halo, Selamat Belajar!" &lt;&lt; endl;
+    // Tidak ada return karena ini fungsi void
+}
+
+int main() {
+    // Memanggil fungsi void
+    sapa();
+    sapa();
+    return 0;
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-3 text-gray-800">
+                                        <i class="fas fa-terminal text-green-500 mr-2"></i>
+                                        Output Program
+                                    </h4>
+                                    <div class="output-terminal rounded-lg overflow-hidden">
+                                        <div class="output-content p-4">
+                                            <pre class="text-green-400 font-mono text-sm"><code>Halo, Selamat Belajar!
+Halo, Selamat Belajar!</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parameter -->
+                        <div v-if="activeMateriTab === 2">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                                <i class="fas fa-sliders-h text-purple-600 mr-2"></i>
+                                Parameter dalam Fungsi
+                            </h3>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                                <p class="text-gray-700">
+                                    <strong>Parameter</strong> adalah nilai yang dikirim ke fungsi saat dipanggil. 
+                                    Fungsi dapat menerima satu atau lebih parameter.
+                                </p>
+                            </div>
+
+                            <!-- Structure Section -->
+                            <div class="bg-gradient-to-r from-blue-100 to-cyan-100 p-6 rounded-lg mb-6">
+                                <h4 class="font-semibold text-lg mb-3">Struktur Fungsi dengan Parameter</h4>
+                                
+                                <!-- Void dengan parameter -->
+                                <div class="structure-example">
+                                    <div class="structure-title">
+                                        <i class="fas fa-code text-blue-600"></i>
+                                        Fungsi void dengan parameter
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow-inner">
+                                        <code class="text-blue-700 font-mono text-sm">
+                                            void namaFungsi(tipeData parameter1, tipeData parameter2) {<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Kode fungsi<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Gunakan parameter di dalam fungsi<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Tidak ada return<br>
+                                            }
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="code-block-container">
+                                    <div class="code-block-header">
+                                        <div class="code-block-title">parameter.cpp</div>
+                                        <div class="code-block-actions">
+                                            <i class="fas fa-copy code-block-action" @click="copyCode('code3')"></i>
+                                        </div>
+                                    </div>
+                                    <div class="code-block-content">
+                                        <pre id="code3"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+// Fungsi void dengan 2 parameter
+void cetakNama(string nama, int umur) {
+    cout &lt;&lt; "Nama: " &lt;&lt; nama &lt;&lt; endl;
+    cout &lt;&lt; "Umur: " &lt;&lt; umur &lt;&lt; " tahun" &lt;&lt; endl;
+    // Tidak ada return karena ini fungsi void
+}
+
+int main() {
+    // Memanggil dengan argumen
+    cetakNama("Andi", 20);
+    cetakNama("Budi", 22);
+    return 0;
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-3 text-gray-800">
+                                        <i class="fas fa-terminal text-green-500 mr-2"></i>
+                                        Output Program
+                                    </h4>
+                                    <div class="output-terminal rounded-lg overflow-hidden">
+                                        <div class="output-content p-4">
+                                            <pre class="text-green-400 font-mono text-sm"><code>Nama: Andi
+Umur: 20 tahun
+Nama: Budi
+Umur: 22 tahun</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+                                <p class="text-sm text-gray-700">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                    <strong>Tip:</strong> Parameter membuat fungsi lebih fleksibel karena dapat menerima nilai yang berbeda setiap kali dipanggil.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Return Value -->
+                        <div v-if="activeMateriTab === 3">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                                <i class="fas fa-reply text-purple-600 mr-2"></i>
+                                Fungsi dengan Nilai Kembalian
+                            </h3>
+                            
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+                                <p class="text-gray-700">
+                                    Fungsi dapat mengembalikan nilai menggunakan kata kunci <code class="bg-white px-2 py-1 rounded">return</code>. 
+                                    Tipe data nilai kembalian harus sesuai dengan tipe return fungsi.
+                                </p>
+                            </div>
+
+                            <!-- Structure Section -->
+                            <div class="bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-lg mb-6">
+                                <h4 class="font-semibold text-lg mb-3">Struktur Fungsi dengan Nilai Kembalian</h4>
+                                
+                                <!-- Fungsi dengan return dan parameter -->
+                                <div class="structure-example">
+                                    <div class="structure-title">
+                                        <i class="fas fa-code text-green-600"></i>
+                                        Fungsi dengan return value dan parameter
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow-inner">
+                                        <code class="text-green-700 font-mono text-sm">
+                                            tipeData namaFungsi(tipeData parameter1, tipeData parameter2) {<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Kode fungsi<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;// Proses parameter<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;return nilaiKembali;<br>
+                                            }
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="code-block-container">
+                                    <div class="code-block-header">
+                                        <div class="code-block-title">return_value.cpp</div>
+                                        <div class="code-block-actions">
+                                            <i class="fas fa-copy code-block-action" @click="copyCode('code4')"></i>
+                                        </div>
+                                    </div>
+                                    <div class="code-block-content">
+                                        <pre id="code4"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// Fungsi mengembalikan integer dengan parameter
+int tambah(int a, int b) {
+    return a + b;
+}
+
+// Fungsi mengembalikan double dengan parameter
+double bagi(double a, double b) {
+    return a / b;
+}
+
+int main() {
+    int hasil1 = tambah(5, 3);
+    double hasil2 = bagi(10, 2);
+    
+    cout &lt;&lt; "5 + 3 = " &lt;&lt; hasil1 &lt;&lt; endl;
+    cout &lt;&lt; "10 / 2 = " &lt;&lt; hasil2 &lt;&lt; endl;
+    
+    return 0;
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-3 text-gray-800">
+                                        <i class="fas fa-terminal text-green-500 mr-2"></i>
+                                        Output Program
+                                    </h4>
+                                    <div class="output-terminal rounded-lg overflow-hidden">
+                                        <div class="output-content p-4">
+                                            <pre class="text-green-400 font-mono text-sm"><code>5 + 3 = 8
+10 / 2 = 5</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    <div class="bg-purple-100 p-4 rounded-lg text-center">
+                                        <div class="text-2xl mb-2">📊</div>
+                                        <p class="font-semibold">int</p>
+                                        <p class="text-sm text-gray-600">Mengembalikan bilangan bulat</p>
+                                    </div>
+                                    <div class="bg-blue-100 p-4 rounded-lg text-center">
+                                        <div class="text-2xl mb-2">🔢</div>
+                                        <p class="font-semibold">double</p>
+                                        <p class="text-sm text-gray-600">Mengembalikan bilangan desimal</p>
+                                    </div>
+                                    <div class="bg-green-100 p-4 rounded-lg text-center">
+                                        <div class="text-2xl mb-2">📝</div>
+                                        <p class="font-semibold">string</p>
+                                        <p class="text-sm text-gray-600">Mengembalikan teks</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rekursif -->
+                        <div v-if="activeMateriTab === 4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                                <i class="fas fa-sync-alt text-purple-600 mr-2"></i>
+                                Rekursif dalam Fungsi
+                            </h3>
+                            
+                            <div class="recursion-box rounded-xl p-6 mb-6">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-sync-alt text-white text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-xl font-bold text-gray-800 mb-3">
+                                            <span class="text-indigo-600">Rekursif</span> - Fungsi yang Memanggil Diri Sendiri
+                                        </h4>
+                                        <p class="text-gray-700 mb-4 leading-relaxed">
+                                            <span class="font-semibold text-indigo-600">Rekursif</span> adalah teknik di mana sebuah fungsi memanggil 
+                                            dirinya sendiri untuk menyelesaikan masalah yang lebih besar dengan 
+                                            memecahnya menjadi sub-masalah yang lebih kecil.
+                                        </p>
+
+                                        <!-- Visual Flow -->
+                                        <div class="recursion-flow">
+                                            <div class="recursion-step">
+                                                <div class="recursion-number">5</div>
+                                                <div class="recursion-arrow"></div>
+                                            </div>
+                                            <div class="recursion-step">
+                                                <div class="recursion-number">4</div>
+                                                <div class="recursion-arrow"></div>
+                                            </div>
+                                            <div class="recursion-step">
+                                                <div class="recursion-number">3</div>
+                                                <div class="recursion-arrow"></div>
+                                            </div>
+                                            <div class="recursion-step">
+                                                <div class="recursion-number">2</div>
+                                                <div class="recursion-arrow"></div>
+                                            </div>
+                                            <div class="recursion-step">
+                                                <div class="recursion-number">1</div>
+                                                <div class="recursion-arrow"></div>
+                                            </div>
+                                            <div class="recursion-step">
+                                                <div class="recursion-number">0</div>
+                                                <div class="recursion-arrow"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Base Case -->
+                                <div class="recursion-base-case">
+                                    <div class="diagram-title">Base Case</div>
+                                    <div class="diagram-content">
+                                        <p class="diagram-content">n = 5</p>
+                                    </div>
+                                </div>
+
+                                <!-- Recursive Call -->
+                                <div class="recursion-call">
+                                    <div class="diagram-title">Recursive Call</div>
+                                    <div class="diagram-content">
+                                        <p class="text-sm">faktorial(4)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Result -->
+                            <div class="recursion-call">
+                                <div class="diagram-title">Result</div>
+                                <div class="diagram-content">
+                                    <p class="text-sm">return 4 * 3 * 2 * 1 = 24</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="code-block-container">
+                                    <div class="code-block-header">
+                                        <div class="code-block-title">recursion.cpp</div>
+                                        <div class="code-block-actions">
+                                            <i class="fas fa-copy code-block-action" @click="copyCode('code5')"></i>
+                                        </div>
+                                    </div>
+                                    <div class="code-block-example">
+                                        <pre id="code5"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// Fungsi rekursif untuk menghitung faktorial
+int faktorial(int n) {
+    // Base case
+    if (n == 0) {
+        return 1;
+    }
+    // Recursive case
+    else {
+        return n * faktorial(n - 1);
+    }
+}
+
+int main() {
+    cout &lt;&lt; "Faktorial 5 = " &lt;&lt; faktorial(5) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-3 text-gray-800">
+                                        <i class="fas fa-terminal text-green-500 mr-2"></i>
+                                        Output Program
+                                    </h4>
+                                    <div class="output-terminal rounded-lg overflow-hidden">
+                                        <div class="output-content p-4">
+                                            <pre class="text-green-400 font-mono text-sm"><code>Faktorial 5 = 120</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 rounded-lg">
+                                        <div class="text-2xl mb-2">📚</div>
+                                        <p class="font-semibold">Keuntungan Rekursif</p>
+                                        <p class="text-sm text-gray-600">Memecah masalah kompleks</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <ul class="text-sm text-gray-600 space-y-1">
+                                            <li>• Menyelesaikan masalah yang kompleks</li>
+                                            <li>• Menghindari loop yang tidak jelas</li>
+                                            <li>• Kode lebih ringkas dan efisien</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg">
+                                        <div class="text-2xl mb-2">🔄</div>
+                                        <p class="font-semibold">Contohoh Umumum</p>
+                                        <p class="text-sm text-gray-600">Faktorial, Fibonacci, Tree Traversal</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 p-4 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-lg p-4">
+                                <h4 class="font-semibold text-lg mb-3">
+                                    <i class="fas fa-lightbulb text-blue-500 mr-2"></i>
+                                    <strong>Memahami Rekursif:</strong>
+                                </h4>
+                                <ul class="text-sm text-gray-700 space-y-2">
+                                    <li><strong>Base Case:</strong> Kondisi berhenti rekursif (n == 0)</li>
+                                    <li><strong>Recursive Case:</strong> n * faktorial(n - 1)</li>
+                                    <li><strong>Stack Overflow:</strong> Terjadi jika rekursif terlalu dalam</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </section>
+
+            <!-- Mencoba Section -->
+            <section v-if="activeMenu === 'mencoba'" class="fade-enter-active">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-gamepad text-purple-600 mr-2"></i>
+                        Game Menyusun Kode
+                    </h2>
+                    <p class="text-gray-600">Klik kata-kata untuk membuat fungsi yang benar!</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="bg-white rounded-lg shadow p-4 mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">Progress</span>
+                        <span class="text-sm font-medium text-purple-600">{{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="progress-bar bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" 
+                             :style="{ width: ((currentQuestionIndex + 1) / questions.length * 100) + '%' }"></div>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                            Pertanyaan {{ currentQuestionIndex + 1 }}
+                        </h3>
+                        <p class="text-gray-600">{{ questions[currentQuestionIndex].instruction }}</p>
+                    </div>
+
+                    <!-- Drop Zone -->
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-dashed border-purple-300 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-gray-600 mb-3 font-medium">
+                            <i class="fas fa-hand-pointer mr-2"></i>
+                            Klik kata di bawah untuk menyusun kode:
+                        </p>
+                        <div class="drop-zone bg-white border-2 border-purple-200 rounded-lg p-4 min-h-[80px] flex flex-wrap gap-2 items-center">
+                            <span v-if="droppedWords.length === 0" class="text-gray-400 italic">Klik kata-kata di bawah untuk memulai...</span>
+                            <div v-for="(word, index) in droppedWords" :key="'dropped-' + index"
+                                 @click="moveWordBack(index)"
+                                 class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-2 rounded-lg cursor-pointer hover:from-purple-700 hover:to-pink-700 transition-all word-move-animation">
+                                {{ word }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Words -->
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-600 mb-3 font-medium">
+                            <i class="fas fa-mouse-pointer mr-2"></i>
+                            Kata-kata yang tersedia (klik untuk menambahkan):
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <div v-for="(word, index) in availableWords" :key="'available-' + index"
+                                 @click="moveWordToDropZone(word)"
+                                 class="word-card bg-white border-2 border-purple-300 text-purple-700 px-4 py-2 rounded-lg shadow hover:bg-purple-50 hover:border-purple-500 hover:shadow-lg">
+                                {{ word }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3">
+                        <button @click="checkAnswer" 
+                                :disabled="droppedWords.length === 0"
+                                :class="['flex-1 py-3 rounded-lg font-semibold transition-all',
+                                        droppedWords.length === 0 ? 
+                                        'bg-gray-300 text-gray-500 cursor-not-allowed' : 
+                                        'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg']">
+                            <i class="fas fa-check mr-2"></i>Periksa Jawaban
+                        </button>
+                        <button @click="resetQuestion" 
+                                class="px-6 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </button>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div v-if="feedback" :class="['mt-4 p-4 rounded-lg', feedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700']">
+                        <i :class="['fas mr-2', feedback.type === 'success' ? 'fa-check-circle' : 'fa-times-circle']"></i>
+                        {{ feedback.message }}
+                    </div>
+                </div>
+
+                <!-- Score Display -->
+                <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg p-4 text-center">
+                    <p class="text-lg font-semibold text-gray-800">Skor: {{ score }} / {{ questions.length * 10 }}</p>
+                </div>
+            </section>
+
+            <!-- Kuis Section -->
+            <section v-if="activeMenu === 'kuis'" class="fade-enter-active">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-clipboard-check text-purple-600 mr-2"></i>
+                        Kuis Fungsi C++
+                    </h2>
+                    <p class="text-gray-600">Uji pemahamanmu tentang fungsi C++!</p>
+                </div>
+
+                <!-- Quiz Progress -->
+                <div class="bg-white rounded-lg shadow p-4 mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">Progress Kuis</span>
+                        <span class="text-sm font-medium text-purple-600">{{ currentQuizIndex + 1 }} / {{ quizQuestions.length }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="progress-bar bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full" 
+                             :style="{ width: ((currentQuizIndex + 1) / quizQuestions.length * 100) + '%' }"></div>
+                    </div>
+                </div>
+
+                <!-- Quiz Question -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                            {{ quizQuestions[currentQuizIndex].question }}
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <div v-for="(option, index) in quizQuestions[currentQuizIndex].options" :key="index"
+                                 @click="selectAnswer(index)"
+                                 :class="['p-4 rounded-lg border-2 cursor-pointer transition-all',
+                                         selectedAnswer === index ? 
+                                         (showResult ? 
+                                             (index === quizQuestions[currentQuizIndex].correct ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50') 
+                                             : 'border-purple-500 bg-purple-50') 
+                                         : 'border-gray-200 hover:border-gray-300']">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full border-2 border-gray-300 mr-3 flex items-center justify-center"
+                                         :class="selectedAnswer === index ? 'bg-purple-600 border-purple-600' : ''">
+                                        <span v-if="selectedAnswer === index" class="text-white text-sm font-bold">{{ String.fromCharCode(65 + index) }}</span>
+                                        <span v-else class="text-gray-600 text-sm font-bold">{{ String.fromCharCode(65 + index) }}</span>
+                                    </div>
+                                    <span class="flex-1">{{ option }}</span>
+                                    <i v-if="showResult && index === quizQuestions[currentQuizIndex].correct" 
+                                       class="fas fa-check-circle text-green-500 text-xl"></i>
+                                    <i v-if="showResult && selectedAnswer === index && index !== quizQuestions[currentQuizIndex].correct" 
+                                       class="fas fa-times-circle text-red-500 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="!showResult" class="flex gap-3">
+                        <button @click="submitQuizAnswer" 
+                                :disabled="selectedAnswer === null"
+                                :class="['flex-1 py-3 rounded-lg font-semibold transition-all',
+                                        selectedAnswer === null ? 
+                                        'bg-gray-300 text-gray-500 cursor-not-allowed' : 
+                                        'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg']">
+                            <i class="fas fa-paper-plane mr-2"></i>Jawab
+                        </button>
+                    </div>
+
+                    <div v-if="showResult" class="flex gap-3">
+                        <button @click="nextQuizQuestion" 
+                                class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+                            <i class="fas fa-arrow-right mr-2"></i>
+                            {{ currentQuizIndex < quizQuestions.length - 1 ? 'Lanjut' : 'Lihat Hasil' }}
+                        </button>
+                    </div>
+
+                    <!-- Explanation -->
+                    <div v-if="showResult" class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-blue-800">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            <strong>Penjelasan:</strong> {{ quizQuestions[currentQuizIndex].explanation }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Quiz Score -->
+                <div class="bg-gradient-to-r from-blue-100 to-cyan-100 rounded-lg p-4 text-center">
+                    <p class="text-lg font-semibold text-gray-800">Skor Kuis: {{ quizScore }} / {{ quizQuestions.length * 5 }}</p>
+                </div>
+            </section>
+
+            <!-- Latihan Section -->
+            <section v-if="activeMenu === 'latihan'" class="fade-enter-active">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-laptop-code text-purple-600 mr-2"></i>
+                        Latihan Praktik
+                    </h2>
+                    <p class="text-gray-600">Kerjakan soal praktik untuk meningkatkan skill codingmu!</p>
+                </div>
+
+                <!-- Practice Problems -->
+                <div class="space-y-6">
+                    <!-- Problem 1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4">
+                            <h3 class="text-xl font-semibold">
+                                <i class="fas fa-tasks mr-2"></i>
+                                Soal 1: Kalkulator Sederhana
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-lg mb-2">Deskripsi:</h4>
+                                <p class="text-gray-700 mb-4">
+                                    Buat program dengan fungsi-fungsi berikut:
+                                </p>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 mb-4">
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">tambah(int a, int b)</code> untuk penjumlahan</li>
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">kurang(int a, int b)</code> untuk pengurangan</li>
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">kali(int a, int b)</code> untuk perkalian</li>
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">bagi(int a, int b)</code> untuk pembagian</li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-lg mb-2">Contoh Input:</h4>
+                                <div class="bg-gray-900 text-white p-3 rounded font-mono text-sm">
+                                    <p>Masukkan angka pertama: 10</p>
+                                    <p>Masukkan angka kedua: 5</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-lg mb-2">Contoh Output:</h4>
+                                <div class="output-terminal rounded-lg overflow-hidden">
+                                    <div class="output-content p-4">
+                                        <pre class="text-green-400 font-mono text-sm"><code>10 + 5 = 15
+10 - 5 = 5
+10 * 5 = 50
+10 / 5 = 2</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="code-editor p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-gray-400 text-sm">main.cpp</span>
+                                    <div class="flex gap-2">
+                                        <button class="text-gray-400 hover:text-white">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-white">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea class="w-full h-64 bg-transparent text-green-400 font-mono text-sm outline-none resize-none" 
+                                          placeholder="// Tulis kode C++ di sini&#10;#include &lt;iostream&gt;&#10;using namespace std;&#10;&#10;// Tulis fungsi-fungsi kamu di sini&#10;&#10;int main() {&#10;    // Tulis program utama kamu di sini&#10;    return 0;&#10;}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-4">
+                            <h3 class="text-xl font-semibold">
+                                <i class="fas fa-tasks mr-2"></i>
+                                Soal 2: Konversi Suhu
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-lg mb-2">Deskripsi:</h4>
+                                <p class="text-gray-700 mb-4">
+                                    Buat program untuk konversi suhu dengan fungsi-fungsi berikut:
+                                </p>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 mb-4">
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">celsiusToFahrenheit(double c)</code></li>
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">fahrenheitToCelsius(double f)</code></li>
+                                    <li>Fungsi <code class="bg-gray-100 px-2 py-1 rounded">celsiusToKelvin(double c)</code></li>
+                                </ul>
+                                <p class="text-gray-700">
+                                    Rumus konversi:<br>
+                                    • Fahrenheit = (Celsius × 9/5) + 32<br>
+                                    • Celsius = (Fahrenheit - 32) × 5/9<br>
+                                    • Kelvin = Celsius + 273.15
+                                </p>
+                            </div>
+
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-lg mb-2">Contoh Input:</h4>
+                                <div class="bg-gray-900 text-white p-3 rounded font-mono text-sm">
+                                    <p>Masukkan suhu dalam Celsius: 25</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h4 class="font-semibold text-lg mb-2">Contoh Output:</h4>
+                                <div class="output-terminal rounded-lg overflow-hidden">
+                                    <div class="output-content p-4">
+                                        <pre class="text-green-400 font-mono text-sm"><code>25 Celsius = 77 Fahrenheit
+25 Celsius = 298.15 Kelvin</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="code-editor p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-gray-400 text-sm">temperature.cpp</span>
+                                    <div class="flex gap-2">
+                                        <button class="text-gray-400 hover:text-white">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-white">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea class="w-full h-64 bg-transparent text-green-400 font-mono text-sm outline-none resize-none" 
+                                          placeholder="// Tulis kode C++ di sini&#10;#include &lt;iostream&gt;&#10;#include &lt;iomanip&gt;&#10;using namespace std;&#10;&#10;// Tulis fungsi-fungsi konversi suhu di sini&#10;&#10;int main() {&#10;    // Tulis program utama kamu di sini&#10;    return 0;&#10;}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Section -->
+                <div class="mt-6 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg p-6">
+                    <h4 class="font-semibold text-lg mb-3">
+                        <i class="fas fa-lightbulb text-yellow-600 mr-2"></i>
+                        Tips Menyelesaikan Latihan:
+                    </h4>
+                    <ul class="space-y-2 text-gray-700">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Pahami terlebih dahulu rumus yang akan digunakan</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Buat fungsi satu per satu dan test masing-masing</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Perhatikan tipe data yang digunakan (int vs double)</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Gunakan komentar untuk memudahkan debugging</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+            <div class="container mx-auto">
+                <div class="flex justify-around">
+                    <button v-for="menu in menus" :key="menu.id"
+                            @click="activeMenu = menu.id"
+                            :class="['flex flex-col items-center py-3 px-4 transition-all',
+                                    activeMenu === menu.id ? 'text-purple-600' : 'text-gray-500 hover:text-gray-700']">
+                        <i :class="[menu.icon, 'text-2xl mb-1']"></i>
+                        <span class="text-xs font-medium">{{ menu.name }}</span>
+                        <div v-if="activeMenu === menu.id" class="w-8 h-1 bg-purple-600 rounded-full mt-1"></div>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeMenu: 'materi',
+                    userLevel: 'Pemula',
+                    userXP: 150,
+                    
+                    // Materi
+                    activeMateriTab: 0,
+                    materiTabs: [
+                        { title: 'Kenapa Fungsi?', icon: 'fas fa-question-circle' },
+                        { title: 'Membuat Fungsi', icon: 'fas fa-tools' },
+                        { title: 'Parameter', icon: 'fas fa-sliders-h' },
+                        { title: 'Nilai Kembalian', icon: 'fas fa-reply' },
+                        { title: 'Rekursif', icon: 'fas fa-sync-alt' }
+                    ],
+                    
+                    // Game Mencoba
+                    currentQuestionIndex: 0,
+                    score: 0,
+                    droppedWords: [],
+                    availableWords: [],
+                    feedback: null,
+                    questions: [
+                        {
+                            instruction: 'Susun kode untuk membuat fungsi sederhana yang mencetak "Hello World"',
+                            words: ['void', 'hello()', '{', 'cout', '<<', '"Hello World"', ';', '}', '#include', '<iostream>', 'using', 'namespace', 'std;'],
+                            correct: ['void', 'hello()', '{', 'cout', '<<', '"Hello World"', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi untuk menjumlahkan dua bilangan',
+                            words: ['int', 'tambah', '(', 'int', 'a', ',', 'int', 'b', ')', '{', 'return', 'a', '+', 'b', ';', '}'],
+                            correct: ['int', 'tambah', '(', 'int', 'a', ',', 'int', 'b', ')', '{', 'return', 'a', '+', 'b', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi dengan parameter string',
+                            words: ['void', 'sapa', '(', 'string', 'nama', ')', '{', 'cout', '<<', '"Halo "', '<<', 'nama', '<<', 'endl', ';', '}'],
+                            correct: ['void', 'sapa', '(', 'string', 'nama', ')', '{', 'cout', '<<', '"Halo "', '<<', 'nama', '<<', 'endl', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi untuk menghitung luas persegi',
+                            words: ['int', 'luasPersegi', '(', 'int', 'sisi', ')', '{', 'return', 'sisi', '*', 'sisi', ';', '}'],
+                            correct: ['int', 'luasPersegi', '(', 'int', 'sisi', ')', '{', 'return', 'sisi', '*', 'sisi', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi dengan return type double',
+                            words: ['double', 'bagi', '(', 'double', 'x', ',', 'double', 'y', ')', '{', 'return', 'x', '/', 'y', ';', '}'],
+                            correct: ['double', 'bagi', '(', 'double', 'x', ',', 'double', 'y', ')', '{', 'return', 'x', '/', 'y', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi tanpa parameter',
+                            words: ['void', 'tampilkanMenu', '(', ')', '{', 'cout', '<<', '"1. Tambah"', '<<', 'endl', ';', '}'],
+                            correct: ['void', 'tampilkanMenu', '(', ')', '{', 'cout', '<<', '"1. Tambah"', '<<', 'endl', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi untuk menghitung rata-rata',
+                            words: ['float', 'rataRata', '(', 'float', 'a', ',', 'float', 'b', ')', '{', 'return', '(', 'a', '+', 'b', ')', '/', '2', ';', '}'],
+                            correct: ['float', 'rataRata', '(', 'float', 'a', ',', 'float', 'b', ')', '{', 'return', '(', 'a', '+', 'b', ')', '/', '2', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi dengan multiple parameters',
+                            words: ['int', 'max', '(', 'int', 'x', ',', 'int', 'y', ',', 'int', 'z', ')', '{', 'if', '(', 'x', '>', 'y', ')', 'return', 'x', ';', 'else', 'return', 'y', ';', '}'],
+                            correct: ['int', 'max', '(', 'int', 'x', ',', 'int', 'y', ',', 'int', 'z', ')', '{', 'if', '(', 'x', '>', 'y', ')', 'return', 'x', ';', 'else', 'return', 'y', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi boolean',
+                            words: ['bool', 'isGenap', '(', 'int', 'n', ')', '{', 'return', 'n', '%', '2', '==', '0', ';', '}'],
+                            correct: ['bool', 'isGenap', '(', 'int', 'n', ')', '{', 'return', 'n', '%', '2', '==', '0', ';', '}']
+                        },
+                        {
+                            instruction: 'Susun fungsi rekursif sederhana',
+                            words: ['int', 'faktorial', '(', 'int', 'n', ')', '{', 'if', '(', 'n', '==', '0', ')', 'return', '1', ';', 'else', 'return', 'n', '*', 'faktorial', '(', 'n', '-', '1', ')', ';', '}'],
+                            correct: ['int', 'faktorial', '(', 'int', 'n', ')', '{', 'if', '(', 'n', '==', '0', ')', 'return', '1', ';', 'else', 'return', 'n', '*', 'faktorial', '(', 'n', '-', '1', ')', ';', '}']
+                        }
+                    ],
+                    
+                    // Kuis
+                    currentQuizIndex: 0,
+                    quizScore: 0,
+                    selectedAnswer: null,
+                    showResult: false,
+                    quizQuestions: [
+                        {
+                            question: 'Apa tujuan utama menggunakan fungsi dalam pemrograman?',
+                            options: [
+                                'Membuat program berjalan lebih cepat',
+                                'Mengorganisir kode dan menghindari pengulangan',
+                                'Mengurangi ukuran file program',
+                                'Meningkatkan keamanan program'
+                            ],
+                            correct: 1,
+                            explanation: 'Fungsi membantu mengorganisir kode menjadi bagian-bagian yang lebih kecil dan dapat digunakan kembali, menghindari penulisan kode yang sama berulang kali.'
+                        },
+                        {
+                            question: 'Manakah yang bukan merupakan bagian dari deklarasi fungsi?',
+                            options: [
+                                'Return type',
+                                'Nama fungsi',
+                                'Parameter',
+                                'Variabel global'
+                            ],
+                            correct: 3,
+                            explanation: 'Variabel global bukan bagian dari deklarasi fungsi. Deklarasi fungsi terdiri dari return type, nama fungsi, dan parameter.'
+                        },
+                        {
+                            question: 'Apa yang akan dicetak oleh kode berikut?\n\nvoid test() { cout << "Hello"; }\nint main() { test(); return 0; }',
+                            options: [
+                                'Hello',
+                                'Tidak ada output',
+                                'Error kompilasi',
+                                'test'
+                            ],
+                            correct: 0,
+                            explanation: 'Fungsi test() dipanggil dari main() dan akan mencetak "Hello" ke layar.'
+                        },
+                        {
+                            question: 'Fungsi dengan tipe return void berarti...',
+                            options: [
+                                'Fungsi tidak mengembalikan nilai',
+                                'Fungsi mengembalikan nilai kosong',
+                                'Fungsi tidak bisa dipanggil',
+                                'Fungsi harus memiliki parameter'
+                            ],
+                            correct: 0,
+                            explanation: 'Void berarti fungsi tidak mengembalikan nilai apapun setelah selesai dieksekusi.'
+                        },
+                        {
+                            question: 'Berapa banyak parameter yang dimiliki fungsi berikut?\n\nint calculate(int a, int b, int c)',
+                            options: [
+                                '0',
+                                '1',
+                                '2',
+                                '3'
+                            ],
+                            correct: 3,
+                            explanation: 'Fungsi calculate memiliki 3 parameter: a, b, dan c.'
+                        },
+                        {
+                            question: 'Apa output dari kode berikut?\n\nint add(int x, int y) { return x + y; }\nint main() { cout << add(5, 3); }',
+                            options: [
+                                '5',
+                                '3',
+                                '8',
+                                'Error'
+                            ],
+                            correct: 2,
+                            explanation: 'Fungsi add(5, 3) akan mengembalikan 5 + 3 = 8.'
+                        },
+                        {
+                            question: 'Kata kunci yang digunakan untuk mengembalikan nilai dari fungsi adalah...',
+                            options: [
+                                'return',
+                                'output',
+                                'give',
+                                'send'
+                            ],
+                            correct: 0,
+                            explanation: 'Kata kunci "return" digunakan untuk mengembalikan nilai dari fungsi.'
+                        },
+                        {
+                            question: 'Manakah yang merupakan deklarasi fungsi yang benar?',
+                            options: [
+                                'void myFunction() {}',
+                                'myFunction void() {}',
+                                'function void myFunction() {}',
+                                'void myFunction[] {}'
+                            ],
+                            correct: 0,
+                            explanation: 'Format yang benar adalah: returnType functionName() {}'
+                        },
+                        {
+                            question: 'Apa yang terjadi jika kita memanggil fungsi dengan parameter yang tidak sesuai?',
+                            options: [
+                                'Program akan crash',
+                                'Error kompilasi',
+                                'Fungsi akan menggunakan nilai default',
+                                'Program berjalan normal'
+                            ],
+                            correct: 1,
+                            explanation: 'Kompiler akan menghasilkan error karena tipe atau jumlah parameter tidak cocok.'
+                        },
+                        {
+                            question: 'Fungsi rekursif adalah fungsi yang...',
+                            options: [
+                                'Memanggil fungsi lain',
+                                'Dipanggil berulang kali dalam loop',
+                                'Memanggil dirinya sendiri',
+                                'Tidak memiliki return value'
+                            ],
+                            correct: 2,
+                            explanation: 'Fungsi rekursif adalah fungsi yang memanggil dirinya sendiri untuk menyelesaikan masalah.'
+                        },
+                        {
+                            question: 'Scope variabel yang dideklarasikan di dalam fungsi adalah...',
+                            options: [
+                                'Global',
+                                'Local',
+                                'Static',
+                                'External'
+                            ],
+                            correct: 1,
+                            explanation: 'Variabel yang dideklarasikan di dalam fungsi memiliki scope local dan hanya bisa diakses dalam fungsi tersebut.'
+                        },
+                        {
+                            question: 'Manakah yang bukan merupakan tipe data valid untuk return value?',
+                            options: [
+                                'int',
+                                'string',
+                                'array',
+                                'double'
+                            ],
+                            correct: 2,
+                            explanation: 'Dalam C++, array tidak bisa dikembalikan langsung dari fungsi. Gunakan pointer atau vector sebagai alternatif.'
+                        },
+                        {
+                            question: 'Apa kegunaan parameter dalam fungsi?',
+                            options: [
+                                'Menentukan nama fungsi',
+                                'Menerima input dari luar fungsi',
+                                'Mengembalikan nilai',
+                                'Menghentikan fungsi'
+                            ],
+                            correct: 1,
+                            explanation: 'Parameter digunakan untuk menerima nilai/input dari luar fungsi yang akan diproses di dalam fungsi.'
+                        },
+                        {
+                            question: 'Berapa kali fungsi akan dipanggil dalam kode berikut?\n\nfor(int i=0; i<3; i++) { test(); }',
+                            options: [
+                                '0',
+                                '1',
+                                '2',
+                                '3'
+                            ],
+                            correct: 3,
+                            explanation: 'Loop akan berjalan 3 kali (i=0,1,2) dan memanggil fungsi test() setiap iterasi.'
+                        },
+                        {
+                            question: 'Apa output dari kode berikut?\n\nvoid print(int n) { if(n>0) { cout << n; print(n-1); } }\nint main() { print(3); }',
+                            options: [
+                                '321',
+                                '123',
+                                '3',
+                                'Error'
+                            ],
+                            correct: 0,
+                            explanation: 'Fungsi rekursif akan mencetak 3, lalu 2, lalu 1.'
+                        },
+                        {
+                            question: 'Fungsi main() dalam C++ selalu memiliki return type...',
+                            options: [
+                                'void',
+                                'int',
+                                'string',
+                                'bool'
+                            ],
+                            correct: 1,
+                            explanation: 'Fungsi main() dalam C++ harus memiliki return type int dan mengembalikan 0 jika berhasil.'
+                        },
+                        {
+                            question: 'Manakah yang benar tentang function overloading?',
+                            options: [
+                                'Dua fungsi dengan nama sama tidak boleh ada',
+                                'Dua fungsi dengan nama sama boleh ada jika parameternya berbeda',
+                                'Function overloading hanya bisa untuk tipe data yang sama',
+                                'Function overloading tidak didukung di C++'
+                            ],
+                            correct: 1,
+                            explanation: 'Function overloading memungkinkan beberapa fungsi dengan nama sama asalkan memiliki parameter yang berbeda.'
+                        },
+                        {
+                            question: 'Apa yang dimaksud dengan function prototype?',
+                            options: [
+                                'Implementasi lengkap fungsi',
+                                'Deklarasi fungsi tanpa implementasi',
+                                'Pemanggilan fungsi',
+                                'Variabel dalam fungsi'
+                            ],
+                            correct: 1,
+                            explanation: 'Function prototype adalah deklarasi fungsi yang memberitahu compiler tentang keberadaan fungsi sebelum didefinisikan.'
+                        },
+                        {
+                            question: 'Fungsi dengan parameter default adalah...',
+                            options: [
+                                'Fungsi yang tidak bisa dipanggil',
+                                'Fungsi yang bisa dipanggil tanpa memberikan semua parameter',
+                                'Fungsi yang selalu mengembalikan 0',
+                                'Fungsi yang tidak memiliki nama'
+                            ],
+                            correct: 1,
+                            explanation: 'Parameter default memungkinkan fungsi dipanggil tanpa memberikan nilai untuk parameter tersebut.'
+                        },
+                        {
+                            question: 'Apa keuntungan menggunakan fungsi inline?',
+                            options: [
+                                'Mengurangi ukuran kode',
+                                'Meningkatkan kecepatan eksekusi',
+                                'Meningkatkan keamanan',
+                                'Memudahkan debugging'
+                            ],
+                            correct: 1,
+                            explanation: 'Fungsi inline menghindari overhead pemanggilan fungsi dengan menyalin kode langsung ke tempat pemanggilan.'
+                        }
+                    ],
+                    
+                    menus: [
+                        { id: 'materi', name: 'Materi', icon: 'fas fa-book' },
+                        { id: 'mencoba', name: 'Mencoba', icon: 'fas fa-gamepad' },
+                        { id: 'kuis', name: 'Kuis', icon: 'fas fa-clipboard-check' },
+                        { id: 'latihan', name: 'Latihan', icon: 'fas fa-laptop-code' }
+                    ]
+                }
+            },
+            
+            mounted() {
+                this.initGame();
+                // Initialize Prism.js highlighting after Vue mounts
+                this.$nextTick(() => {
+                    Prism.highlightAll();
+                });
+            },
+            
+            updated() {
+                // Re-highlight code after Vue updates
+                this.$nextTick(() => {
+                    Prism.highlightAll();
+                });
+            },
+            
+            methods: {
+                // Game Methods
+                initGame() {
+                    this.resetQuestion();
+                },
+                
+                resetQuestion() {
+                    const currentQ = this.questions[this.currentQuestionIndex];
+                    this.availableWords = [...currentQ.words];
+                    this.droppedWords = [];
+                    this.feedback = null;
+                },
+                
+                // New click-based methods
+                moveWordToDropZone(word) {
+                    const index = this.availableWords.indexOf(word);
+                    if (index > -1) {
+                        this.availableWords.splice(index, 1);
+                        this.droppedWords.push(word);
+                    }
+                },
+                
+                moveWordBack(index) {
+                    const word = this.droppedWords[index];
+                    this.droppedWords.splice(index, 1);
+                    this.availableWords.push(word);
+                },
+                
+                checkAnswer() {
+                    const currentQ = this.questions[this.currentQuestionIndex];
+                    const isCorrect = JSON.stringify(this.droppedWords) === JSON.stringify(currentQ.correct);
+                    
+                    if (isCorrect) {
+                        this.score += 10;
+                        this.feedback = {
+                            type: 'success',
+                            message: 'Benar! Kamu berhasil menyusun kode dengan benar! 🎉'
+                        };
+                        
+                        setTimeout(() => {
+                            if (this.currentQuestionIndex < this.questions.length - 1) {
+                                this.currentQuestionIndex++;
+                                this.resetQuestion();
+                            }
+                        }, 2000);
+                    } else {
+                        this.feedback = {
+                            type: 'error',
+                            message: 'Coba lagi! Perhatikan urutan dan kata-kata yang digunakan.'
+                        };
+                    }
+                },
+                
+                // Quiz Methods
+                selectAnswer(index) {
+                    if (!this.showResult) {
+                        this.selectedAnswer = index;
+                    }
+                },
+                
+                submitQuizAnswer() {
+                    this.showResult = true;
+                    if (this.selectedAnswer === this.quizQuestions[this.currentQuizIndex].correct) {
+                        this.quizScore += 5;
+                    }
+                },
+                
+                nextQuizQuestion() {
+                    if (this.currentQuizIndex < this.quizQuestions.length - 1) {
+                        this.currentQuizIndex++;
+                        this.selectedAnswer = null;
+                        this.showResult = false;
+                    } else {
+                        // Show final results
+                        alert(`Kuis selesai! Skor akhir: ${this.quizScore} / ${this.quizQuestions.length * 5}`);
+                    }
+                },
+                
+                // Copy code method
+                copyCode(codeId) {
+                    const codeElement = document.getElementById(codeId);
+                    const textArea = document.createElement('textarea');
+                    textArea.value = codeElement.textContent;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    // Show toast notification
+                    this.showToast('Kode berhasil disalin!');
+                },
+                
+                // Toast notification
+                showToast(message) {
+                    // Create toast element
+                    const toast = document.createElement('div');
+                    toast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity duration-300';
+                    toast.textContent = message;
+                    document.body.appendChild(toast);
+                    
+                    // Fade in
+                    setTimeout(() => {
+                        toast.style.opacity = '1';
+                    }, 10);
+                    
+                    // Fade out and remove
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        setTimeout(() => {
+                            document.body.removeChild(toast);
+                        }, 300);
+                    }, 2000);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
