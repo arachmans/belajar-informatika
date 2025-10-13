@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Bot - Belajar C++</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .code-editor {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Animated Background */
+        body {
+            background: linear-gradient(-45deg, #1e3a8a, #059669, #0d9488, #6366f1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        .glass-dark {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Grid Styles */
+        .grid-container {
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .grid-cell {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: visible;
+            transform-style: preserve-3d;
+        }
+        
+        .grid-cell:hover {
+            transform: translateY(-5px) scale(1.05);
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        /* Robot Animation */
+        .robot {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            z-index: 20;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+        
+        .robot.moving {
+            animation: robotMove 0.4s ease-in-out;
+        }
+        
+        .robot.rotating {
+            animation: robotRotate 0.3s ease-in-out;
+        }
+        
+        .robot.harvesting {
+            animation: robotHarvest 0.5s ease-in-out;
+        }
+        
+        .robot.planting {
+            animation: robotPlant 0.5s ease-in-out;
+        }
+        
+        @keyframes robotMove {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) translateY(-10px); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes robotRotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.3); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        @keyframes robotHarvest {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3) rotate(-10deg); }
+            75% { transform: scale(1.3) rotate(10deg); }
+        }
+        
+        @keyframes robotPlant {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        /* Cell Content Animation */
+        .cell-content {
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .cell-content.growing {
+            animation: grow 1s ease-in-out;
+        }
+        
+        .cell-content.harvested {
+            animation: harvest 0.5s ease-out forwards;
+        }
+        
+        .cell-content.planted {
+            animation: plantSeed 0.5s ease-out;
+        }
+        
+        @keyframes grow {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes harvest {
+            0% { transform: scale(1) translateY(0); opacity: 1; }
+            50% { transform: scale(1.5) translateY(-20px) rotate(180deg); opacity: 0.8; }
+            100% { transform: scale(0) translateY(-40px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes plantSeed {
+            0% { transform: scale(0) translateY(-20px); opacity: 0; }
+            50% { transform: scale(1.3) translateY(-5px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 30;
+            font-size: 1.5rem;
+        }
+        
+        .particle.float-up {
+            animation: floatUp 1s ease-out forwards;
+        }
+        
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(0) scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(-80px) scale(1.8) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        /* Progress bar animation */
+        .progress-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glow effect */
+        .glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(34, 197, 94, 0.4),
+                           0 0 20px rgba(34, 197, 94, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(34, 197, 94, 0.8),
+                           0 0 40px rgba(34, 197, 94, 0.4),
+                           0 0 60px rgba(34, 197, 94, 0.2);
+            }
+        }
+        
+        /* Cell highlight */
+        .cell-highlight {
+            animation: highlight 0.5s ease-out;
+        }
+        
+        @keyframes highlight {
+            0%, 100% { background-color: transparent; }
+            50% { 
+                background-color: rgba(251, 191, 36, 0.5);
+                box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
+            }
+        }
+        
+        /* Shake animation for errors */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .error-shake {
+            animation: shake 0.3s;
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        
+        /* Pulse animation */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        /* Confetti effect */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Stats Card Animation */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide-in {
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Neon Button */
+        .neon-button {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .neon-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .neon-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .tooltip:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        /* Floating Animation */
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        /* Stat Number Animation */
+        .stat-number {
+            font-weight: 700;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Attempts indicator */
+        .attempts-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            animation: pulse 2s infinite;
+        }
+
+        .attempts-badge.used {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            animation: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen overflow-x-hidden">
+    <div id="app">
+        <!-- Modern Header with Gradient -->
+        <header class="glass-dark text-white p-4 shadow-2xl sticky top-0 z-40 border-b-2 border-indigo-500">
+            <div class="container mx-auto">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <!-- Logo & Title -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-3xl shadow-lg floating">
+                            🤖
+                        </div>
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold gradient-text bg-gradient-to-r from-cyan-400 to-blue-500" style="-webkit-text-fill-color: white;">
+                                Farm Bot Academy
+                            </h1>
+                            <p class="text-xs md:text-sm text-gray-300">
+                                <i class="fas fa-code mr-1"></i> Master C++ Programming Through Gaming
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Bar -->
+                    <div class="flex items-center gap-3">
+                        <!-- Level Badge -->
+                        <div class="glass px-4 py-2 rounded-xl text-center">
+                            <div class="text-xs text-gray-400">Level</div>
+                            <div class="text-2xl font-bold text-yellow-400">{{ currentLevel }}</div>
+                        </div>
+                        
+                        <!-- Score Badge -->
+                        <div class="glass px-4 py-2 rounded-xl text-center">
+                            <div class="text-xs text-gray-400">Score</div>
+                            <div class="text-2xl font-bold text-green-400">
+                                <i class="fas fa-star mr-1"></i>{{ score }}
+                            </div>
+                        </div>
+                        
+                        <!-- Attempts Badge -->
+                        <div class="attempts-badge px-4 py-2 rounded-xl text-center" :class="{ 'used': hasRunCode }">
+                            <div class="text-xs text-white">Attempt</div>
+                            <div class="text-2xl font-bold text-white">
+                                {{ hasRunCode ? 'Used' : '1/1' }}
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Badge -->
+                        <div class="glass px-4 py-2 rounded-xl text-center hidden md:block">
+                            <div class="text-xs text-gray-400">Progress</div>
+                            <div class="text-2xl font-bold text-purple-400">{{ currentLevel }}/{{ levels.length }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mx-auto p-4 lg:p-6">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                
+                <!-- Left Sidebar - Mission & Stats -->
+                <div class="xl:col-span-3 space-y-6">
+                    
+                    <!-- Mission Card -->
+                    <div class="glass rounded-2xl p-6 shadow-2xl slide-in border-l-4 border-indigo-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl">
+                                📋
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-800">Mission</h2>
+                                <p class="text-xs text-gray-500">Level {{ currentLevel }}</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                            {{ levels[currentLevel - 1].description }}
+                        </p>
+                        
+                        <!-- Warning Message -->
+                        <div v-if="!hasRunCode" class="bg-yellow-100 border-2 border-yellow-400 rounded-xl p-3 mb-4">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                                <span class="text-sm font-semibold text-yellow-800">
+                                    One attempt only! Plan your code carefully.
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Reward -->
+                        <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-xl p-3 border-2 border-yellow-300">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold text-gray-700">
+                                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>Reward
+                                </span>
+                                <span class="text-lg font-bold text-yellow-600">
+                                    +{{ levels[currentLevel - 1].reward }} XP
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Targets Card -->
+                    <div class="glass rounded-2xl p-6 shadow-2xl slide-in border-l-4 border-green-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl">
+                                🎯
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Targets</h2>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div v-for="(target, key) in levels[currentLevel - 1].targets" :key="key" 
+                                 class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-3 border-2"
+                                 :class="inventory[key] >= target ? 'border-green-500' : 'border-gray-300'">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-2xl">{{ getTargetIcon(key) }}</span>
+                                        <div>
+                                            <div class="font-semibold text-gray-800 capitalize">{{ key }}</div>
+                                            <div class="text-xs text-gray-500">{{ inventory[key] }} / {{ target }}</div>
+                                        </div>
+                                    </div>
+                                    <div v-if="inventory[key] >= target" class="text-green-500">
+                                        <i class="fas fa-check-circle text-2xl"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- Progress Bar -->
+                                <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full progress-bar rounded-full" 
+                                         :class="inventory[key] >= target ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-gradient-to-r from-orange-500 to-yellow-500'"
+                                         :style="{ width: Math.min(100, (inventory[key] / target) * 100) + '%' }">
+                                    </div>
+                                </div>
+                                <div class="text-right text-xs text-gray-500 mt-1">
+                                    {{ Math.min(100, Math.round((inventory[key] / target) * 100)) }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Inventory Card -->
+                    <div class="glass rounded-2xl p-6 shadow-2xl slide-in border-l-4 border-purple-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-2xl">
+                                🎒
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Inventory</h2>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div v-for="(value, key) in inventory" :key="key" 
+                                 class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 text-center border-2 border-purple-200 hover:border-purple-400 transition-all cursor-pointer transform hover:scale-105">
+                                <div class="text-3xl mb-2">{{ getTargetIcon(key) }}</div>
+                                <div class="text-xs text-gray-600 capitalize mb-1">{{ key }}</div>
+                                <div class="text-2xl font-bold text-purple-600">{{ value }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Center - Game Area -->
+                <div class="xl:col-span-6 space-y-6">
+                    
+                    <!-- Game Grid Card -->
+                    <div class="glass rounded-2xl p-6 shadow-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center text-2xl">
+                                    🌾
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold text-gray-800">Farm Grid</h2>
+                                    <p class="text-xs text-gray-500">{{ gridSize }}x{{ gridSize }} Interactive Field</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Speed Control -->
+                            <div class="flex items-center gap-2 bg-gray-100 rounded-xl px-4 py-2">
+                                <i class="fas fa-tachometer-alt text-indigo-600"></i>
+                                <input type="range" v-model="animationSpeed" min="0.5" max="3" step="0.5" 
+                                       class="w-24 h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer">
+                                <span class="font-bold text-gray-700 text-sm">{{ animationSpeed }}x</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Grid -->
+                        <div class="grid-container relative mb-6 bg-gradient-to-br from-amber-50 to-green-50 rounded-2xl p-4 border-4 border-amber-200">
+                            <div class="grid gap-2" :style="{ gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))` }">
+                                <div 
+                                    v-for="(cell, index) in grid" 
+                                    :key="index"
+                                    :ref="'cell-' + index"
+                                    class="grid-cell aspect-square border-3 rounded-xl flex items-center justify-center text-3xl cursor-pointer relative"
+                                    :class="[getCellClass(cell), { 'cell-highlight': highlightedCell === index, 'glow': cell.growth >= 100 }]"
+                                    @click="debugCell(index)"
+                                >
+                                    <!-- Cell Content with Animation -->
+                                    <span 
+                                        class="cell-content"
+                                        :class="cellAnimations[index]"
+                                        v-if="robotPos !== index"
+                                    >
+                                        {{ getCellIcon(cell) }}
+                                    </span>
+                                    
+                                    <!-- Growth indicator -->
+                                    <div v-if="cell.type === 'planted'" class="absolute bottom-1 left-1 right-1 bg-white bg-opacity-95 rounded-lg px-2 py-1 shadow-lg">
+                                        <div class="text-xs text-center font-bold text-gray-700 mb-1">
+                                            <i class="fas fa-seedling text-green-600 mr-1"></i>{{ cell.growth }}%
+                                        </div>
+                                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-green-400 to-green-600 progress-bar" :style="{ width: cell.growth + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Robot Overlay -->
+                            <div 
+                                class="robot"
+                                :class="robotAnimation"
+                                :style="getRobotPosition()"
+                            >
+                                <div class="text-5xl" style="filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));">
+                                    {{ getRobotIcon() }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Control Buttons -->
+                        <div class="grid grid-cols-3 gap-3">
+                            <button @click="runCode" :disabled="isRunning || hasRunCode" 
+                                    class="neon-button col-span-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 disabled:scale-100 shadow-lg relative overflow-hidden">
+                                <i :class="isRunning ? 'fas fa-spinner fa-spin' : hasRunCode ? 'fas fa-lock' : 'fas fa-play'" class="mr-2"></i>
+                                {{ isRunning ? 'Running...' : hasRunCode ? 'Attempt Used' : 'Run Code' }}
+                            </button>
+                            <button @click="stopCode" :disabled="!isRunning" 
+                                    class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 disabled:scale-100 shadow-lg">
+                                <i class="fas fa-stop mr-2"></i>Stop
+                            </button>
+                        </div>
+                        
+                        <button @click="resetLevel" 
+                                class="w-full mt-3 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-redo mr-2"></i>Reset Level
+                        </button>
+                    </div>
+                    
+                    <!-- Tutorial Card -->
+                    <div class="glass rounded-2xl p-6 shadow-2xl border-l-4 border-blue-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center text-2xl">
+                                📚
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Tutorial & Learning</h2>
+                        </div>
+                        <div class="prose prose-sm max-w-none text-gray-700">
+                            <div v-html="levels[currentLevel - 1].tutorial"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar - Code Editor -->
+                <div class="xl:col-span-3 space-y-6">
+                    
+                    <!-- Code Editor Card -->
+                    <div class="glass-dark rounded-2xl p-6 shadow-2xl border-2 border-indigo-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl">
+                                💻
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Code Editor</h2>
+                                <p class="text-xs text-gray-400">Write your C++ code</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="code-editor text-gray-500 text-xs space-y-1">
+                                <div class="flex"><span class="text-gray-600 w-8">1</span><span class="text-purple-400">#include</span> <span class="text-green-400">&lt;iostream&gt;</span></div>
+                                <div class="flex"><span class="text-gray-600 w-8">2</span><span class="text-purple-400">using namespace</span> std;</div>
+                                <div class="flex"><span class="text-gray-600 w-8">3</span></div>
+                                <div class="flex"><span class="text-gray-600 w-8">4</span><span class="text-blue-400">int</span> <span class="text-yellow-400">main</span>() {</div>
+                            </div>
+                        </div>
+                        
+                        <textarea 
+                            v-model="code" 
+                            class="code-editor w-full h-64 bg-gray-900 text-green-400 p-4 rounded-xl border-2 border-gray-700 focus:border-indigo-500 focus:outline-none resize-none shadow-inner"
+                            placeholder="// Your C++ code here...&#10;// Example:&#10;move();&#10;harvest();"
+                            :disabled="isRunning || hasRunCode"
+                        ></textarea>
+                        
+                        <div class="code-editor text-gray-500 text-xs mt-3 space-y-1">
+                            <div class="flex"><span class="text-gray-600 w-8"></span>    <span class="text-purple-400">return</span> <span class="text-orange-400">0</span>;</div>
+                            <div class="flex"><span class="text-gray-600 w-8"></span>}</div>
+                        </div>
+                    </div>
+
+                    <!-- Console Output Card -->
+                    <div class="glass-dark rounded-2xl p-6 shadow-2xl border-2 border-green-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center text-2xl">
+                                📟
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-xl font-bold text-white">Console</h2>
+                                <p class="text-xs text-gray-400">{{ logs.length }} messages</p>
+                            </div>
+                            <button @click="logs = []" class="text-gray-400 hover:text-white transition">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div ref="consoleOutput" class="bg-black rounded-xl p-4 h-48 overflow-y-auto code-editor text-sm space-y-1 shadow-inner">
+                            <div v-for="(log, index) in logs" :key="index" 
+                                 :class="log.type === 'error' ? 'text-red-400' : log.type === 'success' ? 'text-green-400' : log.type === 'warning' ? 'text-yellow-400' : 'text-gray-300'"
+                                 class="flex gap-2">
+                                <span class="text-gray-600 text-xs">[{{ log.time }}]</span> 
+                                <i :class="getLogIcon(log.type)" class="mt-1"></i>
+                                <span>{{ log.message }}</span>
+                            </div>
+                            <div v-if="logs.length === 0" class="text-gray-600 text-center py-8">
+                                <i class="fas fa-terminal text-4xl mb-2"></i>
+                                <div>Console output will appear here...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Commands Card -->
+                    <div class="glass rounded-2xl p-6 shadow-2xl border-l-4 border-cyan-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl">
+                                ⚡
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Commands</h2>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <div v-for="cmd in availableCommands" :key="cmd.name" 
+                                 class="bg-gradient-to-r from-cyan-50 to-blue-50 border-l-4 border-cyan-500 rounded-lg p-3 hover:shadow-md transition-all cursor-pointer transform hover:scale-102">
+                                <div class="font-bold code-editor text-cyan-700 text-sm flex items-center gap-2">
+                                    <i :class="cmd.icon" class="text-cyan-600"></i>
+                                    {{ cmd.syntax }}
+                                </div>
+                                <div class="text-xs text-gray-600 mt-1">{{ cmd.description }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Particles Container -->
+        <div ref="particlesContainer" class="fixed inset-0 pointer-events-none z-50"></div>
+
+        <!-- Victory Modal -->
+        <transition name="fade">
+            <div v-if="showVictory" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4" @click="showVictory = false">
+                <div class="glass rounded-3xl p-8 max-w-md w-full mx-4 transform shadow-2xl border-4 border-yellow-400" @click.stop>
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 floating">🎉</div>
+                        <h2 class="text-4xl font-bold mb-2 gradient-text bg-gradient-to-r from-yellow-400 to-orange-500" style="-webkit-text-fill-color: transparent;">
+                            Level Complete!
+                        </h2>
+                        <p class="text-gray-600 mb-6">Congratulations! You've completed level {{ currentLevel }}!</p>
+                        
+                        <!-- Stars -->
+                        <div class="flex justify-center gap-2 mb-6">
+                            <i class="fas fa-star text-yellow-400 text-4xl"></i>
+                            <i class="fas fa-star text-yellow-400 text-4xl"></i>
+                            <i class="fas fa-star text-yellow-400 text-4xl"></i>
+                        </div>
+                        
+                        <!-- Reward -->
+                        <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-6 mb-6 border-2 border-yellow-300">
+                            <div class="text-sm text-gray-600 mb-2">XP Earned</div>
+                            <div class="text-5xl font-bold text-yellow-600">
+                                +{{ levels[currentLevel - 1].reward }}
+                            </div>
+                        </div>
+                        
+                        <!-- Stats -->
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200">
+                                <div class="text-xs text-gray-600 mb-1">Total Score</div>
+                                <div class="text-2xl font-bold text-blue-600">{{ score }}</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200">
+                                <div class="text-xs text-gray-600 mb-1">Progress</div>
+                                <div class="text-2xl font-bold text-purple-600">{{ currentLevel }}/{{ levels.length }}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Buttons -->
+                        <button v-if="currentLevel < levels.length" @click="nextLevel" 
+                                class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 shadow-lg mb-3">
+                            <i class="fas fa-arrow-right mr-2"></i>Next Level
+                        </button>
+                        <button v-else @click="resetToLevel1" 
+                                class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 shadow-lg mb-3">
+                            <i class="fas fa-trophy mr-2"></i>Play Again
+                        </button>
+                        <button @click="showVictory = false" class="text-gray-500 hover:text-gray-700 text-sm">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <!-- Failure Modal -->
+        <transition name="fade">
+            <div v-if="showFailure" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4" @click="showFailure = false">
+                <div class="glass rounded-3xl p-8 max-w-md w-full mx-4 transform shadow-2xl border-4 border-red-500" @click.stop>
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">😔</div>
+                        <h2 class="text-4xl font-bold mb-2 text-red-600">
+                            Mission Failed!
+                        </h2>
+                        <p class="text-gray-600 mb-6">You didn't complete all targets. Try again!</p>
+                        
+                        <!-- Failed Targets -->
+                        <div class="bg-red-50 rounded-2xl p-4 mb-6 border-2 border-red-200">
+                            <div class="text-sm font-semibold text-red-700 mb-2">Missing Targets:</div>
+                            <div v-for="(target, key) in getFailedTargets()" :key="key" 
+                                 class="flex items-center justify-between text-sm text-gray-700 mb-1">
+                                <span>{{ getTargetIcon(key) }} {{ key }}</span>
+                                <span class="font-bold">{{ inventory[key] }} / {{ target }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Button -->
+                        <button @click="resetLevel" 
+                                class="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-redo mr-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    gridSize: 8,
+                    grid: [],
+                    initialGrid: null, // Store initial grid state
+                    robotPos: 0,
+                    initialRobotPos: 0, // Store initial robot position
+                    robotDirection: 'right',
+                    initialRobotDirection: 'right', // Store initial robot direction
+                    robotAnimation: '',
+                    cellAnimations: {},
+                    highlightedCell: null,
+                    inventory: {
+                        wheat: 0,
+                        carrot: 0,
+                        wood: 0,
+                        stone: 0
+                    },
+                    initialInventory: null, // Store initial inventory
+                    code: '',
+                    logs: [],
+                    isRunning: false,
+                    currentLevel: 1,
+                    score: 0,
+                    showVictory: false,
+                    showFailure: false,
+                    animationSpeed: 1,
+                    hasRunCode: false, // Track if code has been run
+                    levelSeeds: {}, // Store seeds for each level to ensure consistency
+                    
+                    levels: [
+                        {
+                            description: 'Learn basic commands! Move your robot and harvest 3 wheat.',
+                            targets: { wheat: 3 },
+                            reward: 100,
+                            tutorial: `
+                                <h3 class="font-bold mb-2 text-lg">🌾 Level 1: Basic Movement</h3>
+                                <p class="mb-2">Use <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">move()</code> to move forward.</p>
+                                <p class="mb-2">Use <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">harvest()</code> to collect resources.</p>
+                                <p class="mb-2"><strong>C++ Concept:</strong> Function Calls</p>
+                                <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
+<span class="text-gray-500">// Example:</span>
+move();
+move();
+harvest();
+                                </div>
+                            `,
+                            seed: 12345 // Fixed seed for level 1
+                        },
+                        {
+                            description: 'Master loops! Plant and harvest 5 wheat using a for loop.',
+                            targets: { wheat: 5 },
+                            reward: 200,
+                            tutorial: `
+                                <h3 class="font-bold mb-2 text-lg">🔄 Level 2: For Loops</h3>
+                                <p class="mb-2">Use loops to repeat commands efficiently!</p>
+                                <p class="mb-2"><strong>C++ Concept:</strong> For Loop</p>
+                                <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
+<span class="text-gray-500">// Example:</span>
+<span class="text-purple-400">for</span>(<span class="text-blue-400">int</span> i=<span class="text-orange-400">0</span>; i<<span class="text-orange-400">5</span>; i++) {
+    plant();
+    wait(<span class="text-orange-400">100</span>);
+    harvest();
+    move();
+}
+                                </div>
+                            `,
+                            seed: 23456 // Fixed seed for level 2
+                        },
+                        {
+                            description: 'Learn variables! Collect 3 wheat and 3 carrots.',
+                            targets: { wheat: 3, carrot: 3 },
+                            reward: 300,
+                            tutorial: `
+                                <h3 class="font-bold mb-2 text-lg">📦 Level 3: Variables</h3>
+                                <p class="mb-2">Store values in variables for better code!</p>
+                                <p class="mb-2"><strong>C++ Concept:</strong> Variables & Data Types</p>
+                                <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
+<span class="text-gray-500">// Example:</span>
+<span class="text-blue-400">int</span> count = <span class="text-orange-400">3</span>;
+<span class="text-purple-400">for</span>(<span class="text-blue-400">int</span> i=<span class="text-orange-400">0</span>; i<count; i++) {
+    plant();
+    wait(<span class="text-orange-400">100</span>);
+    harvest();
+}
+                                </div>
+                            `,
+                            seed: 34567 // Fixed seed for level 3
+                        },
+                        {
+                            description: 'Master conditions! Only harvest when plants are fully grown.',
+                            targets: { wheat: 5, carrot: 3 },
+                            reward: 400,
+                            tutorial: `
+                                <h3 class="font-bold mb-2 text-lg">❓ Level 4: Conditionals</h3>
+                                <p class="mb-2">Make decisions with if statements!</p>
+                                <p class="mb-2">Use <code class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">canHarvest()</code> to check readiness.</p>
+                                <p class="mb-2"><strong>C++ Concept:</strong> If/Else Statements</p>
+                                <div class="bg-gray-800 text-green-400 p-3 rounded-lg mt-2 code-editor text-xs">
+<span class="text-gray-500">// Example:</span>
+<span class="text-purple-400">if</span>(canHarvest()) {
+    harvest();
+} <span class="text-purple-400">else</span> {
+    wait(<span class="text-orange-400">50</span>);
+}
+                                </div>
+                            `,
+                            seed: 45678 // Fixed seed for level 4
+                        },
+                        {
+                            description: 'Final challenge! Collect all resources: 10 wheat, 5 carrot, 3 wood, 2 stone.',
+                            targets: { wheat: 10, carrot: 5, wood: 3, stone: 2 },
+                            reward: 1000,
+                            tutorial: `
+                                <h3 class="font-bold mb-2 text-lg">🏆 Level 5: Master Challenge</h3>
+                                <p class="mb-2">Combine everything you've learned!</p>
+                                <p class="mb-2"><strong>Required Skills:</strong> Loops, Variables, Conditions, Functions</p>
+                                <ul class="list-disc list-inside text-sm space-y-1">
+                                    <li>Use nested loops for efficiency</li>
+                                    <li>Rotate to change direction</li>
+                                    <li>Check resources before harvesting</li>
+                                    <li>Plan your path strategically</li>
+                                </ul>
+                            `,
+                            seed: 56789 // Fixed seed for level 5
+                        }
+                    ],
+
+                    availableCommands: [
+                        { name: 'move', syntax: 'move()', description: 'Move forward in current direction', icon: 'fas fa-arrow-up' },
+                        { name: 'rotate', syntax: 'rotate()', description: 'Rotate 90° clockwise', icon: 'fas fa-redo' },
+                        { name: 'plant', syntax: 'plant()', description: 'Plant a seed at current position', icon: 'fas fa-seedling' },
+                        { name: 'harvest', syntax: 'harvest()', description: 'Harvest grown crops', icon: 'fas fa-cut' },
+                        { name: 'wait', syntax: 'wait(time)', description: 'Wait for crops to grow (ms)', icon: 'fas fa-clock' },
+                        { name: 'canHarvest', syntax: 'canHarvest()', description: 'Check if harvest is ready (bool)', icon: 'fas fa-check-circle' },
+                        { name: 'getResource', syntax: 'getResource()', description: 'Collect wood/stone resources', icon: 'fas fa-gem' },
+                    ]
+                }
+            },
+
+            mounted() {
+                this.initLevel();
+            },
+
+            methods: {
+                // Seeded random number generator for consistent level generation
+                seededRandom(seed) {
+                    const x = Math.sin(seed) * 10000;
+                    return x - Math.floor(x);
+                },
+
+                initLevel() {
+                    const levelSeed = this.levels[this.currentLevel - 1].seed;
+                    this.grid = [];
+                    this.cellAnimations = {};
+                    const size = this.gridSize * this.gridSize;
+                    
+                    // Generate grid using seeded random for consistency
+                    for (let i = 0; i < size; i++) {
+                        let cell = { type: 'empty', growth: 0 };
+                        const rand = this.seededRandom(levelSeed + i);
+                        
+                        if (this.currentLevel >= 3 && rand < 0.1) {
+                            cell = { type: 'tree', growth: 100 };
+                        } else if (this.currentLevel >= 4 && rand < 0.15) {
+                            cell = { type: 'stone', growth: 100 };
+                        } else if (rand < 0.3) {
+                            cell = { type: 'wheat', growth: 100 };
+                        } else if (this.currentLevel >= 3 && rand < 0.4) {
+                            cell = { type: 'carrot', growth: 100 };
+                        }
+                        
+                        this.grid.push(cell);
+                        this.cellAnimations[i] = '';
+                    }
+                    
+                    // Store initial state
+                    this.initialGrid = JSON.parse(JSON.stringify(this.grid));
+                    this.initialRobotPos = 0;
+                    this.initialRobotDirection = 'right';
+                    this.initialInventory = { wheat: 0, carrot: 0, wood: 0, stone: 0 };
+                    
+                    // Reset current state
+                    this.robotPos = 0;
+                    this.robotDirection = 'right';
+                    this.inventory = { wheat: 0, carrot: 0, wood: 0, stone: 0 };
+                    this.hasRunCode = false;
+                    this.logs = [];
+                    this.addLog(`Level ${this.currentLevel} initialized. Good luck! 🚀`);
+                    this.addLog('⚠️ You have only ONE attempt to complete this level!');
+                },
+
+                getRobotPosition() {
+                    const row = Math.floor(this.robotPos / this.gridSize);
+                    const col = this.robotPos % this.gridSize;
+                    const cellSize = 100 / this.gridSize;
+                    
+                    return {
+                        position: 'absolute',
+                        left: `${col * cellSize}%`,
+                        top: `${row * cellSize}%`,
+                        width: `${cellSize}%`,
+                        height: `${cellSize}%`,
+                    };
+                },
+
+                getRobotIcon() {
+                    const icons = {
+                        'up': '🤖',
+                        'down': '🤖',
+                        'left': '🤖',
+                        'right': '🤖'
+                    };
+                    return icons[this.robotDirection] || '🤖';
+                },
+
+                getCellClass(cell) {
+                    const classes = {
+                        'empty': 'bg-gradient-to-br from-amber-100 to-yellow-50 border-amber-300',
+                        'wheat': 'bg-gradient-to-br from-yellow-200 to-yellow-100 border-yellow-400',
+                        'carrot': 'bg-gradient-to-br from-orange-200 to-orange-100 border-orange-400',
+                        'planted': 'bg-gradient-to-br from-green-100 to-emerald-50 border-green-400',
+                        'tree': 'bg-gradient-to-br from-green-300 to-green-200 border-green-500',
+                        'stone': 'bg-gradient-to-br from-gray-400 to-gray-300 border-gray-500'
+                    };
+                    return classes[cell.type] || 'bg-gray-100 border-gray-300';
+                },
+
+                getCellIcon(cell) {
+                    const icons = {
+                        'empty': '🟫',
+                        'wheat': '🌾',
+                        'carrot': '🥕',
+                        'planted': '🌱',
+                        'tree': '🌳',
+                        'stone': '🪨'
+                    };
+                    return icons[cell.type] || '';
+                },
+
+                getTargetIcon(key) {
+                    const icons = {
+                        'wheat': '🌾',
+                        'carrot': '🥕',
+                        'wood': '🪵',
+                        'stone': '🪨'
+                    };
+                    return icons[key] || '📦';
+                },
+
+                getLogIcon(type) {
+                    const icons = {
+                        'info': 'fas fa-info-circle',
+                        'success': 'fas fa-check-circle',
+                        'warning': 'fas fa-exclamation-triangle',
+                        'error': 'fas fa-times-circle'
+                    };
+                    return icons[type] || 'fas fa-circle';
+                },
+
+                getFailedTargets() {
+                    const targets = this.levels[this.currentLevel - 1].targets;
+                    const failed = {};
+                    for (let key in targets) {
+                        if (this.inventory[key] < targets[key]) {
+                            failed[key] = targets[key];
+                        }
+                    }
+                    return failed;
+                },
+
+                debugCell(index) {
+                    const cell = this.grid[index];
+                    this.addLog(`Cell ${index}: ${cell.type} (${cell.growth}%)`);
+                    this.highlightCell(index);
+                },
+
+                highlightCell(index) {
+                    this.highlightedCell = index;
+                    setTimeout(() => {
+                        this.highlightedCell = null;
+                    }, 500);
+                },
+
+                addLog(message, type = 'info') {
+                    const time = new Date().toLocaleTimeString();
+                    this.logs.push({ message, type, time });
+                    
+                    this.$nextTick(() => {
+                        const console = this.$refs.consoleOutput;
+                        if (console) console.scrollTop = console.scrollHeight;
+                    });
+                },
+
+                createParticle(icon, x, y) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle float-up';
+                    particle.textContent = icon;
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    
+                    this.$refs.particlesContainer.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 1000);
+                },
+
+                createConfetti() {
+                    const colors = ['🎉', '⭐', '✨', '🌟', '💫', '🎊', '🎈'];
+                    for (let i = 0; i < 100; i++) {
+                        setTimeout(() => {
+                            const confetti = document.createElement('div');
+                            confetti.className = 'confetti';
+                            confetti.textContent = colors[Math.floor(Math.random() * colors.length)];
+                            confetti.style.left = Math.random() * window.innerWidth + 'px';
+                            confetti.style.top = '-20px';
+                            confetti.style.fontSize = (10 + Math.random() * 20) + 'px';
+                            confetti.style.animation = `confettiFall ${2 + Math.random() * 2}s linear forwards`;
+                            
+                            document.body.appendChild(confetti);
+                            
+                            setTimeout(() => confetti.remove(), 4000);
+                        }, i * 20);
+                    }
+                },
+
+                async runCode() {
+                    if (this.isRunning || this.hasRunCode) return;
+                    
+                    this.isRunning = true;
+                    this.hasRunCode = true; // Mark as used immediately
+                    this.logs = [];
+                    this.addLog('Starting program execution...');
+                    this.addLog('⚠️ This is your only attempt for this level!');
+                    
+                    try {
+                        await this.executeCode(this.code);
+                        this.addLog('Program finished successfully! ✅', 'success');
+                        
+                        // Check victory after a short delay
+                        setTimeout(() => {
+                            this.checkVictory();
+                        }, 500);
+                    } catch (error) {
+                        this.addLog(`Error: ${error.message} ❌`, 'error');
+                        setTimeout(() => {
+                            this.showFailure = true;
+                        }, 1000);
+                    }
+                    
+                    this.isRunning = false;
+                },
+
+                async executeCode(code) {
+                    const lines = code.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('//'));
+                    
+                    let i = 0;
+                    while (i < lines.length && this.isRunning) {
+                        const line = lines[i];
+                        
+                        if (line.startsWith('for')) {
+                            const result = this.parseForLoop(lines, i);
+                            await this.executeLoop(result.body, result.iterations);
+                            i = result.endIndex;
+                        }
+                        else if (line.startsWith('if')) {
+                            const result = this.parseIf(lines, i);
+                            const condition = await this.evaluateCondition(result.condition);
+                            if (condition && result.ifBody.length > 0) {
+                                await this.executeCode(result.ifBody.join('\n'));
+                            } else if (!condition && result.elseBody.length > 0) {
+                                await this.executeCode(result.elseBody.join('\n'));
+                            }
+                            i = result.endIndex;
+                        }
+                        else if (line.startsWith('int ')) {
+                            // Skip variable declarations
+                        }
+                        else {
+                            await this.executeCommand(line);
+                        }
+                        
+                        i++;
+                        await this.sleep(50 / this.animationSpeed);
+                    }
+                },
+
+                parseForLoop(lines, startIndex) {
+                    const forLine = lines[startIndex];
+                    const match = forLine.match(/for\s*\(\s*int\s+\w+\s*=\s*(\d+)\s*;\s*\w+\s*<\s*(\d+)\s*;\s*\w+\+\+\s*\)/);
+                    
+                    if (!match) {
+                        throw new Error(`Invalid for loop syntax at line ${startIndex + 1}`);
+                    }
+                    
+                    const start = parseInt(match[1]);
+                    const end = parseInt(match[2]);
+                    const iterations = end - start;
+                    
+                    let body = [];
+                    let endIndex = startIndex + 1;
+                    let braceCount = 0;
+                    let foundOpenBrace = false;
+                    
+                    for (let i = startIndex; i < lines.length; i++) {
+                        if (lines[i].includes('{')) {
+                            foundOpenBrace = true;
+                            braceCount++;
+                        }
+                        if (lines[i].includes('}')) {
+                            braceCount--;
+                            if (braceCount === 0 && foundOpenBrace) {
+                                endIndex = i;
+                                break;
+                            }
+                        }
+                        if (foundOpenBrace && i > startIndex && !lines[i].includes('{') && !lines[i].includes('}')) {
+                            body.push(lines[i]);
+                        }
+                    }
+                    
+                    return { iterations, body, endIndex };
+                },
+
+                parseIf(lines, startIndex) {
+                    const ifLine = lines[startIndex];
+                    const match = ifLine.match(/if\s*\(\s*(.+?)\s*\)/);
+                    
+                    if (!match) {
+                        throw new Error(`Invalid if syntax at line ${startIndex + 1}`);
+                    }
+                    
+                    const condition = match[1];
+                    let ifBody = [];
+                    let elseBody = [];
+                    let endIndex = startIndex + 1;
+                    let braceCount = 0;
+                    let foundOpenBrace = false;
+                    let inElse = false;
+                    
+                    for (let i = startIndex; i < lines.length; i++) {
+                        if (lines[i].includes('{')) {
+                            foundOpenBrace = true;
+                            braceCount++;
+                        }
+                        if (lines[i].includes('} else {')) {
+                            inElse = true;
+                            continue;
+                        }
+                        if (lines[i].includes('}')) {
+                            braceCount--;
+                            if (braceCount === 0 && foundOpenBrace) {
+                                endIndex = i;
+                                break;
+                            }
+                        }
+                        if (foundOpenBrace && i > startIndex && !lines[i].includes('{') && !lines[i].includes('}') && !lines[i].includes('else')) {
+                            if (inElse) {
+                                elseBody.push(lines[i]);
+                            } else {
+                                ifBody.push(lines[i]);
+                            }
+                        }
+                    }
+                    
+                    return { condition, ifBody, elseBody, endIndex };
+                },
+
+                async evaluateCondition(condition) {
+                    condition = condition.trim();
+                    
+                    if (condition === 'canHarvest()') {
+                        return this.canHarvest();
+                    }
+                    
+                    return true;
+                },
+
+                async executeLoop(body, iterations) {
+                    for (let i = 0; i < iterations && this.isRunning; i++) {
+                        await this.executeCode(body.join('\n'));
+                    }
+                },
+
+                async executeCommand(command) {
+                    command = command.replace(';', '').trim();
+                    
+                    if (!command) return;
+                    
+                    const match = command.match(/(\w+)\s*\(([^)]*)\)/);
+                    if (!match) return;
+                    
+                    const funcName = match[1];
+                    const params = match[2];
+                    
+                    switch(funcName) {
+                        case 'move':
+                            await this.robotMove();
+                            break;
+                        case 'rotate':
+                            await this.robotRotate();
+                            break;
+                        case 'plant':
+                            await this.robotPlant();
+                            break;
+                        case 'harvest':
+                            await this.robotHarvest();
+                            break;
+                        case 'wait':
+                            await this.robotWait(parseInt(params) || 100);
+                            break;
+                        case 'getResource':
+                            await this.robotGetResource();
+                            break;
+                        default:
+                            this.addLog(`Unknown command: ${funcName}`, 'warning');
+                    }
+                },
+
+                async robotMove() {
+                    const directions = {
+                        'right': 1,
+                        'left': -1,
+                        'down': this.gridSize,
+                        'up': -this.gridSize
+                    };
+                    
+                    const newPos = this.robotPos + directions[this.robotDirection];
+                    
+                    if (newPos < 0 || newPos >= this.gridSize * this.gridSize) {
+                        this.addLog('Cannot move: out of bounds! ⚠️', 'warning');
+                        return;
+                    }
+                    
+                    if (this.robotDirection === 'right' && this.robotPos % this.gridSize === this.gridSize - 1) {
+                        this.addLog('Cannot move: edge of map! ⚠️', 'warning');
+                        return;
+                    }
+                    if (this.robotDirection === 'left' && this.robotPos % this.gridSize === 0) {
+                        this.addLog('Cannot move: edge of map! ⚠️', 'warning');
+                        return;
+                    }
+                    
+                    this.robotAnimation = 'moving';
+                    this.highlightCell(newPos);
+                    
+                    await this.sleep(400 / this.animationSpeed);
+                    
+                    this.robotPos = newPos;
+                    this.addLog(`Moved ${this.robotDirection} to position ${newPos}`);
+                    
+                    await this.sleep(100 / this.animationSpeed);
+                    this.robotAnimation = '';
+                },
+
+                async robotRotate() {
+                    this.robotAnimation = 'rotating';
+                    
+                    const rotations = ['right', 'down', 'left', 'up'];
+                    const currentIndex = rotations.indexOf(this.robotDirection);
+                    this.robotDirection = rotations[(currentIndex + 1) % 4];
+                    
+                    this.addLog(`Rotated to face ${this.robotDirection}`);
+                    
+                    await this.sleep(300 / this.animationSpeed);
+                    this.robotAnimation = '';
+                },
+
+                async robotPlant() {
+                    const cell = this.grid[this.robotPos];
+                    
+                    if (cell.type !== 'empty') {
+                        this.addLog('Cannot plant: cell not empty! ⚠️', 'warning');
+                        return;
+                    }
+                    
+                    this.robotAnimation = 'planting';
+                    
+                    await this.sleep(250 / this.animationSpeed);
+                    
+                    const plantType = Math.random() < 0.6 ? 'wheat' : 'carrot';
+                    this.grid[this.robotPos] = { type: 'planted', growth: 0, plantType };
+                    this.cellAnimations[this.robotPos] = 'planted';
+                    
+                    this.addLog(`Planted ${plantType} seed 🌱`, 'success');
+                    
+                    await this.sleep(250 / this.animationSpeed);
+                    this.robotAnimation = '';
+                    this.cellAnimations[this.robotPos] = '';
+                },
+
+                async robotHarvest() {
+                    const cell = this.grid[this.robotPos];
+                    
+                    if (cell.type !== 'wheat' && cell.type !== 'carrot' && cell.type !== 'planted') {
+                        this.addLog('Cannot harvest: nothing to harvest! ⚠️', 'warning');
+                        return;
+                    }
+                    
+                    if (cell.type === 'planted' && cell.growth < 100) {
+                        this.addLog(`Cannot harvest: plant not ready (${cell.growth}%)! ⚠️`, 'warning');
+                        return;
+                    }
+                    
+                    this.robotAnimation = 'harvesting';
+                    this.cellAnimations[this.robotPos] = 'harvested';
+                    
+                    const harvestType = cell.type === 'planted' ? cell.plantType : cell.type;
+                    
+                    await this.sleep(500 / this.animationSpeed);
+                    
+                    this.inventory[harvestType]++;
+                    this.grid[this.robotPos] = { type: 'empty', growth: 0 };
+                    
+                    const icon = this.getTargetIcon(harvestType);
+                    const cellElement = this.$refs['cell-' + this.robotPos];
+                    if (cellElement && cellElement[0]) {
+                        const rect = cellElement[0].getBoundingClientRect();
+                        this.createParticle(icon, rect.left + rect.width / 2, rect.top + rect.height / 2);
+                    }
+                    
+                    this.addLog(`Harvested ${harvestType}! Total: ${this.inventory[harvestType]} ✅`, 'success');
+                    
+                    this.robotAnimation = '';
+                    this.cellAnimations[this.robotPos] = '';
+                },
+
+                async robotWait(time) {
+                    const cell = this.grid[this.robotPos];
+                    
+                    if (cell.type === 'planted') {
+                        const growthIncrease = Math.min(100, cell.growth + (time / 10));
+                        
+                        const steps = 10;
+                        const stepGrowth = (growthIncrease - cell.growth) / steps;
+                        
+                        for (let i = 0; i < steps; i++) {
+                            cell.growth = Math.min(100, Math.round(cell.growth + stepGrowth));
+                            this.cellAnimations[this.robotPos] = 'growing';
+                            await this.sleep((time / steps) / this.animationSpeed);
+                        }
+                        
+                        cell.growth = Math.round(growthIncrease);
+                        this.cellAnimations[this.robotPos] = '';
+                        
+                        this.addLog(`Waited ${time}ms. Plant growth: ${cell.growth}% 🌱`);
+                        
+                        if (cell.growth >= 100) {
+                            this.addLog('Plant fully grown! Ready to harvest! 🌾', 'success');
+                        }
+                    } else {
+                        this.addLog(`Waited ${time}ms ⏳`);
+                        await this.sleep(time / this.animationSpeed);
+                    }
+                },
+
+                async robotGetResource() {
+                    const cell = this.grid[this.robotPos];
+                    
+                    if (cell.type === 'tree') {
+                        this.robotAnimation = 'harvesting';
+                        this.cellAnimations[this.robotPos] = 'harvested';
+                        
+                        await this.sleep(500 / this.animationSpeed);
+                        
+                        this.inventory.wood++;
+                        this.grid[this.robotPos] = { type: 'empty', growth: 0 };
+                        
+                        const cellElement = this.$refs['cell-' + this.robotPos];
+                        if (cellElement && cellElement[0]) {
+                            const rect = cellElement[0].getBoundingClientRect();
+                            this.createParticle('🪵', rect.left + rect.width / 2, rect.top + rect.height / 2);
+                        }
+                        
+                        this.addLog(`Got wood! Total: ${this.inventory.wood} 🪵`, 'success');
+                        
+                        this.robotAnimation = '';
+                        this.cellAnimations[this.robotPos] = '';
+                    } else if (cell.type === 'stone') {
+                        this.robotAnimation = 'harvesting';
+                        this.cellAnimations[this.robotPos] = 'harvested';
+                        
+                        await this.sleep(500 / this.animationSpeed);
+                        
+                        this.inventory.stone++;
+                        this.grid[this.robotPos] = { type: 'empty', growth: 0 };
+                        
+                        const cellElement = this.$refs['cell-' + this.robotPos];
+                        if (cellElement && cellElement[0]) {
+                            const rect = cellElement[0].getBoundingClientRect();
+                            this.createParticle('🪨', rect.left + rect.width / 2, rect.top + rect.height / 2);
+                        }
+                        
+                        this.addLog(`Got stone! Total: ${this.inventory.stone} 🪨`, 'success');
+                        
+                        this.robotAnimation = '';
+                        this.cellAnimations[this.robotPos] = '';
+                    } else {
+                        this.addLog('No resource here! ⚠️', 'warning');
+                    }
+                },
+
+                canHarvest() {
+                    const cell = this.grid[this.robotPos];
+                    return (cell.type === 'wheat' || cell.type === 'carrot' || 
+                           (cell.type === 'planted' && cell.growth >= 100));
+                },
+
+                checkVictory() {
+                    const targets = this.levels[this.currentLevel - 1].targets;
+                    let completed = true;
+                    
+                    for (let key in targets) {
+                        if (this.inventory[key] < targets[key]) {
+                            completed = false;
+                            break;
+                        }
+                    }
+                    
+                    if (completed) {
+                        this.score += this.levels[this.currentLevel - 1].reward;
+                        this.showVictory = true;
+                        this.createConfetti();
+                        this.addLog('🎉 LEVEL COMPLETE! 🎉', 'success');
+                    } else {
+                        this.showFailure = true;
+                        this.addLog('❌ Mission Failed! Try again! ❌', 'error');
+                    }
+                },
+
+                nextLevel() {
+                    this.showVictory = false;
+                    if (this.currentLevel < this.levels.length) {
+                        this.currentLevel++;
+                        this.initLevel();
+                    }
+                },
+
+                resetLevel() {
+                    // Restore to initial state
+                    this.grid = JSON.parse(JSON.stringify(this.initialGrid));
+                    this.robotPos = this.initialRobotPos;
+                    this.robotDirection = this.initialRobotDirection;
+                    this.inventory = JSON.parse(JSON.stringify(this.initialInventory));
+                    this.hasRunCode = false;
+                    this.isRunning = false;
+                    this.showFailure = false;
+                    this.showVictory = false;
+                    this.logs = [];
+                    this.robotAnimation = '';
+                    this.cellAnimations = {};
+                    
+                    // Re-initialize cell animations
+                    for (let i = 0; i < this.grid.length; i++) {
+                        this.cellAnimations[i] = '';
+                    }
+                    
+                    this.addLog(`Level ${this.currentLevel} reset. Try again! 🔄`);
+                },
+
+                resetToLevel1() {
+                    this.showVictory = false;
+                    this.currentLevel = 1;
+                    this.score = 0;
+                    this.initLevel();
+                },
+
+                stopCode() {
+                    this.isRunning = false;
+                    this.robotAnimation = '';
+                    this.addLog('Program stopped by user! ⏹️', 'warning');
+                },
+
+                sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
