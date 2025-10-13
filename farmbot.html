@@ -1561,6 +1561,7 @@ harvest();
                     }
                 },
 
+                // Improved parsing for nested structures
                 parseForLoop(lines, startIndex) {
                     const forLine = lines[startIndex];
                     const match = forLine.match(/for\s*\(\s*int\s+\w+\s*=\s*(\d+)\s*;\s*\w+\s*<\s*(\d+)\s*;\s*\w+\+\+\s*\)/);
@@ -1578,34 +1579,50 @@ harvest();
                     let braceCount = 0;
                     let foundOpenBrace = false;
                     
+                    // Parse the for loop body properly
                     for (let i = startIndex; i < lines.length; i++) {
-                        if (lines[i].includes('{')) {
+                        const line = lines[i];
+                        
+                        if (line.includes('{')) {
                             foundOpenBrace = true;
                             braceCount++;
                         }
-                        if (lines[i].includes('}')) {
+                        if (line.includes('}')) {
                             braceCount--;
                             if (braceCount === 0 && foundOpenBrace) {
                                 endIndex = i;
                                 break;
                             }
                         }
-                        if (foundOpenBrace && i > startIndex && !lines[i].includes('{') && !lines[i].includes('}')) {
-                            body.push(lines[i]);
+                        
+                        // Add lines inside the for loop body
+                        if (foundOpenBrace && i > startIndex) {
+                            if (!line.includes('{') && !line.includes('}')) {
+                                body.push(line);
+                            }
                         }
                     }
                     
+                    // Handle single statement for loop (no braces)
                     if (!foundOpenBrace && endIndex === startIndex + 1) {
-                        const nextLine = lines[startIndex].replace(/for\s*\([^)]+\)\s*\{?\s*/, '').replace(/\}?/, '').trim();
-                        if (nextLine && nextLine !== '') {
-                            body.push(nextLine);
-                            endIndex = startIndex + 1;
+                        // Check if there's a statement on the same line after for(...)
+                        const sameLineStatement = lines[startIndex].replace(/for\s*\([^)]+\)\s*\{?\s*/, '').replace(/\}?/, '').trim();
+                        if (sameLineStatement && sameLineStatement !== '') {
+                            body.push(sameLineStatement);
+                        } else if (startIndex + 1 < lines.length) {
+                            // Check next line for statement
+                            const nextLine = lines[startIndex + 1];
+                            if (nextLine && !nextLine.startsWith('for') && !nextLine.startsWith('if') && !nextLine.startsWith('}')) {
+                                body.push(nextLine);
+                                endIndex = startIndex + 1;
+                            }
                         }
                     }
                     
                     return { iterations, body, endIndex };
                 },
 
+                // Improved parsing for nested if statements
                 parseIf(lines, startIndex) {
                     const ifLine = lines[startIndex];
                     const match = ifLine.match(/if\s*\(\s*(.+?)\s*\)/);
@@ -1622,36 +1639,53 @@ harvest();
                     let foundOpenBrace = false;
                     let inElse = false;
                     
+                    // Parse the if statement body properly
                     for (let i = startIndex; i < lines.length; i++) {
-                        if (lines[i].includes('{')) {
+                        const line = lines[i];
+                        
+                        if (line.includes('{')) {
                             foundOpenBrace = true;
                             braceCount++;
                         }
-                        if (lines[i].includes('} else {')) {
-                            inElse = true;
-                            continue;
-                        }
-                        if (lines[i].includes('}')) {
+                        if (line.includes('}')) {
                             braceCount--;
                             if (braceCount === 0 && foundOpenBrace) {
                                 endIndex = i;
                                 break;
                             }
                         }
-                        if (foundOpenBrace && i > startIndex && !lines[i].includes('{') && !lines[i].includes('}') && !lines[i].includes('else')) {
-                            if (inElse) {
-                                elseBody.push(lines[i]);
-                            } else {
-                                ifBody.push(lines[i]);
+                        
+                        // Check for else clause
+                        if (line.includes('} else {')) {
+                            inElse = true;
+                            continue;
+                        }
+                        
+                        // Add lines to appropriate body
+                        if (foundOpenBrace && i > startIndex) {
+                            if (!line.includes('{') && !line.includes('}') && !line.includes('else')) {
+                                if (inElse) {
+                                    elseBody.push(line);
+                                } else {
+                                    ifBody.push(line);
+                                }
                             }
                         }
                     }
                     
+                    // Handle single statement if (no braces)
                     if (!foundOpenBrace && endIndex === startIndex + 1) {
-                        const nextLine = lines[startIndex].replace(/if\s*\([^)]+\)\s*\{?\s*/, '').replace(/\}?/, '').trim();
-                        if (nextLine && nextLine !== '') {
-                            ifBody.push(nextLine);
-                            endIndex = startIndex + 1;
+                        // Check if there's a statement on the same line after if(...)
+                        const sameLineStatement = lines[startIndex].replace(/if\s*\([^)]+\)\s*\{?\s*/, '').replace(/\}?/, '').trim();
+                        if (sameLineStatement && sameLineStatement !== '') {
+                            ifBody.push(sameLineStatement);
+                        } else if (startIndex + 1 < lines.length) {
+                            // Check next line for statement
+                            const nextLine = lines[startIndex + 1];
+                            if (nextLine && !nextLine.startsWith('for') && !nextLine.startsWith('if') && !nextLine.startsWith('else') && !nextLine.startsWith('}')) {
+                                ifBody.push(nextLine);
+                                endIndex = startIndex + 1;
+                            }
                         }
                     }
                     
@@ -1762,7 +1796,6 @@ harvest();
                     const cell = this.grid[this.robotPos];
                     
                     if (cell.type !== 'empty') {
-                        // Apply penalty for planting on non-empty cell
                         this.robotAnimation = 'error';
                         this.cellAnimations[this.robotPos] = 'error';
                         
@@ -1770,7 +1803,6 @@ harvest();
                         
                         this.showPenalty('Menanam di lahan tidak kosong!', 50);
                         
-                        // Create error particle
                         const cellElement = this.$refs['cell-' + this.robotPos];
                         if (cellElement && cellElement[0]) {
                             const rect = cellElement[0].getBoundingClientRect();
@@ -1801,7 +1833,6 @@ harvest();
                     const cell = this.grid[this.robotPos];
                     
                     if (cell.type !== 'wheat' && cell.type !== 'carrot' && cell.type !== 'planted') {
-                        // Apply penalty for harvesting non-crop
                         this.robotAnimation = 'error';
                         this.cellAnimations[this.robotPos] = 'error';
                         
@@ -1809,7 +1840,6 @@ harvest();
                         
                         this.showPenalty('Memanen bukan tanaman!', 50);
                         
-                        // Create error particle
                         const cellElement = this.$refs['cell-' + this.robotPos];
                         if (cellElement && cellElement[0]) {
                             const rect = cellElement[0].getBoundingClientRect();
@@ -1822,7 +1852,6 @@ harvest();
                     }
                     
                     if (cell.type === 'planted' && cell.growth < 100) {
-                        // Apply penalty for harvesting unripe crop
                         this.robotAnimation = 'error';
                         this.cellAnimations[this.robotPos] = 'error';
                         
@@ -1830,7 +1859,6 @@ harvest();
                         
                         this.showPenalty(`Memanen tanaman belum siap (${cell.growth}%)!`, 30);
                         
-                        // Create error particle
                         const cellElement = this.$refs['cell-' + this.robotPos];
                         if (cellElement && cellElement[0]) {
                             const rect = cellElement[0].getBoundingClientRect();
