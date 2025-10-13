@@ -364,6 +364,392 @@
             margin-right: 0.5rem;
             color: #6b7280;
         }
+
+        /* Enhanced Recursion Styles */
+        .recursion-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recursion-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .recursion-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .recursion-visual {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .recursion-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .recursion-step {
+            position: relative;
+            animation: bounceIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .recursion-step:nth-child(1) { animation-delay: 0.1s; }
+        .recursion-step:nth-child(2) { animation-delay: 0.2s; }
+        .recursion-step:nth-child(3) { animation-delay: 0.3s; }
+        .recursion-step:nth-child(4) { animation-delay: 0.4s; }
+        .recursion-step:nth-child(5) { animation-delay: 0.5s; }
+        .recursion-step:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .recursion-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .recursion-number:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .recursion-arrow {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            position: relative;
+            margin: 0 0.5rem;
+        }
+
+        .recursion-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #764ba2;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .stack-visualization {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stack-title {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .stack-title i {
+            margin-right: 0.5rem;
+            color: #667eea;
+        }
+
+        .stack-items {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .stack-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            animation: slideInRight 0.5s ease-out;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stack-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .base-case-highlight {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            animation: pulse 2s infinite;
+        }
+
+        .recursive-case-highlight {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .demo-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .demo-result {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .recursion-tree {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .tree-node {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+            margin: 0 1rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .tree-branch {
+            position: absolute;
+            background: #667eea;
+            height: 2px;
+            transform-origin: left center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .comparison-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-title i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .loop-icon {
+            color: #10b981;
+        }
+
+        .recursion-icon {
+            color: #667eea;
+        }
+
+        .code-comparison {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #d4d4d4;
+            overflow-x: auto;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.3);
+        }
+
+        .step-dot.completed {
+            background: #10b981;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recursion-flow {
+                flex-direction: column;
+            }
+            
+            .recursion-arrow {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -824,159 +1210,296 @@ int main() {
                             </div>
                         </div>
 
-                        <!-- Rekursif -->
+                        <!-- Rekursif - ENHANCED VERSION -->
                         <div v-if="activeMateriTab === 4">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">
-                                <i class="fas fa-sync-alt text-purple-600 mr-2"></i>
-                                Rekursif dalam Fungsi
-                            </h3>
-                            
-                            <div class="recursion-box rounded-xl p-6 mb-6">
-                                <div class="flex items-start space-x-4">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-sync-alt text-white text-xl"></i>
+                            <!-- Hero Section -->
+                            <div class="recursion-container mb-8">
+                                <h3 class="recursion-title">
+                                    <i class="fas fa-sync-alt mr-3"></i>
+                                    Rekursif - Fungsi Ajaib
+                                </h3>
+                            </div>
+
+                            <!-- Interactive Demo -->
+                            <div class="interactive-demo">
+                                <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">
+                                    <i class="fas fa-play-circle text-purple-600 mr-2"></i>
+                                    Demo Interaktif Faktorial
+                                </h4>
+                                
+                                <div class="demo-controls justify-center">
+                                    <input type="number" v-model="recursionInput" min="0" max="10" 
+                                           class="demo-input" placeholder="Masukkan angka (0-10)">
+                                    <button @click="calculateFactorial" class="demo-button">
+                                        <i class="fas fa-calculator mr-2"></i>Hitung Faktorial
+                                    </button>
+                                    <button @click="resetDemo" class="demo-button" 
+                                            style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                                        <i class="fas fa-redo mr-2"></i>Reset
+                                    </button>
+                                </div>
+
+                                <div class="demo-result">
+                                    <span v-if="recursionResult !== null">
+                                        {{ recursionInput }}! = {{ recursionResult }}
+                                    </span>
+                                    <span v-else class="text-gray-400">
+                                        Masukkan angka dan klik "Hitung Faktorial"
+                                    </span>
+                                </div>
+
+                                <!-- Step Indicator -->
+                                <div class="step-indicator">
+                                    <div v-for="i in 5" :key="i" 
+                                         :class="['step-dot', 
+                                                 i <= currentStep ? 'completed' : '', 
+                                                 i === currentStep ? 'active' : '']"></div>
+                                </div>
+                            </div>
+
+                            <!-- Visual Flow -->
+                            <div class="recursion-visual">
+                                <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">
+                                    <i class="fas fa-project-diagram text-purple-600 mr-2"></i>
+                                    Alur Rekursif Faktorial(5)
+                                </h4>
+                                
+                                <div class="recursion-flow">
+                                    <div class="recursion-step">
+                                        <div class="recursion-number">5!</div>
+                                    </div>
+                                    <div class="recursion-arrow"></div>
+                                    <div class="recursion-step">
+                                        <div class="recursion-number">4!</div>
+                                    </div>
+                                    <div class="recursion-arrow"></div>
+                                    <div class="recursion-step">
+                                        <div class="recursion-number">3!</div>
+                                    </div>
+                                    <div class="recursion-arrow"></div>
+                                    <div class="recursion-step">
+                                        <div class="recursion-number">2!</div>
+                                    </div>
+                                    <div class="recursion-arrow"></div>
+                                    <div class="recursion-step">
+                                        <div class="recursion-number">1!</div>
+                                    </div>
+                                    <div class="recursion-arrow"></div>
+                                    <div class="recursion-step">
+                                        <div class="recursion-number">0!</div>
+                                    </div>
+                                </div>
+
+                                <!-- Stack Visualization -->
+                                <div class="stack-visualization">
+                                    <div class="stack-title">
+                                        <i class="fas fa-layer-group"></i>
+                                        Visualisasi Stack Rekursif
+                                    </div>
+                                    <div class="stack-items">
+                                        <div class="stack-item base-case-highlight">
+                                            faktorial(0) = 1 ← Base Case
+                                        </div>
+                                        <div class="stack-item recursive-case-highlight">
+                                            faktorial(1) = 1 * faktorial(0) = 1
+                                        </div>
+                                        <div class="stack-item recursive-case-highlight">
+                                            faktorial(2) = 2 * faktorial(1) = 2
+                                        </div>
+                                        <div class="stack-item recursive-case-highlight">
+                                            faktorial(3) = 3 * faktorial(2) = 6
+                                        </div>
+                                        <div class="stack-item recursive-case-highlight">
+                                            faktorial(4) = 4 * faktorial(3) = 24
+                                        </div>
+                                        <div class="stack-item recursive-case-highlight">
+                                            faktorial(5) = 5 * faktorial(4) = 120
                                         </div>
                                     </div>
-                                    <div class="flex-1">
-                                        <h4 class="text-xl font-bold text-gray-800 mb-3">
-                                            <span class="text-indigo-600">Rekursif</span> - Fungsi yang Memanggil Diri Sendiri
-                                        </h4>
-                                        <p class="text-gray-700 mb-4 leading-relaxed">
-                                            <span class="font-semibold text-indigo-600">Rekursif</span> adalah teknik di mana sebuah fungsi memanggil 
-                                            dirinya sendiri untuk menyelesaikan masalah yang lebih besar dengan 
-                                            memecahnya menjadi sub-masalah yang lebih kecil.
+                                </div>
+
+                                <!-- Comparison Section -->
+                                <div class="comparison-grid">
+                                    <div class="comparison-card">
+                                        <div class="comparison-title">
+                                            <i class="fas fa-sync-alt recursion-icon"></i>
+                                            Rekursif
+                                        </div>
+                                        <p class="text-gray-600 mb-3">
+                                            Fungsi memanggil dirinya sendiri
                                         </p>
+                                        <div class="code-comparison">
+                                            int faktorial(int n) {<br>
+                                            &nbsp;&nbsp;if (n == 0) return 1;<br>
+                                            &nbsp;&nbsp;return n * faktorial(n-1);<br>
+                                            }
+                                        </div>
+                                        <div class="mt-3 text-sm text-gray-500">
+                                            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+                                            Kode lebih ringkas<br>
+                                            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+                                            Solusi elegan
+                                        </div>
+                                    </div>
 
-                                        <!-- Visual Flow -->
-                                        <div class="recursion-flow">
-                                            <div class="recursion-step">
-                                                <div class="recursion-number">5</div>
-                                                <div class="recursion-arrow"></div>
-                                            </div>
-                                            <div class="recursion-step">
-                                                <div class="recursion-number">4</div>
-                                                <div class="recursion-arrow"></div>
-                                            </div>
-                                            <div class="recursion-step">
-                                                <div class="recursion-number">3</div>
-                                                <div class="recursion-arrow"></div>
-                                            </div>
-                                            <div class="recursion-step">
-                                                <div class="recursion-number">2</div>
-                                                <div class="recursion-arrow"></div>
-                                            </div>
-                                            <div class="recursion-step">
-                                                <div class="recursion-number">1</div>
-                                                <div class="recursion-arrow"></div>
-                                            </div>
-                                            <div class="recursion-step">
-                                                <div class="recursion-number">0</div>
-                                                <div class="recursion-arrow"></div>
-                                            </div>
+                                    <div class="comparison-card">
+                                        <div class="comparison-title">
+                                            <i class="fas fa-redo loop-icon"></i>
+                                            Iteratif (Loop)
+                                        </div>
+                                        <p class="text-gray-600 mb-3">
+                                            Menggunakan perulangan
+                                        </p>
+                                        <div class="code-comparison">
+                                            int faktorial(int n) {<br>
+                                            &nbsp;&nbsp;int result = 1;<br>
+                                            &nbsp;&nbsp;for(int i=1; i<=n; i++)<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;result *= i;<br>
+                                            &nbsp;&nbsp;return result;<br>
+                                            }
+                                        </div>
+                                        <div class="mt-3 text-sm text-gray-500">
+                                            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+                                            Lebih efisien memori<br>
+                                            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+                                            Tidak ada stack overflow
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Base Case -->
-                                <div class="recursion-base-case">
-                                    <div class="diagram-title">Base Case</div>
-                                    <div class="diagram-content">
-                                        <p class="diagram-content">n = 5</p>
-                                    </div>
-                                </div>
-
-                                <!-- Recursive Call -->
-                                <div class="recursion-call">
-                                    <div class="diagram-title">Recursive Call</div>
-                                    <div class="diagram-content">
-                                        <p class="text-sm">faktorial(4)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Result -->
-                            <div class="recursion-call">
-                                <div class="diagram-title">Result</div>
-                                <div class="diagram-content">
-                                    <p class="text-sm">return 4 * 3 * 2 * 1 = 24</p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-6">
-                                <div class="code-block-container">
-                                    <div class="code-block-header">
-                                        <div class="code-block-title">recursion.cpp</div>
-                                        <div class="code-block-actions">
-                                            <i class="fas fa-copy code-block-action" @click="copyCode('code5')"></i>
+                                <!-- Key Concepts -->
+                                <div class="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+                                    <h4 class="font-bold text-lg mb-4 text-gray-800">
+                                        <i class="fas fa-key text-blue-600 mr-2"></i>
+                                        Konsep Kunci Rekursif
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <div class="flex items-center mb-2">
+                                                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                                    <i class="fas fa-stop text-white"></i>
+                                                </div>
+                                                <h5 class="font-semibold">Base Case</h5>
+                                            </div>
+                                            <p class="text-sm text-gray-600">
+                                                Kondisi berhenti yang mencegah rekursif tak terbatas. 
+                                                Tanpa base case, program akan crash!
+                                            </p>
+                                        </div>
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <div class="flex items-center mb-2">
+                                                <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                                                    <i class="fas fa-repeat text-white"></i>
+                                                </div>
+                                                <h5 class="font-semibold">Recursive Case</h5>
+                                            </div>
+                                            <p class="text-sm text-gray-600">
+                                                Bagian fungsi yang memanggil dirinya sendiri dengan 
+                                                parameter yang mendekati base case.
+                                            </p>
                                         </div>
                                     </div>
-                                    <div class="code-block-example">
-                                        <pre id="code5"><code class="language-cpp">#include &lt;iostream&gt;
+                                </div>
+
+                                <!-- Code Example -->
+                                <div class="mt-6 space-y-6">
+                                    <div class="code-block-container">
+                                        <div class="code-block-header">
+                                            <div class="code-block-title">recursion.cpp</div>
+                                            <div class="code-block-actions">
+                                                <i class="fas fa-copy code-block-action" @click="copyCode('code5')"></i>
+                                            </div>
+                                        </div>
+                                        <div class="code-block-content">
+                                            <pre id="code5"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
 // Fungsi rekursif untuk menghitung faktorial
 int faktorial(int n) {
-    // Base case
+    // Base case: kondisi berhenti
     if (n == 0) {
+        cout &lt;&lt; "Base case tercapai: faktorial(0) = 1" &lt;&lt; endl;
         return 1;
     }
-    // Recursive case
+    // Recursive case: memanggil diri sendiri
     else {
+        cout &lt;&lt; "Menghitung " &lt;&lt; n &lt;&lt; " * faktorial(" &lt;&lt; (n-1) &lt;&lt; ")" &lt;&lt; endl;
         return n * faktorial(n - 1);
     }
 }
 
 int main() {
-    cout &lt;&lt; "Faktorial 5 = " &lt;&lt; faktorial(5) &lt;&lt; endl;
+    int angka = 5;
+    cout &lt;&lt; "Menghitung faktorial dari " &lt;&lt; angka &lt;&lt; endl;
+    cout &lt;&lt; "--------------------------------" &lt;&lt; endl;
+    int hasil = faktorial(angka);
+    cout &lt;&lt; "--------------------------------" &lt;&lt; endl;
+    cout &lt;&lt; "Hasil: " &lt;&lt; angka &lt;&lt; "! = " &lt;&lt; hasil &lt;&lt; endl;
     return 0;
 }</code></pre>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div>
-                                    <h4 class="font-semibold text-lg mb-3 text-gray-800">
-                                        <i class="fas fa-terminal text-green-500 mr-2"></i>
-                                        Output Program
-                                    </h4>
-                                    <div class="output-terminal rounded-lg overflow-hidden">
-                                        <div class="output-content p-4">
-                                            <pre class="text-green-400 font-mono text-sm"><code>Faktorial 5 = 120</code></pre>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-3 text-gray-800">
+                                            <i class="fas fa-terminal text-green-500 mr-2"></i>
+                                            Output Program
+                                        </h4>
+                                        <div class="output-terminal rounded-lg overflow-hidden">
+                                            <div class="output-content p-4">
+                                                <pre class="text-green-400 font-mono text-sm"><code>Menghitung faktorial dari 5
+--------------------------------
+Menghitung 5 * faktorial(4)
+Menghitung 4 * faktorial(3)
+Menghitung 3 * faktorial(2)
+Menghitung 2 * faktorial(1)
+Menghitung 1 * faktorial(0)
+Base case tercapai: faktorial(0) = 1
+--------------------------------
+Hasil: 5! = 120</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 rounded-lg">
-                                        <div class="text-2xl mb-2">📚</div>
-                                        <p class="font-semibold">Keuntungan Rekursif</p>
-                                        <p class="text-sm text-gray-600">Memecah masalah kompleks</p>
-                                    </div>
-                                    <div class="mt-2">
-                                        <ul class="text-sm text-gray-600 space-y-1">
-                                            <li>• Menyelesaikan masalah yang kompleks</li>
-                                            <li>• Menghindari loop yang tidak jelas</li>
-                                            <li>• Kode lebih ringkas dan efisien</li>
-                                        </ul>
+                                <!-- Common Use Cases -->
+                                <div class="mt-6">
+                                    <h4 class="font-bold text-lg mb-4 text-gray-800">
+                                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                        Kasus Penggunaan Umum Rekursif
+                                    </h4>
+                                    <div class="grid md:grid-cols-3 gap-4">
+                                        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+                                            <div class="text-3xl mb-2">🔢</div>
+                                            <h5 class="font-semibold mb-1">Matematika</h5>
+                                            <p class="text-sm text-gray-600">Faktorial, Fibonacci, Permutasi</p>
+                                        </div>
+                                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+                                            <div class="text-3xl mb-2">🌳</div>
+                                            <h5 class="font-semibold mb-1">Struktur Data</h5>
+                                            <p class="text-sm text-gray-600">Tree Traversal, Graph, Linked List</p>
+                                        </div>
+                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg text-center hover:shadow-lg transition-all">
+                                            <div class="text-3xl mb-2">🎯</div>
+                                            <h5 class="font-semibold mb-1">Algoritma</h5>
+                                            <p class="text-sm text-gray-600">Binary Search, Quick Sort, Merge Sort</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-lg">
-                                        <div class="text-2xl mb-2">🔄</div>
-                                        <p class="font-semibold">Contohoh Umumum</p>
-                                        <p class="text-sm text-gray-600">Faktorial, Fibonacci, Tree Traversal</p>
-                                </div>
-                            </div>
 
-                            <div class="mt-6 p-4 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-lg p-4">
-                                <h4 class="font-semibold text-lg mb-3">
-                                    <i class="fas fa-lightbulb text-blue-500 mr-2"></i>
-                                    <strong>Memahami Rekursif:</strong>
-                                </h4>
-                                <ul class="text-sm text-gray-700 space-y-2">
-                                    <li><strong>Base Case:</strong> Kondisi berhenti rekursif (n == 0)</li>
-                                    <li><strong>Recursive Case:</strong> n * faktorial(n - 1)</li>
-                                    <li><strong>Stack Overflow:</strong> Terjadi jika rekursif terlalu dalam</li>
-                                </ul>
+                                <!-- Warning Section -->
+                                <div class="mt-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border-l-4 border-red-500">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-exclamation-triangle text-red-500 text-xl mr-3 mt-1"></i>
+                                        <div>
+                                            <h5 class="font-semibold text-red-800 mb-1">⚠️ Perhatian!</h5>
+                                            <p class="text-sm text-red-700">
+                                                Rekursif yang terlalu dalam dapat menyebabkan <strong>Stack Overflow</strong>. 
+                                                Pastikan selalu ada base case dan parameter mendekati base case setiap pemanggilan.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1350,6 +1873,11 @@ int main() {
                         { title: 'Rekursif', icon: 'fas fa-sync-alt' }
                     ],
                     
+                    // Enhanced Recursion Demo
+                    recursionInput: 5,
+                    recursionResult: null,
+                    currentStep: 0,
+                    
                     // Game Mencoba
                     currentQuestionIndex: 0,
                     score: 0,
@@ -1662,6 +2190,39 @@ int main() {
             },
             
             methods: {
+                // Enhanced Recursion Demo Methods
+                calculateFactorial() {
+                    const n = parseInt(this.recursionInput);
+                    if (n >= 0 && n <= 10) {
+                        this.recursionResult = this.factorial(n);
+                        this.animateSteps();
+                    } else {
+                        this.showToast('Masukkan angka antara 0-10');
+                    }
+                },
+                
+                factorial(n) {
+                    if (n === 0) return 1;
+                    return n * this.factorial(n - 1);
+                },
+                
+                animateSteps() {
+                    this.currentStep = 0;
+                    const interval = setInterval(() => {
+                        if (this.currentStep < 5) {
+                            this.currentStep++;
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 500);
+                },
+                
+                resetDemo() {
+                    this.recursionInput = 5;
+                    this.recursionResult = null;
+                    this.currentStep = 0;
+                },
+                
                 // Game Methods
                 initGame() {
                     this.resetQuestion();
