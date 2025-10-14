@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Quest - Petualangan Belajar Komputer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .glow { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .slide-in { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .game-container { max-width: 800px; margin: 0 auto; }
+        .badge-shine { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+            100% { filter: brightness(1); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 min-h-screen">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-black bg-opacity-50 backdrop-blur-sm border-b border-purple-500">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center text-2xl">
+                            💻
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white">Computer Quest</h1>
+                            <p class="text-xs text-purple-300">Petualangan Belajar Komputer</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <p class="text-yellow-400 font-bold text-lg">⭐ {{ player.score }}</p>
+                            <p class="text-xs text-gray-300">Poin</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-green-400 font-bold text-lg">🎯 Level {{ player.level }}</p>
+                            <div class="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500" 
+                                     :style="{width: (player.exp / player.nextLevelExp * 100) + '%'}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                
+                <!-- Left Sidebar - Player Stats & Quest -->
+                <div class="lg:col-span-1 space-y-4">
+                    <!-- Player Card -->
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-purple-500 glow">
+                        <div class="text-center mb-3">
+                            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-4xl mb-2 border-4 border-yellow-300">
+                                {{ player.avatar }}
+                            </div>
+                            <h3 class="text-white font-bold">{{ player.name }}</h3>
+                            <p class="text-purple-300 text-sm">{{ player.title }}</p>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-300">❤️ HP:</span>
+                                <span class="text-red-400 font-bold">{{ player.hp }}/100</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-300">⚡ Energi:</span>
+                                <span class="text-blue-400 font-bold">{{ player.energy }}/100</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-300">🧠 IQ:</span>
+                                <span class="text-purple-400 font-bold">{{ player.intelligence }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Quest -->
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-green-500">
+                        <h3 class="text-white font-bold mb-3 flex items-center">
+                            📜 Quest Aktif
+                            <span class="ml-auto text-xs bg-green-500 px-2 py-1 rounded-full">{{ completedQuests }}/{{ totalQuests }}</span>
+                        </h3>
+                        <div class="space-y-2 max-h-48 overflow-y-auto">
+                            <div v-for="quest in activeQuests" :key="quest.id" 
+                                 class="bg-gray-800 bg-opacity-50 p-2 rounded-lg text-sm slide-in">
+                                <p class="text-yellow-300 font-semibold">{{ quest.title }}</p>
+                                <p class="text-gray-400 text-xs">{{ quest.description }}</p>
+                                <div class="mt-1 flex justify-between items-center">
+                                    <span class="text-xs text-green-400">Reward: +{{ quest.reward }} XP</span>
+                                    <span v-if="quest.completed" class="text-xs bg-green-600 px-2 py-0.5 rounded">✓ Selesai</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Achievements -->
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-yellow-500">
+                        <h3 class="text-white font-bold mb-3">🏆 Pencapaian</h3>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div v-for="achievement in achievements" :key="achievement.id" 
+                                 :class="achievement.unlocked ? 'badge-shine' : 'bg-gray-700'"
+                                 class="aspect-square rounded-lg flex flex-col items-center justify-center p-2 cursor-pointer hover:scale-110 transition-transform"
+                                 @click="showAchievement(achievement)">
+                                <span class="text-2xl">{{ achievement.icon }}</span>
+                                <span class="text-xs text-white text-center mt-1">{{ achievement.name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center - Game Area -->
+                <div class="lg:col-span-2">
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-blue-500 glow">
+                        <div class="mb-3 flex justify-between items-center">
+                            <h2 class="text-white font-bold text-xl">🎮 Area Permainan</h2>
+                            <button @click="resetGame" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition">
+                                🔄 Reset
+                            </button>
+                        </div>
+                        
+                        <!-- Phaser Game Container -->
+                        <div id="game-container" class="rounded-lg overflow-hidden border-4 border-purple-600"></div>
+                        
+                        <!-- Game Controls -->
+                        <div class="mt-4 bg-gray-800 bg-opacity-50 rounded-lg p-3">
+                            <p class="text-white text-sm mb-2 font-semibold">⌨️ Kontrol:</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+                                <div>🔼🔽◀️▶️ Arrow Keys - Gerak</div>
+                                <div>SPACE - Interaksi</div>
+                                <div>📱 Klik NPC untuk berbicara</div>
+                                <div>🎯 Kumpulkan item komputer</div>
+                            </div>
+                        </div>
+
+                        <!-- Game Messages -->
+                        <div v-if="gameMessage" class="mt-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-3 slide-in">
+                            <p class="text-white text-center font-semibold">{{ gameMessage }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar - Inventory & Leaderboard -->
+                <div class="lg:col-span-1 space-y-4">
+                    <!-- Inventory -->
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-orange-500">
+                        <h3 class="text-white font-bold mb-3 flex items-center">
+                            🎒 Inventory
+                            <span class="ml-auto text-xs bg-orange-500 px-2 py-1 rounded-full">{{ inventory.length }}/20</span>
+                        </h3>
+                        <div class="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
+                            <div v-for="item in inventory" :key="item.id"
+                                 class="bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg p-2 text-center hover:scale-105 transition-transform cursor-pointer border-2"
+                                 :class="item.type === 'hardware' ? 'border-blue-400' : 'border-green-400'"
+                                 @click="showItemInfo(item)">
+                                <div class="text-2xl mb-1">{{ item.icon }}</div>
+                                <p class="text-white text-xs font-semibold truncate">{{ item.name }}</p>
+                                <p class="text-gray-400 text-xs">{{ item.type === 'hardware' ? 'HW' : 'SW' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knowledge Base -->
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-cyan-500">
+                        <h3 class="text-white font-bold mb-3">📚 Pengetahuan</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Hardware:</span>
+                                <span class="text-blue-400 font-bold">{{ knowledgeCount.hardware }}/10</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500" :style="{width: (knowledgeCount.hardware/10*100) + '%'}"></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-gray-300">Software:</span>
+                                <span class="text-green-400 font-bold">{{ knowledgeCount.software }}/10</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500" :style="{width: (knowledgeCount.software/10*100) + '%'}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leaderboard -->
+                    <div class="bg-black bg-opacity-40 backdrop-blur-md rounded-xl p-4 border border-pink-500">
+                        <h3 class="text-white font-bold mb-3">👑 Papan Peringkat</h3>
+                        <div class="space-y-2">
+                            <div v-for="(leader, index) in leaderboard" :key="index"
+                                 class="flex items-center space-x-2 bg-gray-800 bg-opacity-50 p-2 rounded-lg">
+                                <span class="text-2xl">{{ index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '👤' }}</span>
+                                <div class="flex-1">
+                                    <p class="text-white text-sm font-semibold">{{ leader.name }}</p>
+                                    <p class="text-gray-400 text-xs">Level {{ leader.level }}</p>
+                                </div>
+                                <span class="text-yellow-400 font-bold">{{ leader.score }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Modal -->
+        <div v-if="showQuiz" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+            <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 max-w-2xl w-full border-4 border-purple-500 glow slide-in">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">{{ currentQuiz.npc }} bertanya:</h2>
+                        <div class="flex space-x-2">
+                            <span class="bg-blue-500 px-3 py-1 rounded-full text-white text-xs">{{ currentQuiz.category }}</span>
+                            <span class="bg-purple-500 px-3 py-1 rounded-full text-white text-xs">Poin: {{ currentQuiz.points }}</span>
+                        </div>
+                    </div>
+                    <button @click="closeQuiz" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                
+                <div class="bg-blue-900 bg-opacity-30 rounded-xl p-4 mb-6">
+                    <p class="text-white text-lg">{{ currentQuiz.question }}</p>
+                </div>
+
+                <div class="space-y-3 mb-6">
+                    <button v-for="(option, index) in currentQuiz.options" :key="index"
+                            @click="answerQuiz(index)"
+                            :disabled="quizAnswered"
+                            :class="getOptionClass(index)"
+                            class="w-full text-left p-4 rounded-lg font-semibold transition-all transform hover:scale-105 disabled:cursor-not-allowed">
+                        <span class="inline-block w-8 h-8 bg-white bg-opacity-20 rounded-full text-center mr-3">{{ String.fromCharCode(65 + index) }}</span>
+                        {{ option }}
+                    </button>
+                </div>
+
+                <div v-if="quizAnswered" class="bg-gray-800 rounded-lg p-4 slide-in">
+                    <p class="text-white font-semibold mb-2">💡 Penjelasan:</p>
+                    <p class="text-gray-300 text-sm">{{ currentQuiz.explanation }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Info Modal -->
+        <div v-if="selectedItem" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4" @click="selectedItem = null">
+            <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 max-w-md w-full border-4 border-blue-500 slide-in" @click.stop>
+                <div class="text-center">
+                    <div class="text-6xl mb-4">{{ selectedItem.icon }}</div>
+                    <h3 class="text-2xl font-bold text-white mb-2">{{ selectedItem.name }}</h3>
+                    <span :class="selectedItem.type === 'hardware' ? 'bg-blue-500' : 'bg-green-500'" 
+                          class="px-3 py-1 rounded-full text-white text-sm">
+                        {{ selectedItem.type === 'hardware' ? '🔧 Hardware' : '💿 Software' }}
+                    </span>
+                    <p class="text-gray-300 mt-4">{{ selectedItem.description }}</p>
+                    <button @click="selectedItem = null" class="mt-6 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Notification -->
+        <div v-if="achievementNotif" class="fixed top-20 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-4 shadow-2xl z-50 slide-in max-w-sm">
+            <div class="flex items-center space-x-3">
+                <span class="text-4xl">{{ achievementNotif.icon }}</span>
+                <div>
+                    <p class="text-white font-bold">Pencapaian Terbuka!</p>
+                    <p class="text-yellow-100 text-sm">{{ achievementNotif.name }}</p>
+                    <p class="text-yellow-200 text-xs">{{ achievementNotif.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        // Variable untuk menyimpan reference Vue instance
+        let vueApp;
+
+        // Phaser Scene Class
+        class GameScene extends Phaser.Scene {
+            constructor() {
+                super({ key: 'GameScene' });
+            }
+
+            preload() {
+                // Buat texture untuk player
+                this.createPlayerTexture();
+            }
+
+            createPlayerTexture() {
+                const graphics = this.add.graphics();
+                graphics.fillStyle(0x4ade80, 1);
+                graphics.fillCircle(16, 16, 16);
+                graphics.generateTexture('player', 32, 32);
+                graphics.destroy();
+            }
+
+            create() {
+                // Buat background grid
+                this.createBackground();
+                
+                // Buat player
+                this.player = this.physics.add.sprite(400, 300, 'player');
+                this.player.setCollideWorldBounds(true);
+                
+                // Tambahkan emoji ke player
+                this.playerEmoji = this.add.text(400, 300, '🧑‍💻', {
+                    fontSize: '28px'
+                }).setOrigin(0.5);
+                
+                // Buat NPCs
+                this.createNPCs();
+                
+                // Buat items
+                this.items = this.physics.add.group();
+                this.spawnItems();
+                
+                // Setup collisions
+                this.physics.add.overlap(this.player, this.items, this.collectItem, null, this);
+                
+                // Setup controls
+                this.cursors = this.input.keyboard.createCursorKeys();
+                this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+                
+                // Instruksi
+                this.add.text(400, 20, '🎮 Kumpulkan item & bicara dengan NPC!', {
+                    fontSize: '16px',
+                    color: '#fff',
+                    backgroundColor: '#000000aa',
+                    padding: { x: 10, y: 5 }
+                }).setOrigin(0.5);
+            }
+
+            createBackground() {
+                const graphics = this.add.graphics();
+                for (let x = 0; x < 800; x += 40) {
+                    for (let y = 0; y < 600; y += 40) {
+                        const shade = ((x + y) / 40) % 2 === 0 ? 0x16213e : 0x0f3460;
+                        graphics.fillStyle(shade, 1);
+                        graphics.fillRect(x, y, 40, 40);
+                    }
+                }
+            }
+
+            createNPCs() {
+                this.npcs = [];
+                const npcData = [
+                    { x: 150, y: 150, emoji: '🤖', name: 'Robot Tutorial', color: 0x9333ea },
+                    { x: 650, y: 150, emoji: '👨‍🏫', name: 'Guru Komputer', color: 0x3b82f6 },
+                    { x: 150, y: 450, emoji: '🧙‍♂️', name: 'Wizard IT', color: 0x10b981 },
+                    { x: 650, y: 450, emoji: '👾', name: 'NPC Quest', color: 0xf59e0b }
+                ];
+
+                npcData.forEach(data => {
+                    const npc = this.physics.add.sprite(data.x, data.y, 'player');
+                    npc.setTint(data.color);
+                    npc.setImmovable(true);
+                    
+                    const npcEmoji = this.add.text(data.x, data.y, data.emoji, {
+                        fontSize: '32px'
+                    }).setOrigin(0.5);
+                    
+                    const npcName = this.add.text(data.x, data.y + 35, data.name, {
+                        fontSize: '11px',
+                        color: '#fff',
+                        backgroundColor: '#00000088',
+                        padding: { x: 4, y: 2 }
+                    }).setOrigin(0.5);
+                    
+                    npc.emoji = npcEmoji;
+                    npc.nameText = npcName;
+                    npc.npcData = data;
+                    
+                    // Make NPC interactive
+                    npc.setInteractive();
+                    npc.on('pointerdown', () => {
+                        vueApp.interactWithNPC(data);
+                    });
+                    
+                    this.npcs.push(npc);
+                });
+            }
+
+            spawnItems() {
+                const itemsToSpawn = 8;
+                
+                for (let i = 0; i < itemsToSpawn; i++) {
+                    this.spawnSingleItem();
+                }
+            }
+
+            spawnSingleItem() {
+                const x = Phaser.Math.Between(50, 750);
+                const y = Phaser.Math.Between(80, 520);
+                
+                const itemData = vueApp.getRandomItem();
+                if (!itemData) return;
+                
+                const color = itemData.type === 'hardware' ? 0x3b82f6 : 0x10b981;
+                
+                const item = this.physics.add.sprite(x, y, 'player');
+                item.setTint(color);
+                item.setScale(0.8);
+                
+                const itemEmoji = this.add.text(x, y, itemData.icon, {
+                    fontSize: '24px'
+                }).setOrigin(0.5);
+                
+                item.emoji = itemEmoji;
+                item.itemData = itemData;
+                
+                this.items.add(item);
+                
+                // Floating animation
+                this.tweens.add({
+                    targets: [item, itemEmoji],
+                    y: y - 10,
+                    duration: 1000,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+            }
+
+            collectItem(player, item) {
+                const itemData = item.itemData;
+                vueApp.addToInventory(itemData);
+                
+                item.emoji.destroy();
+                item.destroy();
+                
+                // Spawn new item after delay
+                this.time.delayedCall(2000, () => {
+                    this.spawnSingleItem();
+                });
+            }
+
+            update() {
+                if (!this.player) return;
+                
+                const speed = 200;
+                this.player.setVelocity(0);
+                
+                if (this.cursors.left.isDown) {
+                    this.player.setVelocityX(-speed);
+                } else if (this.cursors.right.isDown) {
+                    this.player.setVelocityX(speed);
+                }
+                
+                if (this.cursors.up.isDown) {
+                    this.player.setVelocityY(-speed);
+                } else if (this.cursors.down.isDown) {
+                    this.player.setVelocityY(speed);
+                }
+                
+                // Update player emoji position
+                this.playerEmoji.setPosition(this.player.x, this.player.y);
+                
+                // Check for NPC interaction with SPACE
+                if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
+                    this.npcs.forEach(npc => {
+                        const distance = Phaser.Math.Distance.Between(
+                            this.player.x, this.player.y,
+                            npc.x, npc.y
+                        );
+                        if (distance < 80) {
+                            vueApp.interactWithNPC(npc.npcData);
+                        }
+                    });
+                }
+            }
+        }
+
+        // Vue App
+        const app = createApp({
+            data() {
+                return {
+                    player: {
+                        name: 'Tech Explorer',
+                        avatar: '🧑‍💻',
+                        title: 'Pemula',
+                        level: 1,
+                        exp: 0,
+                        nextLevelExp: 100,
+                        score: 0,
+                        hp: 100,
+                        energy: 100,
+                        intelligence: 10
+                    },
+                    inventory: [],
+                    activeQuests: [
+                        { id: 1, title: 'Kenali Hardware', description: 'Kumpulkan 5 komponen hardware', reward: 50, completed: false },
+                        { id: 2, title: 'Pelajari Software', description: 'Kumpulkan 5 jenis software', reward: 50, completed: false },
+                        { id: 3, title: 'Master Quiz', description: 'Jawab 10 pertanyaan dengan benar', reward: 100, completed: false }
+                    ],
+                    achievements: [
+                        { id: 1, name: 'First Step', icon: '👣', description: 'Mulai permainan', unlocked: true },
+                        { id: 2, name: 'Collector', icon: '🎒', description: 'Kumpulkan 10 item', unlocked: false },
+                        { id: 3, name: 'Quiz Master', icon: '🧠', description: 'Jawab 5 quiz benar', unlocked: false },
+                        { id: 4, name: 'Hardware Pro', icon: '🔧', description: 'Koleksi 10 hardware', unlocked: false },
+                        { id: 5, name: 'Software Guru', icon: '💿', description: 'Koleksi 10 software', unlocked: false },
+                        { id: 6, name: 'Level Up!', icon: '⬆️', description: 'Capai level 5', unlocked: false },
+                    ],
+                    leaderboard: [
+                        { name: 'Pro Gamer', level: 10, score: 5000 },
+                        { name: 'Tech Master', level: 8, score: 3500 },
+                        { name: 'Code Ninja', level: 6, score: 2000 },
+                        { name: 'You', level: 1, score: 0 }
+                    ],
+                    showQuiz: false,
+                    currentQuiz: null,
+                    quizAnswered: false,
+                    selectedAnswer: null,
+                    selectedItem: null,
+                    gameMessage: 'Selamat datang! Gunakan arrow keys untuk bergerak dan tekan SPACE untuk interaksi.',
+                    achievementNotif: null,
+                    game: null,
+                    correctAnswers: 0,
+                    quizBank: [
+                        {
+                            npc: '🤖 Robot Tutorial',
+                            category: 'Hardware',
+                            question: 'Apa fungsi utama dari CPU (Central Processing Unit)?',
+                            options: [
+                                'Menyimpan data permanen',
+                                'Memproses instruksi dan perhitungan',
+                                'Menampilkan gambar ke layar',
+                                'Menghubungkan ke internet'
+                            ],
+                            correct: 1,
+                            points: 50,
+                            explanation: 'CPU adalah "otak" komputer yang bertugas memproses semua instruksi dan melakukan perhitungan. Semua program yang berjalan diproses oleh CPU.'
+                        },
+                        {
+                            npc: '👨‍🏫 Guru Komputer',
+                            category: 'Hardware',
+                            question: 'Komponen mana yang berfungsi sebagai memori sementara?',
+                            options: ['Hard Disk', 'RAM (Random Access Memory)', 'ROM', 'SSD'],
+                            correct: 1,
+                            points: 50,
+                            explanation: 'RAM adalah memori sementara yang menyimpan data yang sedang diproses. Data di RAM akan hilang saat komputer dimatikan.'
+                        },
+                        {
+                            npc: '🧙‍♂️ Wizard IT',
+                            category: 'Hardware',
+                            question: 'Apa kepanjangan dari GPU?',
+                            options: [
+                                'General Processing Unit',
+                                'Graphics Processing Unit',
+                                'Game Processing Unit',
+                                'Global Processing Unit'
+                            ],
+                            correct: 1,
+                            points: 40,
+                            explanation: 'GPU (Graphics Processing Unit) adalah prosesor khusus untuk memproses grafis dan rendering visual, penting untuk gaming dan desain.'
+                        },
+                        {
+                            npc: '👾 NPC Quest',
+                            category: 'Hardware',
+                            question: 'Perangkat input adalah perangkat yang berfungsi untuk...?',
+                            options: [
+                                'Mengeluarkan hasil proses',
+                                'Menyimpan data',
+                                'Memasukkan data ke komputer',
+                                'Memproses data'
+                            ],
+                            correct: 2,
+                            points: 30,
+                            explanation: 'Perangkat input seperti keyboard, mouse, scanner berfungsi untuk memasukkan data atau perintah ke dalam komputer.'
+                        },
+                        {
+                            npc: '🤖 Robot Tutorial',
+                            category: 'Hardware',
+                            question: 'Motherboard adalah...?',
+                            options: [
+                                'Papan sirkuit utama yang menghubungkan semua komponen',
+                                'Perangkat penyimpanan data',
+                                'Alat pendingin komputer',
+                                'Software sistem operasi'
+                            ],
+                            correct: 0,
+                            points: 50,
+                            explanation: 'Motherboard adalah papan sirkuit utama tempat semua komponen komputer (CPU, RAM, dll) terhubung dan berkomunikasi.'
+                        },
+                        {
+                            npc: '👨‍🏫 Guru Komputer',
+                            category: 'Software',
+                            question: 'Apa itu Sistem Operasi?',
+                            options: [
+                                'Program untuk browsing internet',
+                                'Software yang mengelola hardware dan software komputer',
+                                'Aplikasi untuk mengetik',
+                                'Program antivirus'
+                            ],
+                            correct: 1,
+                            points: 50,
+                            explanation: 'Sistem Operasi (OS) seperti Windows, Linux, macOS adalah software dasar yang mengelola semua hardware dan software di komputer.'
+                        },
+                        {
+                            npc: '🧙‍♂️ Wizard IT',
+                            category: 'Software',
+                            question: 'Contoh software aplikasi adalah...?',
+                            options: [
+                                'BIOS',
+                                'Microsoft Word',
+                                'Device Driver',
+                                'Windows Kernel'
+                            ],
+                            correct: 1,
+                            points: 40,
+                            explanation: 'Software aplikasi adalah program yang digunakan user untuk tugas tertentu, seperti Microsoft Word untuk pengolahan kata, Photoshop untuk edit gambar, dll.'
+                        },
+                        {
+                            npc: '👾 NPC Quest',
+                            category: 'Software',
+                            question: 'Apa fungsi dari Web Browser?',
+                            options: [
+                                'Membuat dokumen',
+                                'Mengakses dan menampilkan halaman web',
+                                'Mengedit video',
+                                'Bermain game'
+                            ],
+                            correct: 1,
+                            points: 30,
+                            explanation: 'Web Browser seperti Chrome, Firefox, Edge digunakan untuk mengakses, menampilkan, dan berinteraksi dengan halaman web di internet.'
+                        },
+                        {
+                            npc: '🤖 Robot Tutorial',
+                            category: 'Software',
+                            question: 'Apa perbedaan software berbayar dan open source?',
+                            options: [
+                                'Open source gratis dan kode sumbernya terbuka',
+                                'Tidak ada perbedaan',
+                                'Software berbayar selalu lebih baik',
+                                'Open source hanya untuk programmer'
+                            ],
+                            correct: 0,
+                            points: 50,
+                            explanation: 'Software open source gratis dan kode programnya terbuka untuk umum (seperti Linux, LibreOffice), sedangkan software berbayar memerlukan lisensi (seperti Windows, Adobe).'
+                        },
+                        {
+                            npc: '👨‍🏫 Guru Komputer',
+                            category: 'Software',
+                            question: 'Apa itu Driver?',
+                            options: [
+                                'Program game',
+                                'Software yang memungkinkan OS berkomunikasi dengan hardware',
+                                'Aplikasi office',
+                                'Browser internet'
+                            ],
+                            correct: 1,
+                            points: 50,
+                            explanation: 'Driver adalah software khusus yang memungkinkan sistem operasi berkomunikasi dengan hardware seperti printer, kartu grafis, dll.'
+                        }
+                    ],
+                    itemsData: [
+                        // Hardware Items
+                        { id: 'cpu', name: 'CPU', icon: '🔲', type: 'hardware', description: 'Central Processing Unit - Otak komputer yang memproses semua instruksi dan perhitungan.' },
+                        { id: 'ram', name: 'RAM', icon: '🎴', type: 'hardware', description: 'Random Access Memory - Memori sementara untuk menyimpan data yang sedang diproses.' },
+                        { id: 'hdd', name: 'Hard Disk', icon: '💾', type: 'hardware', description: 'Perangkat penyimpanan data permanen dengan kapasitas besar.' },
+                        { id: 'gpu', name: 'GPU', icon: '🎮', type: 'hardware', description: 'Graphics Processing Unit - Prosesor khusus untuk memproses grafis dan video.' },
+                        { id: 'motherboard', name: 'Motherboard', icon: '🔌', type: 'hardware', description: 'Papan sirkuit utama yang menghubungkan semua komponen komputer.' },
+                        { id: 'psu', name: 'Power Supply', icon: '⚡', type: 'hardware', description: 'Unit catu daya yang menyuplai listrik ke semua komponen.' },
+                        { id: 'monitor', name: 'Monitor', icon: '🖥️', type: 'hardware', description: 'Perangkat output untuk menampilkan visual dari komputer.' },
+                        { id: 'keyboard', name: 'Keyboard', icon: '⌨️', type: 'hardware', description: 'Perangkat input untuk memasukkan teks dan perintah.' },
+                        { id: 'mouse', name: 'Mouse', icon: '🖱️', type: 'hardware', description: 'Perangkat input untuk navigasi dan kontrol pointer.' },
+                        { id: 'ssd', name: 'SSD', icon: '📀', type: 'hardware', description: 'Solid State Drive - Penyimpanan data yang lebih cepat dari HDD.' },
+                        
+                        // Software Items
+                        { id: 'windows', name: 'Windows', icon: '🪟', type: 'software', description: 'Sistem operasi populer dari Microsoft untuk komputer PC.' },
+                        { id: 'linux', name: 'Linux', icon: '🐧', type: 'software', description: 'Sistem operasi open source yang powerful dan gratis.' },
+                        { id: 'browser', name: 'Web Browser', icon: '🌐', type: 'software', description: 'Aplikasi untuk mengakses dan menjelajah internet.' },
+                        { id: 'office', name: 'Office Suite', icon: '📝', type: 'software', description: 'Paket aplikasi produktivitas untuk dokumen, spreadsheet, presentasi.' },
+                        { id: 'photoshop', name: 'Photo Editor', icon: '🎨', type: 'software', description: 'Software untuk mengedit dan memanipulasi gambar.' },
+                        { id: 'antivirus', name: 'Antivirus', icon: '🛡️', type: 'software', description: 'Program keamanan untuk melindungi dari virus dan malware.' },
+                        { id: 'vscode', name: 'Code Editor', icon: '💻', type: 'software', description: 'Editor untuk menulis dan mengembangkan kode program.' },
+                        { id: 'mediaplayer', name: 'Media Player', icon: '🎵', type: 'software', description: 'Aplikasi untuk memutar file audio dan video.' },
+                        { id: 'driver', name: 'Device Driver', icon: '🔧', type: 'software', description: 'Software yang menghubungkan OS dengan hardware.' },
+                        { id: 'database', name: 'Database', icon: '🗄️', type: 'software', description: 'Sistem untuk menyimpan dan mengelola data terstruktur.' }
+                    ]
+                }
+            },
+            computed: {
+                completedQuests() {
+                    return this.activeQuests.filter(q => q.completed).length;
+                },
+                totalQuests() {
+                    return this.activeQuests.length;
+                },
+                knowledgeCount() {
+                    return {
+                        hardware: this.inventory.filter(i => i.type === 'hardware').length,
+                        software: this.inventory.filter(i => i.type === 'software').length
+                    };
+                }
+            },
+            mounted() {
+                vueApp = this;
+                this.initGame();
+                setTimeout(() => {
+                    this.gameMessage = '';
+                }, 5000);
+            },
+            methods: {
+                initGame() {
+                    const config = {
+                        type: Phaser.AUTO,
+                        width: 800,
+                        height: 600,
+                        parent: 'game-container',
+                        backgroundColor: '#1a1a2e',
+                        physics: {
+                            default: 'arcade',
+                            arcade: {
+                                gravity: { y: 0 },
+                                debug: false
+                            }
+                        },
+                        scene: GameScene
+                    };
+                    this.game = new Phaser.Game(config);
+                },
+                
+                getRandomItem() {
+                    return this.itemsData[Math.floor(Math.random() * this.itemsData.length)];
+                },
+                
+                interactWithNPC(npcData) {
+                    const quizzes = this.quizBank.filter(q => q.npc.includes(npcData.emoji));
+                    
+                    if (quizzes.length > 0) {
+                        this.currentQuiz = quizzes[Math.floor(Math.random() * quizzes.length)];
+                        this.showQuiz = true;
+                        this.quizAnswered = false;
+                        this.selectedAnswer = null;
+                    }
+                },
+                
+                addToInventory(item) {
+                    if (!this.inventory.find(i => i.id === item.id)) {
+                        this.inventory.push(item);
+                        this.addExp(20);
+                        this.addScore(10);
+                        this.showMessage(`✅ Kamu mendapat ${item.name}! +10 poin`);
+                        
+                        // Check achievements
+                        if (this.inventory.length >= 10) {
+                            this.unlockAchievement(2);
+                        }
+                        
+                        const hwCount = this.inventory.filter(i => i.type === 'hardware').length;
+                        const swCount = this.inventory.filter(i => i.type === 'software').length;
+                        
+                        if (hwCount >= 10) this.unlockAchievement(4);
+                        if (swCount >= 10) this.unlockAchievement(5);
+                        
+                        this.checkQuestProgress();
+                    }
+                },
+                
+                answerQuiz(index) {
+                    this.selectedAnswer = index;
+                    this.quizAnswered = true;
+                    
+                    if (index === this.currentQuiz.correct) {
+                        this.correctAnswers++;
+                        this.addScore(this.currentQuiz.points);
+                        this.addExp(this.currentQuiz.points);
+                        this.player.intelligence += 2;
+                        this.showMessage(`✅ Benar! +${this.currentQuiz.points} poin!`);
+                        
+                        if (this.correctAnswers >= 5) {
+                            this.unlockAchievement(3);
+                        }
+                        if (this.correctAnswers >= 10) {
+                            this.completeQuest(3);
+                        }
+                    } else {
+                        this.showMessage('❌ Jawaban salah. Pelajari penjelasannya!');
+                        this.player.energy = Math.max(0, this.player.energy - 5);
+                    }
+                    
+                    setTimeout(() => {
+                        this.closeQuiz();
+                    }, 5000);
+                },
+                
+                getOptionClass(index) {
+                    if (!this.quizAnswered) {
+                        return 'bg-gray-700 hover:bg-gray-600 text-white';
+                    }
+                    
+                    if (index === this.currentQuiz.correct) {
+                        return 'bg-green-600 text-white';
+                    }
+                    
+                    if (index === this.selectedAnswer && index !== this.currentQuiz.correct) {
+                        return 'bg-red-600 text-white';
+                    }
+                    
+                    return 'bg-gray-700 text-gray-400';
+                },
+                
+                closeQuiz() {
+                    this.showQuiz = false;
+                    this.currentQuiz = null;
+                },
+                
+                addScore(points) {
+                    this.player.score += points;
+                    this.updateLeaderboard();
+                },
+                
+                addExp(exp) {
+                    this.player.exp += exp;
+                    
+                    while (this.player.exp >= this.player.nextLevelExp) {
+                        this.levelUp();
+                    }
+                },
+                
+                levelUp() {
+                    this.player.exp -= this.player.nextLevelExp;
+                    this.player.level++;
+                    this.player.nextLevelExp = Math.floor(this.player.nextLevelExp * 1.5);
+                    this.player.hp = 100;
+                    this.player.energy = 100;
+                    this.player.intelligence += 5;
+                    
+                    this.showMessage(`🎉 LEVEL UP! Sekarang Level ${this.player.level}!`);
+                    
+                    // Update title
+                    if (this.player.level >= 5) {
+                        this.player.title = 'Tech Enthusiast';
+                        this.unlockAchievement(6);
+                    }
+                    if (this.player.level >= 10) {
+                        this.player.title = 'Computer Expert';
+                    }
+                    if (this.player.level >= 15) {
+                        this.player.title = 'IT Master';
+                    }
+                },
+                
+                checkQuestProgress() {
+                    const hwCount = this.inventory.filter(i => i.type === 'hardware').length;
+                    const swCount = this.inventory.filter(i => i.type === 'software').length;
+                    
+                    if (hwCount >= 5) this.completeQuest(1);
+                    if (swCount >= 5) this.completeQuest(2);
+                },
+                
+                completeQuest(questId) {
+                    const quest = this.activeQuests.find(q => q.id === questId);
+                    if (quest && !quest.completed) {
+                        quest.completed = true;
+                        this.addExp(quest.reward);
+                        this.addScore(quest.reward);
+                        this.showMessage(`✅ Quest selesai: ${quest.title}! +${quest.reward} XP`);
+                    }
+                },
+                
+                unlockAchievement(achievementId) {
+                    const achievement = this.achievements.find(a => a.id === achievementId);
+                    if (achievement && !achievement.unlocked) {
+                        achievement.unlocked = true;
+                        this.achievementNotif = achievement;
+                        this.addScore(100);
+                        
+                        setTimeout(() => {
+                            this.achievementNotif = null;
+                        }, 4000);
+                    }
+                },
+                
+                showMessage(message) {
+                    this.gameMessage = message;
+                    setTimeout(() => {
+                        this.gameMessage = '';
+                    }, 3000);
+                },
+                
+                showItemInfo(item) {
+                    this.selectedItem = item;
+                },
+                
+                showAchievement(achievement) {
+                    if (achievement.unlocked) {
+                        alert(`🏆 ${achievement.name}\n\n${achievement.description}`);
+                    } else {
+                        alert(`🔒 ${achievement.name}\n\n${achievement.description}\n\nBelum terbuka!`);
+                    }
+                },
+                
+                updateLeaderboard() {
+                    this.leaderboard[3] = {
+                        name: 'You',
+                        level: this.player.level,
+                        score: this.player.score
+                    };
+                    this.leaderboard.sort((a, b) => b.score - a.score);
+                },
+                
+                resetGame() {
+                    if (confirm('Apakah kamu yakin ingin reset game? Progress akan hilang!')) {
+                        location.reload();
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
