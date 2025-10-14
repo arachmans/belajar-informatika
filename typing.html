@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster - Belajar Mengetik 10 Jari 🎮</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+        }
+        
+        .glow-effect {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes bounce-in {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .bounce-in {
+            animation: bounce-in 0.5s ease-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .key-button {
+            transition: all 0.1s ease;
+        }
+        
+        .key-button.active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .key-button.correct {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .key-button.wrong {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        .typing-text {
+            letter-spacing: 0.1em;
+            line-height: 2;
+        }
+        
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .star-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .star-icon.filled {
+            color: #fbbf24;
+            transform: scale(1.2);
+        }
+        
+        @keyframes levelUp {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.5) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        
+        .level-up-animation {
+            animation: levelUp 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 min-h-screen">
+    <div id="app">
+        <!-- Header -->
+        <header class="gradient-bg text-white py-6 shadow-2xl">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-4xl">⌨️</span>
+                        <h1 class="text-3xl font-bold">TypeMaster</h1>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <div class="text-center">
+                            <div class="text-sm opacity-90">Level</div>
+                            <div class="text-2xl font-bold">{{ currentMaxLevel }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm opacity-90">XP</div>
+                            <div class="text-2xl font-bold">{{ totalXP }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm opacity-90">Prestasi</div>
+                            <div class="text-2xl font-bold">{{ achievements.filter(a => a.unlocked).length }}/{{ achievements.length }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-8">
+            <!-- Main Menu -->
+            <div v-if="gameState === 'menu'" class="max-w-4xl mx-auto">
+                <div class="text-center mb-12 float">
+                    <h2 class="text-6xl font-bold gradient-text mb-4">Selamat Datang!</h2>
+                    <p class="text-xl text-gray-600">Tingkatkan kecepatan mengetikmu dan raih prestasi tertinggi! 🏆</p>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-2xl shadow-xl p-6 text-center transform hover:scale-105 transition">
+                        <div class="text-4xl mb-2">⚡</div>
+                        <div class="text-3xl font-bold gradient-text">{{ bestWPM }}</div>
+                        <div class="text-gray-600">WPM Terbaik</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-xl p-6 text-center transform hover:scale-105 transition">
+                        <div class="text-4xl mb-2">🎯</div>
+                        <div class="text-3xl font-bold gradient-text">{{ bestAccuracy }}%</div>
+                        <div class="text-gray-600">Akurasi Terbaik</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-xl p-6 text-center transform hover:scale-105 transition">
+                        <div class="text-4xl mb-2">🔥</div>
+                        <div class="text-3xl font-bold gradient-text">{{ streak }}</div>
+                        <div class="text-gray-600">Streak Hari</div>
+                    </div>
+                </div>
+
+                <!-- Level Selection -->
+                <div class="bg-white rounded-2xl shadow-2xl p-8 mb-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Pilih Level</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button 
+                            v-for="lvl in levels" 
+                            :key="lvl.id"
+                            @click="startGame(lvl.id)"
+                            :disabled="!isLevelUnlocked(lvl.id)"
+                            class="relative overflow-hidden rounded-xl p-6 text-left transform hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            :class="isLevelUnlocked(lvl.id) ? 'gradient-bg text-white shadow-lg' : 'bg-gray-200 text-gray-500'">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-3xl">{{ lvl.icon }}</span>
+                                <span v-if="isLevelUnlocked(lvl.id)" class="text-sm bg-white bg-opacity-30 px-3 py-1 rounded-full">
+                                    {{ isLevelCompleted(lvl.id) ? '✅ Completed' : 'Unlocked' }}
+                                </span>
+                                <span v-else class="text-sm bg-black bg-opacity-20 px-3 py-1 rounded-full">🔒 Locked</span>
+                            </div>
+                            <div class="font-bold text-xl mb-1">{{ lvl.name }}</div>
+                            <div class="text-sm opacity-90 mb-3">{{ lvl.description }}</div>
+                            
+                            <!-- Progress Stars -->
+                            <div v-if="isLevelUnlocked(lvl.id)" class="flex items-center justify-center gap-2 mt-3">
+                                <span 
+                                    v-for="star in 3" 
+                                    :key="star"
+                                    class="star-icon text-2xl"
+                                    :class="{ 'filled': getLevelProgress(lvl.id) >= star }">
+                                    {{ getLevelProgress(lvl.id) >= star ? '⭐' : '☆' }}
+                                </span>
+                                <span class="ml-2 text-sm">{{ getLevelProgress(lvl.id) }}/3</span>
+                            </div>
+                            <div v-else class="text-center text-xs mt-3 opacity-75">
+                                Selesaikan level sebelumnya 3x untuk unlock
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="bg-white rounded-2xl shadow-2xl p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center">🏆 Prestasi</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div 
+                            v-for="achievement in achievements" 
+                            :key="achievement.id"
+                            class="text-center p-4 rounded-xl transition transform hover:scale-105"
+                            :class="achievement.unlocked ? 'bg-gradient-to-br from-yellow-100 to-yellow-200' : 'bg-gray-100 opacity-50'">
+                            <div class="text-4xl mb-2">{{ achievement.icon }}</div>
+                            <div class="font-semibold text-sm">{{ achievement.name }}</div>
+                            <div class="text-xs text-gray-600 mt-1">{{ achievement.description }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div v-if="gameState === 'playing'" class="max-w-6xl mx-auto">
+                <!-- Game Stats Bar -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">{{ currentLevel.icon }}</span>
+                            <div>
+                                <div class="font-bold text-lg">{{ currentLevel.name }}</div>
+                                <div class="text-sm text-gray-600">Percobaan {{ getLevelProgress(currentLevelId) + 1 }}/3</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <span 
+                                v-for="star in 3" 
+                                :key="star"
+                                class="star-icon text-2xl"
+                                :class="{ 'filled': getLevelProgress(currentLevelId) >= star }">
+                                {{ getLevelProgress(currentLevelId) >= star ? '⭐' : '☆' }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-4 text-center">
+                        <div>
+                            <div class="text-gray-600 text-sm mb-1">Waktu</div>
+                            <div class="text-3xl font-bold gradient-text">{{ timeLeft }}s</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600 text-sm mb-1">WPM</div>
+                            <div class="text-3xl font-bold text-blue-600">{{ currentWPM }}</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600 text-sm mb-1">Akurasi</div>
+                            <div class="text-3xl font-bold text-green-600">{{ currentAccuracy }}%</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-600 text-sm mb-1">Skor</div>
+                            <div class="text-3xl font-bold text-purple-600">{{ currentScore }}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mt-4 bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div 
+                            class="progress-bar h-full gradient-bg"
+                            :style="{ width: progressPercentage + '%' }">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Typing Area -->
+                <div class="bg-white rounded-2xl shadow-2xl p-8 mb-6">
+                    <div class="typing-text text-2xl md:text-3xl text-center mb-8 font-mono p-6 bg-gray-50 rounded-xl min-h-32">
+                        <span 
+                            v-for="(char, index) in currentText" 
+                            :key="index"
+                            :class="{
+                                'text-green-600': index < typedText.length && typedText[index] === char,
+                                'text-red-600': index < typedText.length && typedText[index] !== char,
+                                'text-gray-400': index >= typedText.length,
+                                'bg-yellow-200': index === typedText.length
+                            }">{{ char }}</span>
+                    </div>
+
+                    <div class="relative">
+                        <input 
+                            ref="typingInput"
+                            v-model="typedText"
+                            @input="handleTyping"
+                            @keydown="handleKeyDown"
+                            type="text"
+                            class="w-full px-6 py-4 text-2xl border-4 border-purple-300 rounded-xl focus:outline-none focus:border-purple-600 transition"
+                            :class="{ 'shake border-red-500': showError }"
+                            placeholder="Mulai mengetik di sini..."
+                            autocomplete="off"
+                            spellcheck="false">
+                    </div>
+
+                    <div class="mt-4 text-center text-gray-500 text-sm">
+                        💡 Tips: Gunakan semua 10 jari untuk mengetik lebih cepat!
+                    </div>
+                </div>
+
+                <!-- Virtual Keyboard -->
+                <div class="bg-white rounded-2xl shadow-2xl p-6">
+                    <h3 class="text-center font-bold mb-4 text-lg">Panduan Keyboard 10 Jari</h3>
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Row 1 -->
+                        <div class="flex justify-center gap-1 mb-2">
+                            <div v-for="key in keyboardLayout[0]" :key="key" 
+                                class="key-button w-12 h-12 flex items-center justify-center rounded-lg font-semibold text-sm"
+                                :class="getKeyClass(key)"
+                                :style="{ backgroundColor: getFingerColor(key) }">
+                                {{ key }}
+                            </div>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="flex justify-center gap-1 mb-2 ml-6">
+                            <div v-for="key in keyboardLayout[1]" :key="key" 
+                                class="key-button w-12 h-12 flex items-center justify-center rounded-lg font-semibold text-sm"
+                                :class="getKeyClass(key)"
+                                :style="{ backgroundColor: getFingerColor(key) }">
+                                {{ key }}
+                            </div>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="flex justify-center gap-1 mb-2 ml-12">
+                            <div v-for="key in keyboardLayout[2]" :key="key" 
+                                class="key-button w-12 h-12 flex items-center justify-center rounded-lg font-semibold text-sm"
+                                :class="getKeyClass(key)"
+                                :style="{ backgroundColor: getFingerColor(key) }">
+                                {{ key }}
+                            </div>
+                        </div>
+                        <!-- Row 4 -->
+                        <div class="flex justify-center gap-1 mb-2">
+                            <div class="key-button w-32 h-12 flex items-center justify-center bg-gray-200 rounded-lg font-semibold text-sm">
+                                Space
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Finger Color Legend -->
+                    <div class="mt-4 flex justify-center gap-4 flex-wrap text-xs">
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #FCA5A5"></div>
+                            <span>Kelingking Kiri</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #FDBA74"></div>
+                            <span>Manis Kiri</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #FDE047"></div>
+                            <span>Tengah Kiri</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #86EFAC"></div>
+                            <span>Telunjuk Kiri</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #7DD3FC"></div>
+                            <span>Telunjuk Kanan</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #A5B4FC"></div>
+                            <span>Tengah Kanan</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #DDD6FE"></div>
+                            <span>Manis Kanan</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: #FBCFE8"></div>
+                            <span>Kelingking Kanan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div v-if="gameState === 'results'" class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-2xl p-12 text-center bounce-in">
+                    <div class="text-6xl mb-4">{{ resultEmoji }}</div>
+                    <h2 class="text-4xl font-bold gradient-text mb-2">{{ resultTitle }}</h2>
+                    <p class="text-xl text-gray-600 mb-8">{{ resultMessage }}</p>
+
+                    <!-- Level Progress Stars -->
+                    <div v-if="levelCompleted" class="mb-6 slide-in">
+                        <div class="inline-block bg-gradient-to-r from-yellow-100 to-yellow-200 px-8 py-4 rounded-2xl">
+                            <div class="text-sm text-gray-700 mb-2">Progress Level {{ currentLevel.name }}</div>
+                            <div class="flex gap-2 justify-center">
+                                <span 
+                                    v-for="star in 3" 
+                                    :key="star"
+                                    class="star-icon text-3xl level-up-animation"
+                                    :class="{ 'filled': getLevelProgress(currentLevelId) >= star }">
+                                    {{ getLevelProgress(currentLevelId) >= star ? '⭐' : '☆' }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-700 mt-2 font-bold">
+                                {{ getLevelProgress(currentLevelId) }}/3 Selesai
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level Unlock Notification -->
+                    <div v-if="levelUnlocked" class="mb-6 bounce-in">
+                        <div class="inline-block bg-gradient-to-r from-purple-100 to-pink-100 px-8 py-4 rounded-2xl">
+                            <div class="text-2xl mb-2">🎉</div>
+                            <div class="font-bold text-lg text-purple-800">Level Baru Terbuka!</div>
+                            <div class="text-sm text-purple-600">{{ levels.find(l => l.id === currentLevelId + 1)?.name }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Results Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
+                            <div class="text-3xl mb-2">⚡</div>
+                            <div class="text-3xl font-bold text-blue-600">{{ finalWPM }}</div>
+                            <div class="text-gray-600 text-sm">WPM</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
+                            <div class="text-3xl mb-2">🎯</div>
+                            <div class="text-3xl font-bold text-green-600">{{ finalAccuracy }}%</div>
+                            <div class="text-gray-600 text-sm">Akurasi</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
+                            <div class="text-3xl mb-2">⭐</div>
+                            <div class="text-3xl font-bold text-purple-600">{{ earnedXP }}</div>
+                            <div class="text-gray-600 text-sm">XP Didapat</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6">
+                            <div class="text-3xl mb-2">🏆</div>
+                            <div class="text-3xl font-bold text-yellow-600">{{ currentScore }}</div>
+                            <div class="text-gray-600 text-sm">Skor Total</div>
+                        </div>
+                    </div>
+
+                    <!-- New Achievements -->
+                    <div v-if="newAchievements.length > 0" class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4">🎉 Prestasi Baru!</h3>
+                        <div class="flex justify-center gap-4 flex-wrap">
+                            <div 
+                                v-for="achievement in newAchievements" 
+                                :key="achievement.id"
+                                class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-xl p-4 bounce-in">
+                                <div class="text-4xl mb-2">{{ achievement.icon }}</div>
+                                <div class="font-bold">{{ achievement.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4 justify-center flex-wrap">
+                        <button 
+                            v-if="!isLevelCompleted(currentLevelId)"
+                            @click="restartLevel"
+                            class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
+                            🔄 Ulangi Level ({{ getLevelProgress(currentLevelId) }}/3)
+                        </button>
+                        
+                        <button 
+                            v-if="isLevelCompleted(currentLevelId) && currentLevelId < levels.length"
+                            @click="nextLevel"
+                            class="px-8 py-4 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transform hover:scale-105 transition glow-effect">
+                            ➡️ Level Selanjutnya
+                        </button>
+                        
+                        <button 
+                            v-if="isLevelCompleted(currentLevelId)"
+                            @click="restartLevel"
+                            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
+                            🔄 Main Lagi
+                        </button>
+                        
+                        <button 
+                            @click="backToMenu"
+                            class="px-8 py-4 bg-gray-200 text-gray-800 rounded-xl font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
+                            🏠 Menu Utama
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confetti Container -->
+        <div id="confetti-container"></div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    gameState: 'menu', // menu, playing, results
+                    currentMaxLevel: 1,
+                    totalXP: 0,
+                    bestWPM: 0,
+                    bestAccuracy: 0,
+                    streak: 0,
+                    
+                    levelProgress: {}, // Track completion count per level
+                    
+                    currentLevelId: 1,
+                    currentLevel: null,
+                    currentText: '',
+                    typedText: '',
+                    
+                    startTime: null,
+                    timeLeft: 60,
+                    timerInterval: null,
+                    
+                    correctChars: 0,
+                    totalChars: 0,
+                    currentWPM: 0,
+                    currentAccuracy: 100,
+                    currentScore: 0,
+                    
+                    showError: false,
+                    currentKeyPressed: '',
+                    
+                    finalWPM: 0,
+                    finalAccuracy: 0,
+                    earnedXP: 0,
+                    
+                    levelCompleted: false,
+                    levelUnlocked: false,
+                    
+                    newAchievements: [],
+                    
+                    levels: [
+                        {
+                            id: 1,
+                            name: 'Pemula',
+                            icon: '🌱',
+                            description: 'Huruf dasar dan kata sederhana',
+                            texts: [
+                                'aku suka belajar mengetik dengan cepat dan tepat',
+                                'latihan membuat sempurna jadi terus berlatih',
+                                'setiap hari aku belajar hal baru yang menarik',
+                                'mengetik dengan sepuluh jari sangat menyenangkan',
+                                'belajar mengetik itu mudah jika rutin berlatih'
+                            ],
+                            timeLimit: 60,
+                            requiredWPM: 20,
+                            requiredAccuracy: 80
+                        },
+                        {
+                            id: 2,
+                            name: 'Menengah',
+                            icon: '🌿',
+                            description: 'Kalimat lebih panjang',
+                            texts: [
+                                'kecepatan mengetik yang baik akan membantu produktivitas kerja',
+                                'dengan berlatih rutin setiap hari kemampuan akan meningkat pesat',
+                                'teknologi modern membutuhkan kemampuan mengetik yang handal',
+                                'fokus dan konsentrasi adalah kunci sukses dalam belajar mengetik',
+                                'menguasai teknik mengetik sepuluh jari memerlukan dedikasi tinggi'
+                            ],
+                            timeLimit: 60,
+                            requiredWPM: 30,
+                            requiredAccuracy: 85
+                        },
+                        {
+                            id: 3,
+                            name: 'Mahir',
+                            icon: '🌳',
+                            description: 'Teks kompleks dengan angka',
+                            texts: [
+                                'pada tahun 2024 teknologi AI semakin berkembang pesat di berbagai sektor industri',
+                                'indonesia memiliki 17000 pulau dengan populasi lebih dari 270 juta jiwa',
+                                'kecepatan mengetik 60 WPM sudah dianggap bagus untuk pekerjaan kantoran',
+                                'kombinasi huruf angka dan simbol seperti email@domain.com butuh latihan ekstra',
+                                'rata rata orang dapat mengetik 40 kata per menit setelah latihan 6 bulan'
+                            ],
+                            timeLimit: 60,
+                            requiredWPM: 40,
+                            requiredAccuracy: 90
+                        },
+                        {
+                            id: 4,
+                            name: 'Expert',
+                            icon: '🏆',
+                            description: 'Challenge tingkat tinggi',
+                            texts: [
+                                'the quick brown fox jumps over the lazy dog 1234567890 testing speed and accuracy',
+                                'programming requires fast typing skills like function calculateScore() return value',
+                                'special characters and symbols !@#$%^&*() are commonly used in coding',
+                                'mastering touch typing with 10 fingers can boost productivity by 50% or more',
+                                'professional typists can achieve speeds of 80 to 95 WPM with near perfect accuracy'
+                            ],
+                            timeLimit: 60,
+                            requiredWPM: 50,
+                            requiredAccuracy: 92
+                        }
+                    ],
+                    
+                    achievements: [
+                        { id: 1, name: 'First Steps', icon: '👶', description: 'Selesaikan level 1', unlocked: false, condition: 'levelComplete', value: 1 },
+                        { id: 2, name: 'Speed Demon', icon: '⚡', description: 'Capai 40 WPM', unlocked: false, condition: 'wpm', value: 40 },
+                        { id: 3, name: 'Perfectionist', icon: '💯', description: 'Akurasi 100%', unlocked: false, condition: 'accuracy', value: 100 },
+                        { id: 4, name: 'Speedster', icon: '🚀', description: 'Capai 60 WPM', unlocked: false, condition: 'wpm', value: 60 },
+                        { id: 5, name: 'Master Typist', icon: '🎯', description: 'Selesaikan semua level', unlocked: false, condition: 'allLevels', value: 4 },
+                        { id: 6, name: 'Streak Master', icon: '🔥', description: 'Main 7 hari berturut', unlocked: false, condition: 'streak', value: 7 },
+                        { id: 7, name: 'XP Hunter', icon: '⭐', description: 'Kumpulkan 1000 XP', unlocked: false, condition: 'xp', value: 1000 },
+                        { id: 8, name: 'Lightning Fast', icon: '⚡', description: 'Capai 80 WPM', unlocked: false, condition: 'wpm', value: 80 }
+                    ],
+                    
+                    keyboardLayout: [
+                        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+                        ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                        ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                        ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+                    ],
+                    
+                    fingerMapping: {
+                        'Q': 'left-pinky', 'A': 'left-pinky', 'Z': 'left-pinky', '1': 'left-pinky',
+                        'W': 'left-ring', 'S': 'left-ring', 'X': 'left-ring', '2': 'left-ring',
+                        'E': 'left-middle', 'D': 'left-middle', 'C': 'left-middle', '3': 'left-middle',
+                        'R': 'left-index', 'F': 'left-index', 'V': 'left-index', '4': 'left-index',
+                        'T': 'left-index', 'G': 'left-index', 'B': 'left-index', '5': 'left-index',
+                        'Y': 'right-index', 'H': 'right-index', 'N': 'right-index', '6': 'right-index',
+                        'U': 'right-index', 'J': 'right-index', 'M': 'right-index', '7': 'right-index',
+                        'I': 'right-middle', 'K': 'right-middle', '8': 'right-middle',
+                        'O': 'right-ring', 'L': 'right-ring', '9': 'right-ring',
+                        'P': 'right-pinky', '0': 'right-pinky'
+                    }
+                }
+            },
+            
+            computed: {
+                progressPercentage() {
+                    if (!this.currentText) return 0;
+                    return Math.min((this.typedText.length / this.currentText.length) * 100, 100);
+                },
+                
+                resultEmoji() {
+                    if (this.finalWPM >= 60) return '🏆';
+                    if (this.finalWPM >= 40) return '🌟';
+                    if (this.finalWPM >= 20) return '👍';
+                    return '💪';
+                },
+                
+                resultTitle() {
+                    if (this.isLevelCompleted(this.currentLevelId)) {
+                        return 'Level Selesai! 🎉';
+                    }
+                    if (this.levelCompleted) {
+                        return 'Hebat! ' + (3 - this.getLevelProgress(this.currentLevelId)) + ' lagi!';
+                    }
+                    if (this.finalWPM >= this.currentLevel.requiredWPM && this.finalAccuracy >= this.currentLevel.requiredAccuracy) {
+                        return 'Bagus Sekali!';
+                    }
+                    return 'Tetap Semangat!';
+                },
+                
+                resultMessage() {
+                    if (this.isLevelCompleted(this.currentLevelId)) {
+                        return 'Kamu sudah menguasai level ini! Lanjut ke level berikutnya!';
+                    }
+                    if (this.levelCompleted) {
+                        return `Satu langkah lagi menuju penguasaan! Ulangi ${3 - this.getLevelProgress(this.currentLevelId)}x lagi.`;
+                    }
+                    const reqWPM = this.currentLevel.requiredWPM;
+                    const reqAcc = this.currentLevel.requiredAccuracy;
+                    return `Target: ${reqWPM} WPM & ${reqAcc}% akurasi untuk melanjutkan`;
+                }
+            },
+            
+            methods: {
+                isLevelUnlocked(levelId) {
+                    if (levelId === 1) return true;
+                    return this.isLevelCompleted(levelId - 1);
+                },
+                
+                isLevelCompleted(levelId) {
+                    return this.getLevelProgress(levelId) >= 3;
+                },
+                
+                getLevelProgress(levelId) {
+                    return this.levelProgress[levelId] || 0;
+                },
+                
+                startGame(levelId) {
+                    if (!this.isLevelUnlocked(levelId)) return;
+                    
+                    this.currentLevelId = levelId;
+                    this.currentLevel = this.levels.find(l => l.id === levelId);
+                    this.currentText = this.getRandomText();
+                    this.typedText = '';
+                    this.correctChars = 0;
+                    this.totalChars = 0;
+                    this.currentWPM = 0;
+                    this.currentAccuracy = 100;
+                    this.currentScore = 0;
+                    this.timeLeft = this.currentLevel.timeLimit;
+                    this.gameState = 'playing';
+                    this.newAchievements = [];
+                    this.levelCompleted = false;
+                    this.levelUnlocked = false;
+                    
+                    this.$nextTick(() => {
+                        this.$refs.typingInput.focus();
+                        this.startTimer();
+                    });
+                },
+                
+                getRandomText() {
+                    const texts = this.currentLevel.texts;
+                    return texts[Math.floor(Math.random() * texts.length)];
+                },
+                
+                startTimer() {
+                    this.startTime = Date.now();
+                    this.timerInterval = setInterval(() => {
+                        this.timeLeft--;
+                        this.calculateWPM();
+                        
+                        if (this.timeLeft <= 0) {
+                            this.endGame();
+                        }
+                    }, 1000);
+                },
+                
+                handleTyping() {
+                    this.totalChars = this.typedText.length;
+                    this.correctChars = 0;
+                    
+                    for (let i = 0; i < this.typedText.length; i++) {
+                        if (this.typedText[i] === this.currentText[i]) {
+                            this.correctChars++;
+                        }
+                    }
+                    
+                    this.currentAccuracy = this.totalChars > 0 
+                        ? Math.round((this.correctChars / this.totalChars) * 100) 
+                        : 100;
+                    
+                    this.currentScore = this.correctChars * 10;
+                    
+                    if (this.typedText === this.currentText) {
+                        this.endGame();
+                    }
+                },
+                
+                handleKeyDown(event) {
+                    this.currentKeyPressed = event.key.toUpperCase();
+                    
+                    const currentIndex = this.typedText.length;
+                    const expectedChar = this.currentText[currentIndex];
+                    
+                    if (event.key !== expectedChar && event.key !== 'Backspace') {
+                        this.showError = true;
+                        setTimeout(() => {
+                            this.showError = false;
+                        }, 500);
+                    }
+                    
+                    setTimeout(() => {
+                        this.currentKeyPressed = '';
+                    }, 100);
+                },
+                
+                calculateWPM() {
+                    const minutes = (Date.now() - this.startTime) / 60000;
+                    const words = this.correctChars / 5;
+                    this.currentWPM = minutes > 0 ? Math.round(words / minutes) : 0;
+                },
+                
+                endGame() {
+                    clearInterval(this.timerInterval);
+                    
+                    this.finalWPM = this.currentWPM;
+                    this.finalAccuracy = this.currentAccuracy;
+                    
+                    // Calculate XP
+                    this.earnedXP = Math.round(
+                        (this.currentWPM * 2) + 
+                        (this.currentAccuracy * 5) + 
+                        (this.correctChars * 2)
+                    );
+                    
+                    this.totalXP += this.earnedXP;
+                    
+                    // Update best scores
+                    if (this.currentWPM > this.bestWPM) {
+                        this.bestWPM = this.currentWPM;
+                    }
+                    
+                    if (this.currentAccuracy > this.bestAccuracy) {
+                        this.bestAccuracy = this.currentAccuracy;
+                    }
+                    
+                    // Check if level requirements met
+                    const reqWPM = this.currentLevel.requiredWPM;
+                    const reqAcc = this.currentLevel.requiredAccuracy;
+                    
+                    if (this.currentWPM >= reqWPM && this.currentAccuracy >= reqAcc) {
+                        // Increment level progress
+                        if (!this.levelProgress[this.currentLevelId]) {
+                            this.levelProgress[this.currentLevelId] = 0;
+                        }
+                        
+                        if (this.levelProgress[this.currentLevelId] < 3) {
+                            this.levelProgress[this.currentLevelId]++;
+                            this.levelCompleted = true;
+                            
+                            // Check if level just completed (3rd time)
+                            if (this.levelProgress[this.currentLevelId] === 3) {
+                                // Unlock next level
+                                if (this.currentLevelId < this.levels.length) {
+                                    if (this.currentMaxLevel < this.currentLevelId + 1) {
+                                        this.currentMaxLevel = this.currentLevelId + 1;
+                                        this.levelUnlocked = true;
+                                    }
+                                }
+                                
+                                this.showConfetti();
+                            }
+                        }
+                    }
+                    
+                    // Check achievements
+                    this.checkAchievements();
+                    
+                    // Save progress
+                    this.saveProgress();
+                    
+                    // Show confetti for good performance
+                    if (this.finalWPM >= 40) {
+                        this.showConfetti();
+                    }
+                    
+                    this.gameState = 'results';
+                },
+                
+                checkAchievements() {
+                    this.achievements.forEach(achievement => {
+                        if (!achievement.unlocked) {
+                            let shouldUnlock = false;
+                            
+                            switch(achievement.condition) {
+                                case 'levelComplete':
+                                    shouldUnlock = this.isLevelCompleted(achievement.value);
+                                    break;
+                                case 'allLevels':
+                                    shouldUnlock = this.levels.every(l => this.isLevelCompleted(l.id));
+                                    break;
+                                case 'wpm':
+                                    shouldUnlock = this.bestWPM >= achievement.value;
+                                    break;
+                                case 'accuracy':
+                                    shouldUnlock = this.finalAccuracy >= achievement.value;
+                                    break;
+                                case 'xp':
+                                    shouldUnlock = this.totalXP >= achievement.value;
+                                    break;
+                                case 'streak':
+                                    shouldUnlock = this.streak >= achievement.value;
+                                    break;
+                            }
+                            
+                            if (shouldUnlock) {
+                                achievement.unlocked = true;
+                                this.newAchievements.push(achievement);
+                            }
+                        }
+                    });
+                },
+                
+                showConfetti() {
+                    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+                    const container = document.getElementById('confetti-container');
+                    
+                    for (let i = 0; i < 50; i++) {
+                        setTimeout(() => {
+                            const confetti = document.createElement('div');
+                            confetti.className = 'confetti';
+                            confetti.style.left = Math.random() * 100 + '%';
+                            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                            container.appendChild(confetti);
+                            
+                            setTimeout(() => {
+                                confetti.remove();
+                            }, 3000);
+                        }, i * 30);
+                    }
+                },
+                
+                restartLevel() {
+                    this.startGame(this.currentLevelId);
+                },
+                
+                nextLevel() {
+                    if (this.currentLevelId < this.levels.length) {
+                        this.startGame(this.currentLevelId + 1);
+                    } else {
+                        this.backToMenu();
+                    }
+                },
+                
+                backToMenu() {
+                    this.gameState = 'menu';
+                },
+                
+                getKeyClass(key) {
+                    const upperKey = key.toUpperCase();
+                    const currentIndex = this.typedText.length;
+                    const expectedKey = this.currentText[currentIndex]?.toUpperCase();
+                    
+                    if (this.currentKeyPressed === upperKey) {
+                        if (upperKey === expectedKey) {
+                            return 'correct';
+                        } else {
+                            return 'wrong';
+                        }
+                    }
+                    
+                    if (upperKey === expectedKey) {
+                        return 'active glow-effect';
+                    }
+                    
+                    return '';
+                },
+                
+                getFingerColor(key) {
+                    const finger = this.fingerMapping[key.toUpperCase()];
+                    const colors = {
+                        'left-pinky': '#FCA5A5',
+                        'left-ring': '#FDBA74',
+                        'left-middle': '#FDE047',
+                        'left-index': '#86EFAC',
+                        'right-index': '#7DD3FC',
+                        'right-middle': '#A5B4FC',
+                        'right-ring': '#DDD6FE',
+                        'right-pinky': '#FBCFE8'
+                    };
+                    
+                    return colors[finger] || '#E5E7EB';
+                },
+                
+                saveProgress() {
+                    const data = {
+                        currentMaxLevel: this.currentMaxLevel,
+                        levelProgress: this.levelProgress,
+                        totalXP: this.totalXP,
+                        bestWPM: this.bestWPM,
+                        bestAccuracy: this.bestAccuracy,
+                        streak: this.streak,
+                        achievements: this.achievements,
+                        lastPlayed: new Date().toDateString()
+                    };
+                    
+                    localStorage.setItem('typeMasterProgress', JSON.stringify(data));
+                },
+                
+                loadProgress() {
+                    const saved = localStorage.getItem('typeMasterProgress');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        this.currentMaxLevel = data.currentMaxLevel || 1;
+                        this.levelProgress = data.levelProgress || {};
+                        this.totalXP = data.totalXP || 0;
+                        this.bestWPM = data.bestWPM || 0;
+                        this.bestAccuracy = data.bestAccuracy || 0;
+                        this.achievements = data.achievements || this.achievements;
+                        
+                        // Update streak
+                        const lastPlayed = data.lastPlayed;
+                        const today = new Date().toDateString();
+                        const yesterday = new Date(Date.now() - 86400000).toDateString();
+                        
+                        if (lastPlayed === yesterday) {
+                            this.streak = (data.streak || 0) + 1;
+                        } else if (lastPlayed === today) {
+                            this.streak = data.streak || 0;
+                        } else {
+                            this.streak = 1;
+                        }
+                    }
+                }
+            },
+            
+            mounted() {
+                this.loadProgress();
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
