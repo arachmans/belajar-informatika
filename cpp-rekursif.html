@@ -955,12 +955,69 @@ int main() {
                                     </div>
                                 </div>
                                 
-                                <!-- KPK -->
+                                <!-- FPB (Moved to position 2) -->
+                                <div class="mb-8 interactive-card">
+                                    <div class="bg-gradient-to-r from-green-500 to-teal-500 rounded-t-xl p-4">
+                                        <h4 class="text-white font-bold text-lg flex items-center">
+                                            <i class="fas fa-divide mr-2"></i>
+                                            2. Faktor Persekutuan Terbesar (FPB)
+                                        </h4>
+                                    </div>
+                                    <div class="bg-white rounded-b-xl p-6 shadow-xl">
+                                        <p class="text-gray-700 mb-4">FPB dari dua bilangan adalah bilangan bulat positif terbesar yang membagi keduanya.</p>
+                                        
+                                        <!-- ENHANCED DARK CODE BLOCK -->
+                                        <div class="code-block-wrapper">
+                                            <div class="code-header">
+                                                <div class="code-title">
+                                                    <i class="fas fa-code"></i>
+                                                    <span>fpb.cpp</span>
+                                                </div>
+                                                <div class="code-dots">
+                                                    <div class="code-dot red"></div>
+                                                    <div class="code-dot yellow"></div>
+                                                    <div class="code-dot green"></div>
+                                                </div>
+                                            </div>
+                                            <div style="position: relative;">
+                                                <button @click="copyCode('fpb')" class="copy-button">
+                                                    <i class="fas fa-copy mr-2"></i>Salin Kode
+                                                </button>
+                                                <pre><code id="fpb" class="language-cpp line-numbers">#include &lt;iostream&gt;
+using namespace std;
+
+int fpb(int a, int b) {
+    // Base case
+    if (b == 0) {
+        return a;
+    }
+    // Recursive step
+    return fpb(b, a % b);
+}
+
+int main() {
+    int num1 = 48, num2 = 18;
+    cout &lt;&lt; "FPB dari " &lt;&lt; num1 &lt;&lt; " dan " &lt;&lt; num2 &lt;&lt; " adalah " &lt;&lt; fpb(num1, num2) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Terminal Output -->
+                                        <div class="terminal mt-4">
+                                            <div class="terminal-prompt">$</div>
+                                            <div class="terminal-command inline ml-2">g++ fpb.cpp -o fpb && ./fpb</div>
+                                            <div class="terminal-output">FPB dari 48 dan 18 adalah 6</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- KPK (Moved to position 3) -->
                                 <div class="mb-8 interactive-card">
                                     <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-t-xl p-4">
                                         <h4 class="text-white font-bold text-lg flex items-center">
                                             <i class="fas fa-infinity mr-2"></i>
-                                            2. Kelipatan Persekutuan Terkecil (KPK)
+                                            3. Kelipatan Persekutuan Terkecil (KPK)
                                         </h4>
                                     </div>
                                     <div class="bg-white rounded-b-xl p-6 shadow-xl">
@@ -1010,63 +1067,6 @@ int main() {
                                             <div class="terminal-prompt">$</div>
                                             <div class="terminal-command inline ml-2">g++ kpk.cpp -o kpk && ./kpk</div>
                                             <div class="terminal-output">KPK dari 12 dan 18 adalah 36</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- FPB -->
-                                <div class="mb-8 interactive-card">
-                                    <div class="bg-gradient-to-r from-green-500 to-teal-500 rounded-t-xl p-4">
-                                        <h4 class="text-white font-bold text-lg flex items-center">
-                                            <i class="fas fa-divide mr-2"></i>
-                                            3. Faktor Persekutuan Terbesar (FPB)
-                                        </h4>
-                                    </div>
-                                    <div class="bg-white rounded-b-xl p-6 shadow-xl">
-                                        <p class="text-gray-700 mb-4">FPB dari dua bilangan adalah bilangan bulat positif terbesar yang membagi keduanya.</p>
-                                        
-                                        <!-- ENHANCED DARK CODE BLOCK -->
-                                        <div class="code-block-wrapper">
-                                            <div class="code-header">
-                                                <div class="code-title">
-                                                    <i class="fas fa-code"></i>
-                                                    <span>fpb.cpp</span>
-                                                </div>
-                                                <div class="code-dots">
-                                                    <div class="code-dot red"></div>
-                                                    <div class="code-dot yellow"></div>
-                                                    <div class="code-dot green"></div>
-                                                </div>
-                                            </div>
-                                            <div style="position: relative;">
-                                                <button @click="copyCode('fpb')" class="copy-button">
-                                                    <i class="fas fa-copy mr-2"></i>Salin Kode
-                                                </button>
-                                                <pre><code id="fpb" class="language-cpp line-numbers">#include &lt;iostream&gt;
-using namespace std;
-
-int fpb(int a, int b) {
-    // Base case
-    if (b == 0) {
-        return a;
-    }
-    // Recursive step
-    return fpb(b, a % b);
-}
-
-int main() {
-    int num1 = 48, num2 = 18;
-    cout &lt;&lt; "FPB dari " &lt;&lt; num1 &lt;&lt; " dan " &lt;&lt; num2 &lt;&lt; " adalah " &lt;&lt; fpb(num1, num2) &lt;&lt; endl;
-    return 0;
-}</code></pre>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Terminal Output -->
-                                        <div class="terminal mt-4">
-                                            <div class="terminal-prompt">$</div>
-                                            <div class="terminal-command inline ml-2">g++ fpb.cpp -o fpb && ./fpb</div>
-                                            <div class="terminal-output">FPB dari 48 dan 18 adalah 6</div>
                                         </div>
                                     </div>
                                 </div>
