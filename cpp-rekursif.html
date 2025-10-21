@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Rekursif C++ - Interactive Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .code-block code {
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .keyword { color: #569cd6; }
+        .function { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .operator { color: #d4d4d4; }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+
+        .slide-enter-active {
+            transition: all 0.3s ease;
+        }
+
+        .slide-enter-from {
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .exercise-card {
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-card:hover {
+            border-left-width: 8px;
+            background: #f8f9ff;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app">
+        <!-- Header -->
+        <header class="gradient-bg text-white shadow-2xl sticky top-0 z-50">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-code text-3xl"></i>
+                        <div>
+                            <h1 class="text-2xl font-bold">Belajar Rekursif C++</h1>
+                            <p class="text-sm text-purple-200">Interactive Learning Platform</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span class="text-sm">Level: Pemula - Menengah</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bg-white shadow-md sticky top-[88px] z-40">
+            <div class="container mx-auto px-4">
+                <div class="flex space-x-1">
+                    <button 
+                        @click="activeMenu = 'materi'"
+                        :class="activeMenu === 'materi' ? 'border-b-4 border-purple-600 text-purple-600' : 'text-gray-600 hover:text-purple-600'"
+                        class="px-6 py-4 font-semibold transition-all duration-300 flex items-center space-x-2">
+                        <i class="fas fa-book"></i>
+                        <span>Materi</span>
+                    </button>
+                    <button 
+                        @click="activeMenu = 'latihan'"
+                        :class="activeMenu === 'latihan' ? 'border-b-4 border-purple-600 text-purple-600' : 'text-gray-600 hover:text-purple-600'"
+                        class="px-6 py-4 font-semibold transition-all duration-300 flex items-center space-x-2">
+                        <i class="fas fa-pencil-alt"></i>
+                        <span>Latihan</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <!-- Materi Section -->
+            <transition name="fade">
+                <div v-if="activeMenu === 'materi'" class="space-y-8">
+                    <!-- Hero Section -->
+                    <div class="gradient-bg rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-lightbulb text-4xl float-animation"></i>
+                                <h2 class="text-3xl md:text-4xl font-bold">Kenapa Rekursif?</h2>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 card-hover">
+                                    <i class="fas fa-check-circle text-2xl mb-3"></i>
+                                    <h3 class="text-xl font-semibold mb-2">Solusi Elegan</h3>
+                                    <p class="text-purple-100">Memecahkan masalah kompleks menjadi sub-masalah yang lebih sederhana</p>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 card-hover">
+                                    <i class="fas fa-layer-group text-2xl mb-3"></i>
+                                    <h3 class="text-xl font-semibold mb-2">Kode Lebih Ringkas</h3>
+                                    <p class="text-purple-100">Mengurangi penggunaan loop yang berlebihan dan membuat kode lebih mudah dibaca</p>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 card-hover">
+                                    <i class="fas fa-tree text-2xl mb-3"></i>
+                                    <h3 class="text-xl font-semibold mb-2">Natural untuk Struktur Data</h3>
+                                    <p class="text-purple-100">Sempurna untuk tree, graph, dan struktur data rekursif lainnya</p>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 card-hover">
+                                    <i class="fas fa-puzzle-piece text-2xl mb-3"></i>
+                                    <h3 class="text-xl font-semibold mb-2">Problem Solving</h3>
+                                    <p class="text-purple-100">Pendekatan divide and conquer yang powerful untuk berbagai masalah</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
+                        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
+                    </div>
+
+                    <!-- Apa itu Rekursif -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <i class="fas fa-question-circle text-2xl text-purple-600"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold gradient-text">Apa itu Fungsi Rekursif?</h2>
+                        </div>
+                        <p class="text-gray-700 text-lg mb-4 leading-relaxed">
+                            Fungsi rekursif adalah fungsi yang <strong>memanggil dirinya sendiri</strong> untuk menyelesaikan masalah. 
+                            Setiap fungsi rekursif harus memiliki:
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">✓ Base Case (Kasus Dasar)</h4>
+                                <p class="text-gray-700 text-sm">Kondisi untuk menghentikan rekursi</p>
+                            </div>
+                            <div class="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg">
+                                <h4 class="font-semibold text-blue-800 mb-2">✓ Recursive Case (Kasus Rekursif)</h4>
+                                <p class="text-gray-700 text-sm">Pemanggilan fungsi ke dirinya sendiri dengan parameter berbeda</p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-yellow-800 mb-1">Penting!</h4>
+                                    <p class="text-gray-700 text-sm">Tanpa base case, rekursi akan berjalan tanpa henti (infinite recursion) dan menyebabkan stack overflow!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contoh 1: Faktorial -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-blue-100 p-3 rounded-lg">
+                                    <i class="fas fa-calculator text-2xl text-blue-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800">Contoh 1: Faktorial</h3>
+                            </div>
+                            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">Basic</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            Faktorial dari n (n!) adalah perkalian semua bilangan positif dari 1 hingga n.<br>
+                            Contoh: 5! = 5 × 4 × 3 × 2 × 1 = 120
+                        </p>
+                        <div class="bg-purple-50 p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-purple-800 mb-2">💡 Konsep:</h4>
+                            <p class="text-gray-700">n! = n × (n-1)! dengan base case: 0! = 1</p>
+                        </div>
+                        <div class="code-block">
+<code><span class="comment">// Fungsi Faktorial Rekursif</span><br>
+<span class="keyword">int</span> <span class="function">faktorial</span>(<span class="keyword">int</span> n) { <br>
+    <span class="comment">// Base case</span><br>
+    <span class="keyword">if</span> (n == <span class="number">0</span> || n == <span class="number">1</span>) { <br>
+        <span class="keyword">return</span> <span class="number">1</span>;<br>
+    } <br>
+    <span class="comment">// Recursive case</span><br>
+    <span class="keyword">return</span> n * <span class="function">faktorial</span>(n - <span class="number">1</span>);<br>
+}<br>
+<br>
+<span class="comment">// Contoh penggunaan</span><br>
+<span class="keyword">int</span> <span class="function">main</span>() {<br>
+    <span class="keyword">int</span> angka = <span class="number">5</span>;<br>
+    cout << <span class="string">"Faktorial dari "</span> << angka << <span class="string">" adalah: "</span> <br>
+         << <span class="function">faktorial</span>(angka) << endl;<br>
+    <span class="comment">// Output: Faktorial dari 5 adalah: 120</span><br>
+    <span class="keyword">return</span> <span class="number">0</span>;<br>
+}</code>
+                        </div>
+                        <div class="mt-4 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">🔄 Alur Eksekusi faktorial(5):</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-purple-600 font-mono">→</span>
+                                    <span>faktorial(5) = 5 × faktorial(4)</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-4">
+                                    <span class="text-purple-600 font-mono">→</span>
+                                    <span>faktorial(4) = 4 × faktorial(3)</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-8">
+                                    <span class="text-purple-600 font-mono">→</span>
+                                    <span>faktorial(3) = 3 × faktorial(2)</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-12">
+                                    <span class="text-purple-600 font-mono">→</span>
+                                    <span>faktorial(2) = 2 × faktorial(1)</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-16">
+                                    <span class="text-green-600 font-mono">✓</span>
+                                    <span class="text-green-600 font-semibold">faktorial(1) = 1 (BASE CASE)</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-12">
+                                    <span class="text-blue-600 font-mono">←</span>
+                                    <span>faktorial(2) = 2 × 1 = 2</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-8">
+                                    <span class="text-blue-600 font-mono">←</span>
+                                    <span>faktorial(3) = 3 × 2 = 6</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-4">
+                                    <span class="text-blue-600 font-mono">←</span>
+                                    <span>faktorial(4) = 4 × 6 = 24</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-blue-600 font-mono">←</span>
+                                    <span class="font-bold">faktorial(5) = 5 × 24 = 120</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contoh 2: FPB (GCD) -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-green-100 p-3 rounded-lg">
+                                    <i class="fas fa-divide text-2xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800">Contoh 2: FPB (Faktor Persekutuan Terbesar)</h3>
+                            </div>
+                            <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">Intermediate</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            FPB menggunakan algoritma Euclid: FPB(a,b) = FPB(b, a mod b)
+                        </p>
+                        <div class="bg-green-50 p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-green-800 mb-2">💡 Konsep:</h4>
+                            <p class="text-gray-700">Algoritma Euclid: FPB dari dua bilangan dapat ditemukan dengan membagi bilangan lebih besar dengan yang lebih kecil, lalu ulangi dengan sisa pembagian</p>
+                        </div>
+                        <div class="code-block">
+<code><span class="comment">// Fungsi FPB Rekursif (Algoritma Euclid)</span><br>
+<span class="keyword">int</span> <span class="function">fpb</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+    <span class="comment">// Base case</span><br>
+    <span class="keyword">if</span> (b == <span class="number">0</span>) {<br>
+        <span class="keyword">return</span> a;<br>
+    }<br>
+    <span class="comment">// Recursive case</span><br>
+    <span class="keyword">return</span> <span class="function">fpb</span>(b, a % b);<br>
+}<br>
+<br>
+<span class="comment">// Contoh penggunaan</span><br>
+<span class="keyword">int</span> <span class="function">main</span>() {<br>
+    <span class="keyword">int</span> a = <span class="number">48</span>, b = <span class="number">18</span>;<br>
+    cout << <span class="string">"FPB dari "</span> << a << <span class="string">" dan "</span> << b <br>
+         << <span class="string">" adalah: "</span> << <span class="function">fpb</span>(a, b) << endl;<br>
+    <span class="comment">// Output: FPB dari 48 dan 18 adalah: 6</span><br>
+    <span class="keyword">return</span> <span class="number">0</span>;<br>
+}</code>
+                        </div>
+                        <div class="mt-4 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">🔄 Alur Eksekusi fpb(48, 18):</h4>
+                            <div class="space-y-2 text-sm">
+                                <div>fpb(48, 18) → fpb(18, 48 % 18) → fpb(18, 12)</div>
+                                <div class="ml-4">fpb(18, 12) → fpb(12, 18 % 12) → fpb(12, 6)</div>
+                                <div class="ml-8">fpb(12, 6) → fpb(6, 12 % 6) → fpb(6, 0)</div>
+                                <div class="ml-12 text-green-600 font-semibold">fpb(6, 0) → return 6 ✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contoh 3: KPK -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-purple-100 p-3 rounded-lg">
+                                    <i class="fas fa-times text-2xl text-purple-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800">Contoh 3: KPK (Kelipatan Persekutuan Terkecil)</h3>
+                            </div>
+                            <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold">Intermediate</span>
+                        </div>
+                        <p class="text-gray-700 mb-4">
+                            KPK menggunakan rumus: KPK(a,b) = (a × b) / FPB(a,b)
+                        </p>
+                        <div class="bg-purple-50 p-4 rounded-lg mb-4">
+                            <h4 class="font-semibold text-purple-800 mb-2">💡 Konsep:</h4>
+                            <p class="text-gray-700">KPK memanfaatkan fungsi FPB yang sudah kita buat sebelumnya</p>
+                        </div>
+                        <div class="code-block">
+<code><span class="comment">// Fungsi FPB (dari contoh sebelumnya)</span><br>
+<span class="keyword">int</span> <span class="function">fpb</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+    <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> a;<br>
+    <span class="keyword">return</span> <span class="function">fpb</span>(b, a % b);<br>
+}<br>
+<br>
+<span class="comment">// Fungsi KPK menggunakan FPB</span><br>
+<span class="keyword">int</span> <span class="function">kpk</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+    <span class="keyword">return</span> (a * b) / <span class="function">fpb</span>(a, b);<br>
+}<br>
+<br>
+<span class="comment">// Contoh penggunaan</span><br>
+<span class="keyword">int</span> <span class="function">main</span>() {<br>
+    <span class="keyword">int</span> a = <span class="number">12</span>, b = <span class="number">18</span>;<br>
+    cout << <span class="string">"KPK dari "</span> << a << <span class="string">" dan "</span> << b <br>
+         << <span class="string">" adalah: "</span> << <span class="function">kpk</span>(a, b) << endl;<br>
+    <span class="comment">// Output: KPK dari 12 dan 18 adalah: 36</span><br>
+    <span class="keyword">return</span> <span class="number">0</span>;<br>
+}</code>
+                        </div>
+                        <div class="mt-4 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">📝 Penjelasan:</h4>
+                            <p class="text-sm text-gray-700">
+                                Untuk mencari KPK(12, 18):<br>
+                                1. Cari FPB(12, 18) = 6<br>
+                                2. KPK = (12 × 18) / 6 = 216 / 6 = 36
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- Latihan Section -->
+            <transition name="fade">
+                <div v-if="activeMenu === 'latihan'" class="space-y-6">
+                    <!-- Header Latihan -->
+                    <div class="gradient-bg rounded-2xl p-8 text-white">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fas fa-dumbbell text-3xl"></i>
+                            <h2 class="text-3xl font-bold">Latihan Praktik</h2>
+                        </div>
+                        <p class="text-purple-100 text-lg">
+                            Sekarang saatnya kamu mencoba membuat fungsi rekursif sendiri! Kerjakan 3 soal berikut di IDE C++ favoritmu.
+                        </p>
+                        <div class="mt-4 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                            <div class="flex items-center space-x-2 text-sm">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Tips: Selalu tentukan base case terlebih dahulu, lalu pikirkan recursive case-nya!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soal 1 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden exercise-card">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-white text-blue-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
+                                        1
+                                    </div>
+                                    <h3 class="text-2xl font-bold">Menghitung Jumlah Deret 1 + 2 + 3 + ... + n</h3>
+                                </div>
+                                <span class="bg-white/20 px-4 py-2 rounded-full text-sm">⭐ Easy</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-clipboard-list text-blue-600 mr-2"></i>
+                                    Deskripsi Masalah:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed">
+                                    Buatlah fungsi rekursif untuk menghitung jumlah deret bilangan dari 1 sampai n.<br>
+                                    Contoh: jumlahDeret(5) = 1 + 2 + 3 + 4 + 5 = 15
+                                </p>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                    Petunjuk:
+                                </h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <span class="text-blue-600 mr-2">•</span>
+                                        <span><strong>Base case:</strong> Jika n = 1, return 1</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-600 mr-2">•</span>
+                                        <span><strong>Recursive case:</strong> jumlahDeret(n) = n + jumlahDeret(n-1)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-600 mr-2">•</span>
+                                        <span>Pikirkan: Bagaimana cara menghitung jumlah 1..5 jika kamu sudah tahu jumlah 1..4?</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-check-double text-green-600 mr-2"></i>
+                                    Contoh Input/Output:
+                                </h4>
+                                <div class="bg-gray-50 p-4 rounded-lg font-mono text-sm space-y-2">
+                                    <div class="flex justify-between border-b pb-2">
+                                        <span class="text-gray-600">Input: n = 5</span>
+                                        <span class="text-green-600">Output: 15</span>
+                                    </div>
+                                    <div class="flex justify-between border-b pb-2">
+                                        <span class="text-gray-600">Input: n = 10</span>
+                                        <span class="text-green-600">Output: 55</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Input: n = 100</span>
+                                        <span class="text-green-600">Output: 5050</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                                <button 
+                                    @click="toggleHint(1)"
+                                    class="flex items-center space-x-2 text-blue-800 font-semibold hover:text-blue-900 transition">
+                                    <i :class="showHint === 1 ? 'fas fa-chevron-down' : 'fas fa-chevron-right'"></i>
+                                    <span>{{ showHint === 1 ? 'Sembunyikan' : 'Lihat' }} Template Kode</span>
+                                </button>
+                                <transition name="fade">
+                                    <div v-if="showHint === 1" class="mt-4">
+                                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">jumlahDeret</span>(<span class="keyword">int</span> n) {<br>
+    <span class="comment">// Tulis base case di sini</span><br>
+    <br>
+    <br>
+    <span class="comment">// Tulis recursive case di sini</span><br>
+    <br>
+}<br>
+<br>
+<span class="keyword">int</span> <span class="function">main</span>() {<br>
+    <span class="keyword">int</span> n;<br>
+    cout << <span class="string">"Masukkan nilai n: "</span>;<br>
+    cin >> n;<br>
+    cout << <span class="string">"Jumlah deret 1 sampai "</span> << n <br>
+         << <span class="string">" adalah: "</span> << <span class="function">jumlahDeret</span>(n);<br>
+    <span class="keyword">return</span> <span class="number">0</span>;<br>
+}</code>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden exercise-card">
+                        <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-white text-purple-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
+                                        2
+                                    </div>
+                                    <h3 class="text-2xl font-bold">Menghitung Pangkat a^b</h3>
+                                </div>
+                                <span class="bg-white/20 px-4 py-2 rounded-full text-sm">⭐⭐ Medium</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-clipboard-list text-purple-600 mr-2"></i>
+                                    Deskripsi Masalah:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed">
+                                    Buatlah fungsi rekursif untuk menghitung hasil perpangkatan a^b (a pangkat b).<br>
+                                    Contoh: pangkat(2, 5) = 2 × 2 × 2 × 2 × 2 = 32
+                                </p>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                    Petunjuk:
+                                </h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <span class="text-purple-600 mr-2">•</span>
+                                        <span><strong>Base case:</strong> Jika b = 0, return 1 (karena a^0 = 1)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-600 mr-2">•</span>
+                                        <span><strong>Recursive case:</strong> pangkat(a, b) = a × pangkat(a, b-1)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-600 mr-2">•</span>
+                                        <span>Pikirkan: 2^5 = 2 × 2^4, jadi setiap kali pangkat berkurang 1</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-600 mr-2">•</span>
+                                        <span><strong>Bonus:</strong> Pertimbangkan juga kasus jika b negatif (opsional)</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-check-double text-green-600 mr-2"></i>
+                                    Contoh Input/Output:
+                                </h4>
+                                <div class="bg-gray-50 p-4 rounded-lg font-mono text-sm space-y-2">
+                                    <div class="flex justify-between border-b pb-2">
+                                        <span class="text-gray-600">Input: a = 2, b = 5</span>
+                                        <span class="text-green-600">Output: 32</span>
+                                    </div>
+                                    <div class="flex justify-between border-b pb-2">
+                                        <span class="text-gray-600">Input: a = 3, b = 4</span>
+                                        <span class="text-green-600">Output: 81</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Input: a = 5, b = 0</span>
+                                        <span class="text-green-600">Output: 1</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg">
+                                <button 
+                                    @click="toggleHint(2)"
+                                    class="flex items-center space-x-2 text-purple-800 font-semibold hover:text-purple-900 transition">
+                                    <i :class="showHint === 2 ? 'fas fa-chevron-down' : 'fas fa-chevron-right'"></i>
+                                    <span>{{ showHint === 2 ? 'Sembunyikan' : 'Lihat' }} Template Kode</span>
+                                </button>
+                                <transition name="fade">
+                                    <div v-if="showHint === 2" class="mt-4">
+                                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">pangkat</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {<br>
+    <span class="comment">// Base case: a^0 = 1</span><br>
+    <br>
+    <br>
+    <span class="comment">// Recursive case: a^b = a * a^(b-1)</span><br>
+    <br>
+}<br>
+<br>
+<span class="keyword">int</span> <span class="function">main</span>() {<br>
+    <span class="keyword">int</span> a, b;<br>
+    cout << <span class="string">"Masukkan nilai a: "</span>;<br>
+    cin >> a;<br>
+    cout << <span class="string">"Masukkan nilai b: "</span>;<br>
+    cin >> b;<br>
+    cout << a << <span class="string">" pangkat "</span> << b <br>
+         << <span class="string">" adalah: "</span> << <span class="function">pangkat</span>(a, b);<br>
+    <span class="keyword">return</span> <span class="number">0</span>;<br>
+}</code>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soal 3 -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden exercise-card">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-white text-green-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
+                                        3
+                                    </div>
+                                    <h3 class="text-2xl font-bold">Menghitung Jumlah Digit Bilangan</h3>
+                                </div>
+                                <span class="bg-white/20 px-4 py-2 rounded-full text-sm">⭐⭐⭐ Hard</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-clipboard-list text-green-600 mr-2"></i>
+                                    Deskripsi Masalah:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed">
+                                    Buatlah fungsi rekursif untuk menghitung jumlah semua digit dari sebuah bilangan.<br>
+                                    Contoh: jumlahDigit(12345) = 1 + 2 + 3 + 4 + 5 = 15
+                                </p>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                                    Petunjuk:
+                                </h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <span class="text-green-600 mr-2">•</span>
+                                        <span><strong>Base case:</strong> Jika n = 0, return 0</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-600 mr-2">•</span>
+                                        <span><strong>Recursive case:</strong> jumlahDigit(n) = (n % 10) + jumlahDigit(n / 10)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-600 mr-2">•</span>
+                                        <span>Operasi <code class="bg-gray-200 px-2 py-1 rounded">n % 10</code> mengambil digit terakhir</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-600 mr-2">•</span>
+                                        <span>Operasi <code class="bg-gray-200 px-2 py-1 rounded">n / 10</code> menghilangkan digit terakhir</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-600 mr-2">•</span>
+                                        <span>Contoh: 12345 % 10 = 5, dan 12345 / 10 = 1234</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i class="fas fa-check-double text-green-600 mr-2"></i>
+                                    Contoh Input/Output:
+                                </h4>
+                                <div class="bg-gray-50 p-4 rounded-lg font-mono text-sm space-y-2">
+                                    <div class="flex justify-between border-b pb-2">
+                                        <span class="text-gray-600">Input: n = 12345</span>
+                                        <span class="text-green-600">Output: 15</span>
+                                    </div>
+                                    <div class="flex justify-between border-b pb-2">
+                                        <span class="text-gray-600">Input: n = 999</span>
+                                        <span class="text-green-600">Output: 27</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Input: n = 2024</span>
+                                        <span class="text-green-600">Output: 8</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 mb-3">🔍 Visualisasi Proses untuk n = 12345:</h4>
+                                <div class="space-y-2 text-sm font-mono">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-green-600">→</span>
+                                        <span>jumlahDigit(12345) = 5 + jumlahDigit(1234)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 ml-4">
+                                        <span class="text-green-600">→</span>
+                                        <span>jumlahDigit(1234) = 4 + jumlahDigit(123)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 ml-8">
+                                        <span class="text-green-600">→</span>
+                                        <span>jumlahDigit(123) = 3 + jumlahDigit(12)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 ml-12">
+                                        <span class="text-green-600">→</span>
+                                        <span>jumlahDigit(12) = 2 + jumlahDigit(1)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 ml-16">
+                                        <span class="text-green-600">→</span>
+                                        <span>jumlahDigit(1) = 1 + jumlahDigit(0)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 ml-20">
+                                        <span class="text-blue-600">✓</span>
+                                        <span class="text-blue-600">jumlahDigit(0) = 0 (BASE CASE)</span>
+                                    </div>
+                                    <div class="mt-3 pt-3 border-t border-gray-300">
+                                        <span class="font-semibold">Hasil: 5 + 4 + 3 + 2 + 1 + 0 = 15</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                                <button 
+                                    @click="toggleHint(3)"
+                                    class="flex items-center space-x-2 text-green-800 font-semibold hover:text-green-900 transition">
+                                    <i :class="showHint === 3 ? 'fas fa-chevron-down' : 'fas fa-chevron-right'"></i>
+                                    <span>{{ showHint === 3 ? 'Sembunyikan' : 'Lihat' }} Template Kode</span>
+                                </button>
+                                <transition name="fade">
+                                    <div v-if="showHint === 3" class="mt-4">
+                                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">jumlahDigit</span>(<span class="keyword">int</span> n) {<br>
+    <span class="comment">// Base case: jika n = 0</span><br>
+    <br>
+    <br>
+    <span class="comment">// Recursive case: ambil digit terakhir + proses sisanya</span><br>
+    <span class="comment">// n % 10 = digit terakhir</span><br>
+    <span class="comment">// n / 10 = bilangan tanpa digit terakhir</span><br>
+    <br>
+}<br>
+<br>
+<span class="keyword">int</span> <span class="function">main</span>() {<br>
+    <span class="keyword">int</span> n;<br>
+    cout << <span class="string">"Masukkan bilangan: "</span>;<br>
+    cin >> n;<br>
+    cout << <span class="string">"Jumlah digit dari "</span> << n <br>
+         << <span class="string">" adalah: "</span> << <span class="function">jumlahDigit</span>(n);<br>
+    <span class="keyword">return</span> <span class="number">0</span>;<br>
+}</code>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl p-8 text-white shadow-xl">
+                        <div class="flex items-start space-x-4">
+                            <i class="fas fa-star text-4xl mt-1"></i>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-3">Tips Mengerjakan Latihan</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <span class="mr-2">✓</span>
+                                        <span>Mulai dengan menulis base case terlebih dahulu</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="mr-2">✓</span>
+                                        <span>Gunakan cout untuk debug dan melihat alur rekursi</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="mr-2">✓</span>
+                                        <span>Test dengan input kecil terlebih dahulu (n = 1, 2, 3)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="mr-2">✓</span>
+                                        <span>Pastikan recursive case menuju ke base case</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="mr-2">✓</span>
+                                        <span>Jangan takut mencoba dan membuat kesalahan!</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white mt-16 py-8">
+            <div class="container mx-auto px-4 text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <i class="fas fa-code"></i>
+                    <span class="font-semibold">Belajar Rekursif C++</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Platform pembelajaran interaktif untuk memahami konsep rekursif dalam pemrograman C++
+                </p>
+                <div class="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
+                    <span>© 2024</span>
+                    <span>•</span>
+                    <span>Made with <i class="fas fa-heart text-red-500"></i> for learners</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeMenu: 'materi',
+                    showHint: null
+                }
+            },
+            methods: {
+                toggleHint(number) {
+                    this.showHint = this.showHint === number ? null : number;
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
