@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembelajaran Gambar Vector & Bitmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .zoom-in {
+            animation: zoomIn 0.6s ease-out;
+        }
+        
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .vector-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .tab-active {
+            border-bottom: 3px solid #6366f1;
+            color: #6366f1;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .image-container {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .scaled-image {
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+        
+        .pixelated {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+        
+        .draggable {
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+        
+        .draggable:hover {
+            transform: scale(1.05);
+        }
+        
+        .dragging {
+            opacity: 0.5;
+            transform: scale(1.1);
+        }
+        
+        .drop-zone {
+            min-height: 120px;
+            transition: all 0.3s ease;
+            border: 3px dashed transparent;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            transform: scale(1.02);
+        }
+        
+        .correct-drop {
+            animation: correctPulse 0.6s ease;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background: rgba(34, 197, 94, 0.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .wrong-drop {
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .success-animation {
+            animation: successBounce 0.8s ease;
+        }
+        
+        @keyframes successBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .card-flip {
+            perspective: 1000px;
+        }
+        
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .card-flip.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .streak-fire {
+            animation: fireFlicker 1s infinite alternate;
+        }
+        
+        @keyframes fireFlicker {
+            0% { transform: scale(1) rotate(-5deg); }
+            100% { transform: scale(1.1) rotate(5deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app">
+        <!-- Enhanced Header with Animation -->
+        <header class="gradient-bg text-white relative overflow-hidden">
+            <div class="absolute inset-0 vector-pattern"></div>
+            <div class="container mx-auto px-4 py-6 relative z-10">
+                <div class="flex items-center justify-between">
+                    <div class="slide-in">
+                        <h1 class="text-3xl font-bold flex items-center">
+                            <i class="fas fa-image mr-3 float-animation"></i>
+                            {{ currentPageTitle }}
+                        </h1>
+                        <p class="text-purple-100 mt-2">Jelajahi dunia desain digital dengan cara yang menyenangkan</p>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold">{{ learningProgress }}%</div>
+                                <div class="text-xs text-purple-200">Progress</div>
+                            </div>
+                            <svg class="progress-ring" width="60" height="60">
+                                <circle cx="30" cy="30" r="25" stroke="#ffffff30" stroke-width="4" fill="none"/>
+                                <circle cx="30" cy="30" r="25" stroke="#ffffff" stroke-width="4" fill="none"
+                                        :stroke-dasharray="157"
+                                        :stroke-dashoffset="157 - (157 * learningProgress / 100)"
+                                        stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content with Enhanced Design -->
+        <main class="container mx-auto px-4 pb-20 pt-6 min-h-screen">
+            <transition name="fade" mode="out-out">
+                <!-- Enhanced Menu Materi -->
+                <div v-if="currentPage === 'materi'" key="materi">
+                    <!-- Hero Section -->
+                    <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-8 mb-8 text-white zoom-in">
+                        <div class="flex flex-col md:flex-row items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <h2 class="text-3xl font-bold mb-3">🎨 Mulai Perjalanan Kreatifmu!</h2>
+                                <p class="text-lg text-purple-100">Pelajari fundamental desain digital dan kuasai seni vector & bitmap</p>
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur">
+                                        <i class="fas fa-clock mr-1"></i> 15 menit
+                                    </span>
+                                    <span class="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur">
+                                        <i class="fas fa-signal mr-1"></i> Pemula
+                                    </span>
+                                    <span class="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur">
+                                        <i class="fas fa-certificate mr-1"></i> Sertifikat
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-8xl float-animation">🚀</div>
+                        </div>
+                    </div>
+
+                    <!-- Learning Path -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">
+                                <i class="fas fa-route text-indigo-500 mr-2"></i>
+                                Path Pembelajaran
+                            </h3>
+                            <button @click="resetProgress" class="text-sm text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-redo mr-1"></i> Reset
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div v-for="(step, index) in learningSteps" :key="index"
+                                 @click="scrollToSection(step.id)"
+                                 :class="[
+                                     'p-4 rounded-lg cursor-pointer transition-all hover-lift',
+                                     step.completed ? 'bg-green-50 border-2 border-green-300' : 'bg-white border-2 border-gray-200'
+                                 ]">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-2xl">{{ step.icon }}</span>
+                                    <span v-if="step.completed" class="text-green-500">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                </div>
+                                <h4 class="font-semibold text-sm">{{ step.title }}</h4>
+                                <p class="text-xs text-gray-500 mt-1">{{ step.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Comparison Section -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 hover-lift" id="comparison">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                            <i class="fas fa-balance-scale text-indigo-500 mr-2"></i>
+                            Vector vs Bitmap: Perbedaan Mendasar
+                        </h2>
+                        
+                        <!-- Tab Navigation -->
+                        <div class="flex justify-center mb-6">
+                            <div class="bg-gray-100 rounded-lg p-1 inline-flex">
+                                <button @click="activeTab = 'visual'" 
+                                        :class="['px-6 py-2 rounded-lg transition-all', activeTab === 'visual' ? 'bg-white shadow-md tab-active' : '']">
+                                    Visual Demo
+                                </button>
+                                <button @click="activeTab = 'technical'" 
+                                        :class="['px-6 py-2 rounded-lg transition-all', activeTab === 'technical' ? 'bg-white shadow-md tab-active' : '']">
+                                    Teknis
+                                </button>
+                                <button @click="activeTab = 'usecase'" 
+                                        :class="['px-6 py-2 rounded-lg transition-all', activeTab === 'usecase' ? 'bg-white shadow-md tab-active' : '']">
+                                    Use Case
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div v-if="activeTab === 'visual'" class="grid md:grid-cols-2 gap-8">
+                            <div class="text-center">
+                                <div class="bg-gradient-to-br from-purple-100 to-pink-100 p-8 rounded-xl">
+                                    <div class="text-6xl mb-4">📐</div>
+                                    <h3 class="text-xl font-bold text-purple-700 mb-3">Vector Graphics</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <button @click="vectorScale = 50" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           vectorScale === 50 ? 'bg-purple-600 text-white' : 'bg-purple-500 text-white hover:bg-purple-600']">
+                                                50%
+                                            </button>
+                                            <button @click="vectorScale = 100" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           vectorScale === 100 ? 'bg-purple-600 text-white' : 'bg-purple-500 text-white hover:bg-purple-600']">
+                                                100%
+                                            </button>
+                                            <button @click="vectorScale = 200" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           vectorScale === 200 ? 'bg-purple-600 text-white' : 'bg-purple-500 text-white hover:bg-purple-600']">
+                                                200%
+                                            </button>
+                                            <button @click="vectorScale = 500" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           vectorScale === 500 ? 'bg-purple-600 text-white' : 'bg-purple-500 text-white hover:bg-purple-600']">
+                                                500%
+                                            </button>
+                                        </div>
+                                        <div class="flex justify-center">
+                                            <div class="image-container bg-white rounded-lg shadow-inner">
+                                                <svg class="scaled-image" width="100" height="100" viewBox="0 0 100 100"
+                                                     :style="{transform: `scale(${vectorScale/100})`}">
+                                                    <circle cx="50" cy="50" r="40" fill="#8B5CF6"/>
+                                                    <path d="M30 50 L45 35 L55 45 L70 30" stroke="white" stroke-width="3" fill="none"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-2">
+                                            <span class="font-semibold">Tetap tajam</span> di semua ukuran! 
+                                            <span class="text-purple-600">✨</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <div class="bg-gradient-to-br from-orange-100 to-yellow-100 p-8 rounded-xl">
+                                    <div class="text-6xl mb-4">🖼️</div>
+                                    <h3 class="text-xl font-bold text-orange-700 mb-3">Bitmap Graphics</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <button @click="bitmapScale = 50" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           bitmapScale === 50 ? 'bg-orange-600 text-white' : 'bg-orange-500 text-white hover:bg-orange-600']">
+                                                50%
+                                            </button>
+                                            <button @click="bitmapScale = 100" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           bitmapScale === 100 ? 'bg-orange-600 text-white' : 'bg-orange-500 text-white hover:bg-orange-600']">
+                                                100%
+                                            </button>
+                                            <button @click="bitmapScale = 200" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           bitmapScale === 200 ? 'bg-orange-600 text-white' : 'bg-orange-500 text-white hover:bg-orange-600']">
+                                                200%
+                                            </button>
+                                            <button @click="bitmapScale = 500" 
+                                                    :class="['px-3 py-1 rounded text-sm transition-all', 
+                                                           bitmapScale === 500 ? 'bg-orange-600 text-white' : 'bg-orange-500 text-white hover:bg-orange-600']">
+                                                500%
+                                            </button>
+                                        </div>
+                                        <div class="flex justify-center">
+                                            <div class="image-container bg-white rounded-lg shadow-inner">
+                                                <img class="scaled-image" 
+                                                     src="https://picsum.photos/seed/bitmap/100/100" 
+                                                     width="100" height="100"
+                                                     :class="{ 'pixelated': bitmapScale > 100 }"
+                                                     :style="{transform: `scale(${bitmapScale/100})`}"
+                                                     alt="Bitmap example">
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-2">
+                                            <span class="font-semibold">Pecah</span> saat diperbesar! 
+                                            <span class="text-orange-600">💥</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="activeTab === 'technical'" class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-gradient-to-r from-purple-500 to-orange-500 text-white">
+                                        <th class="px-6 py-4 text-left rounded-tl-lg">Aspek</th>
+                                        <th class="px-6 py-4 text-center">Vector</th>
+                                        <th class="px-6 py-4 text-center rounded-tr-lg">Bitmap</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(row, index) in comparisonData" :key="index" 
+                                        :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'">
+                                        <td class="px-6 py-4 font-semibold">{{ row.aspect }}</td>
+                                        <td class="px-6 py-4 text-center">
+                                            <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                                                {{ row.vector }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm">
+                                                {{ row.bitmap }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div v-if="activeTab === 'usecase'" class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
+                                <h4 class="font-bold text-purple-700 mb-4 text-lg">
+                                    <i class="fas fa-check-circle mr-2"></i>Gunakan Vector Untuk:
+                                </h4>
+                                <div class="space-y-3">
+                                    <div v-for="use in vectorUses" :key="use" 
+                                         class="flex items-center bg-white p-3 rounded-lg hover:shadow-md transition">
+                                        <span class="text-2xl mr-3">{{ use.icon }}</span>
+                                        <div>
+                                            <div class="font-semibold text-sm">{{ use.title }}</div>
+                                            <div class="text-xs text-gray-500">{{ use.desc }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl">
+                                <h4 class="font-bold text-orange-700 mb-4 text-lg">
+                                    <i class="fas fa-check-circle mr-2"></i>Gunakan Bitmap Untuk:
+                                </h4>
+                                <div class="space-y-3">
+                                    <div v-for="use in bitmapUses" :key="use" 
+                                         class="flex items-center bg-white p-3 rounded-lg hover:shadow-md transition">
+                                        <span class="text-2xl mr-3">{{ use.icon }}</span>
+                                        <div>
+                                            <div class="font-semibold text-sm">{{ use.title }}</div>
+                                            <div class="text-xs text-gray-500">{{ use.desc }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Accordion Sections -->
+                    <div class="space-y-4">
+                        <!-- Tujuan Pembelajaran -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift">
+                            <button @click="toggleAccordion('tujuan')" 
+                                    class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🎯</span>
+                                    <h3 class="text-lg font-bold text-gray-800">Mengapa Ini Penting?</h3>
+                                </div>
+                                <i :class="['fas fa-chevron-down transition-transform', accordion.tujuan ? 'rotate-180' : '']"></i>
+                            </button>
+                            <div :class="['accordion-content', accordion.tujuan ? 'active' : '']">
+                                <div class="px-6 pb-4">
+                                    <div class="grid md:grid-cols-3 gap-4">
+                                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
+                                            <div class="text-3xl mb-2">💼</div>
+                                            <h4 class="font-semibold text-blue-700">Karir</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Fundamental untuk desainer grafis, UI/UX, dan animator</p>
+                                        </div>
+                                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg">
+                                            <div class="text-3xl mb-2">⚡</div>
+                                            <h4 class="font-semibold text-green-700">Efisiensi</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Pilih format tepat untuk hasil optimal dan hemat storage</p>
+                                        </div>
+                                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
+                                            <div class="text-3xl mb-2">🎨</div>
+                                            <h4 class="font-semibold text-purple-700">Kreativitas</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Eksplore berbagai teknik desain digital</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vector Details -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift">
+                            <button @click="toggleAccordion('vector')" 
+                                    class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">📐</span>
+                                    <h3 class="text-lg font-bold text-gray-800">Vector Graphics Deep Dive</h3>
+                                </div>
+                                <i :class="['fas fa-chevron-down transition-transform', accordion.vector ? 'rotate-180' : '']"></i>
+                            </button>
+                            <div :class="['accordion-content', accordion.vector ? 'active' : '']">
+                                <div class="px-6 pb-4">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 class="font-semibold text-purple-700 mb-3">Format Files</h4>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div v-for="file in vectorFiles" :key="file.ext" 
+                                                     class="bg-purple-50 p-3 rounded-lg hover:bg-purple-100 transition cursor-pointer">
+                                                    <div class="font-bold text-purple-700">{{ file.ext }}</div>
+                                                    <div class="text-xs text-gray-600">{{ file.desc }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-purple-700 mb-3">Software Tools</h4>
+                                            <div class="space-y-2">
+                                                <div v-for="tool in vectorTools" :key="tool.name" 
+                                                     class="flex items-center justify-between bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition">
+                                                    <div class="flex items-center">
+                                                        <span class="text-xl mr-2">{{ tool.icon }}</span>
+                                                        <span class="font-medium">{{ tool.name }}</span>
+                                                    </div>
+                                                    <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded">
+                                                        {{ tool.type }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bitmap Details -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift">
+                            <button @click="toggleAccordion('bitmap')" 
+                                    class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🖼️</span>
+                                    <h3 class="text-lg font-bold text-gray-800">Bitmap Graphics Deep Dive</h3>
+                                </div>
+                                <i :class="['fas fa-chevron-down transition-transform', accordion.bitmap ? 'rotate-180' : '']"></i>
+                            </button>
+                            <div :class="['accordion-content', accordion.bitmap ? 'active' : '']">
+                                <div class="px-6 pb-4">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 class="font-semibold text-orange-700 mb-3">Format Files</h4>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div v-for="file in bitmapFiles" :key="file.ext" 
+                                                     class="bg-orange-50 p-3 rounded-lg hover:bg-orange-100 transition cursor-pointer">
+                                                    <div class="font-bold text-orange-700">{{ file.ext }}</div>
+                                                    <div class="text-xs text-gray-600">{{ file.desc }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-orange-700 mb-3">Software Tools</h4>
+                                            <div class="space-y-2">
+                                                <div v-for="tool in bitmapTools" :key="tool.name" 
+                                                     class="flex items-center justify-between bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition">
+                                                    <div class="flex items-center">
+                                                        <span class="text-xl mr-2">{{ tool.icon }}</span>
+                                                        <span class="font-medium">{{ tool.name }}</span>
+                                                    </div>
+                                                    <span class="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded">
+                                                        {{ tool.type }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Quiz Section -->
+                        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2">🧠 Test Pemahamanmu!</h3>
+                                    <p class="text-indigo-100">Jawab quiz cepat untuk mengukur pemahaman</p>
+                                </div>
+                                <button @click="startQuiz" 
+                                        class="px-6 py-3 bg-white text-indigo-600 rounded-lg font-semibold hover:bg-gray-100 transition pulse-dot">
+                                    Mulai Quiz
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Coba Page with Interactive Activities -->
+                <div v-if="currentPage === 'coba'" key="coba">
+                    <!-- Hero Section -->
+                    <div class="bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500 rounded-2xl p-8 mb-8 text-white zoom-in">
+                        <div class="flex flex-col md:flex-row items-center justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <h2 class="text-3xl font-bold mb-3">🎮 Aktivitas Interaktif</h2>
+                                <p class="text-lg text-green-100">Asah pemahamanmu dengan games seru!</p>
+                                <div class="mt-4 flex items-center space-x-4">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-trophy text-yellow-300 mr-2"></i>
+                                        <span class="font-semibold">Skor: {{ totalScore }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-fire text-orange-300 mr-2 streak-fire" v-if="streak > 2"></i>
+                                        <span class="font-semibold">Streak: {{ streak }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-8xl float-animation">🎯</div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Tabs -->
+                    <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+                        <div class="flex justify-center mb-6">
+                            <div class="bg-gray-100 rounded-lg p-1 inline-flex">
+                                <button @click="activeActivity = 'files'" 
+                                        :class="['px-6 py-2 rounded-lg transition-all font-semibold', activeActivity === 'files' ? 'bg-green-500 text-white shadow-md' : 'text-gray-600 hover:text-gray-800']">
+                                    <i class="fas fa-file mr-2"></i> Tipe File
+                                </button>
+                                <button @click="activeActivity = 'apps'" 
+                                        :class="['px-6 py-2 rounded-lg transition-all font-semibold', activeActivity === 'apps' ? 'bg-blue-500 text-white shadow-md' : 'text-gray-600 hover:text-gray-800']">
+                                    <i class="fas fa-desktop mr-2"></i> Aplikasi
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- File Type Categorization Activity -->
+                        <div v-if="activeActivity === 'files'" key="files">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                                    🗂️ Kelompokkan Tipe File Gambar
+                                </h3>
+                                <p class="text-gray-600">Seret atau klik file ke kategori yang tepat!</p>
+                            </div>
+
+                            <!-- Score and Progress -->
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-green-600">{{ fileScore }}</div>
+                                        <div class="text-xs text-gray-500">Benar</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-red-600">{{ fileWrong }}</div>
+                                        <div class="text-xs text-gray-500">Salah</div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button @click="resetFileActivity" 
+                                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                                        <i class="fas fa-redo mr-1"></i> Reset
+                                    </button>
+                                    <button @click="showFileHint = !showFileHint" 
+                                            class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                                        <i class="fas fa-lightbulb mr-1"></i> Petunjuk
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Hint Section -->
+                            <div v-if="showFileHint" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                                <p class="text-sm text-yellow-800">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    <strong>Petunjuk:</strong> Vector (.SVG, .AI, .EPS, .PDF) digunakan untuk logo dan ikon. 
+                                    Bitmap (.JPG, .PNG, .GIF, .BMP, .TIFF) digunakan untuk foto dan gambar kompleks.
+                                </p>
+                            </div>
+
+                            <!-- Drop Zones -->
+                            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
+                                    <h4 class="font-bold text-purple-700 text-lg mb-4 text-center">
+                                        <i class="fas fa-shapes mr-2"></i>VECTOR FILES
+                                    </h4>
+                                    <div class="drop-zone bg-white rounded-lg p-4 min-h-[200px]"
+                                         @dragover.prevent
+                                         @dragenter.prevent="dragEnter('vector')"
+                                         @dragleave.prevent="dragLeave('vector')"
+                                         @drop.prevent="dropFile('vector', $event)"
+                                         :class="{ 'drag-over': dragOverZone === 'vector' }">
+                                        <div v-if="vectorFilesSorted.length === 0" class="text-center text-gray-400 py-8">
+                                            <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                                            <p>Drop file vector di sini</p>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div v-for="file in vectorFilesSorted" :key="file" 
+                                                 class="bg-purple-500 text-white px-4 py-2 rounded-lg flex items-center justify-between success-animation">
+                                                <span class="font-semibold">{{ file }}</span>
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6">
+                                    <h4 class="font-bold text-orange-700 text-lg mb-4 text-center">
+                                        <i class="fas fa-th mr-2"></i>BITMAP FILES
+                                    </h4>
+                                    <div class="drop-zone bg-white rounded-lg p-4 min-h-[200px]"
+                                         @dragover.prevent
+                                         @dragenter.prevent="dragEnter('bitmap')"
+                                         @dragleave.prevent="dragLeave('bitmap')"
+                                         @drop.prevent="dropFile('bitmap', $event)"
+                                         :class="{ 'drag-over': dragOverZone === 'bitmap' }">
+                                        <div v-if="bitmapFilesSorted.length === 0" class="text-center text-gray-400 py-8">
+                                            <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                                            <p>Drop file bitmap di sini</p>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div v-for="file in bitmapFilesSorted" :key="file" 
+                                                 class="bg-orange-500 text-white px-4 py-2 rounded-lg flex items-center justify-between success-animation">
+                                                <span class="font-semibold">{{ file }}</span>
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Draggable Files -->
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="font-semibold text-gray-700 mb-4">File yang perlu dikategorikan:</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    <div v-for="file in unsortedFiles" :key="file"
+                                         draggable="true"
+                                         @dragstart="dragStart(file, $event)"
+                                         @dragend="dragEnd"
+                                         @click="clickFile(file)"
+                                         :class="[
+                                             'draggable px-4 py-3 rounded-lg font-semibold cursor-pointer transition-all',
+                                             getFileColor(file)
+                                         ]">
+                                        <i :class="getFileIcon(file) + ' mr-2'"></i>
+                                        {{ file }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application Categorization Activity -->
+                        <div v-if="activeActivity === 'apps'" key="apps">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                                    💻 Kelompokkan Aplikasi Desain
+                                </h3>
+                                <p class="text-gray-600">Seret atau klik aplikasi ke kategori yang tepat!</p>
+                            </div>
+
+                            <!-- Score and Progress -->
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-green-600">{{ appScore }}</div>
+                                        <div class="text-xs text-gray-500">Benar</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-red-600">{{ appWrong }}</div>
+                                        <div class="text-xs text-gray-500">Salah</div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button @click="resetAppActivity" 
+                                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                                        <i class="fas fa-redo mr-1"></i> Reset
+                                    </button>
+                                    <button @click="showAppHint = !showAppHint" 
+                                            class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                                        <i class="fas fa-lightbulb mr-1"></i> Petunjuk
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Hint Section -->
+                            <div v-if="showAppHint" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                                <p class="text-sm text-blue-800">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    <strong>Petunjuk:</strong> Aplikasi Desain Grafis untuk logo dan ilustrasi. 
+                                    Aplikasi Editing Foto untuk manipulasi gambar dan retouch.
+                                </p>
+                            </div>
+
+                            <!-- Drop Zones -->
+                            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
+                                    <h4 class="font-bold text-purple-700 text-lg mb-4 text-center">
+                                        <i class="fas fa-pen-nib mr-2"></i>APLIKASI DESAIN GRAFIS
+                                    </h4>
+                                    <div class="drop-zone bg-white rounded-lg p-4 min-h-[200px]"
+                                         @dragover.prevent
+                                         @dragenter.prevent="dragEnterApp('vector')"
+                                         @dragleave.prevent="dragLeaveApp('vector')"
+                                         @drop.prevent="dropApp('vector', $event)"
+                                         :class="{ 'drag-over': dragOverAppZone === 'vector' }">
+                                        <div v-if="vectorAppsSorted.length === 0" class="text-center text-gray-400 py-8">
+                                            <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                                            <p>Drop aplikasi desain grafis di sini</p>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div v-for="app in vectorAppsSorted" :key="app.name" 
+                                                 class="bg-purple-500 text-white p-3 rounded-lg text-center success-animation">
+                                                <i :class="app.icon + ' text-2xl mb-1'"></i>
+                                                <div class="text-sm font-semibold">{{ app.name }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6">
+                                    <h4 class="font-bold text-orange-700 text-lg mb-4 text-center">
+                                        <i class="fas fa-camera-retro mr-2"></i>APLIKASI EDITING FOTO
+                                    </h4>
+                                    <div class="drop-zone bg-white rounded-lg p-4 min-h-[200px]"
+                                         @dragover.prevent
+                                         @dragenter.prevent="dragEnterApp('bitmap')"
+                                         @dragleave.prevent="dragLeaveApp('bitmap')"
+                                         @drop.prevent="dropApp('bitmap', $event)"
+                                         :class="{ 'drag-over': dragOverAppZone === 'bitmap' }">
+                                        <div v-if="bitmapAppsSorted.length === 0" class="text-center text-gray-400 py-8">
+                                            <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                                            <p>Drop aplikasi editing foto di sini</p>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div v-for="app in bitmapAppsSorted" :key="app.name" 
+                                                 class="bg-orange-500 text-white p-3 rounded-lg text-center success-animation">
+                                                <i :class="app.icon + ' text-2xl mb-1'"></i>
+                                                <div class="text-sm font-semibold">{{ app.name }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Draggable Applications -->
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="font-semibold text-gray-700 mb-4">Aplikasi yang perlu dikategorikan:</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <div v-for="app in unsortedApps" :key="app.name"
+                                         draggable="true"
+                                         @dragstart="dragStartApp(app, $event)"
+                                         @dragend="dragEndApp"
+                                         @click="clickApp(app)"
+                                         :class="[
+                                             'draggable bg-white p-4 rounded-lg text-center cursor-pointer transition-all hover-lift',
+                                             getAppColor(app.name)
+                                         ]">
+                                        <i :class="app.icon + ' text-2xl mb-2'"></i>
+                                        <div class="text-sm font-semibold">{{ app.name }}</div>
+                                        <div class="text-xs text-gray-500">{{ app.type }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Achievement Section -->
+                    <div v-if="showAchievement" class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-6 text-white text-center success-animation">
+                        <div class="text-5xl mb-3">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Luar Biasa!</h3>
+                        <p class="text-lg">Kamu berhasil menyelesaikan semua tantangan!</p>
+                        <div class="flex justify-center mt-4 space-x-2">
+                            <span v-for="i in 5" :key="i" class="text-3xl">⭐</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other pages remain the same... -->
+                <div v-if="currentPage === 'kuis'" key="kuis">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-clipboard-list text-indigo-500 mr-2"></i>
+                            Kuis Pemahaman
+                        </h2>
+                        <p class="text-gray-600">Halaman Kuis dalam pengembangan...</p>
+                    </div>
+                </div>
+
+                <div v-if="currentPage === 'latihan'" key="latihan">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-laptop-code text-teal-500 mr-2"></i>
+                            Latihan Praktik
+                        </h2>
+                        <p class="text-gray-600">Halaman Latihan dalam pengembangan...</p>
+                    </div>
+                </div>
+            </transition>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg glass-effect">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-4">
+                    <button v-for="menu in menus" :key="menu.id"
+                            @click="currentPage = menu.id"
+                            :class="[
+                                'py-3 px-2 flex flex-col items-center justify-center transition-all relative',
+                                currentPage === menu.id 
+                                    ? 'text-indigo-600' 
+                                    : 'text-gray-500 hover:text-gray-700'
+                            ]">
+                        <i :class="menu.icon + ' text-xl mb-1'"></i>
+                        <span class="text-xs">{{ menu.name }}</span>
+                        <span v-if="currentPage === menu.id" 
+                              class="absolute top-0 w-8 h-1 bg-indigo-600 rounded-full"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    currentPage: 'materi',
+                    menus: [
+                        { id: 'materi', name: 'Materi', icon: 'fas fa-book' },
+                        { id: 'coba', name: 'Coba', icon: 'fas fa-play' },
+                        { id: 'kuis', name: 'Kuis', icon: 'fas fa-question-circle' },
+                        { id: 'latihan', name: 'Latihan', icon: 'fas fa-laptop' }
+                    ],
+                    // Materi Data
+                    learningProgress: 35,
+                    learningSteps: [
+                        { id: 'comparison', title: 'Perbandingan', description: 'Memahami dasar', icon: '🔍', completed: true },
+                        { id: 'vector', title: 'Vector', description: 'Teknik vector', icon: '📐', completed: false },
+                        { id: 'bitmap', title: 'Bitmap', description: 'Teknik bitmap', icon: '🖼️', completed: false },
+                        { id: 'practice', title: 'Praktik', description: 'Terapkan ilmu', icon: '✏️', completed: false }
+                    ],
+                    activeTab: 'visual',
+                    vectorScale: 100,
+                    bitmapScale: 100,
+                    accordion: {
+                        tujuan: true,
+                        vector: false,
+                        bitmap: false
+                    },
+                    comparisonData: [
+                        { aspect: 'Struktur', vector: 'Matematika', bitmap: 'Piksel Grid' },
+                        { aspect: 'Skalabilitas', vector: 'Tak Terbatas', bitmap: 'Terbatas' },
+                        { aspect: 'Ukuran File', vector: 'Kecil', bitmap: 'Bervariasi' },
+                        { aspect: 'Editing', vector: 'Objek', bitmap: 'Piksel' },
+                        { aspect: 'Kualitas', vector: 'Tajam Selalu', bitmap: 'Bergantung Resolusi' }
+                    ],
+                    vectorUses: [
+                        { icon: '🏢', title: 'Logo & Branding', desc: 'Skalable untuk semua ukuran' },
+                        { icon: '🎨', title: 'Ilustrasi', desc: 'Edit mudah dan fleksibel' },
+                        { icon: '📱', title: 'Icon & UI', desc: 'Crisp di semua resolusi' },
+                        { icon: '✏️', title: 'Typography', desc: 'Teks tetap tajam' }
+                    ],
+                    bitmapUses: [
+                        { icon: '📷', title: 'Fotografi', desc: 'Detail warna kompleks' },
+                        { icon: '🖌️', title: 'Digital Painting', desc: 'Gradien halus' },
+                        { icon: '🌄', title: 'Landscape', desc: 'Realistis dan natural' },
+                        { icon: '👤', title: 'Portrait', desc: 'Detail kulit halus' }
+                    ],
+                    vectorFiles: [
+                        { ext: '.SVG', desc: 'Scalable Vector Graphics' },
+                        { ext: '.AI', desc: 'Adobe Illustrator' },
+                        { ext: '.EPS', desc: 'Encapsulated PostScript' },
+                        { ext: '.PDF', desc: 'Portable Document Format' }
+                    ],
+                    bitmapFiles: [
+                        { ext: '.JPG', desc: 'JPEG Photo' },
+                        { ext: '.PNG', desc: 'Portable Network Graphics' },
+                        { ext: '.GIF', desc: 'Graphics Interchange' },
+                        { ext: '.TIFF', desc: 'Tagged Image File' }
+                    ],
+                    vectorTools: [
+                        { name: 'Adobe Illustrator', icon: '🎨', type: 'Professional' },
+                        { name: 'Inkscape', icon: '🆓', type: 'Free' },
+                        { name: 'Figma', icon: '💻', type: 'Web-based' },
+                        { name: 'CorelDRAW', icon: '🖌️', type: 'Professional' }
+                    ],
+                    bitmapTools: [
+                        { name: 'Adobe Photoshop', icon: '🎨', type: 'Professional' },
+                        { name: 'GIMP', icon: '🆓', type: 'Free' },
+                        { name: 'Paint.NET', icon: '🖌️', type: 'Windows' },
+                        { name: 'Canva', icon: '💻', type: 'Web-based' }
+                    ],
+                    // Coba Page Data
+                    activeActivity: 'files',
+                    totalScore: 0,
+                    streak: 0,
+                    showAchievement: false,
+                    showFileHint: false,
+                    showAppHint: false,
+                    // File Activity
+                    fileScore: 0,
+                    fileWrong: 0,
+                    draggedFile: null,
+                    dragOverZone: null,
+                    unsortedFiles: ['.SVG', '.AI', '.JPG', '.PNG', '.EPS', '.GIF', '.PDF', '.BMP', '.TIFF'],
+                    vectorFilesSorted: [],
+                    bitmapFilesSorted: [],
+                    vectorFileTypes: ['.SVG', '.AI', '.EPS', '.PDF'],
+                    bitmapFileTypes: ['.JPG', '.PNG', '.GIF', '.BMP', '.TIFF'],
+                    // App Activity
+                    appScore: 0,
+                    appWrong: 0,
+                    draggedApp: null,
+                    dragOverAppZone: null,
+                    unsortedApps: [
+                        { name: 'Adobe Illustrator', icon: 'fas fa-pen-nib', type: 'Professional' },
+                        { name: 'Photoshop', icon: 'fas fa-image', type: 'Professional' },
+                        { name: 'Inkscape', icon: 'fas fa-shapes', type: 'Free' },
+                        { name: 'GIMP', icon: 'fas fa-paint-brush', type: 'Free' },
+                        { name: 'Figma', icon: 'fas fa-figma', type: 'Web-based' },
+                        { name: 'Paint.NET', icon: 'fas fa-palette', type: 'Windows' },
+                        { name: 'CorelDRAW', icon: 'fas fa-vector-square', type: 'Professional' },
+                        { name: 'Canva', icon: 'fas fa-canva', type: 'Web-based' }
+                    ],
+                    vectorAppsSorted: [],
+                    bitmapAppsSorted: [],
+                    vectorAppNames: ['Adobe Illustrator', 'Inkscape', 'Figma', 'CorelDRAW']
+                };
+            },
+            computed: {
+                currentPageTitle() {
+                    const menu = this.menus.find(m => m.id === this.currentPage);
+                    return menu ? menu.name : '';
+                }
+            },
+            methods: {
+                // Materi methods
+                toggleAccordion(section) {
+                    this.accordion[section] = !this.accordion[section];
+                    if (this.accordion[section]) {
+                        this.updateProgress();
+                    }
+                },
+                updateProgress() {
+                    const completed = Object.values(this.accordion).filter(v => v).length;
+                    this.learningProgress = Math.round((completed / 3) * 100);
+                },
+                scrollToSection(id) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                },
+                resetProgress() {
+                    this.learningProgress = 0;
+                    this.accordion = {
+                        tujuan: false,
+                        vector: false,
+                        bitmap: false
+                    };
+                    this.learningSteps.forEach(step => step.completed = false);
+                },
+                startQuiz() {
+                    this.currentPage = 'kuis';
+                },
+                // File Activity Methods
+                getFileColor(file) {
+                    if (this.vectorFileTypes.includes(file)) {
+                        return 'bg-purple-100 text-purple-700 border-2 border-purple-300';
+                    }
+                    return 'bg-orange-100 text-orange-700 border-2 border-orange-300';
+                },
+                getFileIcon(file) {
+                    const icons = {
+                        '.SVG': 'fas fa-shapes',
+                        '.AI': 'fas fa-pen-nib',
+                        '.JPG': 'fas fa-image',
+                        '.PNG': 'fas fa-image',
+                        '.EPS': 'fas fa-file-vector',
+                        '.GIF': 'fas fa-film',
+                        '.PDF': 'fas fa-file-pdf',
+                        '.BMP': 'fas fa-image',
+                        '.TIFF': 'fas fa-image'
+                    };
+                    return icons[file] || 'fas fa-file';
+                },
+                dragStart(file, event) {
+                    this.draggedFile = file;
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.target.classList.add('dragging');
+                },
+                dragEnd(event) {
+                    event.target.classList.remove('dragging');
+                    this.draggedFile = null;
+                },
+                dragEnter(zone) {
+                    this.dragOverZone = zone;
+                },
+                dragLeave(zone) {
+                    if (this.dragOverZone === zone) {
+                        this.dragOverZone = null;
+                    }
+                },
+                dropFile(zone, event) {
+                    event.preventDefault();
+                    this.dragOverZone = null;
+                    
+                    if (this.draggedFile) {
+                        if (zone === 'vector' && this.vectorFileTypes.includes(this.draggedFile)) {
+                            this.vectorFilesSorted.push(this.draggedFile);
+                            this.unsortedFiles = this.unsortedFiles.filter(f => f !== this.draggedFile);
+                            this.fileScore++;
+                            this.streak++;
+                            this.totalScore += 10;
+                            this.checkAchievement();
+                        } else if (zone === 'bitmap' && this.bitmapFileTypes.includes(this.draggedFile)) {
+                            this.bitmapFilesSorted.push(this.draggedFile);
+                            this.unsortedFiles = this.unsortedFiles.filter(f => f !== this.draggedFile);
+                            this.fileScore++;
+                            this.streak++;
+                            this.totalScore += 10;
+                            this.checkAchievement();
+                        } else {
+                            this.fileWrong++;
+                            this.streak = 0;
+                        }
+                        this.draggedFile = null;
+                    }
+                },
+                clickFile(file) {
+                    // Auto-categorize on click for mobile
+                    if (this.vectorFileTypes.includes(file)) {
+                        this.vectorFilesSorted.push(file);
+                        this.unsortedFiles = this.unsortedFiles.filter(f => f !== file);
+                        this.fileScore++;
+                        this.streak++;
+                        this.totalScore += 10;
+                    } else {
+                        this.bitmapFilesSorted.push(file);
+                        this.unsortedFiles = this.unsortedFiles.filter(f => f !== file);
+                        this.fileScore++;
+                        this.streak++;
+                        this.totalScore += 10;
+                    }
+                    this.checkAchievement();
+                },
+                resetFileActivity() {
+                    this.fileScore = 0;
+                    this.fileWrong = 0;
+                    this.unsortedFiles = ['.SVG', '.AI', '.JPG', '.PNG', '.EPS', '.GIF', '.PDF', '.BMP', '.TIFF'];
+                    this.vectorFilesSorted = [];
+                    this.bitmapFilesSorted = [];
+                },
+                // App Activity Methods
+                getAppColor(appName) {
+                    if (this.vectorAppNames.includes(appName)) {
+                        return 'border-2 border-purple-300 hover:border-purple-500';
+                    }
+                    return 'border-2 border-orange-300 hover:border-orange-500';
+                },
+                dragStartApp(app, event) {
+                    this.draggedApp = app;
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.target.classList.add('dragging');
+                },
+                dragEndApp(event) {
+                    event.target.classList.remove('dragging');
+                    this.draggedApp = null;
+                },
+                dragEnterApp(zone) {
+                    this.dragOverAppZone = zone;
+                },
+                dragLeaveApp(zone) {
+                    if (this.dragOverAppZone === zone) {
+                        this.dragOverAppZone = null;
+                    }
+                },
+                dropApp(zone, event) {
+                    event.preventDefault();
+                    this.dragOverAppZone = null;
+                    
+                    if (this.draggedApp) {
+                        if (zone === 'vector' && this.vectorAppNames.includes(this.draggedApp.name)) {
+                            this.vectorAppsSorted.push(this.draggedApp);
+                            this.unsortedApps = this.unsortedApps.filter(a => a.name !== this.draggedApp.name);
+                            this.appScore++;
+                            this.streak++;
+                            this.totalScore += 15;
+                            this.checkAchievement();
+                        } else if (zone === 'bitmap' && !this.vectorAppNames.includes(this.draggedApp.name)) {
+                            this.bitmapAppsSorted.push(this.draggedApp);
+                            this.unsortedApps = this.unsortedApps.filter(a => a.name !== this.draggedApp.name);
+                            this.appScore++;
+                            this.streak++;
+                            this.totalScore += 15;
+                            this.checkAchievement();
+                        } else {
+                            this.appWrong++;
+                            this.streak = 0;
+                        }
+                        this.draggedApp = null;
+                    }
+                },
+                clickApp(app) {
+                    // Auto-categorize on click for mobile
+                    if (this.vectorAppNames.includes(app.name)) {
+                        this.vectorAppsSorted.push(app);
+                        this.unsortedApps = this.unsortedApps.filter(a => a.name !== app.name);
+                        this.appScore++;
+                        this.streak++;
+                        this.totalScore += 15;
+                    } else {
+                        this.bitmapAppsSorted.push(app);
+                        this.unsortedApps = this.unsortedApps.filter(a => a.name !== app.name);
+                        this.appScore++;
+                        this.streak++;
+                        this.totalScore += 15;
+                    }
+                    this.checkAchievement();
+                },
+                resetAppActivity() {
+                    this.appScore = 0;
+                    this.appWrong = 0;
+                    this.unsortedApps = [
+                        { name: 'Adobe Illustrator', icon: 'fas fa-pen-nib', type: 'Professional' },
+                        { name: 'Photoshop', icon: 'fas fa-image', type: 'Professional' },
+                        { name: 'Inkscape', icon: 'fas fa-shapes', type: 'Free' },
+                        { name: 'GIMP', icon: 'fas fa-paint-brush', type: 'Free' },
+                        { name: 'Figma', icon: 'fas fa-figma', type: 'Web-based' },
+                        { name: 'Paint.NET', icon: 'fas fa-palette', type: 'Windows' },
+                        { name: 'CorelDRAW', icon: 'fas fa-vector-square', type: 'Professional' },
+                        { name: 'Canva', icon: 'fas fa-canva', type: 'Web-based' }
+                    ];
+                    this.vectorAppsSorted = [];
+                    this.bitmapAppsSorted = [];
+                },
+                checkAchievement() {
+                    if (this.fileScore >= 9 && this.appScore >= 8) {
+                        this.showAchievement = true;
+                        this.createConfetti();
+                    }
+                },
+                createConfetti() {
+                    for (let i = 0; i < 50; i++) {
+                        setTimeout(() => {
+                            const confetti = document.createElement('div');
+                            confetti.className = 'confetti';
+                            confetti.style.left = Math.random() * 100 + '%';
+                            confetti.style.backgroundColor = ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa'][Math.floor(Math.random() * 5)];
+                            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                            document.body.appendChild(confetti);
+                            setTimeout(() => confetti.remove(), 3000);
+                        }, i * 30);
+                    }
+                }
+            },
+            watch: {
+                vectorScale(newVal) {
+                    if (newVal >= 200) {
+                        this.learningSteps[1].completed = true;
+                    }
+                },
+                bitmapScale(newVal) {
+                    if (newVal >= 200) {
+                        this.learningSteps[2].completed = true;
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
