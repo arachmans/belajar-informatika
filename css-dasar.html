@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belajar CSS Dasar - Enhanced UI</title>
+    <title>Belajar CSS Dasar - Fixed Version</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -52,7 +52,7 @@
 
     <div id="app" class="h-screen flex flex-col overflow-hidden">
         
-        <!-- HEADER (Sedikit diubah gradasinya) -->
+        <!-- HEADER -->
         <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg z-10 flex-shrink-0">
             <div class="px-4 py-4 flex items-center justify-between max-w-4xl mx-auto w-full">
                 <div class="flex items-center gap-3">
@@ -74,7 +74,7 @@
         <main class="flex-1 overflow-y-auto pb-24 relative scroll-smooth">
             <div class="max-w-4xl mx-auto p-4 w-full min-h-full">
                 
-                <!-- 1. MENU MATERI (REDESIGNED) -->
+                <!-- 1. MENU MATERI -->
                 <div v-if="activeTab === 'materi'" class="space-y-8 animate-fade-in">
                     
                     <!-- Hero Intro -->
@@ -84,153 +84,113 @@
                         <p class="text-slate-500 max-w-lg mx-auto">Pelajari bagaimana cara mengubah tampilan HTML yang polos menjadi karya seni digital yang memukau.</p>
                     </div>
 
-                    <!-- Section: Kenapa Belajar CSS (Cards) -->
+                    <!-- Section: Kenapa Belajar CSS -->
                     <section>
                         <div class="flex items-center gap-2 mb-4">
                             <div class="w-1 h-6 bg-indigo-500 rounded-full"></div>
                             <h3 class="text-lg font-bold text-slate-800">Mengapa CSS Penting?</h3>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Card 1 -->
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-lift cursor-default group">
                                 <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl mb-4 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
                                     <i class="fa-solid fa-palette"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-700 mb-1">Estetika</h4>
-                                <p class="text-sm text-slate-500 leading-relaxed">Mengubah warna, font, dan layout agar website terlihat profesional dan nyaman dilihat.</p>
+                                <p class="text-sm text-slate-500 leading-relaxed">Mengubah warna, font, dan layout agar website terlihat profesional.</p>
                             </div>
-                            <!-- Card 2 -->
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-lift cursor-default group">
                                 <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-xl mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
                                     <i class="fa-solid fa-mobile-screen"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-700 mb-1">Responsivitas</h4>
-                                <p class="text-sm text-slate-500 leading-relaxed">Membuat tampilan menyesuaikan ukuran layar, baik di HP, Tablet, maupun Desktop.</p>
+                                <p class="text-sm text-slate-500 leading-relaxed">Membuat tampilan menyesuaikan ukuran layar (HP & PC).</p>
                             </div>
-                            <!-- Card 3 -->
                             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-lift cursor-default group">
                                 <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center text-xl mb-4 group-hover:bg-teal-500 group-hover:text-white transition-colors duration-300">
                                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-700 mb-1">Interaksi</h4>
-                                <p class="text-sm text-slate-500 leading-relaxed">Menambahkan animasi halus dan efek hover untuk pengalaman pengguna yang lebih baik.</p>
+                                <p class="text-sm text-slate-500 leading-relaxed">Menambahkan animasi halus dan efek hover.</p>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Section: Anatomi CSS (Visual Code Breakdown) -->
+                    <!-- Section: Anatomi CSS -->
                     <section>
                         <div class="flex items-center gap-2 mb-4">
                             <div class="w-1 h-6 bg-pink-500 rounded-full"></div>
                             <h3 class="text-lg font-bold text-slate-800">Anatomi CSS</h3>
                         </div>
-                        
                         <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-xl border border-slate-800">
-                            <!-- Fake Window Header -->
                             <div class="bg-slate-800 px-4 py-2 flex items-center gap-2 border-b border-slate-700">
                                 <div class="w-3 h-3 rounded-full bg-red-500"></div>
                                 <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                                 <div class="w-3 h-3 rounded-full bg-green-500"></div>
                                 <span class="ml-2 text-xs text-slate-400 font-mono">style.css</span>
                             </div>
-                            <!-- Code Content -->
                             <div class="p-6 overflow-x-auto">
                                 <div class="code-font text-sm leading-loose">
-                                    <div class="flex">
-                                        <span class="text-slate-600 mr-4 select-none">1</span>
-                                        <span><span class="sh-selector">h1</span> {</span>
-                                    </div>
-                                    <div class="flex">
-                                        <span class="text-slate-600 mr-4 select-none">2</span>
-                                        <span class="pl-4"><span class="sh-property">color</span>: <span class="sh-value">#ffffff</span>;</span>
-                                    </div>
-                                    <div class="flex">
-                                        <span class="text-slate-600 mr-4 select-none">3</span>
-                                        <span class="pl-4"><span class="sh-property">font-size</span>: <span class="sh-value">24px</span>;</span>
-                                    </div>
-                                    <div class="flex">
-                                        <span class="text-slate-600 mr-4 select-none">4</span>
-                                        <span>}</span>
-                                    </div>
+                                    <div class="flex"><span class="text-slate-600 mr-4 select-none">1</span><span><span class="sh-selector">h1</span> {</span></div>
+                                    <div class="flex"><span class="text-slate-600 mr-4 select-none">2</span><span class="pl-4"><span class="sh-property">color</span>: <span class="sh-value">#ffffff</span>;</span></div>
+                                    <div class="flex"><span class="text-slate-600 mr-4 select-none">3</span><span class="pl-4"><span class="sh-property">font-size</span>: <span class="sh-value">24px</span>;</span></div>
+                                    <div class="flex"><span class="text-slate-600 mr-4 select-none">4</span><span>}</span></div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Legend / Explanation -->
                         <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                            <div class="bg-pink-50 p-3 rounded-xl border border-pink-100">
-                                <span class="block text-pink-500 font-bold text-xs mb-1">SELECTOR</span>
-                                <span class="text-[10px] text-slate-500">Elemen yang dipilih (h1)</span>
-                            </div>
-                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                                <span class="block text-blue-500 font-bold text-xs mb-1">PROPERTY</span>
-                                <span class="text-[10px] text-slate-500">Atribut yang diubah (color)</span>
-                            </div>
-                            <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100">
-                                <span class="block text-yellow-600 font-bold text-xs mb-1">VALUE</span>
-                                <span class="text-[10px] text-slate-500">Nilai atribut (#ffffff)</span>
-                            </div>
+                            <div class="bg-pink-50 p-3 rounded-xl border border-pink-100"><span class="block text-pink-500 font-bold text-xs mb-1">SELECTOR</span><span class="text-[10px] text-slate-500">Elemen</span></div>
+                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100"><span class="block text-blue-500 font-bold text-xs mb-1">PROPERTY</span><span class="text-[10px] text-slate-500">Atribut</span></div>
+                            <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100"><span class="block text-yellow-600 font-bold text-xs mb-1">VALUE</span><span class="text-[10px] text-slate-500">Nilai</span></div>
                         </div>
                     </section>
 
-                    <!-- Section: Penerapan (Colored Accordions) -->
+                    <!-- Section: Penerapan -->
                     <section>
                         <div class="flex items-center gap-2 mb-4">
                             <div class="w-1 h-6 bg-orange-500 rounded-full"></div>
                             <h3 class="text-lg font-bold text-slate-800">Metode Penerapan</h3>
                         </div>
-                        
                         <div class="space-y-3">
-                            <!-- Inline -->
                             <details class="group bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                                 <summary class="flex justify-between items-center p-4 cursor-pointer hover:bg-slate-50 transition">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-red-100 text-red-500 flex items-center justify-center font-bold text-xs">1</div>
                                         <span class="font-bold text-slate-700">Inline CSS</span>
-                                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">Cepat / Kecil</span>
                                     </div>
                                     <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
                                 </summary>
                                 <div class="px-4 pb-4 pt-2 border-t border-slate-100 bg-slate-50/50">
-                                    <p class="text-sm text-slate-600 mb-3">Langsung menulis di atribut elemen HTML.</p>
+                                    <p class="text-sm text-slate-600 mb-3">Langsung di atribut HTML.</p>
                                     <div class="bg-slate-800 rounded-lg p-3 text-xs code-font text-green-300 border border-slate-700">
                                         &lt;<span class="sh-tag">h1</span> <span class="sh-attr">style</span>=<span class="sh-value">"color: red;"</span>&gt;Judul&lt;/<span class="sh-tag">h1</span>&gt;
                                     </div>
                                 </div>
                             </details>
-
-                            <!-- Internal -->
                             <details class="group bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                                 <summary class="flex justify-between items-center p-4 cursor-pointer hover:bg-slate-50 transition">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-500 flex items-center justify-center font-bold text-xs">2</div>
                                         <span class="font-bold text-slate-700">Internal CSS</span>
-                                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">Satu Halaman</span>
                                     </div>
                                     <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
                                 </summary>
                                 <div class="px-4 pb-4 pt-2 border-t border-slate-100 bg-slate-50/50">
-                                    <p class="text-sm text-slate-600 mb-3">Ditaruh di dalam tag <code>&lt;style&gt;</code> pada <code>&lt;head&gt;</code>.</p>
+                                    <p class="text-sm text-slate-600 mb-3">Di dalam tag <code>&lt;style&gt;</code>.</p>
                                     <div class="bg-slate-800 rounded-lg p-3 text-xs code-font text-green-300 border border-slate-700">
-                                        &lt;<span class="sh-tag">style</span>&gt;<br>
-                                        &nbsp;&nbsp;<span class="sh-selector">body</span> { <span class="sh-property">background</span>: <span class="sh-value">white</span>; }<br>
-                                        &lt;/<span class="sh-tag">style</span>&gt;
+                                        &lt;<span class="sh-tag">style</span>&gt;<br>&nbsp;&nbsp;<span class="sh-selector">body</span> { <span class="sh-property">background</span>: <span class="sh-value">white</span>; }<br>&lt;/<span class="sh-tag">style</span>&gt;
                                     </div>
                                 </div>
                             </details>
-
-                            <!-- External -->
                             <details class="group bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm" open>
                                 <summary class="flex justify-between items-center p-4 cursor-pointer hover:bg-slate-50 transition">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-green-100 text-green-500 flex items-center justify-center font-bold text-xs">3</div>
                                         <span class="font-bold text-slate-700">External CSS</span>
-                                        <span class="text-[10px] bg-green-100 text-green-600 px-2 py-0.5 rounded-full font-bold">Best Practice</span>
                                     </div>
                                     <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
                                 </summary>
                                 <div class="px-4 pb-4 pt-2 border-t border-slate-100 bg-slate-50/50">
-                                    <p class="text-sm text-slate-600 mb-3">File terpisah (.css) dihubungkan dengan tag link.</p>
+                                    <p class="text-sm text-slate-600 mb-3">File terpisah (.css).</p>
                                     <div class="bg-slate-800 rounded-lg p-3 text-xs code-font text-green-300 border border-slate-700">
                                         &lt;<span class="sh-tag">link</span> <span class="sh-attr">rel</span>=<span class="sh-value">"stylesheet"</span> <span class="sh-attr">href</span>=<span class="sh-value">"style.css"</span>&gt;
                                     </div>
@@ -239,113 +199,105 @@
                         </div>
                     </section>
 
-                    <!-- Section: Properti Dasar (Cheat Sheet Style) -->
+                    <!-- Section: Properti Dasar -->
                     <section>
                         <div class="flex items-center gap-2 mb-4">
                             <div class="w-1 h-6 bg-cyan-500 rounded-full"></div>
                             <h3 class="text-lg font-bold text-slate-800">Properti Dasar</h3>
                         </div>
-                        
                         <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-                            <!-- Text Props -->
                             <div class="mb-5">
-                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Tipografi & Warna</h4>
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Tipografi</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-indigo-600 font-bold text-sm mb-1">color</code>
-                                        <span class="text-xs text-slate-500">Warna teks</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-indigo-600 font-bold text-sm mb-1">font-size</code>
-                                        <span class="text-xs text-slate-500">Ukuran huruf</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-indigo-600 font-bold text-sm mb-1">text-align</code>
-                                        <span class="text-xs text-slate-500">Perataan teks</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-indigo-600 font-bold text-sm mb-1">font-weight</code>
-                                        <span class="text-xs text-slate-500">Ketebalan (bold)</span>
-                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition"><code class="block text-indigo-600 font-bold text-sm mb-1">color</code><span class="text-xs text-slate-500">Warna teks</span></div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition"><code class="block text-indigo-600 font-bold text-sm mb-1">font-size</code><span class="text-xs text-slate-500">Ukuran huruf</span></div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition"><code class="block text-indigo-600 font-bold text-sm mb-1">text-align</code><span class="text-xs text-slate-500">Perataan</span></div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition"><code class="block text-indigo-600 font-bold text-sm mb-1">font-weight</code><span class="text-xs text-slate-500">Ketebalan</span></div>
                                 </div>
                             </div>
-
-                            <!-- Box Props -->
                             <div>
-                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Model Kotak (Box Model)</h4>
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Box Model</h4>
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-pink-600 font-bold text-sm mb-1">margin</code>
-                                        <span class="text-xs text-slate-500">Jarak luar</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-pink-600 font-bold text-sm mb-1">padding</code>
-                                        <span class="text-xs text-slate-500">Jarak dalam</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-pink-600 font-bold text-sm mb-1">border</code>
-                                        <span class="text-xs text-slate-500">Garis tepi</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-indigo-200 transition">
-                                        <code class="block text-pink-600 font-bold text-sm mb-1">border-radius</code>
-                                        <span class="text-xs text-slate-500">Lengkungan sudut</span>
-                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-pink-200 transition"><code class="block text-pink-600 font-bold text-sm mb-1">margin</code><span class="text-xs text-slate-500">Jarak luar</span></div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-pink-200 transition"><code class="block text-pink-600 font-bold text-sm mb-1">padding</code><span class="text-xs text-slate-500">Jarak dalam</span></div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-pink-200 transition"><code class="block text-pink-600 font-bold text-sm mb-1">border</code><span class="text-xs text-slate-500">Garis tepi</span></div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-pink-200 transition"><code class="block text-pink-600 font-bold text-sm mb-1">border-radius</code><span class="text-xs text-slate-500">Lengkungan</span></div>
                                 </div>
                             </div>
                         </div>
                     </section>
                 </div>
 
-                <!-- 2. MENU COBA -->
+                <!-- 2. MENU COBA (FIXED LOGIC) -->
                 <div v-else-if="activeTab === 'coba'" class="h-full flex flex-col">
-                    <!-- Code unchanged from previous response for brevity, assuming user wants specifically material updated, but I will keep it functional -->
                     <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6 rounded-r-xl">
-                        <p class="text-sm text-indigo-800 font-medium">
-                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Lab Interaktif
-                        </p>
-                        <p class="text-xs text-indigo-600 mt-1">Ubah nilai di bawah ini untuk melihat hasilnya langsung!</p>
+                        <p class="text-sm text-indigo-800 font-medium"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Lab Interaktif</p>
+                        <p class="text-xs text-indigo-600 mt-1">Geser slider atau pilih warna untuk melihat perubahannya.</p>
                     </div>
+                    
                     <div class="flex-1 flex flex-col md:flex-row gap-6">
-                        <!-- Kontrol & Preview (Sama seperti sebelumnya, dipangkas agar tidak terlalu panjang di sini tapi tetap ada di kode full) -->
+                        <!-- Kontrol -->
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 space-y-5 md:w-1/2">
-                            <h3 class="font-bold text-slate-700 border-b pb-2">Pengaturan</h3>
-                            <!-- Inputs -->
+                            <h3 class="font-bold text-slate-700 border-b pb-2">Pengaturan Style</h3>
+                            
                             <div class="space-y-4">
+                                <!-- Warna Teks -->
                                 <div class="flex items-center justify-between">
                                     <label class="text-sm font-medium text-slate-600">Warna Teks</label>
                                     <div class="flex items-center gap-2">
-                                        <input type="color" v-model="style.color" class="h-8 w-8 rounded cursor-pointer border-0">
-                                        <span class="text-xs font-mono text-slate-500">{{ style.color }}</span>
+                                        <input type="color" v-model="style.color" class="h-8 w-8 rounded cursor-pointer border-0 bg-transparent">
+                                        <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded">{{ style.color }}</span>
                                     </div>
                                 </div>
+
+                                <!-- Background -->
                                 <div class="flex items-center justify-between">
                                     <label class="text-sm font-medium text-slate-600">Background</label>
                                     <div class="flex items-center gap-2">
-                                        <input type="color" v-model="style.backgroundColor" class="h-8 w-8 rounded cursor-pointer border-0">
-                                        <span class="text-xs font-mono text-slate-500">{{ style.backgroundColor }}</span>
+                                        <input type="color" v-model="style.backgroundColor" class="h-8 w-8 rounded cursor-pointer border-0 bg-transparent">
+                                        <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded">{{ style.backgroundColor }}</span>
                                     </div>
                                 </div>
+
+                                <!-- Font Size -->
                                 <div>
-                                    <label class="text-sm font-medium text-slate-600 block mb-1">Ukuran Font (px): {{ style.fontSize }}</label>
-                                    <input type="range" v-model.number="style.fontSize" min="12" max="72" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                    <div class="flex justify-between mb-1">
+                                        <label class="text-sm font-medium text-slate-600">Ukuran Huruf</label>
+                                        <span class="text-xs font-bold text-indigo-600">{{ style.fontSize }}px</span>
+                                    </div>
+                                    <input type="range" v-model.number="style.fontSize" min="10" max="72" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                                 </div>
+
+                                <!-- Padding -->
                                 <div>
-                                    <label class="text-sm font-medium text-slate-600 block mb-1">Padding (px): {{ style.padding }}</label>
+                                    <div class="flex justify-between mb-1">
+                                        <label class="text-sm font-medium text-slate-600">Padding (Isi)</label>
+                                        <span class="text-xs font-bold text-indigo-600">{{ style.padding }}px</span>
+                                    </div>
                                     <input type="range" v-model.number="style.padding" min="0" max="80" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                                 </div>
+
+                                <!-- Border Radius -->
                                 <div>
-                                    <label class="text-sm font-medium text-slate-600 block mb-1">Border Radius (px): {{ style.borderRadius }}</label>
+                                    <div class="flex justify-between mb-1">
+                                        <label class="text-sm font-medium text-slate-600">Lengkungan Sudut</label>
+                                        <span class="text-xs font-bold text-indigo-600">{{ style.borderRadius }}px</span>
+                                    </div>
                                     <input type="range" v-model.number="style.borderRadius" min="0" max="50" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                                 </div>
                             </div>
                         </div>
+
                         <!-- Preview -->
                         <div class="bg-slate-200 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center p-4 md:w-1/2 min-h-[300px] relative overflow-hidden">
-                            <div class="preview-box text-center shadow-xl transition-all duration-300" :style="style">
-                                <h2 class="font-bold">Hello CSS!</h2>
-                                <p>Styling itu menyenangkan.</p>
+                            <!-- Perbaikan: Menggunakan computedStyle alih-alih style langsung -->
+                            <div class="preview-box text-center shadow-xl transition-all duration-300 ease-out" :style="boxStyle">
+                                <h2 class="font-bold leading-tight">Hello CSS!</h2>
+                                <p class="mt-2">Styling itu menyenangkan.</p>
                             </div>
-                            <div class="absolute bottom-4 left-4 right-4 bg-slate-900/90 text-green-400 p-3 rounded-lg text-xs font-mono hidden md:block backdrop-blur-sm">
+                            
+                            <!-- Generated Code Display -->
+                            <div class="absolute bottom-4 left-4 right-4 bg-slate-900/90 text-green-400 p-3 rounded-lg text-xs font-mono hidden md:block backdrop-blur-sm border border-slate-700">
                                 {{ generatedCode }}
                             </div>
                         </div>
@@ -356,14 +308,10 @@
                 <div v-else-if="activeTab === 'kuis'" class="max-w-2xl mx-auto pt-4">
                     <div v-if="!quizStarted" class="text-center pt-10">
                         <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                            <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <i class="fa-solid fa-graduation-cap text-4xl text-indigo-600"></i>
-                            </div>
+                            <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fa-solid fa-graduation-cap text-4xl text-indigo-600"></i></div>
                             <h2 class="text-2xl font-bold text-slate-800 mb-2">Ujian Pemahaman</h2>
                             <p class="text-slate-500 mb-8">20 Pertanyaan untuk menguji pengetahuan CSS Anda.</p>
-                            <button @click="startQuiz" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full transition shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-1">
-                                Mulai Kuis Sekarang
-                            </button>
+                            <button @click="startQuiz" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full transition shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-1">Mulai Kuis Sekarang</button>
                         </div>
                     </div>
 
@@ -379,24 +327,8 @@
                         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 mb-6">
                             <h3 class="text-lg md:text-xl font-bold text-slate-800 mb-6 leading-snug">{{ questions[currentQuestionIndex].question }}</h3>
                             <div class="space-y-3">
-                                <button 
-                                    v-for="(option, idx) in questions[currentQuestionIndex].options" 
-                                    :key="idx"
-                                    @click="selectAnswer(idx)"
-                                    :class="[
-                                        'w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-center gap-4',
-                                        selectedAnswerIndex === idx 
-                                            ? (idx === questions[currentQuestionIndex].correct ? 'bg-green-50 border-green-500 text-green-900' : 'bg-red-50 border-red-500 text-red-900')
-                                            : 'bg-white border-slate-100 hover:border-indigo-300 hover:bg-indigo-50/50 text-slate-600'
-                                    ]"
-                                    :disabled="showExplanation"
-                                >
-                                    <div class="w-8 h-8 rounded-full border flex items-center justify-center font-bold text-sm" 
-                                         :class="selectedAnswerIndex === idx 
-                                            ? (idx === questions[currentQuestionIndex].correct ? 'bg-green-500 text-white border-green-500' : 'bg-red-500 text-white border-red-500')
-                                            : 'bg-slate-50 border-slate-200 text-slate-400'">
-                                        {{ String.fromCharCode(65 + idx) }}
-                                    </div>
+                                <button v-for="(option, idx) in questions[currentQuestionIndex].options" :key="idx" @click="selectAnswer(idx)" :class="['w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-center gap-4', selectedAnswerIndex === idx ? (idx === questions[currentQuestionIndex].correct ? 'bg-green-50 border-green-500 text-green-900' : 'bg-red-50 border-red-500 text-red-900') : 'bg-white border-slate-100 hover:border-indigo-300 hover:bg-indigo-50/50 text-slate-600']" :disabled="showExplanation">
+                                    <div class="w-8 h-8 rounded-full border flex items-center justify-center font-bold text-sm" :class="selectedAnswerIndex === idx ? (idx === questions[currentQuestionIndex].correct ? 'bg-green-500 text-white border-green-500' : 'bg-red-500 text-white border-red-500') : 'bg-slate-50 border-slate-200 text-slate-400'">{{ String.fromCharCode(65 + idx) }}</div>
                                     <span class="font-medium">{{ option }}</span>
                                 </button>
                             </div>
@@ -406,33 +338,17 @@
                             <p class="text-blue-900 text-sm"><i class="fa-regular fa-lightbulb mr-2 text-blue-500"></i><strong>Penjelasan:</strong> {{ questions[currentQuestionIndex].explanation }}</p>
                         </div>
 
-                        <button 
-                            v-if="showExplanation" 
-                            @click="nextQuestion" 
-                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-xl transition shadow-lg flex justify-center items-center gap-2"
-                        >
-                            <span>{{ currentQuestionIndex === questions.length - 1 ? 'Lihat Hasil' : 'Lanjut Soal Berikutnya' }}</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                        <button v-if="showExplanation" @click="nextQuestion" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-xl transition shadow-lg flex justify-center items-center gap-2"><span>{{ currentQuestionIndex === questions.length - 1 ? 'Lihat Hasil' : 'Lanjut Soal Berikutnya' }}</span><i class="fa-solid fa-arrow-right"></i></button>
                     </div>
 
                     <div v-else class="text-center pt-8 animate-fade-in">
                         <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                            <div class="mb-6">
-                                <i v-if="score >= 70" class="fa-solid fa-trophy text-6xl text-yellow-400 mb-4 drop-shadow-sm"></i>
-                                <i v-else class="fa-solid fa-book-open-reader text-6xl text-slate-300 mb-4"></i>
-                            </div>
+                            <div class="mb-6"><i v-if="score >= 70" class="fa-solid fa-trophy text-6xl text-yellow-400 mb-4 drop-shadow-sm"></i><i v-else class="fa-solid fa-book-open-reader text-6xl text-slate-300 mb-4"></i></div>
                             <h2 class="text-3xl font-bold text-slate-800 mb-2">Kuis Selesai!</h2>
                             <p class="text-slate-500 mb-8">Berikut adalah hasil pencapaian Anda:</p>
-                            
-                            <div class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-2">
-                                {{ score }}
-                            </div>
+                            <div class="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-2">{{ score }}</div>
                             <p class="text-sm text-slate-400 font-medium mb-10 uppercase tracking-wide">Poin Skor</p>
-                            
-                            <button @click="resetQuiz" class="bg-white border-2 border-slate-200 text-slate-700 hover:border-indigo-500 hover:text-indigo-600 font-bold py-3 px-8 rounded-full transition">
-                                Coba Lagi
-                            </button>
+                            <button @click="resetQuiz" class="bg-white border-2 border-slate-200 text-slate-700 hover:border-indigo-500 hover:text-indigo-600 font-bold py-3 px-8 rounded-full transition">Coba Lagi</button>
                         </div>
                     </div>
                 </div>
@@ -445,16 +361,10 @@
                         <p class="text-slate-300 text-sm">Gunakan Text Editor di PC Anda (VS Code / Notepad++) untuk mengerjakan tugas ini.</p>
                     </div>
 
-                    <!-- Task 1 -->
                     <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-slate-100 hover:shadow-lg transition-shadow">
                         <div class="bg-gradient-to-r from-indigo-500 to-blue-500 p-5 text-white flex justify-between items-center">
-                            <div>
-                                <h4 class="font-bold text-lg">Tugas 1: Profile Card</h4>
-                                <p class="text-indigo-100 text-xs">Layout & Box Model</p>
-                            </div>
-                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                                <i class="fa-regular fa-id-card text-xl"></i>
-                            </div>
+                            <div><h4 class="font-bold text-lg">Tugas 1: Profile Card</h4><p class="text-indigo-100 text-xs">Layout & Box Model</p></div>
+                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm"><i class="fa-regular fa-id-card text-xl"></i></div>
                         </div>
                         <div class="p-5">
                             <ul class="space-y-2 mb-5 text-sm text-slate-600">
@@ -490,16 +400,10 @@
                         </div>
                     </div>
 
-                    <!-- Task 2 -->
                     <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-slate-100 hover:shadow-lg transition-shadow">
                         <div class="bg-gradient-to-r from-pink-500 to-rose-500 p-5 text-white flex justify-between items-center">
-                            <div>
-                                <h4 class="font-bold text-lg">Tugas 2: Artikel Blog</h4>
-                                <p class="text-pink-100 text-xs">Tipografi & Warna</p>
-                            </div>
-                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                                <i class="fa-regular fa-newspaper text-xl"></i>
-                            </div>
+                            <div><h4 class="font-bold text-lg">Tugas 2: Artikel Blog</h4><p class="text-pink-100 text-xs">Tipografi & Warna</p></div>
+                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm"><i class="fa-regular fa-newspaper text-xl"></i></div>
                         </div>
                         <div class="p-5">
                             <ul class="space-y-2 mb-5 text-sm text-slate-600">
@@ -579,8 +483,35 @@
             setup() {
                 const activeTab = ref('materi');
                 const toastMessage = ref('');
-                const style = ref({ color: '#ffffff', backgroundColor: '#4f46e5', fontSize: 24, padding: 20, borderRadius: 8 });
-                const generatedCode = computed(() => `.box {\n  color: ${style.value.color};\n  background-color: ${style.value.backgroundColor};\n  font-size: ${style.value.fontSize}px;\n  padding: ${style.value.padding}px;\n  border-radius: ${style.value.borderRadius}px;\n}`);
+                
+                // State untuk Menu Coba (Nilai Raw)
+                const style = ref({ 
+                    color: '#ffffff', 
+                    backgroundColor: '#4f46e5', 
+                    fontSize: 24, 
+                    padding: 20, 
+                    borderRadius: 8 
+                });
+
+                // PERBAIKAN: Computed Style untuk memastikan satuan 'px' selalu ada
+                // Ini memperbaiki masalah di mana style tidak berubah
+                const boxStyle = computed(() => ({
+                    color: style.value.color,
+                    backgroundColor: style.value.backgroundColor,
+                    fontSize: style.value.fontSize + 'px',
+                    padding: style.value.padding + 'px',
+                    borderRadius: style.value.borderRadius + 'px'
+                }));
+
+                const generatedCode = computed(() => {
+                    return `.box {
+  color: ${style.value.color};
+  background-color: ${style.value.backgroundColor};
+  font-size: ${style.value.fontSize}px;
+  padding: ${style.value.padding}px;
+  border-radius: ${style.value.borderRadius}px;
+}`;
+                });
 
                 const questions = ref([
                     { q: "Apa kepanjangan dari CSS?", options: ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style Sheets", "Colorful Style Sheets"], a: 1, exp: "CSS adalah singkatan dari Cascading Style Sheets." },
@@ -634,7 +565,7 @@
                 const resetQuiz = () => { quizStarted.value = false; quizFinished.value = false; };
 
                 return { 
-                    activeTab, style, generatedCode, questions, quizStarted, quizFinished, currentQuestionIndex, selectedAnswerIndex, showExplanation, score, correctCount, 
+                    activeTab, style, boxStyle, generatedCode, questions, quizStarted, quizFinished, currentQuestionIndex, selectedAnswerIndex, showExplanation, score, correctCount, 
                     startQuiz, selectAnswer, nextQuestion, resetQuiz, copyCode, toastMessage 
                 };
             }
