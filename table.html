@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Tabel HTML (Perbaikan Lengkap)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Scrollbar Halus */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* Syntax Highlighting HIGH CONTRAST */
+        .code-bg { background-color: #0f172a; color: #f8fafc; }
+        .tag { color: #f472b6; font-weight: bold; } /* Pink */
+        .attr { color: #a78bfa; font-weight: bold; } /* Purple */
+        .val { color: #4ade80; } /* Green */
+        .content { color: #e2e8f0; } /* Whiteish */
+        .comment { color: #94a3b8; font-style: italic; }
+
+        .nav-bottom-item { padding-bottom: env(safe-area-inset-bottom, 10px); }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden bg-slate-50">
+
+    <div id="app" class="flex flex-col h-full">
+        
+        <!-- HEADER -->
+        <header class="bg-white/80 backdrop-blur-md shadow-sm z-10 shrink-0 border-b border-slate-200">
+            <div class="px-5 py-4 flex justify-between items-center max-w-5xl mx-auto w-full">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                        <i class="fa-solid fa-table-cells text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-800 leading-tight">HTML Master</h1>
+                        <p class="text-xs text-slate-500 font-medium">Panduan Praktis & Langkah Tepat</p>
+                    </div>
+                </div>
+                <!-- Indikator Kuis -->
+                <div v-if="currentTab === 'kuis' && !quizFinished" class="hidden sm:flex items-center gap-2 bg-indigo-50 px-3 py-1 rounded-full">
+                    <span class="text-xs font-bold text-indigo-700">{{ currentQuestionIndex + 1 }}/{{ questions.length }}</span>
+                    <div class="w-16 h-1.5 bg-indigo-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-indigo-600 transition-all" :style="{ width: ((currentQuestionIndex + 1) / questions.length * 100) + '%' }"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- KONTEN UTAMA -->
+        <main class="flex-1 overflow-y-auto p-0 relative scroll-smooth">
+            
+            <!-- ================= MENU 1: MATERI ================= -->
+            <div v-if="currentTab === 'materi'" class="max-w-5xl mx-auto pb-32">
+                <!-- Hero Section -->
+                <div class="relative bg-gradient-to-r from-slate-900 to-indigo-900 rounded-b-3xl p-8 text-white shadow-xl mb-8 overflow-hidden">
+                    <div class="relative z-10">
+                        <span class="bg-indigo-500/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-400/30 mb-3 inline-block">
+                            <i class="fa-solid fa-graduation-cap mr-1"></i> Materi Intensif
+                        </span>
+                        <h2 class="text-3xl font-bold mb-3">Panduan Struktur Tabel</h2>
+                        <p class="text-indigo-100 max-w-2xl text-sm leading-relaxed">
+                            Pelajari setiap komponen tabel secara detail. Lihat kode di kiri dengan warna kontras tinggi, dan bandingkan dengan hasil visual di kanan.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-8 px-4">
+                    
+                    <!-- 1. Struktur Dasar -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800">1. Struktur Dasar</h3>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                                Setiap tabel HTML harus dimulai dengan tag <code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;table&gt;</code>. Di dalamnya, kita wajib mendefinisikan baris menggunakan <code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;tr&gt;</code> (Table Row). Setiap baris kemudian diisi oleh sel data menggunakan <code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;td&gt;</code> (Table Data). Tanpa struktur ini, data tidak akan tersusun rapi.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <div class="code-bg p-4 text-xs overflow-x-auto font-mono border-r border-slate-800">
+                                <span class="comment">&lt;!-- Kerangka Tabel Paling Sederhana --&gt;</span><br><br>
+                                <span class="tag">&lt;table&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Data 1A</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Data 1B</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Data 2A</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Data 2B</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+                                <span class="tag">&lt;/table&gt;</span>
+                            </div>
+                            <div class="p-6 bg-white flex items-center justify-center">
+                                <div class="text-center w-full border border-slate-200 p-4 rounded bg-slate-50">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 block border-b pb-2">Hasil Tampilan</span>
+                                    <table class="w-full border border-slate-300 text-sm text-slate-700">
+                                        <tr><td class="border border-slate-300 p-2">Data 1A</td><td class="border border-slate-300 p-2">Data 1B</td></tr>
+                                        <tr><td class="border border-slate-300 p-2">Data 2A</td><td class="border border-slate-300 p-2">Data 2B</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Header & Styling CSS -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center shadow-sm">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800">2. Header & Styling CSS</h3>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                                Untuk memberi judul pada kolom, gunakan tag <code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;th&gt;</code> (Table Header). Secara default, teks di dalam <code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;th&gt;</code> akan menjadi tebal dan rata tengah. Agar tabel terlihat profesional, kita wajib menggunakan properti CSS <code class="bg-purple-600 text-white px-1 rounded text-xs font-mono">border-collapse: collapse</code> untuk menghapus jarak ganda di antara garis sel.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <div class="code-bg p-4 text-xs overflow-x-auto font-mono border-r border-slate-800">
+                                <span class="tag">&lt;style&gt;</span><br>
+                                &nbsp;<span class="attr">table</span> { <span class="val">width</span>: 100%; <span class="val">border-collapse</span>: collapse; }<br>
+                                &nbsp;<span class="attr">th, td</span> { <span class="val">border</span>: 1px solid #333; <span class="val">padding</span>: 8px; }<br>
+                                &nbsp;<span class="attr">th</span> { <span class="val">background-color</span>: #e0e7ff; }<br>
+                                <span class="tag">&lt;/style&gt;</span><br><br>
+                                <span class="tag">&lt;table&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;th&gt;</span><span class="content">Nama</span><span class="tag">&lt;/th&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;th&gt;</span><span class="content">Umur</span><span class="tag">&lt;/th&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Andi</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">20</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+                                <span class="tag">&lt;/table&gt;</span>
+                            </div>
+                            <div class="p-6 bg-white flex items-center justify-center">
+                                <div class="text-center w-full border border-slate-200 p-4 rounded bg-slate-50">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 block border-b pb-2">Hasil Tampilan</span>
+                                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                        <tr><th style="border: 1px solid #333; padding: 8px; background-color: #e0e7ff;">Nama</th><th style="border: 1px solid #333; padding: 8px; background-color: #e0e7ff;">Umur</th></tr>
+                                        <tr><td style="border: 1px solid #333; padding: 8px;">Andi</td><td style="border: 1px solid #333; padding: 8px;">20</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. COLSPAN -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center shadow-sm">
+                                    <i class="fa-solid fa-arrows-left-right-to-line"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800">3. Colspan (Gabung Kolom)</h3>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                                Atribut <code class="bg-amber-100 text-amber-800 px-1 rounded font-mono text-xs">colspan="n"</code> digunakan ketika satu sel perlu memanjang ke samping meliputi beberapa kolom. Ini sangat umum digunakan untuk judul utama tabel yang mencakup seluruh sub-kolom di bawahnya.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <div class="code-bg p-4 text-xs overflow-x-auto font-mono border-r border-slate-800">
+                                <span class="tag">&lt;table&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;th</span> <span class="attr">colspan</span>=<span class="val">"2"</span><span class="tag">&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data Siswa<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/th&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Budi</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">XII</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+                                <span class="tag">&lt;/table&gt;</span>
+                            </div>
+                            <div class="p-6 bg-white flex items-center justify-center">
+                                <div class="text-center w-full border border-slate-200 p-4 rounded bg-slate-50">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 block border-b pb-2">Hasil Tampilan</span>
+                                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #333;">
+                                        <tr><th colspan="2" style="border: 1px solid #333; padding: 8px; background-color: #fef3c7;">Data Siswa</th></tr>
+                                        <tr><td style="border: 1px solid #333; padding: 8px;">Budi</td><td style="border: 1px solid #333; padding: 8px;">XII</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. ROWSPAN -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center shadow-sm">
+                                    <i class="fa-solid fa-arrows-up-down"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800">4. Rowspan (Gabung Baris)</h3>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                                Atribut <code class="bg-emerald-100 text-emerald-800 px-1 rounded font-mono text-xs">rowspan="n"</code> digunakan ketika satu sel perlu memanjang ke bawah meliputi beberapa baris. Biasanya digunakan untuk label kategori di sisi kiri.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <div class="code-bg p-4 text-xs overflow-x-auto font-mono border-r border-slate-800">
+                                <span class="tag">&lt;table&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td</span> <span class="attr">rowspan</span>=<span class="val">"2"</span><span class="tag">&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kelas A<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Siswa 1</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><span class="content">Siswa 2</span><span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+                                <span class="tag">&lt;/table&gt;</span>
+                            </div>
+                            <div class="p-6 bg-white flex items-center justify-center">
+                                <div class="text-center w-full border border-slate-200 p-4 rounded bg-slate-50">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 block border-b pb-2">Hasil Tampilan</span>
+                                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #333;">
+                                        <tr>
+                                            <td rowspan="2" style="border: 1px solid #333; padding: 8px; background-color: #d1fae5; font-weight: bold; vertical-align: middle;">Kelas A</td>
+                                            <td style="border: 1px solid #333; padding: 8px;">Siswa 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 1px solid #333; padding: 8px;">Siswa 2</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Menyisipkan Elemen (PERBAIKAN GAMBAR) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center shadow-sm">
+                                    <i class="fa-solid fa-images"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800">5. Menyisipkan Elemen</h3>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mt-3">
+                                Sel tabel <code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;td&gt;</code> bersifat fleksibel. Di dalamnya, kita dapat menaruh elemen HTML lain seperti gambar (<code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;img&gt;</code>), tautan (<code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;a&gt;</code>), atau daftar (<code class="bg-slate-200 px-1 rounded text-slate-700 font-mono text-xs">&lt;ul&gt;</code>).
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <div class="code-bg p-4 text-xs overflow-x-auto font-mono border-r border-slate-800">
+                                <span class="tag">&lt;table&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;!-- Gambar Eksternal --&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"icon.png"</span> <span class="attr">width</span>=<span class="val">"60"</span><span class="tag">&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;b&gt;</span><span class="content">Kamera</span><span class="tag">&lt;/b&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;br&gt;</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rp 5 Juta<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/td&gt;</span><br>
+                                &nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+                                <span class="tag">&lt;/table&gt;</span>
+                            </div>
+                            <div class="p-6 bg-white flex items-center justify-center">
+                                <div class="text-center w-full border border-slate-200 p-4 rounded bg-slate-50">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 block border-b pb-2">Hasil Tampilan</span>
+                                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #333;">
+                                        <tr>
+                                            <td style="border: 1px solid #333; padding: 8px; text-align: center;">
+                                                <!-- Menggunakan URL gambar yang sangat stabil (Icons8) -->
+                                                <img src="https://img.icons8.com/color/96/camera--v1.png" alt="Kamera" style="display: block; margin: 0 auto; width: 60px; height: 60px;">
+                                            </td>
+                                            <td style="border: 1px solid #333; padding: 8px; vertical-align: middle; text-align: left;">
+                                                <b>Kamera DSLR</b><br>
+                                                Rp 5.000.000
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= MENU 2: COBA ================= -->
+            <div v-else-if="currentTab === 'coba'" class="max-w-5xl mx-auto h-full flex flex-col p-4 pb-32">
+                <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-140px)]">
+                    <div class="bg-slate-900 text-white p-4 flex justify-between items-center shadow-md">
+                        <div class="flex items-center gap-2">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span class="text-xs text-slate-400 ml-2 font-mono">editor.html</span>
+                        </div>
+                        <button class="text-xs bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-md font-bold transition">
+                            <i class="fa-solid fa-play mr-1"></i> Run
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 flex-1 overflow-hidden">
+                        <div class="flex flex-col border-r border-slate-200 bg-slate-50">
+                            <textarea 
+                                v-model="codeInput"
+                                class="flex-1 w-full p-4 font-mono text-sm leading-relaxed focus:outline-none resize-none text-slate-800 bg-transparent"
+                                spellcheck="false"
+                            ></textarea>
+                        </div>
+                        <div class="flex flex-col bg-white overflow-y-auto relative">
+                            <div class="sticky top-0 bg-slate-100 px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                                Preview Output
+                            </div>
+                            <div class="p-6 flex justify-center items-start min-h-full">
+                                <div v-html="codeInput" class="w-full shadow-sm"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-200">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm">Tantangan #1</h4>
+                                <p class="text-xs text-slate-500">Buat tabel 2x2 dengan isi "A" dan "B".</p>
+                            </div>
+                            <button @click="checkChallenge" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition w-full sm:w-auto">Cek Jawaban</button>
+                        </div>
+                        <div v-if="challengeMessage" :class="`mt-3 p-3 rounded-lg text-xs font-bold text-center flex items-center justify-center gap-2 ${challengeSuccess ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`">
+                            <i :class="['fa-solid', challengeSuccess ? 'fa-circle-check' : 'fa-circle-xmark']"></i>
+                            {{ challengeMessage }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= MENU 3: KUIS ================= -->
+            <div v-else-if="currentTab === 'kuis'" class="max-w-2xl mx-auto px-4 pb-32 flex flex-col justify-center h-full">
+                <div v-if="!quizStarted" class="text-center py-10">
+                    <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+                        <i class="fa-solid fa-brain text-4xl text-indigo-600"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-3">Siap Menguji?</h2>
+                    <p class="text-slate-500 mb-8">20 Pertanyaan tentang Tabel HTML.</p>
+                    <button @click="startQuiz" class="bg-indigo-600 text-white text-lg font-bold py-4 px-10 rounded-2xl shadow-xl hover:bg-indigo-700 transition">Mulai Sekarang</button>
+                </div>
+                <div v-else-if="!quizFinished" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-sm font-bold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">Soal {{ currentQuestionIndex + 1 }}</span>
+                        <span class="text-sm font-bold text-slate-400">{{ score }} Poin</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-8 leading-snug">{{ questions[currentQuestionIndex].q }}</h3>
+                    <div class="space-y-3">
+                        <button v-for="(opt, idx) in questions[currentQuestionIndex].o" :key="idx" @click="selectAnswer(idx)" :class="['w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-center', selectedOptionIndex === idx ? 'border-indigo-500 bg-indigo-50 ring-4 ring-indigo-100' : 'border-slate-100 hover:border-indigo-200 hover:bg-slate-50']">
+                            <div :class="['w-8 h-8 rounded-lg border-2 flex items-center justify-center mr-4 text-sm font-bold transition-all', selectedOptionIndex === idx ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-200 text-slate-400']">{{ String.fromCharCode(65 + idx) }}</div>
+                            <span class="font-medium text-slate-700">{{ opt }}</span>
+                        </button>
+                    </div>
+                    <div class="mt-8 flex justify-end">
+                        <button @click="nextQuestion" :disabled="selectedOptionIndex === null" :class="['py-3 px-8 rounded-xl font-bold transition flex items-center gap-2', selectedOptionIndex === null ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800 shadow-lg']">
+                            {{ currentQuestionIndex === questions.length - 1 ? 'Selesai' : 'Lanjut' }} <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div v-else class="text-center py-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <div class="absolute inset-0 bg-yellow-400 rounded-full opacity-20 animate-ping"></div>
+                            <div class="relative bg-gradient-to-tr from-yellow-400 to-orange-500 w-full h-full rounded-full flex items-center justify-center text-white text-3xl shadow-lg"><i class="fa-solid fa-trophy"></i></div>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-800 mb-2">Kuis Selesai!</h2>
+                        <p class="text-slate-500 mb-6">Skor Anda: <span class="font-bold text-indigo-600 text-3xl">{{ score }}</span> / 20</p>
+                        <div class="p-4 rounded-xl mb-6 text-sm font-medium" :class="score >= 16 ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'">{{ scoreMessage }}</div>
+                        <button @click="resetQuiz" class="w-full bg-slate-900 text-white font-bold py-3 px-6 rounded-xl hover:bg-slate-800 transition">Coba Lagi</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= MENU 4: LATIHAN (PERBAIKAN & PENAMBAHAN) ================= -->
+            <div v-else-if="currentTab === 'latihan'" class="max-w-4xl mx-auto px-4 pb-32 pt-4">
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-8 flex gap-4 items-start">
+                    <i class="fa-solid fa-laptop-code text-blue-500 text-xl mt-1"></i>
+                    <div>
+                        <h3 class="font-bold text-blue-800 mb-1">Instruksi Umum</h3>
+                        <p class="text-sm text-blue-700">Gunakan editor kode (VS Code, Notepad++) di komputer Anda. Simpan file sebagai <code class="bg-blue-200 px-1 rounded">latihan.html</code>.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    
+                    <!-- TUGAS 1: JADWAL KULIAH -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
+                            <h3 class="font-bold text-lg">Tugas 1: Jadwal Kuliah</h3>
+                            <span class="bg-slate-700 text-xs px-3 py-1 rounded-full text-slate-300 font-bold">Level: Pemula</span>
+                        </div>
+                        
+                        <div class="p-6">
+                            <!-- Target Output -->
+                            <div class="mb-6">
+                                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center">
+                                    <i class="fa-solid fa-eye text-indigo-500 mr-2"></i> Target Output (Yang Harus Anda Buat)
+                                </h4>
+                                <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-4 overflow-x-auto">
+                                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #475569;">
+                                        <thead>
+                                            <tr style="background-color: #e2e8f0;">
+                                                <th style="border: 1px solid #475569; padding: 10px;">Jam</th>
+                                                <th style="border: 1px solid #475569; padding: 10px;">Senin</th>
+                                                <th style="border: 1px solid #475569; padding: 10px;">Rabu</th>
+                                                <th style="border: 1px solid #475569; padding: 10px;">Jumat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="border: 1px solid #475569; padding: 10px;">08:00</td>
+                                                <td style="border: 1px solid #475569; padding: 10px;">Matematika</td>
+                                                <td style="border: 1px solid #475569; padding: 10px;">Bahasa Inggris</td>
+                                                <td style="border: 1px solid #475569; padding: 10px;">Olahraga</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: 1px solid #475569; padding: 10px;">10:00</td>
+                                                <td style="border: 1px solid #475569; padding: 10px;">Fisika</td>
+                                                <td style="border: 1px solid #475569; padding: 10px;">Biologi</td>
+                                                <td style="border: 1px solid #475569; padding: 10px;">Seni Budaya</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Langkah-langkah -->
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center">
+                                    <i class="fa-solid fa-list-ol text-indigo-500 mr-2"></i> Panduan Langkah Demi Langkah
+                                </h4>
+                                <ol class="list-decimal list-inside space-y-3 text-sm text-slate-600 bg-slate-50 p-4 rounded-xl">
+                                    <li>Buat struktur dasar HTML dan tambahkan tag <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;table&gt;</code>.</li>
+                                    <li>Tambahkan CSS internal: <code class="bg-slate-200 px-1 rounded text-slate-700">border-collapse: collapse;</code> agar garis tabel menjadi satu.</li>
+                                    <li>Buat <strong>Baris Header</strong> dengan <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;tr&gt;</code> dan isikan 4 buah <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;th&gt;</code> (Jam, Senin, Rabu, Jumat).</li>
+                                    <li>Buat <strong>2 Baris Data</strong> di bawah header menggunakan <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;tr&gt;</code> dan <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;td&gt;</code>.</li>
+                                    <li>Isi data sesuai contoh di atas. Beri warna latar belakang pada baris header agar beda dengan data.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TUGAS 2: KATALOG PRODUK -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                        <div class="bg-indigo-600 text-white px-6 py-4 flex justify-between items-center">
+                            <h3 class="font-bold text-lg">Tugas 2: Katalog Produk</h3>
+                            <span class="bg-indigo-500 text-xs px-3 py-1 rounded-full text-indigo-100 font-bold">Level: Menengah</span>
+                        </div>
+                        
+                        <div class="p-6">
+                            <!-- Target Output -->
+                            <div class="mb-6">
+                                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center">
+                                    <i class="fa-solid fa-eye text-indigo-500 mr-2"></i> Target Output (Yang Harus Anda Buat)
+                                </h4>
+                                <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-4 overflow-x-auto">
+                                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #cbd5e1;">
+                                        <thead>
+                                            <tr style="background-color: #e0e7ff;">
+                                                <th colspan="2" style="border: 1px solid #cbd5e1; padding: 10px; text-align: left;">Daftar Gadget</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="border: 1px solid #cbd5e1; padding: 10px; text-align: center; vertical-align: middle;">
+                                                    <img src="https://img.icons8.com/color/96/laptop--v1.png" alt="Laptop" style="width: 50px; display: block; margin: 0 auto;">
+                                                </td>
+                                                <td style="border: 1px solid #cbd5e1; padding: 10px; vertical-align: middle;">
+                                                    <strong>Laptop Gaming</strong><br>
+                                                    <span style="color: #059669; font-weight: bold;">Rp 15.000.000</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: 1px solid #cbd5e1; padding: 10px; text-align: center; vertical-align: middle;">
+                                                    <img src="https://img.icons8.com/color/96/iphone-x.png" alt="HP" style="width: 50px; display: block; margin: 0 auto;">
+                                                </td>
+                                                <td style="border: 1px solid #cbd5e1; padding: 10px; vertical-align: middle;">
+                                                    <strong>Smartphone Pro</strong><br>
+                                                    <span style="color: #059669; font-weight: bold;">Rp 8.500.000</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Langkah-langkah -->
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center">
+                                    <i class="fa-solid fa-list-ol text-indigo-500 mr-2"></i> Panduan Langkah Demi Langkah
+                                </h4>
+                                <ol class="list-decimal list-inside space-y-3 text-sm text-slate-600 bg-slate-50 p-4 rounded-xl">
+                                    <li>Buat tabel dengan lebar 100% dan border-collapse collapse.</li>
+                                    <li>Buat <strong>Baris Judul</strong> menggunakan <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;th colspan="2"&gt;</code> yang berisi teks "Daftar Gadget".</li>
+                                    <li>Untuk setiap baris produk, buat 2 kolom (<code class="bg-slate-200 px-1 rounded text-slate-700">&lt;td&gt;</code>).</li>
+                                    <li>Di kolom pertama, sisipkan tag <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;img src="..."&gt;</code> (gunakan gambar dari internet atau lokal).</li>
+                                    <li>Atur CSS <code class="bg-slate-200 px-1 rounded text-slate-700">vertical-align: middle;</code> pada <code class="bg-slate-200 px-1 rounded text-slate-700">&lt;td&gt;</code> agar teks nama produk berada di tengah tinggi gambar.</li>
+                                    <li>Buat harga berwarna hijau dan tebal agar menonjol.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- NAVIGASI BAWAH -->
+        <nav class="bg-white/90 backdrop-blur-lg border-t border-slate-200 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)] z-20 shrink-0 pb-safe">
+            <div class="flex justify-around items-center h-16 max-w-4xl mx-auto">
+                <button v-for="menu in menus" :key="menu.id" @click="currentTab = menu.id" :class="['flex flex-col items-center justify-center w-full h-full transition-all duration-300 nav-bottom-item group relative', currentTab === menu.id ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600']">
+                    <div v-if="currentTab === menu.id" class="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-indigo-600 rounded-b-xl"></div>
+                    <div :class="['mb-1 text-xl transition-transform duration-300 group-hover:scale-110', currentTab === menu.id ? '-translate-y-1' : '']"><i :class="[menu.icon, 'fa-fw']"></i></div>
+                    <span :class="['text-[10px] font-bold tracking-wide', currentTab === menu.id ? 'opacity-100' : 'opacity-70']">{{ menu.label }}</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const { createApp, ref, computed } = Vue;
+
+            createApp({
+                setup() {
+                    const currentTab = ref('materi');
+                    
+                    const menus = [
+                        { id: 'materi', label: 'Materi', icon: 'fa-solid fa-book-open-reader' },
+                        { id: 'coba', label: 'Coba', icon: 'fa-solid fa-code' },
+                        { id: 'kuis', label: 'Kuis', icon: 'fa-solid fa-graduation-cap' },
+                        { id: 'latihan', label: 'Latihan', icon: 'fa-solid fa-laptop-file' }
+                    ];
+
+                    // Menu Coba
+                    const codeInput = ref(`<table border="1" style="border-collapse: collapse; width: 100%;">
+  <tr style="background: #f0f9ff;">
+    <th style="padding: 10px;">Nama</th>
+    <th style="padding: 10px;">Kelas</th>
+  </tr>
+  <tr>
+    <td style="padding: 10px;">Andi</td>
+    <td style="padding: 10px;">XII RPL</td>
+  </tr>
+</table>`);
+                    
+                    const challengeMessage = ref('');
+                    const challengeSuccess = ref(false);
+
+                    const checkChallenge = () => {
+                        const lowerCode = codeInput.value.toLowerCase();
+                        const hasTable = lowerCode.includes('<table');
+                        const hasTr = lowerCode.includes('<tr') && lowerCode.includes('</tr>');
+                        const hasTd = lowerCode.includes('<td') && lowerCode.includes('</td>');
+                        const contentMatch = (lowerCode.includes('a') || lowerCode.includes('A')) && 
+                                           (lowerCode.includes('b') || lowerCode.includes('B'));
+
+                        if (hasTable && hasTr && hasTd && contentMatch) {
+                            challengeMessage.value = "Benar! Struktur tabel dan kontennya sesuai.";
+                            challengeSuccess.value = true;
+                        } else {
+                            challengeMessage.value = "Kurang tepat. Pastikan ada tag <table>, <tr>, <td> dan isi A & B.";
+                            challengeSuccess.value = false;
+                        }
+                    };
+
+                    // Menu Kuis
+                    const quizStarted = ref(false);
+                    const quizFinished = ref(false);
+                    const currentQuestionIndex = ref(0);
+                    const selectedOptionIndex = ref(null);
+                    const score = ref(0);
+
+                    const questions = [
+                        { q: "Tag HTML untuk membuat tabel adalah?", o: ["<table>", "<tab>", "<grid>", "<sheet>"], a: 0 },
+                        { q: "Tag <tr> berfungsi untuk membuat?", o: ["Table Row", "Table Right", "Table Rule", "Table Run"], a: 0 },
+                        { q: "Tag untuk sel judul adalah?", o: ["<head>", "<th>", "<header>", "<td>"], a: 1 },
+                        { q: "Tag untuk sel data biasa adalah?", o: ["<data>", "<td>", "<dd>", "<cell>"], a: 1 },
+                        { q: "Atribut untuk menggabungkan kolom secara horizontal?", o: ["rowspan", "colspan", "merge", "join"], a: 1 },
+                        { q: "Atribut untuk menggabungkan baris secara vertikal?", o: ["rowspan", "colspan", "vertical-merge", "span-row"], a: 0 },
+                        { q: "CSS untuk menghapus jarak antar garis border?", o: ["border-spacing: 0", "border-collapse: collapse", "margin: 0", "padding: 0"], a: 1 },
+                        { q: "Secara default, teks di dalam <th> berposisi?", o: ["Rata Kiri", "Rata Kanan", "Tebal & Tengah", "Bergaris Bawah"], a: 2 },
+                        { q: "Urutan penulisan yang benar adalah?", o: ["<td><tr><table>", "<table><td><tr>", "<table><tr><td>", "<tr><table><td>"], a: 2 },
+                        { q: "CSS untuk warna latar belakang sel?", o: ["font-color", "background-color", "color", "fill"], a: 1 },
+                        { q: "Agar tabel memenuhi lebar layar, width di-set?", o: ["100%", "auto", "500px", "full"], a: 0 },
+                        { q: "Tag <thead> mengelompokkan bagian?", o: ["Isi data", "Judul kolom", "Keterangan", "Footer"], a: 1 },
+                        { q: "Tag <tbody> berfungsi untuk?", o: ["Isi data utama", "Baris baru", "Judul tabel", "Footer"], a: 0 },
+                        { q: "Fungsi padding pada sel tabel?", o: ["Menebal garis", "Jarak teks & border", "Menggabungkan sel", "Menebalkan teks"], a: 1 },
+                        { q: "CSS 'text-align: right' akan membuat teks?", o: ["Kiri", "Kanan", "Tengah", "Justify"], a: 1 },
+                        { q: "Jika colspan='2' pada <td>, maka sel akan?", o: ["Turun 2 baris", "Melebar 2 kolom", "Terbagi 2", "Hilang"], a: 1 },
+                        { q: "Elemen yang TIDAK boleh langsung di <table>?", o: ["<tr>", "<thead>", "<p>", "<tbody>"], a: 2 },
+                        { q: "Style garis putus-putus adalah?", o: ["solid", "dotted", "double", "none"], a: 1 },
+                        { q: "Tag <caption> diletakkan?", o: ["Di luar tabel", "Di dalam <tr>", "Di dalam <td>", "Di <style>"], a: 0 },
+                        { q: "Jika row 1 punya 3 kolom, dan row 2 kolom 1 punya rowspan='2', berapa <td> di row 2?", o: ["3", "4", "2", "1"], a: 2 }
+                    ];
+
+                    const formattedQuestions = questions.map(item => ({
+                        q: item.q,
+                        o: item.o,
+                        a: item.a
+                    }));
+
+                    const startQuiz = () => {
+                        quizStarted.value = true;
+                        currentQuestionIndex.value = 0;
+                        score.value = 0;
+                        selectedOptionIndex.value = null;
+                    };
+
+                    const selectAnswer = (index) => {
+                        selectedOptionIndex.value = index;
+                    };
+
+                    const nextQuestion = () => {
+                        if (selectedOptionIndex.value === formattedQuestions[currentQuestionIndex.value].a) {
+                            score.value++;
+                        }
+                        selectedOptionIndex.value = null;
+                        if (currentQuestionIndex.value < formattedQuestions.length - 1) {
+                            currentQuestionIndex.value++;
+                        } else {
+                            quizFinished.value = true;
+                        }
+                    };
+
+                    const resetQuiz = () => {
+                        quizStarted.value = false;
+                        quizFinished.value = false;
+                        currentQuestionIndex.value = 0;
+                        score.value = 0;
+                    };
+
+                    const scoreMessage = computed(() => {
+                        if (score.value >= 18) return "Luar Biasa! Anda adalah ahli tabel HTML.";
+                        if (score.value >= 14) return "Hebat! Pemahaman Anda sangat solid.";
+                        if (score.value >= 10) return "Bagus, tapi ada yang perlu diperbaiki.";
+                        return "Jangan menyerah! Coba pelajari materi lagi.";
+                    });
+
+                    return {
+                        currentTab,
+                        menus,
+                        codeInput,
+                        checkChallenge,
+                        challengeMessage,
+                        challengeSuccess,
+                        questions: formattedQuestions,
+                        quizStarted,
+                        quizFinished,
+                        currentQuestionIndex,
+                        selectedOptionIndex,
+                        score,
+                        scoreMessage,
+                        startQuiz,
+                        selectAnswer,
+                        nextQuestion,
+                        resetQuiz
+                    };
+                }
+            }).mount('#app');
+        });
+    </script>
+</body>
+</html>
