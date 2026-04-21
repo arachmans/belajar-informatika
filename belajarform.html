@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belajar HTML Form</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; }
+    .mono { font-family: 'Space Mono', monospace; }
+    pre, code { font-family: 'Space Mono', monospace; }
+
+    .code-block {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+    .code-block .tag { color: #f472b6; }
+    .code-block .attr { color: #a78bfa; }
+    .code-block .val { color: #34d399; }
+    .code-block .comment { color: #64748b; }
+
+    .lesson-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .lesson-card:hover { transform: translateY(-2px); }
+
+    .tab-active {
+      background: #0f172a;
+      color: #f0abfc;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.5s ease forwards; }
+    .fade-up-1 { animation-delay: 0.05s; opacity: 0; }
+    .fade-up-2 { animation-delay: 0.1s; opacity: 0; }
+    .fade-up-3 { animation-delay: 0.15s; opacity: 0; }
+    .fade-up-4 { animation-delay: 0.2s; opacity: 0; }
+
+    .preview-area {
+      background: repeating-conic-gradient(#f1f5f9 0% 25%, #fff 0% 50%) 0 0 / 20px 20px;
+      border-radius: 12px;
+    }
+
+    .progress-ring { transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .toast-msg {
+      animation: slideIn 0.3s ease, slideOut 0.3s ease 2.5s forwards;
+    }
+    @keyframes slideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideOut { from { opacity: 1; } to { opacity: 0; pointer-events: none; } }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0f172a',
+            surface: '#f8f7ff',
+            orchid: '#c084fc',
+            mint: '#34d399',
+            blush: '#f472b6',
+          }
+        }
+      }
+    }
+  </script>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-ink text-white overflow-auto">
+  <div id="app" class="w-full h-full overflow-auto"><!-- Header -->
+   <header class="relative overflow-hidden px-6 pt-10 pb-14 text-center">
+    <div class="absolute inset-0 opacity-20" style="background: radial-gradient(ellipse at 30% 0%, #c084fc 0%, transparent 60%), radial-gradient(ellipse at 70% 100%, #f472b6 0%, transparent 60%);"></div>
+    <div class="relative z-10 max-w-3xl mx-auto">
+     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-orchid text-sm font-medium mb-5 fade-up fade-up-1"><i data-lucide="code-2" style="width:16px;height:16px;"></i> <span>Interactive Tutorial</span>
+     </div>
+     <h1 id="mainTitle" class="text-4xl md:text-5xl font-bold mb-3 fade-up fade-up-2" style="background: linear-gradient(135deg, #fff 30%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Belajar HTML Form</h1>
+     <p id="subtitle" class="text-lg text-slate-400 max-w-xl mx-auto fade-up fade-up-3">Panduan interaktif untuk memahami elemen-elemen form HTML — dari input sederhana hingga validasi.</p><!-- Progress -->
+     <div class="mt-8 flex items-center justify-center gap-4 fade-up fade-up-4">
+      <svg width="48" height="48" class="rotate-[-90deg]"><circle cx="24" cy="24" r="20" fill="none" stroke="#1e293b" stroke-width="4" /> <circle id="progressRing" class="progress-ring" cx="24" cy="24" r="20" fill="none" stroke="#c084fc" stroke-width="4" stroke-linecap="round" stroke-dasharray="125.66" stroke-dashoffset="125.66" />
+      </svg>
+      <div class="text-left"><span id="progressText" class="text-white font-bold text-lg">0 / 6</span>
+       <p class="text-slate-500 text-xs">Pelajaran selesai</p>
+      </div>
+     </div>
+    </div>
+   </header><!-- Lessons Nav -->
+   <nav class="sticky top-0 z-30 bg-ink/90 backdrop-blur border-b border-white/5">
+    <div class="max-w-5xl mx-auto px-4 flex gap-1 overflow-x-auto py-2" id="lessonTabs"></div>
+   </nav><!-- Lesson Content -->
+   <main class="max-w-5xl mx-auto px-4 py-8">
+    <div id="lessonContent"></div><!-- Navigation Buttons -->
+    <div class="flex justify-between items-center mt-8 mb-12"><button id="prevBtn" onclick="navigate(-1)" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition disabled:opacity-30 disabled:pointer-events-none"> <i data-lucide="arrow-left" style="width:18px;height:18px;"></i> Sebelumnya </button> <button id="nextBtn" onclick="navigate(1)" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orchid/20 hover:bg-orchid/30 text-orchid font-semibold transition disabled:opacity-30 disabled:pointer-events-none"> Selanjutnya <i data-lucide="arrow-right" style="width:18px;height:18px;"></i> </button>
+    </div>
+   </main><!-- Toast container -->
+   <div id="toastContainer" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"></div>
+  </div>
+  <script>
+    // ---- LESSONS DATA ----
+    const lessons = [
+      {
+        id: 'apersepsi', icon: 'lightbulb', title: 'Apersepsi: Mengapa Form Penting?',
+        theory: `<div class="space-y-4">
+          <!-- Interactive Question Section -->
+          <div class="relative overflow-hidden bg-gradient-to-br from-orchid/30 via-blush/20 to-orchid/10 border border-orchid/40 rounded-2xl p-6">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-orchid/20 rounded-full blur-3xl"></div>
+            <div class="relative z-10">
+              <p class="text-orchid font-bold mb-4 flex items-center gap-2 text-lg"><i data-lucide="brain" style="width:20px;height:20px;"></i> Pertanyaan Pemulai:</p>
+              <div class="grid md:grid-cols-3 gap-3">
+                <div class="bg-white/5 hover:bg-white/10 backdrop-blur rounded-xl p-4 border border-orchid/30 transition cursor-pointer group">
+                  <p class="text-orchid font-semibold mb-1 group-hover:text-blush transition">❌ Frustasi?</p>
+                  <p class="text-xs text-slate-400">Pernahkah mengisi form yang sangat membingungkan & membuat kesal?</p>
+                </div>
+                <div class="bg-white/5 hover:bg-white/10 backdrop-blur rounded-xl p-4 border border-mint/30 transition cursor-pointer group">
+                  <p class="text-mint font-semibold mb-1 group-hover:text-orchid transition">✨ Menyenangkan?</p>
+                  <p class="text-xs text-slate-400">Atau pernah form begitu indah & smooth sehingga senang diisi?</p>
+                </div>
+                <div class="bg-white/5 hover:bg-white/10 backdrop-blur rounded-xl p-4 border border-blush/30 transition cursor-pointer group">
+                  <p class="text-blush font-semibold mb-1 group-hover:text-mint transition">💼 Dicari?</p>
+                  <p class="text-xs text-slate-400">Skill form yang baik adalah salah satu yang paling dicari IT!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real World Context with Visual Timeline -->
+          <div class="bg-gradient-to-r from-mint/20 to-mint/5 border border-mint/40 rounded-2xl p-6">
+            <p class="text-mint font-bold mb-4 flex items-center gap-2 text-lg"><i data-lucide="globe" style="width:20px;height:20px;"></i> Dimana Form Ada di Dunia Nyata?</p>
+            <p class="text-slate-300 text-sm mb-4">Form ada DIMANA-MANA dalam kehidupan digital kita:</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <div class="group bg-white/[0.03] hover:bg-white/[0.08] rounded-lg p-3 border border-mint/20 hover:border-mint/40 transition cursor-pointer">
+                <p class="text-mint font-semibold text-sm mb-1">📋 Pendaftaran</p>
+                <p class="text-xs text-slate-400">Akun media sosial, email</p>
+              </div>
+              <div class="group bg-white/[0.03] hover:bg-white/[0.08] rounded-lg p-3 border border-mint/20 hover:border-mint/40 transition cursor-pointer">
+                <p class="text-mint font-semibold text-sm mb-1">💳 Checkout</p>
+                <p class="text-xs text-slate-400">Belanja online & pembayaran</p>
+              </div>
+              <div class="group bg-white/[0.03] hover:bg-white/[0.08] rounded-lg p-3 border border-mint/20 hover:border-mint/40 transition cursor-pointer">
+                <p class="text-mint font-semibold text-sm mb-1">🔍 Pencarian</p>
+                <p class="text-xs text-slate-400">Google, E-commerce, platform</p>
+              </div>
+              <div class="group bg-white/[0.03] hover:bg-white/[0.08] rounded-lg p-3 border border-mint/20 hover:border-mint/40 transition cursor-pointer">
+                <p class="text-mint font-semibold text-sm mb-1">📧 Newsletter</p>
+                <p class="text-xs text-slate-400">Subscribe & komunikasi</p>
+              </div>
+              <div class="group bg-white/[0.03] hover:bg-white/[0.08] rounded-lg p-3 border border-mint/20 hover:border-mint/40 transition cursor-pointer">
+                <p class="text-mint font-semibold text-sm mb-1">⭐ Survey</p>
+                <p class="text-xs text-slate-400">Feedback & pengalaman pengguna</p>
+              </div>
+              <div class="group bg-white/[0.03] hover:bg-white/[0.08] rounded-lg p-3 border border-mint/20 hover:border-mint/40 transition cursor-pointer">
+                <p class="text-mint font-semibold text-sm mb-1">👤 Edit Profil</p>
+                <p class="text-xs text-slate-400">Update data personal</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Why Learn - Interactive Cards -->
+          <div class="bg-gradient-to-br from-blush/20 to-blush/5 border border-blush/40 rounded-2xl p-6">
+            <p class="text-blush font-bold mb-4 flex items-center gap-2 text-lg"><i data-lucide="zap" style="width:20px;height:20px;"></i> Mengapa Form Sangat Penting?</p>
+            <div class="space-y-2">
+              <div class="bg-white/[0.03] hover:bg-blush/10 border border-blush/20 hover:border-blush/40 rounded-xl p-4 transition">
+                <p class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-blush/30 flex items-center justify-center text-xs font-bold">1</span> <span class="font-semibold text-white">Fondasi Web Interaktif</span></p>
+                <p class="text-xs text-slate-400 ml-8">Form adalah cara utama pengguna berkomunikasi dengan aplikasi web</p>
+              </div>
+              <div class="bg-white/[0.03] hover:bg-blush/10 border border-blush/20 hover:border-blush/40 rounded-xl p-4 transition">
+                <p class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-blush/30 flex items-center justify-center text-xs font-bold">2</span> <span class="font-semibold text-white">Impact pada Bisnis</span></p>
+                <p class="text-xs text-slate-400 ml-8">Form yang baik = tinggi konversi, kepuasan pengguna, & revenue bisnis</p>
+              </div>
+              <div class="bg-white/[0.03] hover:bg-blush/10 border border-blush/20 hover:border-blush/40 rounded-xl p-4 transition">
+                <p class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-blush/30 flex items-center justify-center text-xs font-bold">3</span> <span class="font-semibold text-white">Security & Data Integrity</span></p>
+                <p class="text-xs text-slate-400 ml-8">Validasi data memastikan keamanan & integritas data sebelum disimpan</p>
+              </div>
+              <div class="bg-white/[0.03] hover:bg-blush/10 border border-blush/20 hover:border-blush/40 rounded-xl p-4 transition">
+                <p class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-blush/30 flex items-center justify-center text-xs font-bold">4</span> <span class="font-semibold text-white">Aksesibilitas Universal</span></p>
+                <p class="text-xs text-slate-400 ml-8">Form yang baik dapat digunakan oleh semua orang, termasuk disabilitas</p>
+              </div>
+              <div class="bg-white/[0.03] hover:bg-blush/10 border border-blush/20 hover:border-blush/40 rounded-xl p-4 transition">
+                <p class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-blush/30 flex items-center justify-center text-xs font-bold">5</span> <span class="font-semibold text-white">Skill Industri yang Dicari</span></p>
+                <p class="text-xs text-slate-400 ml-8">Developer yang expert dalam form design sangat diminati perusahaan</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Learning Roadmap with Visual Flow -->
+          <div class="relative bg-gradient-to-r from-slate-800/50 to-slate-700/30 border border-slate-700/50 rounded-2xl p-6 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-orchid/5 to-transparent"></div>
+            <div class="relative z-10">
+              <p class="text-white font-bold mb-5 flex items-center gap-2 text-lg"><i data-lucide="map" style="width:20px;height:20px;"></i> 🗺️ Roadmap Pembelajaran Kita:</p>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="text-center p-4 rounded-xl bg-white/[0.05] border border-orchid/30 hover:border-orchid/60 transition">
+                  <p class="text-2xl mb-2">📚</p>
+                  <p class="font-semibold text-sm text-orchid">Teori</p>
+                  <p class="text-xs text-slate-400 mt-1">Struktur HTML form</p>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-white/[0.05] border border-orchid/30 hover:border-orchid/60 transition">
+                  <p class="text-2xl mb-2">🎨</p>
+                  <p class="font-semibold text-sm text-orchid">Styling</p>
+                  <p class="text-xs text-slate-400 mt-1">CSS & UX design</p>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-white/[0.05] border border-orchid/30 hover:border-orchid/60 transition">
+                  <p class="text-2xl mb-2">✅</p>
+                  <p class="font-semibold text-sm text-orchid">Validasi</p>
+                  <p class="text-xs text-slate-400 mt-1">HTML5 & JavaScript</p>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-white/[0.05] border border-mint/30 hover:border-mint/60 transition ring-2 ring-mint/20">
+                  <p class="text-2xl mb-2">🔧</p>
+                  <p class="font-semibold text-sm text-mint">Praktik</p>
+                  <p class="text-xs text-slate-400 mt-1">Project nyata</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Final Call to Action -->
+          <div class="relative overflow-hidden bg-gradient-to-r from-orchid/25 via-blush/15 to-mint/10 border border-white/20 rounded-2xl p-6">
+            <div class="absolute -left-20 -bottom-20 w-60 h-60 bg-orchid/10 rounded-full blur-3xl"></div>
+            <div class="relative z-10">
+              <p class="text-white font-bold mb-2 text-lg flex items-center gap-2">🎯 Tujuan Akhir Pembelajaran:</p>
+              <p class="text-slate-300 text-sm leading-relaxed mb-3">Setelah menyelesaikan materi ini, kamu akan bisa membuat form HTML yang:</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1.5 rounded-full bg-mint/20 text-mint text-xs font-semibold border border-mint/40">✓ Berfungsi dengan sempurna</span>
+                <span class="px-3 py-1.5 rounded-full bg-orchid/20 text-orchid text-xs font-semibold border border-orchid/40">✓ Terlihat profesional & modern</span>
+                <span class="px-3 py-1.5 rounded-full bg-blush/20 text-blush text-xs font-semibold border border-blush/40">✓ Menyenangkan digunakan</span>
+              </div>
+              <p class="text-slate-400 text-xs mt-4 italic">💪 Skill ini akan membedakanmu dari developer pemula dan membukakan peluang karir yang lebih baik!</p>
+            </div>
+          </div>
+        </div>`,
+        code: `<span class="comment">&lt;!-- Contoh Form yang BAIK vs BURUK --&gt;</span>
+
+<span class="comment">&lt;!-- ❌ FORM BURUK: Plain dan membingungkan --&gt;</span>
+<span class="tag">&lt;form&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"submit"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="comment">&lt;!-- ✅ FORM BAIK: Rapi, jelas, user-friendly --&gt;</span>
+<span class="tag">&lt;form&gt;</span>
+  <span class="tag">&lt;label</span><span class="tag">&gt;</span>Nama Lengkap<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">placeholder</span>=<span class="val">"Masukkan nama..."</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">placeholder</span>=<span class="val">"nama@email.com"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="val">"submit"</span><span class="tag">&gt;</span>Kirim<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>`,
+        preview: `<div class="space-y-6">
+          <div>
+            <p class="text-slate-600 font-semibold mb-3 text-sm">❌ Form Buruk (Tidak User-Friendly):</p>
+            <form class="bg-slate-100 p-4 rounded-lg space-y-2 text-slate-800">
+              <input type="text" class="border border-gray-300 px-2 py-1 text-sm">
+              <input type="email" class="border border-gray-300 px-2 py-1 text-sm">
+              <button type="submit" class="bg-gray-400 text-white px-3 py-1 text-sm">Submit</button>
+            </form>
+            <p class="text-xs text-slate-500 mt-2 italic">Tidak ada label, placeholder tidak jelas, styling membosankan</p>
+          </div>
+
+          <div>
+            <p class="text-slate-600 font-semibold mb-3 text-sm">✅ Form Baik (User-Friendly):</p>
+            <form class="bg-white rounded-xl p-5 space-y-4 text-slate-800 border border-slate-200 shadow-lg" onsubmit="event.preventDefault(); showToast('Jadi ingin mengisinya, kan? 😊')">
+              <div>
+                <label class="block font-semibold text-sm mb-1.5">Nama Lengkap</label>
+                <input type="text" placeholder="Masukkan nama Anda..." class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent focus:outline-none transition">
+              </div>
+              <div>
+                <label class="block font-semibold text-sm mb-1.5">Email</label>
+                <input type="email" placeholder="nama@email.com" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent focus:outline-none transition">
+              </div>
+              <button type="submit" class="w-full bg-gradient-to-
