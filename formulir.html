@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Membuat Form HTML</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            overscroll-behavior-y: none; 
+        }
+        .slide-fade-enter-active, .slide-fade-leave-active {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .slide-fade-enter-from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .slide-fade-leave-to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .code-scroll::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .code-scroll::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        .code-scroll::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
+
+    <div id="app" class="flex flex-col h-full w-full max-w-md mx-auto bg-white shadow-2xl relative overflow-hidden sm:border-x sm:border-slate-200">
+        
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-brand-600 to-indigo-600 text-white p-5 shadow-lg z-10 shrink-0 rounded-b-3xl mb-2">
+            <h1 class="text-2xl font-bold flex items-center gap-2 tracking-tight">
+                <i class="ph ph-code-block text-3xl text-yellow-300"></i>
+                FormMaster
+            </h1>
+            <p class="text-brand-100 text-xs mt-1 font-medium">Modul Lengkap HTML Form</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto pb-24 scroll-smooth relative">
+            
+            <!-- =======================
+                 MENU 1: MATERI (UPDATED)
+            ======================== -->
+            <transition name="slide-fade" mode="out-in">
+                <div v-if="activeMenu === 'materi'" class="p-5 space-y-8">
+                    
+                    <!-- 1. PENGANTAR -->
+                    <section class="bg-blue-50 border border-blue-100 rounded-xl p-5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                                <i class="ph ph-info text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-bold text-slate-900">1. Pengantar</h2>
+                        </div>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Sebagian besar website tidak hanya menampilkan informasi satu arah, tetapi juga menerima informasi dari penggunanya. Mulai dari login, mendaftar akun, hingga mengirim komentar—semuanya membutuhkan <strong>Form</strong>.
+                        </p>
+                        <p class="text-sm text-slate-700 leading-relaxed mt-2">
+                            Dalam HTML, form berfungsi sebagai "wadah" untuk mengumpulkan input atau data dari pengguna (client) yang nantinya akan dikirim ke server untuk diproses.
+                        </p>
+                    </section>
+
+                    <!-- 2. STRUKTUR DASAR -->
+                    <section>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                                <i class="ph ph-structure text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-bold text-slate-900">2. Struktur Dasar Form</h2>
+                        </div>
+
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-100">
+                                <h3 class="font-bold text-slate-800 mb-2">Tag &lt;form&gt;</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Tag <code>&lt;form&gt;</code> membungkus semua elemen input. Ia memiliki dua atribut penting:
+                                </p>
+                                <ul class="list-disc list-inside text-sm text-slate-600 mt-2 space-y-1">
+                                    <li><strong>action:</strong> URL tujuan pengiriman data.</li>
+                                    <li><strong>method:</strong> Cara pengiriman (GET/POST).</li>
+                                </ul>
+                            </div>
+
+                            <!-- Code Area -->
+                            <div class="bg-slate-900 p-4 overflow-x-auto code-scroll">
+                                <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2 block">HTML</span>
+                                <pre class="text-xs font-mono text-green-400"><code>&lt;form action="proses.php" method="POST"&gt;
+  ... elemen input di sini ...
+&lt;/form&gt;</code></pre>
+                            </div>
+
+                            <!-- Visual Preview of Structure -->
+                            <div class="p-4 bg-slate-50 flex flex-col gap-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Visualisasi Atribut</span>
+                                <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 relative">
+                                    <div class="absolute -top-3 left-3 bg-white px-2 text-xs font-bold text-slate-500">Wadah Form</div>
+                                    <div class="flex gap-2 justify-center">
+                                        <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded border border-blue-200">action="/proses.php"</span>
+                                        <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded border border-purple-200">method="POST"</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 3. ELEMEN INPUT UTAMA -->
+                    <section class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
+                                <i class="ph ph-input-cursor-text text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-bold text-slate-900">3. Elemen Input Utama</h2>
+                        </div>
+
+                        <!-- 3A. Teks & Rahasia -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-100">
+                                <h3 class="font-bold text-slate-800 mb-2">A. Teks & Rahasia</h3>
+                                <p class="text-sm text-slate-600">Gunakan <code>type="text"</code> untuk nama/kota dan <code>type="password"</code> untuk data sensitif.</p>
+                            </div>
+                            <div class="bg-slate-900 p-4 overflow-x-auto code-scroll">
+                                <pre class="text-xs font-mono text-green-400"><code>&lt;!-- Input Biasa --&gt;
+&lt;input type="text" name="username"&gt;
+
+&lt;!-- Input Rahasia --&gt;
+&lt;input type="password" name="sandi"&gt;</code></pre>
+                            </div>
+                            <div class="p-4 bg-slate-50 grid grid-cols-2 gap-3">
+                                <div>
+                                    <input type="text" placeholder="Nama..." class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm focus:border-brand-500 outline-none">
+                                </div>
+                                <div>
+                                    <input type="password" value="rahasia" class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm bg-slate-50 focus:border-brand-500 outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3B. Pilihan (Choice) -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-100">
+                                <h3 class="font-bold text-slate-800 mb-2">B. Pilihan (Radio & Checkbox)</h3>
+                                <p class="text-sm text-slate-600">
+                                    <strong>Radio:</strong> Pilih satu opsi (harus punya <code>name</code> yang sama).<br>
+                                    <strong>Checkbox:</strong> Pilih lebih dari satu opsi.
+                                </p>
+                            </div>
+                            <div class="bg-slate-900 p-4 overflow-x-auto code-scroll">
+                                <pre class="text-xs font-mono text-green-400"><code>&lt;!-- Radio (Satu Pilihan) --&gt;
+&lt;input type="radio" name="jk" value="pria"&gt; Pria
+
+&lt;!-- Checkbox (Banyak Pilihan) --&gt;
+&lt;input type="checkbox" name="hobi"&gt; Mancing</code></pre>
+                            </div>
+                            <div class="p-4 bg-slate-50 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <input type="radio" name="demo_jk" class="accent-brand-600"> 
+                                    <span class="text-sm">Pria</span>
+                                    <input type="radio" name="demo_jk" class="accent-brand-600"> 
+                                    <span class="text-sm">Wanita</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" class="accent-purple-600 rounded-sm"> 
+                                    <span class="text-sm">Mancing</span>
+                                    <input type="checkbox" class="accent-purple-600 rounded-sm"> 
+                                    <span class="text-sm">Coding</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3C. Data Spesifik -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-100">
+                                <h3 class="font-bold text-slate-800 mb-2">C. Data Spesifik</h3>
+                                <p class="text-sm text-slate-600">Tipe khusus untuk Email, Angka, dan Tanggal.</p>
+                            </div>
+                            <div class="bg-slate-900 p-4 overflow-x-auto code-scroll">
+                                <pre class="text-xs font-mono text-green-400"><code>&lt;input type="email"&gt;
+&lt;input type="number"&gt;
+&lt;input type="date"&gt;</code></pre>
+                            </div>
+                            <div class="p-4 bg-slate-50 grid grid-cols-3 gap-2 text-center">
+                                <div class="flex flex-col gap-1">
+                                    <input type="email" placeholder="Email" class="w-full border border-slate-300 rounded px-1 py-1 text-xs">
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <input type="number" placeholder="Umur" class="w-full border border-slate-300 rounded px-1 py-1 text-xs">
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <input type="date" class="w-full border border-slate-300 rounded px-1 py-1 text-xs">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 4. ELEMEN PENDUKUNG -->
+                    <section class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 shrink-0">
+                                <i class="ph ph-puzzle-piece text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-bold text-slate-900">4. Elemen Pendukung</h2>
+                        </div>
+
+                        <!-- Label & Select -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-100">
+                                <h3 class="font-bold text-slate-800 mb-2">Label, Select & Textarea</h3>
+                                <p class="text-sm text-slate-600 mb-2">
+                                    <strong>&lt;label&gt;</strong> Membuat form aksesibel. <strong>&lt;select&gt;</strong> dropdown. <strong>&lt;textarea&gt;</strong> teks panjang.
+                                </p>
+                            </div>
+                            <div class="bg-slate-900 p-4 overflow-x-auto code-scroll">
+                                <pre class="text-xs font-mono text-green-400"><code>&lt;label for="kota"&gt;Kota Asal:&lt;/label&gt;
+&lt;select id="kota"&gt;
+  &lt;option&gt;Jakarta&lt;/option&gt;
+  &lt;option&gt;Bandung&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;textarea rows="4"&gt;&lt;/textarea&gt;</code></pre>
+                            </div>
+                            <div class="p-4 bg-slate-50 space-y-3">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs font-bold text-slate-600">Kota Asal:</label>
+                                    <select class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm">
+                                        <option>Jakarta</option>
+                                        <option>Bandung</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs font-bold text-slate-600">Pesan:</label>
+                                    <textarea class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 5. CONTOH IMPLEMENTASI -->
+                    <section class="pb-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                                <i class="ph ph-code text-xl"></i>
+                            </div>
+                            <h2 class="text-lg font-bold text-slate-900">5. Contoh Implementasi</h2>
+                        </div>
+
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                                <h3 class="font-bold text-slate-800 text-sm">Form Pendaftaran IT Club</h3>
+                                <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">FULL CODE</span>
+                            </div>
+                            
+                            <!-- Full Code Block -->
+                            <div class="bg-slate-900 p-4 overflow-x-auto code-scroll max-h-[400px]">
+                                <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2 block">HTML</span>
+                                <pre class="text-xs font-mono text-green-400"><code>&lt;form action="/submit-pendaftaran" method="POST"&gt;
+  
+  &lt;p&gt;
+    &lt;label for="namaLengkap"&gt;Nama Lengkap:&lt;/label&gt;&lt;br&gt;
+    &lt;input type="text" id="namaLengkap" name="nama" required&gt;
+  &lt;/p&gt;
+
+  &lt;p&gt;
+    &lt;label for="emailSiswa"&gt;Email Sekolah:&lt;/label&gt;&lt;br&gt;
+    &lt;input type="email" id="emailSiswa" name="email" required&gt;
+  &lt;/p&gt;
+
+  &lt;p&gt;
+    &lt;label&gt;Divisi Peminatan:&lt;/label&gt;&lt;br&gt;
+    &lt;input type="radio" id="div_web" name="divisi" value="Web Dev" required&gt; Web Dev
+    &lt;input type="radio" id="div_android" name="divisi" value="Android"&gt; Android
+  &lt;/p&gt;
+
+  &lt;p&gt;
+    &lt;label&gt;Bahasa Pemrograman:&lt;/label&gt;&lt;br&gt;
+    &lt;input type="checkbox" name="bahasa[]" value="HTML"&gt; HTML/CSS
+    &lt;input type="checkbox" name="bahasa[]" value="JS"&gt; JavaScript
+  &lt;/p&gt;
+
+  &lt;p&gt;
+    &lt;label for="alasan"&gt;Alasan:&lt;/label&gt;&lt;br&gt;
+    &lt;textarea id="alasan" name="alasan"&gt;&lt;/textarea&gt;
+  &lt;/p&gt;
+
+  &lt;button type="submit"&gt;Kirim Pendaftaran&lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+                            </div>
+
+                            <!-- Live Preview of Full Form -->
+                            <div class="p-4 bg-slate-50 border-t border-slate-100">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase mb-3 block">Live Preview (Interaktif)</span>
+                                
+                                <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm max-w-md mx-auto">
+                                    <h4 class="font-bold text-slate-800 mb-1">Formulir Pendaftaran IT Club</h4>
+                                    <p class="text-xs text-slate-500 mb-4">Silakan isi data diri Anda.</p>
+                                    
+                                    <form onsubmit="event.preventDefault(); alert('Ini hanya demo frontend!');" class="space-y-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap:</label>
+                                            <input type="text" required class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm focus:border-brand-500 outline-none">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Email Sekolah:</label>
+                                            <input type="email" required class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm focus:border-brand-500 outline-none">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Divisi Peminatan:</label>
+                                            <div class="flex gap-3">
+                                                <label class="flex items-center gap-1 text-sm">
+                                                    <input type="radio" name="divisi" class="accent-brand-600"> Web Dev
+                                                </label>
+                                                <label class="flex items-center gap-1 text-sm">
+                                                    <input type="radio" name="divisi" class="accent-brand-600"> Android
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Bahasa yang pernah dipelajari:</label>
+                                            <div class="flex flex-col gap-1">
+                                                <label class="flex items-center gap-1 text-sm">
+                                                    <input type="checkbox" class="accent-purple-600 rounded-sm"> HTML/CSS
+                                                </label>
+                                                <label class="flex items-center gap-1 text-sm">
+                                                    <input type="checkbox" class="accent-purple-600 rounded-sm"> JavaScript / Vue.js
+                                                </label>
+                                                <label class="flex items-center gap-1 text-sm">
+                                                    <input type="checkbox" class="accent-purple-600 rounded-sm"> PHP / Laravel
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 mb-1">Mengapa Anda ingin bergabung?</label>
+                                            <textarea class="w-full border border-slate-300 rounded px-2 py-1.5 text-sm h-20 focus:border-brand-500 outline-none resize-none"></textarea>
+                                        </div>
+                                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2 rounded text-sm shadow-md transition-colors">
+                                            Kirim Pendaftaran
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </transition>
+
+            <!-- MENU 2: COBA -->
+            <transition name="slide-fade" mode="out-in">
+                <div v-if="activeMenu === 'coba'" class="p-4 h-full flex flex-col">
+                    <div class="bg-gradient-to-r from-brand-600 to-blue-600 rounded-xl p-5 text-white shadow-lg mb-6">
+                        <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
+                            <i class="ph ph-flask"></i> Lab Interaktif
+                        </h2>
+                        <p class="text-blue-100 text-xs">Ubah pengaturan dan lihat kode serta hasilnya berubah secara real-time.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-5 shrink-0 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tipe Input</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button 
+                                    v-for="t in ['text', 'password', 'email', 'number', 'date', 'color']" 
+                                    :key="t"
+                                    @click="playground.type = t"
+                                    :class="[
+                                        'px-3 py-1.5 rounded-full text-xs font-medium border transition-all capitalize',
+                                        playground.type === t 
+                                            ? 'bg-brand-600 text-white border-brand-600 shadow-md' 
+                                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                                    ]"
+                                >
+                                    {{ t }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Label</label>
+                                <input type="text" v-model="playground.label" class="w-full border-slate-300 rounded-lg text-sm p-2 border focus:ring-2 focus:ring-brand-500 outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tema</label>
+                                <select v-model="playground.color" class="w-full border-slate-300 rounded-lg text-sm p-2 border focus:ring-2 focus:ring-brand-500 outline-none bg-white">
+                                    <option value="blue">Biru</option>
+                                    <option value="green">Hijau</option>
+                                    <option value="red">Merah</option>
+                                    <option value="purple">Ungu</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 flex flex-col min-h-[250px]">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i class="ph ph-eye"></i> Tampilan Nyata
+                        </div>
+                        <div class="flex-1 bg-slate-100 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center relative overflow-hidden group">
+                            <div class="w-full max-w-xs bg-white p-6 rounded-xl shadow-lg border border-slate-100 transform transition duration-300 hover:scale-[1.02]">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">{{ playground.label }}</label>
+                                <input 
+                                    :type="playground.type" 
+                                    class="w-full border-2 rounded-lg px-4 py-2 text-sm outline-none transition-all focus:ring-2 focus:ring-opacity-50 mb-4"
+                                    :class="`border-${playground.color}-200 focus:border-${playground.color}-500 ring-${playground.color}-200`"
+                                    :placeholder="playground.type === 'password' ? '••••••' : 'Ketik sesuatu...'"
+                                >
+                                <button 
+                                    @click="simulateSubmit"
+                                    :class="`w-full py-2.5 rounded-lg text-white font-medium shadow-md hover:shadow-lg transition-all active:scale-95 bg-${playground.color}-600 hover:bg-${playground.color}-700`"
+                                >
+                                    Kirim Data
+                                </button>
+                            </div>
+                            <div v-if="showPlaygroundToast" class="absolute bottom-4 bg-slate-800 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 shadow-xl animate-bounce">
+                                <i class="ph ph-check-circle text-green-400 text-lg"></i>
+                                Form Terkirim! (Simulasi)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- MENU 3: KUIS -->
+            <transition name="slide-fade" mode="out-in">
+                <div v-if="activeMenu === 'kuis'" class="p-4 h-full flex flex-col">
+                    <div v-if="!quizStarted" class="flex-1 flex flex-col items-center justify-center text-center px-4">
+                        <div class="w-28 h-28 bg-indigo-100 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                            <i class="ph ph-graduation-cap text-5xl text-brand-600"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">Uji Pemahaman</h2>
+                        <p class="text-slate-500 mb-8 max-w-[250px]">Siap mengukur seberapa jauh pemahamanmu tentang Form HTML?</p>
+                        <button @click="startQuiz" class="w-full max-w-xs bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-xl shadow-brand-200 transform transition hover:-translate-y-1 active:scale-95 text-lg">
+                            Mulai Kuis
+                        </button>
+                    </div>
+
+                    <div v-else-if="!quizFinished" class="flex-1 flex flex-col">
+                        <div class="flex items-center gap-4 mb-6">
+                            <button @click="quizStarted = false" class="text-slate-400 hover:text-slate-600"><i class="ph ph-x text-lg"></i></button>
+                            <div class="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
+                                <div class="bg-brand-500 h-full rounded-full transition-all duration-500 ease-out" :style="{ width: ((currentQuestionIndex + 1) / questions.length) * 100 + '%' }"></div>
+                            </div>
+                            <span class="text-xs font-bold text-brand-600">{{ currentQuestionIndex + 1 }}/{{ questions.length }}</span>
+                        </div>
+
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6 flex-1 flex flex-col">
+                            <h3 class="text-lg font-bold text-slate-800 mb-6 leading-snug">
+                                {{ questions[currentQuestionIndex].question }}
+                            </h3>
+                            <div class="space-y-3 mt-auto">
+                                <button 
+                                    v-for="(opt, idx) in questions[currentQuestionIndex].options" 
+                                    :key="idx"
+                                    @click="selectAnswer(idx)"
+                                    :class="[
+                                        'w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-center gap-3 text-sm font-medium',
+                                        selectedAnswerIndex === idx 
+                                            ? 'bg-brand-50 border-brand-500 text-brand-700' 
+                                            : 'bg-white border-slate-100 text-slate-600 hover:border-slate-300'
+                                    ]"
+                                >
+                                    <div class="w-6 h-6 rounded-full border flex items-center justify-center shrink-0"
+                                         :class="selectedAnswerIndex === idx ? 'bg-brand-500 border-brand-500 text-white' : 'border-slate-300 text-slate-400'">
+                                        <span v-if="selectedAnswerIndex === idx" class="text-xs">✓</span>
+                                    </div>
+                                    {{ opt }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <button 
+                            @click="nextQuestion" 
+                            :disabled="selectedAnswerIndex === null"
+                            class="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:text-slate-400 text-white font-bold py-4 rounded-xl shadow-lg transition-all text-base"
+                        >
+                            {{ currentQuestionIndex === questions.length - 1 ? 'Lihat Hasil' : 'Lanjut' }}
+                        </button>
+                    </div>
+
+                    <div v-else class="flex-1 flex flex-col items-center justify-center text-center p-6">
+                        <div class="relative w-40 h-40 mb-8 flex items-center justify-center">
+                             <svg class="absolute w-full h-full transform -rotate-90">
+                                <circle cx="80" cy="80" r="70" stroke="#e2e8f0" stroke-width="12" fill="none"/>
+                                <circle cx="80" cy="80" r="70" stroke="#3b82f6" stroke-width="12" fill="none" 
+                                    :stroke-dasharray="440" 
+                                    :stroke-dashoffset="440 - (440 * finalScore / 100)" 
+                                    class="transition-all duration-1000 ease-out"/>
+                            </svg>
+                            <div class="text-4xl font-extrabold text-slate-800">{{ finalScore }}</div>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">{{ getResultMessage() }}</h2>
+                        <p class="text-slate-500 mb-8 text-sm">Kamu telah menyelesaikan 20 soal pilihan ganda.</p>
+                        <button @click="resetQuiz" class="flex items-center gap-2 text-brand-600 font-bold hover:bg-brand-50 px-4 py-2 rounded-lg transition-colors">
+                            <i class="ph ph-arrow-counter-clockwise text-xl"></i>
+                            Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- MENU 4: LATIHAN -->
+            <transition name="slide-fade" mode="out-in">
+                <div v-if="activeMenu === 'latihan'" class="p-4 space-y-8">
+                    <div class="bg-slate-800 text-slate-100 rounded-xl p-5 shadow-lg flex items-start gap-4">
+                        <div class="bg-slate-700 p-2 rounded-lg">
+                            <i class="ph ph-laptop text-2xl text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">Coding Challenge</h3>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Siapkan text editor Anda. Tulis kode dan jalankan di browser. Bandingkan dengan "Preview Hasil".
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Latihan 1 -->
+                    <section>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="bg-brand-100 text-brand-700 text-xs font-bold px-2 py-1 rounded">Latihan 1</span>
+                            <h3 class="font-bold text-slate-800">Form Login Tabel</h3>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-4">
+                            <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                                <li>Buat form dengan tabel HTML.</li>
+                                <li>Input: Username, Password.</li>
+                                <li>Gunakan <code>&lt;tr&gt;</code> dan <code>&lt;td&gt;</code>.</li>
+                            </ul>
+                        </div>
+                        <div class="mb-4">
+                            <div class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                <i class="ph ph-eye"></i> Hasil yang diharapkan:
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex justify-center shadow-inner">
+                                <table class="w-full max-w-[250px] bg-white border border-slate-300 shadow-sm">
+                                    <tr>
+                                        <td class="p-2 text-right font-bold text-slate-700 bg-slate-50 border-r border-slate-200">Username</td>
+                                        <td class="p-2"><input type="text" class="w-full border border-slate-300 px-2 py-1 text-xs"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 text-right font-bold text-slate-700 bg-slate-50 border-r border-slate-200">Password</td>
+                                        <td class="p-2"><input type="password" class="w-full border border-slate-300 px-2 py-1 text-xs"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="p-2 text-center"><button class="bg-slate-800 text-white text-xs px-3 py-1 rounded">Masuk</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Latihan 2 -->
+                    <section>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded">Latihan 2</span>
+                            <h3 class="font-bold text-slate-800">Form Pendaftaran Modern</h3>
+                        </div>
+                         <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-4">
+                            <ul class="list-disc list-inside text-sm text-slate-600 space-y-2">
+                                <li>Input: Nama, Email, Tanggal Lahir.</li>
+                                <li>Radio Button: Jenis Kelamin.</li>
+                                <li>Select Dropdown: Kota Asal.</li>
+                                <li>Tambahkan CSS sederhana.</li>
+                            </ul>
+                        </div>
+                         <div class="mb-4">
+                            <div class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                <i class="ph ph-eye"></i> Hasil yang diharapkan:
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-inner">
+                                <div class="bg-white max-w-[300px] mx-auto border border-slate-200 rounded-lg p-4 shadow-sm space-y-3">
+                                    <h4 class="font-bold text-slate-800 text-sm border-b pb-2">Daftar Anggota</h4>
+                                    <div>
+                                        <label class="block text-xs text-slate-500 mb-1">Nama Lengkap</label>
+                                        <input type="text" class="w-full border border-slate-300 rounded px-2 py-1 text-xs">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-xs text-slate-500 mb-1">Jenis Kelamin</label>
+                                            <select class="w-full border border-slate-300 rounded px-1 py-1 text-xs">
+                                                <option>Pria</option>
+                                                <option>Wanita</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs text-slate-500 mb-1">Kota</label>
+                                            <select class="w-full border border-slate-300 rounded px-1 py-1 text-xs">
+                                                <option>Jakarta</option>
+                                                <option>Bandung</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="w-full bg-purple-600 text-white text-xs py-2 rounded font-bold mt-2">Daftar Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </transition>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bg-white/95 backdrop-blur-md border-t border-slate-100 shrink-0 h-20 pb-2 z-20">
+            <div class="grid grid-cols-4 h-full max-w-md mx-auto">
+                <button 
+                    v-for="item in menuItems" 
+                    :key="item.id"
+                    @click="activeMenu = item.id"
+                    class="flex flex-col items-center justify-center gap-1 group relative"
+                >
+                    <div v-if="activeMenu === item.id" class="absolute top-0 w-12 h-1 bg-brand-500 rounded-b-lg"></div>
+                    <i :class="[
+                        'ph text-2xl mb-0.5 transition-colors duration-300',
+                        activeMenu === item.id ? 'ph-fill text-brand-600' : 'text-slate-400 group-hover:text-slate-600'
+                    ]" :icon="item.icon"></i>
+                    <span :class="[
+                        'text-[10px] font-medium tracking-wide transition-colors duration-300',
+                        activeMenu === item.id ? 'text-brand-700 font-bold' : 'text-slate-400 group-hover:text-slate-600'
+                    ]">{{ item.label }}</span>
+                </button>
+            </div>
+        </nav>
+
+    </div>
+
+    <script>
+        const { createApp, ref, reactive, computed } = Vue;
+
+        createApp({
+            setup() {
+                const activeMenu = ref('materi');
+                const menuItems = [
+                    { id: 'materi', label: 'Materi', icon: 'ph-book-open-text' },
+                    { id: 'coba', label: 'Coba', icon: 'ph-flask' },
+                    { id: 'kuis', label: 'Kuis', icon: 'ph-exam' },
+                    { id: 'latihan', label: 'Latihan', icon: 'ph-laptop' }
+                ];
+
+                const playground = reactive({
+                    type: 'text',
+                    label: 'Nama Lengkap',
+                    color: 'blue'
+                });
+                const showPlaygroundToast = ref(false);
+                const simulateSubmit = () => {
+                    showPlaygroundToast.value = true;
+                    setTimeout(() => showPlaygroundToast.value = false, 2500);
+                };
+
+                const quizStarted = ref(false);
+                const quizFinished = ref(false);
+                const currentQuestionIndex = ref(0);
+                const selectedAnswerIndex = ref(null);
+                const tempScore = ref(0);
+                
+                const questions = ref([
+                    { q: "Tag HTML manakah yang digunakan untuk membuat formulir?", opts: ["<form>", "<input>", "<table>", "<submit>"], a: 0 },
+                    { q: "Atribut apa yang digunakan untuk menentukan ke mana data form akan dikirim?", opts: ["method", "action", "name", "target"], a: 1 },
+                    { q: "Atribut 'type' apa yang digunakan untuk membuat kolom input sandi?", opts: ["text", "secret", "password", "hidden"], a: 2 },
+                    { q: "Tag HTML untuk membuat daftar pilihan dropdown adalah?", opts: ["<list>", "<dropdown>", "<option>", "<select>"], a: 3 },
+                    { q: "Untuk membuat tombol submit, kita bisa menggunakan tag...", opts: ["<submit>", "<button>", "<input type='btn'>", "<a>"], a: 1 },
+                    { q: "Atribut yang menghubungkan <label> dengan <input> agar label bisa diklik adalah?", opts: ["connect", "for", "id", "link"], a: 1 },
+                    { q: "Tipe input mana yang cocok untuk memasukkan alamat email?", opts: ["email", "text", "mail", "url"], a: 0 },
+                    { q: "Apa fungsi dari atribut 'placeholder'?", opts: ["Memberi nilai default", "Memberikan petunjuk singkat", "Membuat input wajib diisi", "Menyembunyikan input"], a: 1 },
+                    { q: "Tag HTML untuk membuat input teks banyak baris adalah?", opts: ["<input type='textarea'>", "<text>", "<textarea>", "<br>"], a: 2 },
+                    { q: "Tombol radio button digunakan untuk memilih...", opts: ["Banyak pilihan sekaligus", "Satu pilihan dari beberapa opsi", "Mencentang persetujuan", "Input tanggal"], a: 1 },
+                    { q: "Elemen form untuk membuat kotak centang (check box) adalah?", opts: ["<input type='radio'>", "<input type='check'>", "<input type='checkbox'>", "<input type='square'>"], a: 2 },
+                    { q: "Dalam tabel HTML, tag <tr> berarti?", opts: ["Table Row (Baris)", "Table Right", "Table Run", "Table Rule"], a: 0 },
+                    { q: "Tag <td> dalam tabel digunakan untuk?", opts: ["Membuat header tabel", "Membuat baris", "Membuat kolom/data", "Membuat judul tabel"], a: 2 },
+                    { q: "Atribut 'required' pada input berfungsi untuk?", opts: ["Membaca data", "Membuat data wajib diisi sebelum submit", "Mengunci input", "Menghapus data"], a: 1 },
+                    { q: "Bagaimana cara membuat input hanya bisa diisi angka?", opts: ["type='number'", "type='digit'", "type='numeric'", "text='number'"], a: 0 },
+                    { q: "CSS apa yang digunakan untuk membuat sudut input melengkung?", opts: ["border-radius", "border-style", "corner-round", "curve"], a: 0 },
+                    { q: "Untuk mengelompokkan opsi dalam dropdown, kita gunakan tag?", opts: ["<group>", "<div>", "<optgroup>", "<section>"], a: 2 },
+                    { q: "Warna border input saat diklik (focus) diatur dengan CSS selector?", opts: [":hover", ":active", ":focus", ":visited"], a: 2 },
+                    { q: "Tag <th> dalam tabel memiliki fungsi khusus sebagai?", opts: ["Sel data biasa", "Sel header tebal dan tengah", "Baris kosong", "Footer tabel"], a: 1 },
+                    { q: "Input type='date' digunakan untuk?", opts: ["Memasukkan waktu", "Memasukkan tanggal lahir", "Memasukkan bulan saja", "Memasukkan tahun saja"], a: 1 }
+                ]);
+
+                const startQuiz = () => {
+                    quizStarted.value = true;
+                    quizFinished.value = false;
+                    currentQuestionIndex.value = 0;
+                    tempScore.value = 0;
+                    selectedAnswerIndex.value = null;
+                };
+
+                const selectAnswer = (index) => {
+                    selectedAnswerIndex.value = index;
+                };
+
+                const nextQuestion = () => {
+                    if (selectedAnswerIndex.value === questions.value[currentQuestionIndex.value].a) {
+                        tempScore.value += 5;
+                    }
+                    selectedAnswerIndex.value = null;
+
+                    if (currentQuestionIndex.value < questions.value.length - 1) {
+                        currentQuestionIndex.value++;
+                    } else {
+                        finishQuiz();
+                    }
+                };
+
+                const finishQuiz = () => {
+                    quizFinished.value = true;
+                };
+
+                const resetQuiz = () => {
+                    startQuiz();
+                };
+
+                const finalScore = computed(() => tempScore.value);
+
+                const getResultMessage = () => {
+                    if (finalScore.value >= 90) return "Luar Biasa! 🏆";
+                    if (finalScore.value >= 70) return "Bagus Sekali! 👍";
+                    if (finalScore.value >= 60) return "Cukup Baik 🙂";
+                    return "Jangan Menyerah! 💪";
+                };
+
+                return {
+                    activeMenu,
+                    menuItems,
+                    playground,
+                    showPlaygroundToast,
+                    simulateSubmit,
+                    quizStarted,
+                    quizFinished,
+                    currentQuestionIndex,
+                    questions,
+                    selectedAnswerIndex,
+                    tempScore,
+                    finalScore,
+                    startQuiz,
+                    selectAnswer,
+                    nextQuestion,
+                    resetQuiz,
+                    getResultMessage
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
