@@ -277,4 +277,633 @@
                 <label class="block font-semibold text-sm mb-1.5">Email</label>
                 <input type="email" placeholder="nama@email.com" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent focus:outline-none transition">
               </div>
-              <button type="submit" class="w-full bg-gradient-to-
+              <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2.5 rounded-lg hover:shadow-lg transition transform hover:scale-105">✨ Kirim Sekarang</button>
+            </form>
+            <p class="text-xs text-slate-500 mt-2 italic">Label jelas, placeholder membantu, styling menarik, lebih mudah diisi</p>
+          </div>
+        </div>`,
+        quiz: { q: 'Apa yang membuat form menjadi user-friendly?', options: ['Hanya indah secara visual', 'Jelas, mudah diisi, & validated dengan baik', 'Hanya banyak fitur', 'Semua jawaban salah'], answer: 1 }
+      },
+      {
+        id: 'intro', icon: 'file-text', title: 'Pengenalan Form',
+        theory: `<p class="mb-3">Tag <code class="mono text-orchid bg-white/5 px-1.5 py-0.5 rounded">&lt;form&gt;</code> adalah wadah untuk mengumpulkan input dari pengguna. Atribut penting:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-300 mb-4">
+          <li><code class="mono text-mint">action</code> — URL tujuan pengiriman data</li>
+          <li><code class="mono text-mint">method</code> — GET atau POST</li>
+        </ul>`,
+        code: `<span class="comment">&lt;!-- Struktur dasar form --&gt;</span>
+<span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">"/kirim"</span> <span class="attr">method</span>=<span class="val">"POST"</span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- Elemen input di sini --&gt;</span>
+<span class="tag">&lt;/form&gt;</span>`,
+        preview: `<form class="space-y-3" onsubmit="event.preventDefault(); showToast('Form berhasil dikirim! 🎉')">
+          <label class="block text-sm font-medium text-slate-700">Nama Anda</label>
+          <input type="text" placeholder="Ketik nama..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800">
+          <button type="submit" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition text-sm font-medium">Kirim</button>
+        </form>`,
+        quiz: { q: 'Atribut mana yang menentukan cara pengiriman data form?', options: ['action', 'method', 'type', 'name'], answer: 1 }
+      },
+      {
+        id: 'input-text', icon: 'text-cursor-input', title: 'Input Teks',
+        theory: `<p class="mb-3">Input teks adalah elemen paling dasar. Beberapa tipe penting:</p>
+        <div class="grid grid-cols-2 gap-2 text-sm mb-4">
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-blush">text</code> — teks biasa</div>
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-blush">email</code> — alamat email</div>
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-blush">password</code> — kata sandi</div>
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-blush">number</code> — angka</div>
+        </div>`,
+        code: `<span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"email"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span>
+  <span class="attr">type</span>=<span class="val">"email"</span>
+  <span class="attr">id</span>=<span class="val">"email"</span>
+  <span class="attr">name</span>=<span class="val">"email"</span>
+  <span class="attr">placeholder</span>=<span class="val">"contoh@mail.com"</span>
+  <span class="attr">required</span>
+<span class="tag">/&gt;</span>`,
+        preview: `<div class="space-y-3">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="demo-text">Teks Biasa</label><input id="demo-text" type="text" placeholder="Nama lengkap" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="demo-email">Email</label><input id="demo-email" type="email" placeholder="nama@email.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="demo-num">Angka</label><input id="demo-num" type="number" placeholder="0" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800"></div>
+        </div>`,
+        quiz: { q: 'Tipe input manakah yang otomatis memvalidasi format alamat email?', options: ['text', 'email', 'url', 'search'], answer: 1 }
+      },
+      {
+        id: 'select-radio', icon: 'list', title: 'Select & Radio',
+        theory: `<p class="mb-3">Untuk pilihan dari beberapa opsi:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-300 mb-4">
+          <li><code class="mono text-orchid">&lt;select&gt;</code> — dropdown pilihan</li>
+          <li><code class="mono text-orchid">&lt;input type="radio"&gt;</code> — pilih satu dari grup</li>
+        </ul>
+        <p class="text-slate-400 text-sm">Radio button dengan <code class="mono text-mint">name</code> yang sama akan otomatis menjadi satu grup.</p>`,
+        code: `<span class="comment">&lt;!-- Dropdown --&gt;</span>
+<span class="tag">&lt;select</span> <span class="attr">name</span>=<span class="val">"kota"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"jkt"</span><span class="tag">&gt;</span>Jakarta<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"sby"</span><span class="tag">&gt;</span>Surabaya<span class="tag">&lt;/option&gt;</span>
+<span class="tag">&lt;/select&gt;</span>
+
+<span class="comment">&lt;!-- Radio --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"gender"</span> <span class="attr">value</span>=<span class="val">"L"</span><span class="tag">/&gt;</span> Laki-laki
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"gender"</span> <span class="attr">value</span>=<span class="val">"P"</span><span class="tag">/&gt;</span> Perempuan`,
+        preview: `<div class="space-y-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="demo-city">Pilih Kota</label><select id="demo-city" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800"><option>Jakarta</option><option>Surabaya</option><option>Bandung</option><option>Yogyakarta</option></select></div>
+          <fieldset><legend class="text-sm font-medium text-slate-700 mb-2">Jenis Kelamin</legend><label class="flex items-center gap-2 text-slate-700 mb-1"><input type="radio" name="demo-gender" class="accent-purple-500"> Laki-laki</label><label class="flex items-center gap-2 text-slate-700"><input type="radio" name="demo-gender" class="accent-purple-500"> Perempuan</label></fieldset>
+        </div>`,
+        quiz: { q: 'Apa yang membuat radio button menjadi satu grup?', options: ['Atribut id sama', 'Atribut name sama', 'Atribut class sama', 'Atribut value sama'], answer: 1 }
+      },
+      {
+        id: 'checkbox-textarea', icon: 'check-square', title: 'Checkbox & Textarea',
+        theory: `<p class="mb-3">Checkbox untuk pilihan ganda, textarea untuk teks panjang:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-300 mb-4">
+          <li><code class="mono text-orchid">&lt;input type="checkbox"&gt;</code> — bisa pilih lebih dari satu</li>
+          <li><code class="mono text-orchid">&lt;textarea&gt;</code> — area teks multi-baris</li>
+        </ul>`,
+        code: `<span class="tag">&lt;label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"checkbox"</span> <span class="attr">name</span>=<span class="val">"hobi"</span> <span class="attr">value</span>=<span class="val">"coding"</span><span class="tag">/&gt;</span>
+  Coding
+<span class="tag">&lt;/label&gt;</span>
+
+<span class="tag">&lt;textarea</span>
+  <span class="attr">name</span>=<span class="val">"pesan"</span>
+  <span class="attr">rows</span>=<span class="val">"4"</span>
+  <span class="attr">placeholder</span>=<span class="val">"Tulis pesan..."</span>
+<span class="tag">&gt;&lt;/textarea&gt;</span>`,
+        preview: `<div class="space-y-4">
+          <fieldset><legend class="text-sm font-medium text-slate-700 mb-2">Hobi (pilih beberapa)</legend>
+            <label class="flex items-center gap-2 text-slate-700 mb-1"><input type="checkbox" class="accent-purple-500 rounded"> Coding</label>
+            <label class="flex items-center gap-2 text-slate-700 mb-1"><input type="checkbox" class="accent-purple-500 rounded"> Desain</label>
+            <label class="flex items-center gap-2 text-slate-700"><input type="checkbox" class="accent-purple-500 rounded"> Gaming</label>
+          </fieldset>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="demo-msg">Pesan</label><textarea id="demo-msg" rows="3" placeholder="Tulis sesuatu..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800 resize-none"></textarea></div>
+        </div>`,
+        quiz: { q: 'Apa perbedaan utama checkbox dan radio button?', options: ['Checkbox lebih besar', 'Checkbox bisa pilih banyak', 'Radio bisa pilih banyak', 'Tidak ada perbedaan'], answer: 1 }
+      },
+      {
+        id: 'validation', icon: 'shield-check', title: 'Validasi Form',
+        theory: `<p class="mb-3">HTML5 menyediakan validasi bawaan tanpa JavaScript:</p>
+        <div class="grid grid-cols-2 gap-2 text-sm mb-4">
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-mint">required</code> — wajib diisi</div>
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-mint">minlength</code> — panjang minimum</div>
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-mint">pattern</code> — pola regex</div>
+          <div class="bg-white/5 rounded-lg p-2"><code class="text-mint">min / max</code> — rentang angka</div>
+        </div>`,
+        code: `<span class="tag">&lt;input</span>
+  <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">required</span>
+  <span class="attr">minlength</span>=<span class="val">"3"</span>
+  <span class="attr">placeholder</span>=<span class="val">"Min 3 karakter"</span>
+<span class="tag">/&gt;</span>
+
+<span class="tag">&lt;input</span>
+  <span class="attr">type</span>=<span class="val">"number"</span>
+  <span class="attr">min</span>=<span class="val">"1"</span>
+  <span class="attr">max</span>=<span class="val">"100"</span>
+<span class="tag">/&gt;</span>
+
+<span class="tag">&lt;input</span>
+  <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">pattern</span>=<span class="val">"[A-Za-z]{3,}"</span>
+  <span class="attr">title</span>=<span class="val">"Min 3 huruf"</span>
+<span class="tag">/&gt;</span>`,
+        preview: `<form class="space-y-3" onsubmit="event.preventDefault(); showToast('Validasi berhasil! ✅')">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="v-name">Nama (wajib, min 3 huruf)</label><input id="v-name" type="text" required minlength="3" placeholder="Minimal 3 karakter" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800 invalid:border-red-400"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1" for="v-age">Umur (1-100)</label><input id="v-age" type="number" min="1" max="100" placeholder="1-100" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none text-slate-800"></div>
+          <button type="submit" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition text-sm font-medium">Validasi</button>
+        </form>`,
+        quiz: { q: 'Atribut mana yang membuat input wajib diisi?', options: ['important', 'required', 'mandatory', 'validate'], answer: 1 }
+      },
+      {
+        id: 'form-table', icon: 'table-2', title: 'Form + Tabel Dinamis',
+        theory: `<p class="mb-3">Menggunakan tabel HTML untuk membuat form yang rapih tanpa CSS kompleks:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-300 mb-4">
+          <li><code class="mono text-orchid">&lt;table&gt;</code> — struktur grid otomatis</li>
+          <li><code class="mono text-orchid">&lt;tr&gt;</code> — baris (untuk tiap field form)</li>
+          <li><code class="mono text-orchid">&lt;td&gt;</code> — sel (kolom label dan input)</li>
+          <li><code class="mono text-orchid">border</code> — atribut untuk garis tabel</li>
+        </ul>
+        <p class="text-slate-400 text-sm">💡 Trik: Gunakan tabel sebagai layout form — kolom pertama untuk label, kolom kedua untuk input. Rapi dan rapih tanpa perlu CSS!</p>`,
+        code: `<span class="tag">&lt;table</span> <span class="attr">border</span>=<span class="val">"1"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;label&gt;</span>Nama<span class="tag">&lt;/label&gt;</span><span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">required</span><span class="tag">/&gt;&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;label&gt;</span>Email<span class="tag">&lt;/label&gt;</span><span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">required</span><span class="tag">/&gt;&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span><span class="tag">&lt;button&gt;</span>Kirim<span class="tag">&lt;/button&gt;</span><span class="tag">&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+<span class="tag">&lt;/table&gt;</span>`,
+        preview: `<div class="space-y-4">
+          <div style="font-family: Arial, sans-serif; color: #333;">
+            <p style="font-weight: bold; margin-bottom: 10px;">📋 Form dengan Tabel (tanpa CSS rumit)</p>
+            <form onsubmit="event.preventDefault(); showToast('Form berhasil dikirim! ✅')">
+              <table border="1" style="border-collapse: collapse; width: 100%;">
+                <tr>
+                  <td style="padding: 8px; width: 120px;"><label style="font-weight: bold;">Nama Lengkap</label></td>
+                  <td style="padding: 8px;"><input type="text" placeholder="Masukkan nama" style="width: 100%; padding: 5px; border: 1px solid #ccc; font-family: Arial;" required></td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px;"><label style="font-weight: bold;">Email</label></td>
+                  <td style="padding: 8px;"><input type="email" placeholder="nama@email.com" style="width: 100%; padding: 5px; border: 1px solid #ccc; font-family: Arial;" required></td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px;"><label style="font-weight: bold;">Telepon</label></td>
+                  <td style="padding: 8px;"><input type="tel" placeholder="08xxxxxxxx" style="width: 100%; padding: 5px; border: 1px solid #ccc; font-family: Arial;"></td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px;"><label style="font-weight: bold;">Pesan</label></td>
+                  <td style="padding: 8px;"><textarea rows="3" placeholder="Tulis pesan..." style="width: 100%; padding: 5px; border: 1px solid #ccc; font-family: Arial;"></textarea></td>
+                </tr>
+                <tr style="background-color: #f5f5f5;">
+                  <td style="padding: 8px;"></td>
+                  <td style="padding: 8px;"><button type="submit" style="padding: 8px 16px; background-color: #0066cc; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: bold;">Kirim</button></td>
+                </tr>
+              </table>
+            </form>
+          </div>
+        </div>`,
+        quiz: { q: 'Untuk membuat form dengan tabel, kolom pertama biasanya untuk apa?', options: ['Input data', 'Label', 'Tombol', 'Keterangan'], answer: 1 }
+      },
+      {
+        id: 'form-styling', icon: 'palette', title: 'Styling Form dengan CSS',
+        theory: `<p class="mb-3 font-semibold text-white">📌 CSS Properties Kunci untuk Styling Form:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-300 mb-4">
+          <li><code class="mono text-orchid">border-radius</code> — sudut bulat pada input</li>
+          <li><code class="mono text-orchid">box-shadow</code> — efek bayangan</li>
+          <li><code class="mono text-orchid">:focus</code> — gaya saat input aktif</li>
+          <li><code class="mono text-orchid">placeholder</code> — styling teks placeholder</li>
+          <li><code class="mono text-orchid">transition</code> — animasi halus</li>
+          <li><code class="mono text-orchid">background-color</code> — warna latar input</li>
+        </ul>
+        <p class="text-slate-400 text-sm">💡 Tips: Gunakan consistent color scheme, padding yang nyaman, dan hover/focus effects untuk UX yang lebih baik!</p>`,
+        code: `<span class="tag">&lt;style&gt;</span>
+  input, textarea, select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: white;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #c084fc;
+    box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
+    background-color: #faf8ff;
+  }
+
+  input:hover, textarea:hover, select:hover {
+    border-color: #d0d5dd;
+  }
+
+  button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(192, 132, 252, 0.4);
+  }
+
+  label {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+  }
+<span class="tag">&lt;/style&gt;</span>`,
+        preview: `<div style="font-family: Arial, sans-serif; color: #333; max-width: 500px; margin: 0 auto;">
+          <p style="font-weight: bold; margin-bottom: 15px;">🎨 Form dengan Styling CSS</p>
+          <form onsubmit="event.preventDefault(); showToast('Form terkirim dengan gaya! ✨')">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-weight: bold; color: #1e293b; margin-bottom: 6px;">Nama Lengkap</label>
+              <input type="text" placeholder="Masukkan nama Anda..." style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; font-family: Arial;" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-weight: bold; color: #1e293b; margin-bottom: 6px;">Email</label>
+              <input type="email" placeholder="email@example.com" style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; font-family: Arial;" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-weight: bold; color: #1e293b; margin-bottom: 6px;">Pesan</label>
+              <textarea rows="4" placeholder="Tulis pesan Anda di sini..." style="width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; font-family: Arial; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" style="width: 100%; padding: 12px 24px; background: linear-gradient(135deg, #c084fc 0%, #f472b6 100%); color: white; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: all 0.3s ease; font-size: 14px;">✨ Kirim Pesan</button>
+          </form>
+          <p style="margin-top: 15px; font-size: 12px; color: #666; text-align: center;">
+            💡 <strong>Tips:</strong> Hover pada input untuk melihat efek border, klik untuk melihat focus state dengan shadow effect!
+          </p>
+        </div>`,
+        quiz: { q: 'Pseudo-class mana yang digunakan untuk styling saat input aktif/diklik?', options: [':active', ':hover', ':focus', ':target'], answer: 2 }
+      },
+      {
+        id: 'practice-1', icon: 'code-2', title: 'Latihan 1: Formulir Survey',
+        theory: `<div class="space-y-3">
+          <p class="font-semibold text-white">📋 Tugas: Buat formulir survey kepuasan pelanggan</p>
+          <p class="text-slate-300">Buat file HTML bernama <code class="mono text-mint bg-white/5 px-1.5 py-0.5 rounded">survey.html</code> dengan fitur:</p>
+          <ul class="list-disc list-inside space-y-1 text-slate-300 text-sm">
+            <li>Input teks untuk nama (wajib, min 3 karakter)</li>
+            <li>Input email (wajib, validasi format email)</li>
+            <li>Rating menggunakan radio button (1-5)</li>
+            <li>Checkbox untuk saran (min 1 harus dipilih)</li>
+            <li>Textarea untuk komentar tambahan</li>
+            <li>Tombol submit (hanya aktif jika semua wajib diisi)</li>
+          </ul>
+          <p class="text-slate-400 text-xs mt-2">💡 Tips: Gunakan validasi HTML5 dan tambahkan styling dasar dengan CSS internal</p>
+        </div>`,
+        code: `<span class="comment">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Survey Pelanggan<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    body { font-family: Arial; max-width: 500px; margin: 40px auto; }
+    form { display: flex; flex-direction: column; gap: 15px; }
+    label { font-weight: bold; margin-top: 10px; }
+    input, select, textarea { padding: 8px; border: 1px solid #ccc; }
+    button { padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>Survey Kepuasan<span class="tag">&lt;/h1&gt;</span>
+  <span class="comment">&lt;!-- Form di sini --&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>`,
+        preview: `<form class="bg-white rounded-lg p-6 text-slate-800 space-y-4" onsubmit="event.preventDefault(); alert('Terima kasih! Survey Anda sudah kami terima.')">
+          <h2 class="text-lg font-bold text-slate-900 mb-6">📋 Survey Kepuasan Pelanggan</h2>
+          
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="s-name">Nama Lengkap *</label>
+            <input id="s-name" type="text" required minlength="3" placeholder="Masukkan nama Anda" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none text-slate-800">
+            <small class="text-slate-500">Minimal 3 karakter</small>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="s-email">Email *</label>
+            <input id="s-email" type="email" required placeholder="nama@email.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none text-slate-800">
+          </div>
+
+          <fieldset>
+            <legend class="font-semibold text-sm mb-2">Rating Kepuasan *</legend>
+            <div class="space-y-1">
+              <label class="flex items-center gap-2 text-sm"><input type="radio" name="rating" value="5" required class="accent-blue-500"> ⭐⭐⭐⭐⭐ Sangat Puas</label>
+              <label class="flex items-center gap-2 text-sm"><input type="radio" name="rating" value="4" class="accent-blue-500"> ⭐⭐⭐⭐ Puas</label>
+              <label class="flex items-center gap-2 text-sm"><input type="radio" name="rating" value="3" class="accent-blue-500"> ⭐⭐⭐ Cukup</label>
+              <label class="flex items-center gap-2 text-sm"><input type="radio" name="rating" value="2" class="accent-blue-500"> ⭐⭐ Kurang Puas</label>
+              <label class="flex items-center gap-2 text-sm"><input type="radio" name="rating" value="1" class="accent-blue-500"> ⭐ Sangat Tidak Puas</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="font-semibold text-sm mb-2">Saran Perbaikan (pilih minimal 1) *</legend>
+            <div class="space-y-1">
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="saran" value="harga" class="accent-blue-500 rounded"> Harga lebih terjangkau</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="saran" value="kualitas" class="accent-blue-500 rounded"> Kualitas lebih baik</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="saran" value="layanan" class="accent-blue-500 rounded"> Layanan pelanggan lebih responsif</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="saran" value="pengiriman" class="accent-blue-500 rounded"> Pengiriman lebih cepat</label>
+            </div>
+          </fieldset>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="s-comment">Komentar Tambahan</label>
+            <textarea id="s-comment" rows="4" placeholder="Ceritakan pengalaman Anda..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none text-slate-800 resize-none"></textarea>
+          </div>
+
+          <button type="submit" class="w-full px-4 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold">Kirim Survey</button>
+        </form>`,
+        quiz: { q: 'Untuk survey, elemen mana yang paling cocok untuk pilihan rating 1-5?', options: ['checkbox', 'radio button', 'select dropdown', 'text input'], answer: 1 }
+      },
+      {
+        id: 'practice-2', icon: 'layers', title: '📝 Latihan 2: Form Registrasi',
+        theory: `<div class="space-y-3">
+          <p class="font-semibold text-white">📝 Tugas: Buat form registrasi toko online</p>
+          <p class="text-slate-300">Buat file HTML bernama <code class="mono text-mint bg-white/5 px-1.5 py-0.5 rounded">registrasi.html</code> dengan fitur:</p>
+          <ul class="list-disc list-inside space-y-1 text-slate-300 text-sm">
+            <li>Input username (wajib, min 5 karakter)</li>
+            <li>Input password (wajib, min 8 karakter, hidden)</li>
+            <li>Input konfirmasi password (wajib, sama dengan password)</li>
+            <li>Input email & nomor telepon (wajib)</li>
+            <li>Select pilihan kategori toko</li>
+            <li>Checkbox agree to terms (wajib)</li>
+            <li>Textarea alamat toko (wajib)</li>
+            <li>Form hanya bisa submit jika semua valid</li>
+          </ul>
+          <p class="text-slate-400 text-xs mt-2">💡 Tips: Tambahkan JavaScript untuk validasi password match dan styling yang rapi</p>
+        </div>`,
+        code: `<span class="comment">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Registrasi Toko<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    * { box-sizing: border-box; }
+    body { font-family: Arial; background: #f5f5f5; }
+    .container { max-width: 600px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; }
+    button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; cursor: pointer; margin-top: 10px; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"container"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h2&gt;</span>Daftar Toko Online<span class="tag">&lt;/h2&gt;</span>
+    <span class="comment">&lt;!-- Form di sini --&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>`,
+        preview: `<form class="bg-white rounded-lg p-6 text-slate-800 space-y-4" onsubmit="event.preventDefault(); alert('Pendaftaran berhasil! Tunggu verifikasi email.')">
+          <h2 class="text-lg font-bold text-slate-900 mb-6">📝 Daftar Toko Online</h2>
+          
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-username">Username *</label>
+            <input id="r-username" type="text" required minlength="5" placeholder="Minimal 5 karakter" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800">
+            <small class="text-slate-500">Username unik untuk login toko Anda</small>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-email">Email Toko *</label>
+            <input id="r-email" type="email" required placeholder="toko@email.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-phone">Nomor Telepon *</label>
+            <input id="r-phone" type="tel" required placeholder="08xxxxxxxxx" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-category">Kategori Toko *</label>
+            <select id="r-category" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800">
+              <option value="">-- Pilih Kategori --</option>
+              <option value="fashion">👕 Fashion & Pakaian</option>
+              <option value="elektronik">📱 Elektronik</option>
+              <option value="makanan">🍔 Makanan & Minuman</option>
+              <option value="kecantikan">💄 Kecantikan & Perawatan</option>
+              <option value="hobi">🎮 Hobi & Kesenangan</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-password">Password *</label>
+            <input id="r-password" type="password" required minlength="8" placeholder="Minimal 8 karakter" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800">
+            <small class="text-slate-500">Gunakan kombinasi huruf, angka, dan simbol</small>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-confirm">Konfirmasi Password *</label>
+            <input id="r-confirm" type="password" required minlength="8" placeholder="Ulangi password" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-sm mb-1" for="r-address">Alamat Toko *</label>
+            <textarea id="r-address" required rows="3" placeholder="Jalan, Kota, Provinsi, Kode Pos" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none text-slate-800 resize-none"></textarea>
+          </div>
+
+          <fieldset>
+            <label class="flex items-start gap-2 text-sm">
+              <input type="checkbox" required class="accent-green-500 mt-0.5"> 
+              <span><span class="font-semibold">Setuju dengan Syarat & Ketentuan *</span><br><small class="text-slate-600">Saya telah membaca dan menyetujui semua syarat penggunaan platform</small></span>
+            </label>
+          </fieldset>
+
+          <button type="submit" class="w-full px-4 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold">Daftar Sekarang</button>
+          <p class="text-center text-xs text-slate-600 mt-3">Sudah punya akun? <span class="font-semibold text-green-600 cursor-pointer">Login di sini</span></p>
+        </form>`,
+        quiz: { q: 'Untuk validasi kecocokan password, apa yang harus digunakan?', options: ['HTML5 pattern', 'JavaScript onchange', 'CSS validation', 'Form attribute'], answer: 1 }
+      }
+    ];
+
+    // ---- STATE ----
+    let currentLesson = 0;
+    let completed = new Set();
+
+    // ---- RENDER ----
+    function renderTabs() {
+      const el = document.getElementById('lessonTabs');
+      el.innerHTML = lessons.map((l, i) => `
+        <button onclick="goTo(${i})" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition whitespace-nowrap ${i === currentLesson ? 'tab-active font-semibold' : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'} ${completed.has(i) ? 'ring-1 ring-mint/40' : ''}">
+          <i data-lucide="${l.icon}" style="width:14px;height:14px;"></i>
+          <span>${l.title}</span>
+          ${completed.has(i) ? '<i data-lucide="check-circle" style="width:13px;height:13px;" class="text-mint"></i>' : ''}
+        </button>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderLesson() {
+      const l = lessons[currentLesson];
+      const el = document.getElementById('lessonContent');
+      const answered = completed.has(currentLesson);
+      
+      // Scroll ke atas saat render pelajaran baru
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      el.innerHTML = `
+        <div class="fade-up">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-orchid/20 flex items-center justify-center"><i data-lucide="${l.icon}" style="width:20px;height:20px;" class="text-orchid"></i></div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase tracking-wider">Pelajaran ${currentLesson + 1} dari ${lessons.length}</p>
+              <h2 class="text-xl font-bold text-white">${l.title}</h2>
+            </div>
+          </div>
+
+          <!-- Theory -->
+          <div class="mb-6 text-slate-300 leading-relaxed">${l.theory}</div>
+
+          <!-- Code & Preview -->
+          <div class="grid md:grid-cols-2 gap-4 mb-8">
+            <div>
+              <div class="flex items-center gap-2 mb-2 text-xs text-slate-500 uppercase tracking-wider"><i data-lucide="code" style="width:13px;height:13px;"></i> Kode HTML</div>
+              <div class="code-block p-4 text-sm leading-relaxed"><pre>${l.code}</pre></div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-2 text-xs text-slate-500 uppercase tracking-wider"><i data-lucide="eye" style="width:13px;height:13px;"></i> Preview</div>
+              <div class="preview-area p-5 border border-slate-200">${l.preview}</div>
+            </div>
+          </div>
+
+          <!-- Quiz -->
+          <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <i data-lucide="help-circle" style="width:18px;height:18px;" class="text-orchid"></i>
+              <h3 class="font-semibold text-white">Kuis Singkat</h3>
+              ${answered ? '<span class="ml-auto text-xs bg-mint/20 text-mint px-2 py-0.5 rounded-full">Terjawab ✓</span>' : ''}
+            </div>
+            <p class="text-slate-300 mb-4">${l.quiz.q}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="quizOptions">
+              ${l.quiz.options.map((o, i) => `
+                <button onclick="checkAnswer(${i})" class="quiz-opt text-left px-4 py-3 rounded-xl border transition text-sm ${answered ? (i === l.quiz.answer ? 'border-mint bg-mint/10 text-mint' : 'border-white/5 text-slate-500 opacity-50') : 'border-white/10 hover:border-orchid/50 hover:bg-orchid/5 text-slate-300'}" ${answered ? 'disabled' : ''}>
+                  <span class="mono text-xs mr-2 opacity-50">${String.fromCharCode(65+i)}.</span>${o}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Nav buttons
+      document.getElementById('prevBtn').disabled = currentLesson === 0;
+      document.getElementById('nextBtn').disabled = currentLesson === lessons.length - 1;
+
+      lucide.createIcons();
+    }
+
+    function updateProgress() {
+      const pct = completed.size / lessons.length;
+      const ring = document.getElementById('progressRing');
+      ring.style.strokeDashoffset = 125.66 * (1 - pct);
+      document.getElementById('progressText').textContent = `${completed.size} / ${lessons.length}`;
+    }
+
+    // ---- ACTIONS ----
+    function goTo(i) { 
+      currentLesson = i; 
+      renderTabs(); 
+      renderLesson();
+      // Scroll ke atas dengan smooth
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function navigate(dir) { goTo(Math.max(0, Math.min(lessons.length - 1, currentLesson + dir))); }
+
+    function checkAnswer(idx) {
+      if (completed.has(currentLesson)) return;
+      const correct = lessons[currentLesson].quiz.answer === idx;
+      if (correct) {
+        completed.add(currentLesson);
+        showToast('Jawaban benar! 🎉');
+        updateProgress();
+        renderTabs();
+        renderLesson();
+      } else {
+        // Flash wrong
+        const btns = document.querySelectorAll('.quiz-opt');
+        btns[idx].classList.add('border-red-500', 'bg-red-500/10', 'text-red-400');
+        setTimeout(() => btns[idx].classList.remove('border-red-500', 'bg-red-500/10', 'text-red-400'), 800);
+        showToast('Coba lagi! 💡');
+      }
+    }
+
+    function showToast(msg) {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = 'toast-msg px-5 py-2.5 bg-white/10 backdrop-blur-lg border border-white/20 rounded-full text-sm text-white font-medium';
+      t.textContent = msg;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    // ---- ELEMENT SDK ----
+    const defaultConfig = {
+      main_title: 'Belajar HTML Form',
+      subtitle: 'Panduan interaktif untuk memahami elemen-elemen form HTML — dari input sederhana hingga validasi.',
+      background_color: '#0f172a',
+      surface_color: '#f8f7ff',
+      text_color: '#e2e8f0',
+      primary_action: '#c084fc',
+      secondary_action: '#f472b6',
+      font_family: 'DM Sans',
+      font_size: 16
+    };
+
+    function applyConfig(config) {
+      const t = (k) => config[k] || defaultConfig[k];
+      document.getElementById('mainTitle').textContent = t('main_title');
+      document.getElementById('subtitle').textContent = t('subtitle');
+
+      const bg = t('background_color');
+      const surface = t('surface_color');
+      const txt = t('text_color');
+      const primary = t('primary_action');
+      const secondary = t('secondary_action');
+      const font = t('font_family');
+      const size = t('font_size');
+
+      document.body.style.backgroundColor = bg;
+      document.body.style.color = txt;
+      document.body.style.fontFamily = `${font}, DM Sans, sans-serif`;
+      document.body.style.fontSize = size + 'px';
+
+      document.querySelectorAll('.code-block').forEach(el => el.style.backgroundColor = bg);
+      document.querySelectorAll('.preview-area').forEach(el => el.style.backgroundColor = surface);
+      document.querySelectorAll('.tab-active').forEach(el => { el.style.backgroundColor = bg; el.style.color = primary; });
+
+      const ring = document.getElementById('progressRing');
+      if (ring) ring.style.stroke = primary;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => applyConfig(config),
+        mapToCapabilities: (config) => {
+          const c = (key) => ({
+            get: () => config[key] || defaultConfig[key],
+            set: (v) => { config[key] = v; window.elementSdk.setConfig({ [key]: v }); }
+          });
+          return {
+            recolorables: [c('background_color'), c('surface_color'), c('text_color'), c('primary_action'), c('secondary_action')],
+            borderables: [],
+            fontEditable: c('font_family'),
+            fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+          };
+        },
+        mapToEditPanelValues: (config) => new Map([
+          ['main_title', config.main_title || defaultConfig.main_title],
+          ['subtitle', config.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+
+    // ---- INIT ----
+    renderTabs();
+    renderLesson();
+    updateProgress();
+    lucide.createIcons();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9efeb704d5b26061',t:'MTc3Njc5ODkwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
