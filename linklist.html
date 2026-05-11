@@ -43,7 +43,6 @@
         .c-cmt { color: #64748B; font-style: italic; }
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse-green { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 50% { box-shadow: 0 0 0 10px rgba(16,185,129,0); } }
         @keyframes confetti-fall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
         @keyframes blob-float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(20px, -20px) scale(1.05); } 66% { transform: translate(-10px, 15px) scale(0.95); } }
         @keyframes nav-indicator { from { width: 0; opacity: 0; } to { width: 24px; opacity: 1; } }
@@ -98,51 +97,29 @@
 <body>
 <div id="app" class="relative min-h-screen overflow-hidden">
 
-    <!-- Dekorasi blob latar -->
     <div class="blob" style="width:320px;height:320px;background:radial-gradient(circle,rgba(20,184,166,0.07) 0%,transparent 70%);top:-80px;right:-80px;"></div>
     <div class="blob" style="width:260px;height:260px;background:radial-gradient(circle,rgba(234,88,12,0.06) 0%,transparent 70%);bottom:100px;left:-60px;animation-delay:-4s;"></div>
     <div class="blob" style="width:200px;height:200px;background:radial-gradient(circle,rgba(20,184,166,0.05) 0%,transparent 70%);top:40%;right:-40px;animation-delay:-8s;"></div>
 
-    <!-- ===== HEADER (Fixed) ===== -->
     <header class="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[#FFF8F0]/80 border-b border-stone-200/60">
         <div class="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-600 to-teal-500 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-code text-white text-xs"></i>
-                </div>
-                <div>
-                    <h1 class="text-sm font-bold leading-tight text-stone-800">HTML Link & List</h1>
-                    <p class="text-[10px] text-stone-400 leading-tight">Modul Pembelajaran Interaktif</p>
-                </div>
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-600 to-teal-500 flex items-center justify-center shadow-sm"><i class="fa-solid fa-code text-white text-xs"></i></div>
+                <div><h1 class="text-sm font-bold leading-tight text-stone-800">HTML Link & List</h1><p class="text-[10px] text-stone-400 leading-tight">Modul Pembelajaran Interaktif</p></div>
             </div>
-            <div v-if="activeTab==='coba'" class="flex items-center gap-1.5 bg-teal-50 px-3 py-1 rounded-full">
-                <i class="fa-solid fa-star text-amber-500 text-xs"></i>
-                <span class="text-xs font-semibold text-teal-700">{{ cobaScore }} poin</span>
-            </div>
+            <div v-if="activeTab==='coba'" class="flex items-center gap-1.5 bg-teal-50 px-3 py-1 rounded-full"><i class="fa-solid fa-star text-amber-500 text-xs"></i><span class="text-xs font-semibold text-teal-700">{{ cobaScore }} poin</span></div>
         </div>
     </header>
 
-    <!-- ===== SUB-NAV MATERI (Fixed, di bawah header) ===== -->
-    <div v-show="activeTab==='materi'"
-         class="fixed left-0 right-0 z-30 bg-[#FFF8F0]/95 backdrop-blur-md border-b border-stone-100"
-         style="top:3.5rem;">
+    <div v-show="activeTab==='materi'" class="fixed left-0 right-0 z-30 bg-[#FFF8F0]/95 backdrop-blur-md border-b border-stone-100" style="top:3.5rem;">
         <div class="max-w-lg mx-auto px-4 py-3">
             <div class="flex gap-2 overflow-x-auto no-scrollbar">
-                <button v-for="sec in materiSections" :key="sec.id"
-                    @click="materiSection=sec.id"
-                    :class="['flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200',
-                        materiSection===sec.id
-                            ? 'bg-teal-700 text-white shadow-md shadow-teal-700/20'
-                            : 'bg-white text-stone-500 border border-stone-200 hover:border-teal-300 hover:text-teal-700']">
-                    <i :class="[sec.icon, 'mr-1.5']"></i>{{ sec.label }}
-                </button>
+                <button v-for="sec in materiSections" :key="sec.id" @click="materiSection=sec.id" :class="['flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200', materiSection===sec.id ? 'bg-teal-700 text-white shadow-md shadow-teal-700/20' : 'bg-white text-stone-500 border border-stone-200 hover:border-teal-300 hover:text-teal-700']"><i :class="[sec.icon, 'mr-1.5']"></i>{{ sec.label }}</button>
             </div>
         </div>
     </div>
 
-    <!-- ===== KONTEN UTAMA (Scrollable) ===== -->
-    <main class="relative z-10 content-scroll"
-          :style="{ height: '100vh', overflowY: 'auto', paddingTop: activeTab==='materi' ? '7.5rem' : '3.5rem', paddingBottom: '6rem' }">
+    <main class="relative z-10 content-scroll" :style="{ height: '100vh', overflowY: 'auto', paddingTop: activeTab==='materi' ? '7.5rem' : '3.5rem', paddingBottom: '6rem' }">
 
         <!-- ==================== TAB MATERI ==================== -->
         <div v-show="activeTab==='materi'">
@@ -152,300 +129,101 @@
                 <div v-show="materiSection==='tujuan'" class="space-y-4 fade-up">
                     <div class="bg-gradient-to-br from-teal-700 to-teal-800 rounded-2xl p-5 text-white relative overflow-hidden">
                         <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/5 rounded-full"></div>
-                        <div class="absolute -right-2 bottom-2 w-16 h-16 bg-white/5 rounded-full"></div>
                         <p class="text-teal-200 text-xs font-medium mb-1">Materi 3</p>
                         <h2 class="text-xl font-extrabold leading-tight mb-2">Link & List pada HTML</h2>
                         <p class="text-teal-100 text-sm leading-relaxed">Pelajari cara menghubungkan halaman web dan menyusun informasi dalam daftar terstruktur.</p>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="text-sm font-bold text-stone-700 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-bullseye text-[10px]"></i></span>
-                            Tujuan Pembelajaran
-                        </h3>
-                        <div v-for="(t, i) in tujuanList" :key="i"
-                            class="flex gap-3 items-start bg-white rounded-xl p-4 border border-stone-100 shadow-sm">
-                            <span class="flex-shrink-0 w-7 h-7 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 text-white flex items-center justify-center text-xs font-bold mt-0.5">{{ i+1 }}</span>
-                            <p class="text-sm text-stone-600 leading-relaxed">{{ t }}</p>
-                        </div>
+                        <h3 class="text-sm font-bold text-stone-700 flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-bullseye text-[10px]"></i></span>Tujuan Pembelajaran</h3>
+                        <div v-for="(t, i) in tujuanList" :key="i" class="flex gap-3 items-start bg-white rounded-xl p-4 border border-stone-100 shadow-sm"><span class="flex-shrink-0 w-7 h-7 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 text-white flex items-center justify-center text-xs font-bold mt-0.5">{{ i+1 }}</span><p class="text-sm text-stone-600 leading-relaxed">{{ t }}</p></div>
                     </div>
-                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
-                        <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
-                        <p class="text-sm text-amber-800 leading-relaxed">Link dan list adalah fondasi dari setiap website. Tanpa link, internet tidak akan terhubung. Tanpa list, informasi sulit dibaca.</p>
-                    </div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3"><i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i><p class="text-sm text-amber-800 leading-relaxed">Link dan list adalah fondasi dari setiap website.</p></div>
                 </div>
 
                 <!-- LINK -->
                 <div v-show="materiSection==='link'" class="space-y-5 fade-up">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-stone-800 mb-1">Elemen Link</h2>
-                        <p class="text-sm text-stone-500 leading-relaxed">Tag <code class="bg-stone-100 text-teal-700 px-1.5 py-0.5 rounded text-xs font-mono">&lt;a&gt;</code> (anchor) digunakan untuk membuat hyperlink yang menghubungkan ke halaman lain, file, email, atau lokasi dalam halaman yang sama.</p>
-                    </div>
+                    <div><h2 class="text-lg font-extrabold text-stone-800 mb-1">Elemen Link</h2><p class="text-sm text-stone-500 leading-relaxed">Tag <code class="bg-stone-100 text-teal-700 px-1.5 py-0.5 rounded text-xs font-mono">&lt;a&gt;</code> (anchor) digunakan untuk membuat hyperlink.</p></div>
                     <div class="bg-white rounded-xl border border-stone-100 shadow-sm overflow-hidden">
-                        <div class="bg-stone-50 px-4 py-3 border-b border-stone-100">
-                            <h3 class="text-sm font-bold text-stone-700"><i class="fa-solid fa-table-list text-teal-600 mr-2"></i>Atribut Penting</h3>
-                        </div>
+                        <div class="bg-stone-50 px-4 py-3 border-b border-stone-100"><h3 class="text-sm font-bold text-stone-700"><i class="fa-solid fa-table-list text-teal-600 mr-2"></i>Atribut Penting</h3></div>
                         <div class="divide-y divide-stone-50">
-                            <div v-for="a in linkAttrs" :key="a.name" class="px-4 py-3 flex gap-3">
-                                <code class="font-mono text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded flex-shrink-0 font-semibold">{{ a.name }}</code>
-                                <div>
-                                    <p class="text-xs text-stone-700 font-medium">{{ a.desc }}</p>
-                                    <p class="text-[11px] text-stone-400 mt-0.5">{{ a.example }}</p>
-                                </div>
-                            </div>
+                            <div v-for="a in linkAttrs" :key="a.name" class="px-4 py-3 flex gap-3"><code class="font-mono text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded flex-shrink-0 font-semibold">{{ a.name }}</code><div><p class="text-xs text-stone-700 font-medium">{{ a.desc }}</p><p class="text-[11px] text-stone-400 mt-0.5">{{ a.example }}</p></div></div>
                         </div>
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-globe text-teal-600 mr-1.5"></i>Link ke Website Lain</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">link-eksternal.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeLinkEksternal"></code></pre>
-                        </div>
+                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">link-eksternal.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeLinkEksternal"></code></pre></div>
                         <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><a href="https://google.com" target="_blank" rel="noopener">Kunjungi Google</a></div></div>
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-envelope text-teal-600 mr-1.5"></i>Link Email & Telepon</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">kontak.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeLinkKontak"></code></pre>
-                        </div>
+                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">kontak.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeLinkKontak"></code></pre></div>
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-anchor text-teal-600 mr-1.5"></i>Link Anchor (Dalam Halaman)</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">anchor.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeLinkAnchor"></code></pre>
-                        </div>
-                        <div class="bg-teal-50 border border-teal-200 rounded-xl p-3.5 mt-2.5 flex gap-2.5">
-                            <i class="fa-solid fa-circle-info text-teal-500 mt-0.5 text-sm"></i>
-                            <p class="text-xs text-teal-800 leading-relaxed">Nilai <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">href</code> diawali <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">#</code> diikuti id elemen tujuan. Link ini akan menggulir halaman ke elemen yang memiliki id tersebut.</p>
-                        </div>
+                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">anchor.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeLinkAnchor"></code></pre></div>
+                        <div class="bg-teal-50 border border-teal-200 rounded-xl p-3.5 mt-2.5 flex gap-2.5"><i class="fa-solid fa-circle-info text-teal-500 mt-0.5 text-sm"></i><p class="text-xs text-teal-800 leading-relaxed">Nilai <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">href</code> diawali <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">#</code> diikuti id elemen tujuan.</p></div>
                     </div>
                 </div>
 
                 <!-- LIST -->
                 <div v-show="materiSection==='list'" class="space-y-5 fade-up">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-stone-800 mb-1">Elemen List</h2>
-                        <p class="text-sm text-stone-500 leading-relaxed">HTML menyediakan dua jenis daftar: <strong class="text-stone-700">Unordered List</strong> (tidak berurutan) dan <strong class="text-stone-700">Ordered List</strong> (berurutan). Keduanya menggunakan tag <code class="bg-stone-100 text-teal-700 px-1.5 py-0.5 rounded text-xs font-mono">&lt;li&gt;</code> untuk setiap item.</p>
-                    </div>
+                    <div><h2 class="text-lg font-extrabold text-stone-800 mb-1">Elemen List</h2><p class="text-sm text-stone-500 leading-relaxed">HTML menyediakan <strong class="text-stone-700">Unordered List</strong> dan <strong class="text-stone-700">Ordered List</strong>. Keduanya menggunakan <code class="bg-stone-100 text-teal-700 px-1.5 py-0.5 rounded text-xs font-mono">&lt;li&gt;</code>.</p></div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white rounded-xl border border-stone-100 shadow-sm p-4">
-                            <div class="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center mb-3"><i class="fa-solid fa-list-ul text-lg"></i></div>
-                            <h3 class="text-sm font-bold text-stone-800 mb-1">Unordered List</h3>
-                            <code class="text-xs font-mono text-teal-600">&lt;ul&gt;</code>
-                            <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">Item ditandai bullet. Urutan tidak penting.</p>
-                        </div>
-                        <div class="bg-white rounded-xl border border-stone-100 shadow-sm p-4">
-                            <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center mb-3"><i class="fa-solid fa-list-ol text-lg"></i></div>
-                            <h3 class="text-sm font-bold text-stone-800 mb-1">Ordered List</h3>
-                            <code class="text-xs font-mono text-orange-600">&lt;ol&gt;</code>
-                            <p class="text-xs text-stone-500 mt-1.5 leading-relaxed">Item ditandai angka/huruf. Urutan penting. Bisa diatur dengan <strong>type</strong> dan <strong>start</strong>.</p>
-                        </div>
+                        <div class="bg-white rounded-xl border border-stone-100 shadow-sm p-4"><div class="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center mb-3"><i class="fa-solid fa-list-ul text-lg"></i></div><h3 class="text-sm font-bold text-stone-800 mb-1">Unordered List</h3><code class="text-xs font-mono text-teal-600">&lt;ul&gt;</code><p class="text-xs text-stone-500 mt-1.5 leading-relaxed">Bullet. Urutan tidak penting.</p></div>
+                        <div class="bg-white rounded-xl border border-stone-100 shadow-sm p-4"><div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center mb-3"><i class="fa-solid fa-list-ol text-lg"></i></div><h3 class="text-sm font-bold text-stone-800 mb-1">Ordered List</h3><code class="text-xs font-mono text-orange-600">&lt;ol&gt;</code><p class="text-xs text-stone-500 mt-1.5 leading-relaxed">Angka/huruf. Atur via <strong>type</strong> & <strong>start</strong>.</p></div>
                     </div>
-
-                    <!-- UL -->
+                    <div><h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-list-ul text-teal-600 mr-1.5"></i>Contoh Unordered List</h3><div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">unordered.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeUL"></code></pre></div><div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ul><li>Apel</li><li>Mangga</li><li>Jeruk</li></ul></div></div></div>
+                    <div><h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-list-ol text-orange-600 mr-1.5"></i>Contoh Ordered List Dasar</h3><div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ordered.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOL"></code></pre></div><div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ol><li>Buka text editor</li><li>Ketik kode HTML</li><li>Simpan dengan ekstensi .html</li><li>Buka di browser</li></ol></div></div></div>
                     <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-list-ul text-teal-600 mr-1.5"></i>Contoh Unordered List</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">unordered.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeUL"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ul><li>Apel</li><li>Mangga</li><li>Jeruk</li></ul></div></div>
+                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-sliders text-orange-600 mr-1.5"></i>Atribut <code class="text-xs font-mono text-orange-600">type</code></h3>
+                        <p class="text-sm text-stone-500 leading-relaxed mb-3">Mengubah jenis penomoran:</p>
+                        <div class="bg-white rounded-xl border border-stone-100 shadow-sm overflow-hidden mb-4"><div class="bg-orange-50 px-4 py-2.5 border-b border-orange-100"><p class="text-xs font-bold text-orange-700">Nilai Atribut type</p></div><div class="divide-y divide-stone-50"><div v-for="t in olTypeValues" :key="t.val" class="px-4 py-2.5 flex items-center gap-3"><code class="font-mono text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded flex-shrink-0 w-14 text-center font-semibold">{{ t.val }}</code><span class="text-xs text-stone-500 w-24 flex-shrink-0">{{ t.label }}</span><span class="text-xs text-stone-700 font-mono">{{ t.example }}</span></div></div></div>
+                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ol-type.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOLType"></code></pre></div>
+                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="grid grid-cols-3 gap-2"><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="A"</p><ol type="A" class="text-left text-sm"><li>Poin satu</li><li>Poin dua</li><li>Poin tiga</li></ol></div><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="i"</p><ol type="i" class="text-left text-sm"><li>Langkah 1</li><li>Langkah 2</li><li>Langkah 3</li></ol></div><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="I"</p><ol type="b" class="text-left text-sm"><li>Bab I</li><li>Bab II</li><li>Bab III</li></ol></div></div></div>
                     </div>
-
-                    <!-- OL Dasar -->
                     <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-list-ol text-orange-600 mr-1.5"></i>Contoh Ordered List Dasar</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ordered.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOL"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ol><li>Buka text editor</li><li>Ketik kode HTML</li><li>Simpan dengan ekstensi .html</li><li>Buka di browser</li></ol></div></div>
+                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-forward text-orange-600 mr-1.5"></i>Atribut <code class="text-xs font-mono text-orange-600">start</code></h3>
+                        <p class="text-sm text-stone-500 leading-relaxed mb-3">Menentukan angka awal penomoran.</p>
+                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ol-start.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOLStart"></code></pre></div>
+                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="grid grid-cols-2 gap-2"><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">start="5"</p><ol start="5"><li>Item kelima</li><li>Item keenam</li><li>Item ketujuh</li></ol></div><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="A" start="3"</p><ol type="A" start="3"><li>Item C</li><li>Item D</li><li>Item E</li></ol></div></div></div>
+                        <div class="bg-teal-50 border border-teal-200 rounded-xl p-3.5 mt-3 flex gap-2.5"><i class="fa-solid fa-circle-info text-teal-500 mt-0.5 text-sm"></i><p class="text-xs text-teal-800 leading-relaxed"><code class="bg-teal-100 px-1 rounded font-mono text-[11px]">start</code> selalu angka. Browser mengonversi ke format <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">type</code>.</p></div>
                     </div>
-
-                    <!-- Atribut type -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-sliders text-orange-600 mr-1.5"></i>Atribut <code class="text-xs font-mono text-orange-600">type</code> pada Ordered List</h3>
-                        <p class="text-sm text-stone-500 leading-relaxed mb-3">Atribut <code class="bg-stone-100 text-orange-600 px-1.5 py-0.5 rounded text-xs font-mono">type</code> mengubah jenis penomoran:</p>
-                        <div class="bg-white rounded-xl border border-stone-100 shadow-sm overflow-hidden mb-4">
-                            <div class="bg-orange-50 px-4 py-2.5 border-b border-orange-100"><p class="text-xs font-bold text-orange-700">Nilai Atribut type</p></div>
-                            <div class="divide-y divide-stone-50">
-                                <div v-for="t in olTypeValues" :key="t.val" class="px-4 py-2.5 flex items-center gap-3">
-                                    <code class="font-mono text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded flex-shrink-0 w-14 text-center font-semibold">{{ t.val }}</code>
-                                    <span class="text-xs text-stone-500 w-24 flex-shrink-0">{{ t.label }}</span>
-                                    <span class="text-xs text-stone-700 font-mono">{{ t.example }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ol-type.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOLType"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p>
-                            <div class="grid grid-cols-3 gap-2">
-                                <div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="A"</p><ol type="A" class="text-left text-sm"><li>Poin satu</li><li>Poin dua</li><li>Poin tiga</li></ol></div>
-                                <div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="i"</p><ol type="i" class="text-left text-sm"><li>Langkah 1</li><li>Langkah 2</li><li>Langkah 3</li></ol></div>
-                                <div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="I"</p><ol type="b" class="text-left text-sm"><li>Bab I</li><li>Bab II</li><li>Bab III</li></ol></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Atribut start -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-forward text-orange-600 mr-1.5"></i>Atribut <code class="text-xs font-mono text-orange-600">start</code> pada Ordered List</h3>
-                        <p class="text-sm text-stone-500 leading-relaxed mb-3">Atribut <code class="bg-stone-100 text-orange-600 px-1.5 py-0.5 rounded text-xs font-mono">start</code> menentukan angka awal penomoran. Berguna saat daftar dimulai dari angka tertentu.</p>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ol-start.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOLStart"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">start="5"</p><ol start="5"><li>Item kelima</li><li>Item keenam</li><li>Item ketujuh</li></ol></div>
-                                <div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="A" start="3"</p><ol type="A" start="3"><li>Item C</li><li>Item D</li><li>Item E</li></ol></div>
-                            </div>
-                        </div>
-                        <div class="bg-teal-50 border border-teal-200 rounded-xl p-3.5 mt-3 flex gap-2.5">
-                            <i class="fa-solid fa-circle-info text-teal-500 mt-0.5 text-sm"></i>
-                            <p class="text-xs text-teal-800 leading-relaxed">Atribut <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">start</code> selalu berupa angka. Browser akan mengonversinya ke format <code class="bg-teal-100 px-1 rounded font-mono text-[11px]">type</code> yang dipakai.</p>
-                        </div>
-                    </div>
-
-                    <!-- Gabungan type + start -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-wand-magic-sparkles text-orange-600 mr-1.5"></i>Menggabungkan <code class="text-xs font-mono text-orange-600">type</code> + <code class="text-xs font-mono text-orange-600">start</code></h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ol-combo.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOLCombo"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="i" start="4"</p><ol type="i" start="4"><li>Masukkan data</li><li>Validasi form</li><li>Kirim ke server</li></ol></div></div>
-                    </div>
-
-                    <!-- Nested List -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-sitemap text-teal-600 mr-1.5"></i>Nested List (List Bersarang)</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nested.html</span></div>
-                            <pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNested"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ul><li>Buah<ul><li>Apel</li><li>Mangga</li></ul></li><li>Minuman<ul><li>Teh</li><li>Kopi</li></ul></li></ul></div></div>
-                    </div>
+                    <div><h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-wand-magic-sparkles text-orange-600 mr-1.5"></i>Gabungan <code class="text-xs font-mono text-orange-600">type</code> + <code class="text-xs font-mono text-orange-600">start</code></h3><div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">ol-combo.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeOLCombo"></code></pre></div><div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame text-center"><p class="text-[10px] text-stone-400 mb-1 font-semibold">type="i" start="4"</p><ol type="i" start="4"><li>Masukkan data</li><li>Validasi form</li><li>Kirim ke server</li></ol></div></div></div>
+                    <div><h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-sitemap text-teal-600 mr-1.5"></i>Nested List</h3><div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nested.html</span></div><pre class="px-4 py-3 text-[13px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNested"></code></pre></div><div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ul><li>Buah<ul><li>Apel</li><li>Mangga</li></ul></li><li>Minuman<ul><li>Teh</li><li>Kopi</li></ul></li></ul></div></div></div>
                 </div>
 
                 <!-- NAVIGASI -->
                 <div v-show="materiSection==='navigasi'" class="space-y-5 fade-up">
+                    <div><h2 class="text-lg font-extrabold text-stone-800 mb-1">Membuat Menu Navigasi</h2><p class="text-sm text-stone-500 leading-relaxed">Menggabungkan <strong class="text-stone-700">list</strong>, <strong class="text-stone-700">link</strong>, dan <strong class="text-stone-700">CSS</strong>.</p></div>
+                    <div class="space-y-3"><div v-for="(step, i) in navSteps" :key="i" class="flex gap-3 items-start bg-white rounded-xl p-4 border border-stone-100 shadow-sm"><span class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white" :class="i%2===0?'bg-teal-600':'bg-orange-500'">{{ i+1 }}</span><div><p class="text-sm text-stone-700 font-semibold">{{ step.title }}</p><p class="text-xs text-stone-500 mt-0.5 leading-relaxed">{{ step.desc }}</p></div></div></div>
+                    <div><h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-code text-stone-400 mr-1.5"></i>Versi 1: Tanpa CSS</h3><div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nav-dasar.html</span></div><pre class="px-4 py-3 text-[12px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNavDasar"></code></pre></div><div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-frame"><ul><li><a href="#">Beranda</a></li><li><a href="#">Tentang</a></li><li><a href="#">Layanan</a></li><li><a href="#">Kontak</a></li></ul></div></div></div>
+                    <div><h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-paintbrush text-teal-600 mr-1.5"></i>Versi 2: CSS Inline</h3><div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nav-inline.html</span></div><pre class="px-4 py-3 text-[12px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNavInline"></code></pre></div><div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil:</p><div class="preview-nav"><a href="#">Beranda</a><a href="#">Tentang</a><a href="#">Layanan</a><a href="#">Kontak</a></div></div></div>
                     <div>
-                        <h2 class="text-lg font-extrabold text-stone-800 mb-1">Membuat Menu Navigasi</h2>
-                        <p class="text-sm text-stone-500 leading-relaxed">Dengan menggabungkan <strong class="text-stone-700">list</strong>, <strong class="text-stone-700">link</strong>, dan <strong class="text-stone-700">CSS</strong>, kita bisa membuat menu navigasi profesional.</p>
+                        <h3 class="text-sm font-bold text-stone-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-orange-500"></i>Versi 3: Profesional <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold">RECOMMENDED</span></h3>
+                        <p class="text-sm text-stone-500 leading-relaxed mb-3">Dengan <code class="bg-stone-100 text-teal-700 px-1.5 py-0.5 rounded text-xs font-mono">&lt;style&gt;</code>, navigasi jadi jauh lebih menarik.</p>
+                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg"><div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nav-profesional.html</span></div><pre class="px-4 py-3 text-[11px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNavFancy"></code></pre></div>
+                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil — coba arahkan kursor:</p><div class="preview-nav-fancy"><a href="#" class="active">Beranda</a><a href="#">Tentang</a><a href="#">Layanan</a><a href="#">Kontak</a></div></div>
+                        <div class="mt-4 space-y-3"><h4 class="text-sm font-bold text-stone-700 flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-teal-600"></i>Penjelasan CSS</h4><div class="space-y-2"><div v-for="(css, ci) in cssExplanations" :key="ci" class="bg-white rounded-xl p-3.5 border border-stone-100 shadow-sm flex gap-3 items-start"><span class="flex-shrink-0 w-6 h-6 rounded-md text-white text-[10px] flex items-center justify-center font-bold" :class="css.color">{{ ci+1 }}</span><div><code class="text-[11px] font-mono text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded">{{ css.prop }}</code><p class="text-xs text-stone-600 mt-1 leading-relaxed">{{ css.desc }}</p></div></div></div></div>
                     </div>
-                    <div class="space-y-3">
-                        <div v-for="(step, i) in navSteps" :key="i" class="flex gap-3 items-start bg-white rounded-xl p-4 border border-stone-100 shadow-sm">
-                            <span class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white" :class="i%2===0?'bg-teal-600':'bg-orange-500'">{{ i+1 }}</span>
-                            <div><p class="text-sm text-stone-700 font-semibold">{{ step.title }}</p><p class="text-xs text-stone-500 mt-0.5 leading-relaxed">{{ step.desc }}</p></div>
-                        </div>
-                    </div>
-
-                    <!-- Versi 1 -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-code text-stone-400 mr-1.5"></i>Versi 1: Tanpa CSS (Default)</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nav-dasar.html</span></div>
-                            <pre class="px-4 py-3 text-[12px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNavDasar"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil — bullet terlihat, menu vertikal:</p><div class="preview-frame"><ul><li><a href="#">Beranda</a></li><li><a href="#">Tentang</a></li><li><a href="#">Layanan</a></li><li><a href="#">Kontak</a></li></ul></div></div>
-                    </div>
-
-                    <!-- Versi 2 -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2"><i class="fa-solid fa-paintbrush text-teal-600 mr-1.5"></i>Versi 2: CSS Inline Horizontal</h3>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nav-inline.html</span></div>
-                            <pre class="px-4 py-3 text-[12px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNavInline"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil — sudah horizontal tapi masih sederhana:</p><div class="preview-nav"><a href="#">Beranda</a><a href="#">Tentang</a><a href="#">Layanan</a><a href="#">Kontak</a></div></div>
-                    </div>
-
-                    <!-- Versi 3 -->
-                    <div>
-                        <h3 class="text-sm font-bold text-stone-700 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-wand-magic-sparkles text-orange-500"></i>
-                            Versi 3: Navigasi Profesional
-                            <span class="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold">RECOMMENDED</span>
-                        </h3>
-                        <p class="text-sm text-stone-500 leading-relaxed mb-3">Dengan menambahkan CSS di dalam <code class="bg-stone-100 text-teal-700 px-1.5 py-0.5 rounded text-xs font-mono">&lt;style&gt;</code>, tampilan navigasi menjadi jauh lebih menarik.</p>
-                        <div class="bg-[#1E293B] rounded-xl overflow-hidden shadow-lg">
-                            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F172A]"><span class="w-2.5 h-2.5 rounded-full bg-red-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span><span class="w-2.5 h-2.5 rounded-full bg-green-400/80"></span><span class="ml-3 text-[10px] text-slate-500 font-mono">nav-profesional.html</span></div>
-                            <pre class="px-4 py-3 text-[11px] leading-relaxed font-mono overflow-x-auto"><code v-html="codeNavFancy"></code></pre>
-                        </div>
-                        <div class="mt-2.5"><p class="text-[10px] text-stone-400 mb-1.5 font-medium uppercase tracking-wider">Hasil — coba arahkan kursor ke menu:</p><div class="preview-nav-fancy"><a href="#" class="active">Beranda</a><a href="#">Tentang</a><a href="#">Layanan</a><a href="#">Kontak</a></div></div>
-
-                        <div class="mt-4 space-y-3">
-                            <h4 class="text-sm font-bold text-stone-700 flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-teal-600"></i>Penjelasan CSS</h4>
-                            <div class="space-y-2">
-                                <div v-for="(css, ci) in cssExplanations" :key="ci" class="bg-white rounded-xl p-3.5 border border-stone-100 shadow-sm flex gap-3 items-start">
-                                    <span class="flex-shrink-0 w-6 h-6 rounded-md text-white text-[10px] flex items-center justify-center font-bold" :class="css.color">{{ ci+1 }}</span>
-                                    <div><code class="text-[11px] font-mono text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded">{{ css.prop }}</code><p class="text-xs text-stone-600 mt-1 leading-relaxed">{{ css.desc }}</p></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4 flex gap-3">
-                        <i class="fa-solid fa-rocket text-orange-500 mt-0.5"></i>
-                        <div>
-                            <p class="text-sm font-semibold text-orange-800 mb-1">Sekarang Giliranmu!</p>
-                            <p class="text-xs text-orange-700 leading-relaxed">Buka menu <strong>Coba</strong> untuk menguji pemahamanmu, lalu <strong>Latihan</strong> untuk mempraktikkan langsung di PC.</p>
-                        </div>
-                    </div>
+                    <div class="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4 flex gap-3"><i class="fa-solid fa-rocket text-orange-500 mt-0.5"></i><div><p class="text-sm font-semibold text-orange-800 mb-1">Sekarang Giliranmu!</p><p class="text-xs text-orange-700 leading-relaxed">Buka menu <strong>Coba</strong> untuk menguji pemahamanmu.</p></div></div>
                 </div>
-
             </div>
         </div>
 
         <!-- ==================== TAB COBA ==================== -->
         <div v-show="activeTab==='coba'">
             <div class="max-w-lg mx-auto px-4 py-5">
-                <div class="mb-5">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-semibold text-stone-600">Progres Latihan</span>
-                        <span class="text-xs font-bold text-teal-700">{{ completedExercises }}/3 selesai</span>
-                    </div>
-                    <div class="h-2 bg-stone-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full transition-all duration-500 ease-out" :style="{width:(completedExercises/3*100)+'%'}"></div>
-                    </div>
-                </div>
+                <div class="mb-5"><div class="flex justify-between items-center mb-2"><span class="text-xs font-semibold text-stone-600">Progres Latihan</span><span class="text-xs font-bold text-teal-700">{{ completedExercises }}/3 selesai</span></div><div class="h-2 bg-stone-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-teal-500 to-teal-400 rounded-full transition-all duration-500 ease-out" :style="{width:(completedExercises/3*100)+'%'}"></div></div></div>
 
                 <!-- Exercise 1 -->
                 <div v-show="cobaStep===0" class="space-y-4 fade-up">
                     <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
-                        <div class="bg-gradient-to-r from-teal-600 to-teal-700 px-5 py-4">
-                            <div class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-white/20 text-white text-xs flex items-center justify-center font-bold">1</span><h3 class="text-white font-bold text-sm">Susun Kode Link</h3></div>
-                            <p class="text-teal-100 text-xs leading-relaxed">Tap potongan kode berikut sesuai urutan yang benar untuk membuat link ke Google.</p>
-                        </div>
+                        <div class="bg-gradient-to-r from-teal-600 to-teal-700 px-5 py-4"><div class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-white/20 text-white text-xs flex items-center justify-center font-bold">1</span><h3 class="text-white font-bold text-sm">Susun Kode Link</h3></div><p class="text-teal-100 text-xs leading-relaxed">Tap potongan kode sesuai urutan yang benar.</p></div>
                         <div class="p-5 space-y-4">
-                            <div>
-                                <p class="text-[10px] text-stone-400 font-medium uppercase tracking-wider mb-2">Urutanmu:</p>
-                                <div class="min-h-[56px] bg-slate-800 rounded-xl p-3 flex flex-wrap gap-2 items-center border-2 transition-colors duration-200" :class="ex1Checked?(ex1Correct?'border-emerald-400':'border-red-400'):'border-slate-600'">
-                                    <span v-if="ex1Answer.length===0" class="text-slate-500 text-xs font-mono">Tap potongan kode di bawah...</span>
-                                    <span v-for="pid in ex1Answer" :key="'a-'+pid" @click="removeEx1(pid)" class="font-mono text-xs px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95" :class="ex1Checked?(ex1Correct?'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30':'bg-red-500/20 text-red-300 border border-red-500/30'):'bg-teal-500/20 text-teal-300 border border-teal-500/30'">{{ getPieceText(pid) }}</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-stone-400 font-medium uppercase tracking-wider mb-2">Potongan kode:</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span v-for="p in ex1Pieces" :key="'p-'+p.id" v-show="!p.used" @click="addEx1(p.id)" class="font-mono text-xs px-3 py-2 bg-white border-2 border-stone-200 rounded-xl cursor-pointer text-stone-700 hover:border-teal-400 hover:text-teal-700 hover:bg-teal-50 transition-all duration-150 active:scale-95 shadow-sm">{{ p.text }}</span>
-                                </div>
-                            </div>
-                            <div class="flex gap-3 pt-1">
-                                <button v-if="!ex1Checked" @click="checkEx1" :disabled="ex1Answer.length<ex1Pieces.length" class="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-200" :class="ex1Answer.length<ex1Pieces.length?'bg-stone-100 text-stone-400 cursor-not-allowed':'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98] shadow-lg shadow-teal-600/20'">Periksa Jawaban</button>
-                                <template v-else>
-                                    <button v-if="!ex1Correct" @click="resetEx1" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all">Coba Lagi</button>
-                                    <button v-if="ex1Correct" @click="cobaStep=1" class="flex-1 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98] transition-all shadow-lg shadow-teal-600/20">Lanjut <i class="fa-solid fa-arrow-right ml-1"></i></button>
-                                </template>
-                            </div>
-                            <div v-if="ex1Checked" class="rounded-xl p-3.5 flex gap-2.5 items-start" :class="ex1Correct?'bg-emerald-50 border border-emerald-200':'bg-red-50 border border-red-200'">
-                                <i :class="ex1Correct?'fa-solid fa-circle-check text-emerald-500':'fa-solid fa-circle-xmark text-red-500'" class="mt-0.5"></i>
-                                <p class="text-xs leading-relaxed" :class="ex1Correct?'text-emerald-700':'text-red-700'">{{ ex1Correct?'Benar! Kode link sudah tersusun sempurna.':'Belum tepat. Perhatikan urutan: tag pembuka, atribut, teks, tag penutup.' }}</p>
-                            </div>
+                            <div><p class="text-[10px] text-stone-400 font-medium uppercase tracking-wider mb-2">Urutanmu:</p><div class="min-h-[56px] bg-slate-800 rounded-xl p-3 flex flex-wrap gap-2 items-center border-2 transition-colors duration-200" :class="ex1Checked?(ex1Correct?'border-emerald-400':'border-red-400'):'border-slate-600'"><span v-if="ex1Answer.length===0" class="text-slate-500 text-xs font-mono">Tap potongan kode di bawah...</span><span v-for="pid in ex1Answer" :key="'a-'+pid" @click="removeEx1(pid)" class="font-mono text-xs px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95" :class="ex1Checked?(ex1Correct?'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30':'bg-red-500/20 text-red-300 border border-red-500/30'):'bg-teal-500/20 text-teal-300 border border-teal-500/30'">{{ getPieceText(pid) }}</span></div></div>
+                            <div><p class="text-[10px] text-stone-400 font-medium uppercase tracking-wider mb-2">Potongan kode:</p><div class="flex flex-wrap gap-2"><span v-for="p in ex1Pieces" :key="'p-'+p.id" v-show="!p.used" @click="addEx1(p.id)" class="font-mono text-xs px-3 py-2 bg-white border-2 border-stone-200 rounded-xl cursor-pointer text-stone-700 hover:border-teal-400 hover:text-teal-700 hover:bg-teal-50 transition-all duration-150 active:scale-95 shadow-sm">{{ p.text }}</span></div></div>
+                            <div class="flex gap-3 pt-1"><button v-if="!ex1Checked" @click="checkEx1" :disabled="ex1Answer.length<ex1Pieces.length" class="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-200" :class="ex1Answer.length<ex1Pieces.length?'bg-stone-100 text-stone-400 cursor-not-allowed':'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98] shadow-lg shadow-teal-600/20'">Periksa Jawaban</button><template v-else><button v-if="!ex1Correct" @click="resetEx1" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all">Coba Lagi</button><button v-if="ex1Correct" @click="cobaStep=1" class="flex-1 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98] transition-all shadow-lg shadow-teal-600/20">Lanjut <i class="fa-solid fa-arrow-right ml-1"></i></button></template></div>
+                            <div v-if="ex1Checked" class="rounded-xl p-3.5 flex gap-2.5 items-start" :class="ex1Correct?'bg-emerald-50 border border-emerald-200':'bg-red-50 border border-red-200'"><i :class="ex1Correct?'fa-solid fa-circle-check text-emerald-500':'fa-solid fa-circle-xmark text-red-500'" class="mt-0.5"></i><p class="text-xs leading-relaxed" :class="ex1Correct?'text-emerald-700':'text-red-700'">{{ ex1Correct?'Benar!':'Belum tepat.' }}</p></div>
                         </div>
                     </div>
                 </div>
@@ -453,10 +231,7 @@
                 <!-- Exercise 2 -->
                 <div v-show="cobaStep===1" class="space-y-4 fade-up">
                     <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
-                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-4">
-                            <div class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-white/20 text-white text-xs flex items-center justify-center font-bold">2</span><h3 class="text-white font-bold text-sm">Lengkapi Kode List</h3></div>
-                            <p class="text-orange-100 text-xs leading-relaxed">Isi bagian yang kosong untuk membuat unordered list berisi 3 bahasa pemrograman.</p>
-                        </div>
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-4"><div class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-white/20 text-white text-xs flex items-center justify-center font-bold">2</span><h3 class="text-white font-bold text-sm">Lengkapi Kode List</h3></div><p class="text-orange-100 text-xs leading-relaxed">Isi bagian yang kosong untuk membuat unordered list.</p></div>
                         <div class="p-5 space-y-4">
                             <div class="bg-[#1E293B] rounded-xl p-4 font-mono text-[13px] leading-loose border-2 transition-colors duration-200" :class="ex2Checked?(ex2Correct?'border-emerald-400':'border-red-400'):'border-slate-600'">
                                 <div><span class="c-tag">&lt;</span><input v-model="ex2[0]" @input="ex2Checked=false" class="c-txt bg-slate-700 border-b-2 w-10 text-center outline-none rounded px-1" :class="ex2Checked?(ex2Blanks[0]===ex2[0].toLowerCase().trim()?'border-emerald-400':'border-red-400'):'border-amber-400'" spellcheck="false"><span class="c-tag">&gt;</span></div>
@@ -465,52 +240,34 @@
                                 <div class="pl-4"><span class="c-tag">&lt;</span><input v-model="ex2[5]" @input="ex2Checked=false" class="c-txt bg-slate-700 border-b-2 w-10 text-center outline-none rounded px-1" :class="ex2Checked?(ex2Blanks[5]===ex2[5].toLowerCase().trim()?'border-emerald-400':'border-red-400'):'border-amber-400'" spellcheck="false"><span class="c-tag">&gt;</span><span class="c-txt">JavaScript</span><span class="c-tag">&lt;/</span><input v-model="ex2[6]" @input="ex2Checked=false" class="c-txt bg-slate-700 border-b-2 w-10 text-center outline-none rounded px-1" :class="ex2Checked?(ex2Blanks[6]===ex2[6].toLowerCase().trim()?'border-emerald-400':'border-red-400'):'border-amber-400'" spellcheck="false"><span class="c-tag">&gt;</span></div>
                                 <div><span class="c-tag">&lt;/</span><input v-model="ex2[7]" @input="ex2Checked=false" class="c-txt bg-slate-700 border-b-2 w-10 text-center outline-none rounded px-1" :class="ex2Checked?(ex2Blanks[7]===ex2[7].toLowerCase().trim()?'border-emerald-400':'border-red-400'):'border-amber-400'" spellcheck="false"><span class="c-tag">&gt;</span></div>
                             </div>
-                            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2"><i class="fa-solid fa-lightbulb text-amber-500 text-xs mt-0.5"></i><p class="text-xs text-amber-700">Tag pembuka unordered list: <strong>ul</strong>. Setiap item: <strong>li</strong>.</p></div>
-                            <div class="flex gap-3">
-                                <button v-if="!ex2Checked" @click="checkEx2" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20">Periksa Jawaban</button>
-                                <template v-else>
-                                    <button v-if="!ex2Correct" @click="resetEx2" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all">Coba Lagi</button>
-                                    <button v-if="ex2Correct" @click="cobaStep=2" class="flex-1 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98] transition-all shadow-lg shadow-teal-600/20">Lanjut <i class="fa-solid fa-arrow-right ml-1"></i></button>
-                                </template>
-                            </div>
-                            <div v-if="ex2Checked" class="rounded-xl p-3.5 flex gap-2.5 items-start" :class="ex2Correct?'bg-emerald-50 border border-emerald-200':'bg-red-50 border border-red-200'">
-                                <i :class="ex2Correct?'fa-solid fa-circle-check text-emerald-500':'fa-solid fa-circle-xmark text-red-500'" class="mt-0.5"></i>
-                                <p class="text-xs leading-relaxed" :class="ex2Correct?'text-emerald-700':'text-red-700'">{{ ex2Correct?'Sempurna! Kamu memahami struktur unordered list.':'Periksa kembali tag pembuka dan penutup (ul dan li).' }}</p>
-                            </div>
+                            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2"><i class="fa-solid fa-lightbulb text-amber-500 text-xs mt-0.5"></i><p class="text-xs text-amber-700">Tag pembuka: <strong>ul</strong>. Setiap item: <strong>li</strong>.</p></div>
+                            <div class="flex gap-3"><button v-if="!ex2Checked" @click="checkEx2" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20">Periksa Jawaban</button><template v-else><button v-if="!ex2Correct" @click="resetEx2" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all">Coba Lagi</button><button v-if="ex2Correct" @click="cobaStep=2" class="flex-1 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98] transition-all shadow-lg shadow-teal-600/20">Lanjut <i class="fa-solid fa-arrow-right ml-1"></i></button></template></div>
+                            <div v-if="ex2Checked" class="rounded-xl p-3.5 flex gap-2.5 items-start" :class="ex2Correct?'bg-emerald-50 border border-emerald-200':'bg-red-50 border border-red-200'"><i :class="ex2Correct?'fa-solid fa-circle-check text-emerald-500':'fa-solid fa-circle-xmark text-red-500'" class="mt-0.5"></i><p class="text-xs leading-relaxed" :class="ex2Correct?'text-emerald-700':'text-red-700'">{{ ex2Correct?'Sempurna!':'Periksa kembali.' }}</p></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Exercise 3 -->
+                <!-- Exercise 3 — DIPERBAIKI: @click ditambahkan -->
                 <div v-show="cobaStep===2" class="space-y-4 fade-up">
                     <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
-                        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-4">
-                            <div class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-white/20 text-white text-xs flex items-center justify-center font-bold">3</span><h3 class="text-white font-bold text-sm">Kuis Cepat</h3></div>
-                            <p class="text-violet-200 text-xs leading-relaxed">Jawab 3 pertanyaan berikut tentang link dan list.</p>
-                        </div>
+                        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-4"><div class="flex items-center gap-2 mb-1"><span class="w-6 h-6 rounded-full bg-white/20 text-white text-xs flex items-center justify-center font-bold">3</span><h3 class="text-white font-bold text-sm">Kuis Cepat</h3></div><p class="text-violet-200 text-xs leading-relaxed">Jawab 3 pertanyaan tentang link dan list.</p></div>
                         <div class="p-5 space-y-5">
                             <div v-for="(q, qi) in quizQuestions" :key="qi" class="space-y-2.5">
-                                <p class="text-sm font-semibold text-stone-800 flex gap-2">
-                                    <span class="flex-shrink-0 w-5 h-5 rounded-full bg-violet-100 text-violet-600 text-[10px] flex items-center justify-center font-bold">{{ qi+1 }}</span>{{ q.question }}
-                                </p>
+                                <p class="text-sm font-semibold text-stone-800 flex gap-2"><span class="flex-shrink-0 w-5 h-5 rounded-full bg-violet-100 text-violet-600 text-[10px] flex items-center justify-center font-bold">{{ qi+1 }}</span>{{ q.question }}</p>
                                 <div class="space-y-2 pl-7">
-                                    <label v-for="(opt, oi) in q.options" :key="oi" class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-150 active:scale-[0.98]" :class="getOptionClass(qi,oi)">
-                                        <span class="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all" :class="getOptionRadioClass(qi,oi)"><span v-if="ex3Answers[qi]===oi" class="w-2.5 h-2.5 rounded-full bg-white"></span></span>
-                                        <span class="text-sm" :class="getOptionTextClass(qi,oi)">{{ opt }}</span>
-                                    </label>
+                                    <div v-for="(opt, oi) in q.options" :key="oi"
+                                         @click="selectEx3(qi, oi)"
+                                         class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all duration-150 active:scale-[0.98]"
+                                         :class="getOptionClass(qi, oi)"
+                                         role="radio"
+                                         :aria-checked="ex3Answers[qi]===oi ? 'true' : 'false'">
+                                        <span class="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all" :class="getOptionRadioClass(qi, oi)"><span v-if="ex3Answers[qi]===oi" class="w-2.5 h-2.5 rounded-full bg-white"></span></span>
+                                        <span class="text-sm" :class="getOptionTextClass(qi, oi)">{{ opt }}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex gap-3 pt-1">
-                                <button v-if="!ex3Checked" @click="checkEx3" :disabled="Object.values(ex3Answers).some(v=>v===null)" class="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-200" :class="Object.values(ex3Answers).some(v=>v===null)?'bg-stone-100 text-stone-400 cursor-not-allowed':'bg-violet-600 text-white hover:bg-violet-700 active:scale-[0.98] shadow-lg shadow-violet-600/20'">Periksa Jawaban</button>
-                                <template v-else>
-                                    <button v-if="!ex3Correct" @click="resetEx3" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all">Coba Lagi</button>
-                                    <button v-if="ex3Correct" @click="showCelebration=true" class="flex-1 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20">Lihat Hasil <i class="fa-solid fa-trophy ml-1"></i></button>
-                                </template>
-                            </div>
-                            <div v-if="ex3Checked" class="rounded-xl p-3.5 flex gap-2.5 items-start" :class="ex3Correct?'bg-emerald-50 border border-emerald-200':'bg-red-50 border border-red-200'">
-                                <i :class="ex3Correct?'fa-solid fa-circle-check text-emerald-500':'fa-solid fa-circle-xmark text-red-500'" class="mt-0.5"></i>
-                                <p class="text-xs leading-relaxed" :class="ex3Correct?'text-emerald-700':'text-red-700'">{{ ex3Correct?'Luar biasa! Semua jawaban benar.':'Belum semua benar. Baca kembali materinya.' }}</p>
-                            </div>
+                            <div class="flex gap-3 pt-1"><button v-if="!ex3Checked" @click="checkEx3" :disabled="Object.values(ex3Answers).some(v=>v===null)" class="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-200" :class="Object.values(ex3Answers).some(v=>v===null)?'bg-stone-100 text-stone-400 cursor-not-allowed':'bg-violet-600 text-white hover:bg-violet-700 active:scale-[0.98] shadow-lg shadow-violet-600/20'">Periksa Jawaban</button><template v-else><button v-if="!ex3Correct" @click="resetEx3" class="flex-1 py-3 rounded-xl text-sm font-bold bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] transition-all">Coba Lagi</button><button v-if="ex3Correct" @click="showCelebration=true" class="flex-1 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20">Lihat Hasil <i class="fa-solid fa-trophy ml-1"></i></button></template></div>
+                            <div v-if="ex3Checked" class="rounded-xl p-3.5 flex gap-2.5 items-start" :class="ex3Correct?'bg-emerald-50 border border-emerald-200':'bg-red-50 border border-red-200'"><i :class="ex3Correct?'fa-solid fa-circle-check text-emerald-500':'fa-solid fa-circle-xmark text-red-500'" class="mt-0.5"></i><p class="text-xs leading-relaxed" :class="ex3Correct?'text-emerald-700':'text-red-700'">{{ ex3Correct?'Luar biasa! Semua benar.':'Belum semua benar. Baca kembali materi.' }}</p></div>
                         </div>
                     </div>
                 </div>
@@ -520,50 +277,19 @@
         <!-- ==================== TAB LATIHAN ==================== -->
         <div v-show="activeTab==='latihan'">
             <div class="max-w-lg mx-auto px-4 py-5 space-y-5">
-                <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-2xl p-5 text-white relative overflow-hidden">
-                    <div class="absolute -right-8 -top-8 w-28 h-28 bg-white/5 rounded-full"></div>
-                    <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-laptop-code text-teal-400"></i><h2 class="text-lg font-extrabold">Latihan Praktik</h2></div>
-                    <p class="text-stone-300 text-sm leading-relaxed">Kerjakan 3 latihan berikut menggunakan PC. Buka text editor, ketik kode, lalu jalankan di browser.</p>
-                </div>
+                <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-2xl p-5 text-white relative overflow-hidden"><div class="absolute -right-8 -top-8 w-28 h-28 bg-white/5 rounded-full"></div><div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-laptop-code text-teal-400"></i><h2 class="text-lg font-extrabold">Latihan Praktik</h2></div><p class="text-stone-300 text-sm leading-relaxed">Kerjakan 3 latihan berikut menggunakan PC.</p></div>
                 <div v-for="(latihan, li) in latihanList" :key="li" class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 border-b border-stone-50 flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-extrabold text-sm shadow-md" :class="['bg-gradient-to-br',latihan.gradient]">{{ li+1 }}</span>
-                        <div><h3 class="text-sm font-bold text-stone-800">{{ latihan.title }}</h3><p class="text-xs text-stone-400">{{ latihan.subtitle }}</p></div>
-                    </div>
-                    <div class="px-5 py-4 space-y-3">
-                        <p class="text-sm text-stone-600 leading-relaxed">{{ latihan.desc }}</p>
-                        <div class="bg-stone-50 rounded-xl p-4 space-y-2">
-                            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-clipboard-list text-stone-400"></i> Instruksi:</p>
-                            <ul class="space-y-1.5">
-                                <li v-for="(instr, ii) in latihan.instructions" :key="ii" class="text-xs text-stone-600 leading-relaxed flex gap-2"><span class="text-teal-500 mt-px flex-shrink-0"><i class="fa-solid fa-check text-[9px]"></i></span>{{ instr }}</li>
-                            </ul>
-                        </div>
-                        <div v-if="latihan.hint" class="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2"><i class="fa-solid fa-lightbulb text-amber-500 text-xs mt-0.5"></i><p class="text-xs text-amber-700 leading-relaxed">{{ latihan.hint }}</p></div>
-                    </div>
+                    <div class="px-5 py-4 border-b border-stone-50 flex items-center gap-3"><span class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-extrabold text-sm shadow-md" :class="['bg-gradient-to-br',latihan.gradient]">{{ li+1 }}</span><div><h3 class="text-sm font-bold text-stone-800">{{ latihan.title }}</h3><p class="text-xs text-stone-400">{{ latihan.subtitle }}</p></div></div>
+                    <div class="px-5 py-4 space-y-3"><p class="text-sm text-stone-600 leading-relaxed">{{ latihan.desc }}</p><div class="bg-stone-50 rounded-xl p-4 space-y-2"><p class="text-xs font-bold text-stone-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-clipboard-list text-stone-400"></i> Instruksi:</p><ul class="space-y-1.5"><li v-for="(instr, ii) in latihan.instructions" :key="ii" class="text-xs text-stone-600 leading-relaxed flex gap-2"><span class="text-teal-500 mt-px flex-shrink-0"><i class="fa-solid fa-check text-[9px]"></i></span>{{ instr }}</li></ul></div><div v-if="latihan.hint" class="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2"><i class="fa-solid fa-lightbulb text-amber-500 text-xs mt-0.5"></i><p class="text-xs text-amber-700 leading-relaxed">{{ latihan.hint }}</p></div></div>
                 </div>
-                <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 flex gap-3">
-                    <i class="fa-solid fa-circle-info text-teal-500 mt-0.5"></i>
-                    <div><p class="text-sm font-semibold text-teal-800 mb-0.5">Hasil tidak dikumpulkan</p><p class="text-xs text-teal-700 leading-relaxed">Latihan ini untuk pemahamanmu sendiri.</p></div>
-                </div>
+                <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 flex gap-3"><i class="fa-solid fa-circle-info text-teal-500 mt-0.5"></i><div><p class="text-sm font-semibold text-teal-800 mb-0.5">Hasil tidak dikumpulkan</p><p class="text-xs text-teal-700 leading-relaxed">Latihan ini untuk pemahamanmu sendiri.</p></div></div>
             </div>
         </div>
 
     </main>
 
-    <!-- ===== BOTTOM NAVIGATION ===== -->
-    <nav class="bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-stone-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
-        <div class="max-w-lg mx-auto flex">
-            <button v-for="tab in tabs" :key="tab.id" @click="switchTab(tab.id)" class="flex-1 flex flex-col items-center py-2.5 relative transition-colors duration-200" :class="activeTab===tab.id?'text-teal-700':'text-stone-400'">
-                <div class="relative">
-                    <i :class="[tab.icon,'text-lg transition-transform duration-200']" :style="activeTab===tab.id?'transform:scale(1.15)':''"></i>
-                    <span v-if="activeTab===tab.id" class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full bg-teal-600" style="animation:nav-indicator 0.3s ease-out"></span>
-                </div>
-                <span class="text-[10px] font-semibold mt-1">{{ tab.label }}</span>
-            </button>
-        </div>
-    </nav>
+    <nav class="bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-stone-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"><div class="max-w-lg mx-auto flex"><button v-for="tab in tabs" :key="tab.id" @click="switchTab(tab.id)" class="flex-1 flex flex-col items-center py-2.5 relative transition-colors duration-200" :class="activeTab===tab.id?'text-teal-700':'text-stone-400'"><div class="relative"><i :class="[tab.icon,'text-lg transition-transform duration-200']" :style="activeTab===tab.id?'transform:scale(1.15)':''"></i><span v-if="activeTab===tab.id" class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full bg-teal-600" style="animation:nav-indicator 0.3s ease-out"></span></div><span class="text-[10px] font-semibold mt-1">{{ tab.label }}</span></button></div></nav>
 
-    <!-- ===== CELEBRATION OVERLAY ===== -->
     <div v-if="showCelebration" class="fixed inset-0 z-[60] flex items-center justify-center p-6" @click.self="showCelebration=false">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div v-for="c in confettiPieces" :key="c.id" class="confetti-piece" :style="{left:c.x+'%',background:c.color,animationDelay:c.delay+'s',animationDuration:c.dur+'s',width:c.size+'px',height:c.size+'px',borderRadius:c.round?'50%':'2px'}"></div>
@@ -574,10 +300,7 @@
             <div class="flex justify-center gap-1 mb-5"><i v-for="s in 3" :key="s" class="fa-solid fa-star text-2xl text-amber-400" :style="'animation:fadeUp 0.4s ease-out '+(s*0.15)+'s both'"></i></div>
             <p class="text-3xl font-extrabold text-teal-700 mb-1">{{ cobaScore }} <span class="text-base font-semibold text-stone-400">poin</span></p>
             <p class="text-xs text-stone-400 mb-6">Skor sempurna!</p>
-            <div class="flex gap-3">
-                <button @click="showCelebration=false;cobaStep=0;resetCoba()" class="flex-1 py-3 rounded-xl text-sm font-bold border-2 border-stone-200 text-stone-600 hover:bg-stone-50 transition-all">Ulangi</button>
-                <button @click="showCelebration=false;activeTab='latihan'" class="flex-1 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20">Latihan PC <i class="fa-solid fa-arrow-right ml-1"></i></button>
-            </div>
+            <div class="flex gap-3"><button @click="showCelebration=false;cobaStep=0;resetCoba()" class="flex-1 py-3 rounded-xl text-sm font-bold border-2 border-stone-200 text-stone-600 hover:bg-stone-50 transition-all">Ulangi</button><button @click="showCelebration=false;activeTab='latihan'" class="flex-1 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20">Latihan PC <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
         </div>
     </div>
 
@@ -585,12 +308,10 @@
 
 <script>
 const { createApp } = Vue;
-
 createApp({
     data() {
         return {
-            activeTab: 'materi',
-            materiSection: 'tujuan',
+            activeTab: 'materi', materiSection: 'tujuan',
             materiSections: [
                 { id: 'tujuan', label: 'Tujuan', icon: 'fa-solid fa-bullseye' },
                 { id: 'link', label: 'Link', icon: 'fa-solid fa-link' },
@@ -602,145 +323,79 @@ createApp({
                 { id: 'coba', label: 'Coba', icon: 'fa-solid fa-flask' },
                 { id: 'latihan', label: 'Latihan', icon: 'fa-solid fa-laptop-code' },
             ],
-            tujuanList: [
-                'Memahami fungsi dan kegunaan elemen link (<a>) dalam menghubungkan halaman web.',
-                'Mengetahui atribut-atribut penting pada link seperti href, target, dan title.',
-                'Membedakan penggunaan unordered list (<ul>) dan ordered list (<ol>).',
-                'Menggunakan atribut type dan start pada ordered list untuk mengatur format penomoran.',
-                'Mampu membuat nested list (list di dalam list) untuk informasi bersarang.',
-                'Menggabungkan link, list, dan CSS untuk membuat menu navigasi yang menarik.',
-            ],
-            linkAttrs: [
-                { name: 'href', desc: 'Menentukan tujuan link (URL, email, telepon, atau anchor).', example: 'href="https://google.com"' },
-                { name: 'target', desc: 'Menentukan di mana link dibuka.', example: 'target="_blank" (tab baru)' },
-                { name: 'title', desc: 'Menampilkan tooltip saat kursor di atas link.', example: 'title="Kunjungi Google"' },
-            ],
-            olTypeValues: [
-                { val: '1', label: 'Angka (default)', example: '1, 2, 3, 4, ...' },
-                { val: 'A', label: 'Huruf besar', example: 'A, B, C, D, ...' },
-                { val: 'a', label: 'Huruf kecil', example: 'a, b, c, d, ...' },
-                { val: 'I', label: 'Romawi besar', example: 'I, II, III, IV, ...' },
-                { val: 'i', label: 'Romawi kecil', example: 'i, ii, iii, iv, ...' },
-            ],
-            navSteps: [
-                { title: 'Buat elemen <ul>', desc: 'Mulai dengan unordered list sebagai wadah menu.' },
-                { title: 'Tambahkan <li> untuk tiap menu', desc: 'Buat item list sebanyak menu yang diinginkan.' },
-                { title: 'Masukkan <a> di dalam <li>', desc: 'Letakkan tag anchor di setiap item list sebagai link.' },
-                { title: 'Hilangkan bullet & buat horizontal', desc: 'Gunakan list-style:none dan display:flex pada <ul>.' },
-                { title: 'Tambahkan CSS untuk mempercantik', desc: 'Atur warna, hover effect, dan garis bawah aktif.' },
-            ],
+            tujuanList: ['Memahami fungsi dan kegunaan elemen link (<a>).','Mengetahui atribut-atribut penting pada link.','Membedakan penggunaan <ul> dan <ol>.','Menggunakan atribut type dan start pada ordered list.','Mampu membuat nested list.','Menggabungkan link, list, dan CSS untuk navigasi.'],
+            linkAttrs: [{ name: 'href', desc: 'Menentukan tujuan link.', example: 'href="https://google.com"' },{ name: 'target', desc: 'Menentukan di mana link dibuka.', example: 'target="_blank" (tab baru)' },{ name: 'title', desc: 'Tooltip saat kursor di atas link.', example: 'title="Kunjungi Google"' }],
+            olTypeValues: [{ val: '1', label: 'Angka (default)', example: '1, 2, 3, 4, ...' },{ val: 'A', label: 'Huruf besar', example: 'A, B, C, D, ...' },{ val: 'a', label: 'Huruf kecil', example: 'a, b, c, d, ...' },{ val: 'I', label: 'Romawi besar', example: 'I, II, III, IV, ...' },{ val: 'i', label: 'Romawi kecil', example: 'i, ii, iii, iv, ...' }],
+            navSteps: [{ title: 'Buat elemen <ul>', desc: 'Wadah menu.' },{ title: 'Tambahkan <li>', desc: 'Item list per menu.' },{ title: 'Masukkan <a> di dalam <li>', desc: 'Anchor sebagai link.' },{ title: 'Hilangkan bullet & buat horizontal', desc: 'list-style:none, display:flex.' },{ title: 'Tambahkan CSS', desc: 'Warna, hover, garis bawah aktif.' }],
             cssExplanations: [
-                { prop: 'list-style: none', desc: 'Menghilangkan bullet (titik) default pada list.', color: 'bg-teal-600' },
-                { prop: 'display: flex', desc: 'Menyusun item list secara horizontal.', color: 'bg-orange-500' },
-                { prop: 'background: linear-gradient(...)', desc: 'Memberikan gradien warna pada latar navigasi.', color: 'bg-violet-600' },
-                { prop: 'text-decoration: none', desc: 'Menghilangkan garis bawah default pada link.', color: 'bg-rose-500' },
-                { prop: 'padding', desc: 'Memberikan ruang di dalam setiap link.', color: 'bg-amber-500' },
-                { prop: 'transition: all 0.3s', desc: 'Perubahan warna terjadi halus (smooth) saat hover.', color: 'bg-emerald-600' },
-                { prop: 'nav a:hover', desc: 'Mengubah tampilan link saat kursor di atasnya.', color: 'bg-sky-600' },
-                { prop: 'nav a::after + :hover::after', desc: 'Garis bawah animasi menggunakan pseudo-element.', color: 'bg-pink-500' },
-                { prop: 'nav a.active', desc: 'Menandai halaman yang sedang aktif.', color: 'bg-indigo-600' },
-                { prop: 'border-radius + box-shadow', desc: 'Sudut membulat dan bayangan agar navigasi mengambang.', color: 'bg-fuchsia-600' },
+                { prop: 'list-style: none', desc: 'Hilangkan bullet default.', color: 'bg-teal-600' },
+                { prop: 'display: flex', desc: 'Susun item horizontal.', color: 'bg-orange-500' },
+                { prop: 'background: linear-gradient(...)', desc: 'Gradien warna latar.', color: 'bg-violet-600' },
+                { prop: 'text-decoration: none', desc: 'Hilangkan garis bawah link.', color: 'bg-rose-500' },
+                { prop: 'padding', desc: 'Ruang di dalam link.', color: 'bg-amber-500' },
+                { prop: 'transition', desc: 'Perubahan warna halus saat hover.', color: 'bg-emerald-600' },
+                { prop: 'nav a:hover', desc: 'Tampilan saat kursor di atas.', color: 'bg-sky-600' },
+                { prop: '::after pseudo-element', desc: 'Garis bawah animasi.', color: 'bg-pink-500' },
+                { prop: 'nav a.active', desc: 'Tandai halaman aktif.', color: 'bg-indigo-600' },
+                { prop: 'border-radius + box-shadow', desc: 'Sudut membulat & bayangan.', color: 'bg-fuchsia-600' },
             ],
             codeLinkEksternal: '<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"https://google.com"</span> <span class="c-attr">target</span><span class="c-eq">=</span><span class="c-val">"_blank"</span><span class="c-tag">&gt;</span><span class="c-txt">Kunjungi Google</span><span class="c-tag">&lt;/a&gt;</span>',
-            codeLinkKontak: '<span class="c-cmt">&lt;!-- Link Email --&gt;</span>\n<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"mailto:info@website.com"</span><span class="c-tag">&gt;</span><span class="c-txt">Kirim Email</span><span class="c-tag">&lt;/a&gt;</span>\n\n<span class="c-cmt">&lt;!-- Link Telepon --&gt;</span>\n<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"tel:+628123456789"</span><span class="c-tag">&gt;</span><span class="c-txt">Hubungi Kami</span><span class="c-tag">&lt;/a&gt;</span>',
-            codeLinkAnchor: '<span class="c-cmt">&lt;!-- Link Menuju Bagian --&gt;</span>\n<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#tentang"</span><span class="c-tag">&gt;</span><span class="c-txt">Ke Bagian Tentang</span><span class="c-tag">&lt;/a&gt;</span>\n\n<span class="c-cmt">&lt;!-- Elemen Tujuan --&gt;</span>\n<span class="c-tag">&lt;section</span> <span class="c-attr">id</span><span class="c-eq">=</span><span class="c-val">"tentang"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;h2&gt;</span><span class="c-txt">Tentang Kami</span><span class="c-tag">&lt;/h2&gt;</span>\n  <span class="c-tag">&lt;p&gt;</span><span class="c-txt">Ini bagian tentang.</span><span class="c-tag">&lt;/p&gt;</span>\n<span class="c-tag">&lt;/section&gt;</span>',
+            codeLinkKontak: '<span class="c-cmt">&lt;!-- Email --&gt;</span>\n<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"mailto:info@website.com"</span><span class="c-tag">&gt;</span><span class="c-txt">Kirim Email</span><span class="c-tag">&lt;/a&gt;</span>\n\n<span class="c-cmt">&lt;!-- Telepon --&gt;</span>\n<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"tel:+628123456789"</span><span class="c-tag">&gt;</span><span class="c-txt">Hubungi Kami</span><span class="c-tag">&lt;/a&gt;</span>',
+            codeLinkAnchor: '<span class="c-cmt">&lt;!-- Link ke bagian --&gt;</span>\n<span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#tentang"</span><span class="c-tag">&gt;</span><span class="c-txt">Ke Bagian Tentang</span><span class="c-tag">&lt;/a&gt;</span>\n\n<span class="c-cmt">&lt;!-- Tujuan --&gt;</span>\n<span class="c-tag">&lt;section</span> <span class="c-attr">id</span><span class="c-eq">=</span><span class="c-val">"tentang"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;h2&gt;</span><span class="c-txt">Tentang Kami</span><span class="c-tag">&lt;/h2&gt;</span>\n<span class="c-tag">&lt;/section&gt;</span>',
             codeUL: '<span class="c-tag">&lt;ul&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Apel</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Mangga</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Jeruk</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ul&gt;</span>',
-            codeOL: '<span class="c-tag">&lt;ol&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Buka text editor</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Ketik kode HTML</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Simpan ekstensi .html</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Buka di browser</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
+            codeOL: '<span class="c-tag">&lt;ol&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Buka text editor</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Ketik kode HTML</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Simpan .html</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Buka di browser</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
             codeOLType: '<span class="c-cmt">&lt;!-- Huruf besar --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"A"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Poin satu</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Poin dua</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Poin tiga</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>\n\n<span class="c-cmt">&lt;!-- Romawi kecil --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"i"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Langkah 1</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Langkah 2</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Langkah 3</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>\n\n<span class="c-cmt">&lt;!-- Romawi besar --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"I"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Bab I</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Bab II</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Bab III</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
-            codeOLStart: '<span class="c-cmt">&lt;!-- Dimulai dari angka 5 --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">start</span><span class="c-eq">=</span><span class="c-val">"5"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item kelima</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item keenam</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item ketujuh</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>\n\n<span class="c-cmt">&lt;!-- Huruf besar, mulai dari C (ke-3) --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"A"</span> <span class="c-attr">start</span><span class="c-eq">=</span><span class="c-val">"3"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item C</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item D</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item E</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
-            codeOLCombo: '<span class="c-cmt">&lt;!-- Romawi kecil, mulai dari iv (ke-4) --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"i"</span> <span class="c-attr">start</span><span class="c-eq">=</span><span class="c-val">"4"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Masukkan data</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Validasi form</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Kirim ke server</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
+            codeOLStart: '<span class="c-cmt">&lt;!-- Mulai dari 5 --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">start</span><span class="c-eq">=</span><span class="c-val">"5"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item kelima</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item keenam</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item ketujuh</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>\n\n<span class="c-cmt">&lt;!-- Huruf besar mulai C --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"A"</span> <span class="c-attr">start</span><span class="c-eq">=</span><span class="c-val">"3"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item C</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item D</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Item E</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
+            codeOLCombo: '<span class="c-cmt">&lt;!-- Romawi kecil mulai iv --&gt;</span>\n<span class="c-tag">&lt;ol</span> <span class="c-attr">type</span><span class="c-eq">=</span><span class="c-val">"i"</span> <span class="c-attr">start</span><span class="c-eq">=</span><span class="c-val">"4"</span><span class="c-tag">&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Masukkan data</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Validasi form</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Kirim ke server</span><span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ol&gt;</span>',
             codeNested: '<span class="c-tag">&lt;ul&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Buah</span>\n    <span class="c-tag">&lt;ul&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Apel</span><span class="c-tag">&lt;/li&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Mangga</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;/ul&gt;</span>\n  <span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Minuman</span>\n    <span class="c-tag">&lt;ul&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Teh</span><span class="c-tag">&lt;/li&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-txt">Kopi</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;/ul&gt;</span>\n  <span class="c-tag">&lt;/li&gt;</span>\n<span class="c-tag">&lt;/ul&gt;</span>',
             codeNavDasar: '<span class="c-tag">&lt;nav&gt;</span>\n  <span class="c-tag">&lt;ul&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Beranda</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Tentang</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Layanan</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Kontak</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;/ul&gt;</span>\n<span class="c-tag">&lt;/nav&gt;</span>',
-            codeNavInline: '<span class="c-tag">&lt;nav&gt;</span>\n  <span class="c-tag">&lt;ul</span> <span class="c-attr">style</span><span class="c-eq">=</span><span class="c-val">"list-style:none; display:flex;"</span><span class="c-tag">&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span>\n      <span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span> <span class="c-attr">style</span><span class="c-eq">=</span><span class="c-val">"padding:12px 20px; display:block;"</span><span class="c-tag">&gt;</span>\n        <span class="c-txt">Beranda</span>\n      <span class="c-tag">&lt;/a&gt;</span>\n    <span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-cmt">&lt;!-- ... item lainnya sama ... --&gt;</span>\n  <span class="c-tag">&lt;/ul&gt;</span>\n<span class="c-tag">&lt;/nav&gt;</span>',
-            codeNavFancy: '<span class="c-tag">&lt;!DOCTYPE html&gt;</span>\n<span class="c-tag">&lt;html&gt;</span>\n<span class="c-tag">&lt;head&gt;</span>\n  <span class="c-tag">&lt;style&gt;</span>\n    <span class="c-cmt">/* Container navigasi */</span>\n    <span class="c-attr">nav ul</span> {\n      <span class="c-attr">list-style</span>: <span class="c-val">none</span>;\n      <span class="c-attr">display</span>: <span class="c-val">flex</span>;\n      <span class="c-attr">background</span>: <span class="c-val">linear-gradient(135deg, #0F766E, #134E4A)</span>;\n      <span class="c-attr">border-radius</span>: <span class="c-val">12px</span>;\n      <span class="c-attr">overflow</span>: <span class="c-val">hidden</span>;\n      <span class="c-attr">box-shadow</span>: <span class="c-val">0 8px 32px rgba(15,118,110,0.3)</span>;\n    }\n\n    <span class="c-cmt">/* Styling link */</span>\n    <span class="c-attr">nav a</span> {\n      <span class="c-attr">color</span>: <span class="c-val">rgba(255,255,255,0.75)</span>;\n      <span class="c-attr">text-decoration</span>: <span class="c-val">none</span>;\n      <span class="c-attr">padding</span>: <span class="c-val">14px 22px</span>;\n      <span class="c-attr">font-weight</span>: <span class="c-val">600</span>;\n      <span class="c-attr">display</span>: <span class="c-val">block</span>;\n      <span class="c-attr">position</span>: <span class="c-val">relative</span>;\n      <span class="c-attr">transition</span>: <span class="c-val">all 0.3s ease</span>;\n    }\n\n    <span class="c-cmt">/* Garis bawah animasi */</span>\n    <span class="c-attr">nav a::after</span> {\n      <span class="c-attr">content</span>: <span class="c-val">\'\'</span>;\n      <span class="c-attr">position</span>: <span class="c-val">absolute</span>;\n      <span class="c-attr">bottom</span>: <span class="c-val">0</span>; <span class="c-attr">left</span>: <span class="c-val">50%</span>;\n      <span class="c-attr">transform</span>: <span class="c-val">translateX(-50%)</span>;\n      <span class="c-attr">width</span>: <span class="c-val">0</span>; <span class="c-attr">height</span>: <span class="c-val">3px</span>;\n      <span class="c-attr">background</span>: <span class="c-val">#FB923C</span>;\n      <span class="c-attr">border-radius</span>: <span class="c-val">3px 3px 0 0</span>;\n      <span class="c-attr">transition</span>: <span class="c-val">width 0.3s ease</span>;\n    }\n\n    <span class="c-cmt">/* Hover effect */</span>\n    <span class="c-attr">nav a:hover</span> {\n      <span class="c-attr">color</span>: <span class="c-val">#fff</span>;\n      <span class="c-attr">background</span>: <span class="c-val">rgba(255,255,255,0.08)</span>;\n    }\n    <span class="c-attr">nav a:hover::after</span> {\n      <span class="c-attr">width</span>: <span class="c-val">60%</span>;\n    }\n\n    <span class="c-cmt">/* Halaman aktif */</span>\n    <span class="c-attr">nav a.active</span> {\n      <span class="c-attr">color</span>: <span class="c-val">#fff</span>;\n      <span class="c-attr">background</span>: <span class="c-val">rgba(255,255,255,0.12)</span>;\n    }\n    <span class="c-attr">nav a.active::after</span> {\n      <span class="c-attr">width</span>: <span class="c-val">60%</span>;\n    }\n  <span class="c-tag">&lt;/style&gt;</span>\n<span class="c-tag">&lt;/head&gt;</span>\n<span class="c-tag">&lt;body&gt;</span>\n  <span class="c-tag">&lt;nav&gt;</span>\n    <span class="c-tag">&lt;ul&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span> <span class="c-attr">class</span><span class="c-eq">=</span><span class="c-val">"active"</span><span class="c-tag">&gt;</span><span class="c-txt">Beranda</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Tentang</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Layanan</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n      <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Kontak</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;/ul&gt;</span>\n  <span class="c-tag">&lt;/nav&gt;</span>\n<span class="c-tag">&lt;/body&gt;</span>\n<span class="c-tag">&lt;/html&gt;</span>',
+            codeNavInline: '<span class="c-tag">&lt;nav&gt;</span>\n  <span class="c-tag">&lt;ul</span> <span class="c-attr">style</span><span class="c-eq">=</span><span class="c-val">"list-style:none; display:flex;"</span><span class="c-tag">&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span>\n      <span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span> <span class="c-attr">style</span><span class="c-eq">=</span><span class="c-val">"padding:12px 20px; display:block;"</span><span class="c-tag">&gt;</span>\n        <span class="c-txt">Beranda</span>\n      <span class="c-tag">&lt;/a&gt;</span>\n    <span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-cmt">&lt;!-- ... --&gt;</span>\n  <span class="c-tag">&lt;/ul&gt;</span>\n<span class="c-tag">&lt;/nav&gt;</span>',
+            codeNavFancy: '<span class="c-tag">&lt;style&gt;</span>\n  <span class="c-attr">nav ul</span> {\n    <span class="c-attr">list-style</span>: <span class="c-val">none</span>;\n    <span class="c-attr">display</span>: <span class="c-val">flex</span>;\n    <span class="c-attr">background</span>: <span class="c-val">linear-gradient(135deg, #0F766E, #134E4A)</span>;\n    <span class="c-attr">border-radius</span>: <span class="c-val">12px</span>;\n    <span class="c-attr">overflow</span>: <span class="c-val">hidden</span>;\n    <span class="c-attr">box-shadow</span>: <span class="c-val">0 8px 32px rgba(15,118,110,0.3)</span>;\n  }\n  <span class="c-attr">nav a</span> {\n    <span class="c-attr">color</span>: <span class="c-val">rgba(255,255,255,0.75)</span>;\n    <span class="c-attr">text-decoration</span>: <span class="c-val">none</span>;\n    <span class="c-attr">padding</span>: <span class="c-val">14px 22px</span>;\n    <span class="c-attr">font-weight</span>: <span class="c-val">600</span>;\n    <span class="c-attr">display</span>: <span class="c-val">block</span>;\n    <span class="c-attr">position</span>: <span class="c-val">relative</span>;\n    <span class="c-attr">transition</span>: <span class="c-val">all 0.3s ease</span>;\n  }\n  <span class="c-attr">nav a::after</span> {\n    <span class="c-attr">content</span>: <span class="c-val">\'\'</span>; <span class="c-attr">position</span>: <span class="c-val">absolute</span>;\n    <span class="c-attr">bottom</span>: <span class="c-val">0</span>; <span class="c-attr">left</span>: <span class="c-val">50%</span>;\n    <span class="c-attr">transform</span>: <span class="c-val">translateX(-50%)</span>;\n    <span class="c-attr">width</span>: <span class="c-val">0</span>; <span class="c-attr">height</span>: <span class="c-val">3px</span>;\n    <span class="c-attr">background</span>: <span class="c-val">#FB923C</span>;\n    <span class="c-attr">border-radius</span>: <span class="c-val">3px 3px 0 0</span>;\n    <span class="c-attr">transition</span>: <span class="c-val">width 0.3s ease</span>;\n  }\n  <span class="c-attr">nav a:hover</span> {\n    <span class="c-attr">color</span>: <span class="c-val">#fff</span>;\n    <span class="c-attr">background</span>: <span class="c-val">rgba(255,255,255,0.08)</span>;\n  }\n  <span class="c-attr">nav a:hover::after</span> { <span class="c-attr">width</span>: <span class="c-val">60%</span>; }\n  <span class="c-attr">nav a.active</span> {\n    <span class="c-attr">color</span>: <span class="c-val">#fff</span>;\n    <span class="c-attr">background</span>: <span class="c-val">rgba(255,255,255,0.12)</span>;\n  }\n  <span class="c-attr">nav a.active::after</span> { <span class="c-attr">width</span>: <span class="c-val">60%</span>; }\n<span class="c-tag">&lt;/style&gt;</span>\n<span class="c-tag">&lt;nav&gt;</span>\n  <span class="c-tag">&lt;ul&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span> <span class="c-attr">class</span><span class="c-eq">=</span><span class="c-val">"active"</span><span class="c-tag">&gt;</span><span class="c-txt">Beranda</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Tentang</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Layanan</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span><span class="c-eq">=</span><span class="c-val">"#"</span><span class="c-tag">&gt;</span><span class="c-txt">Kontak</span><span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span>\n  <span class="c-tag">&lt;/ul&gt;</span>\n<span class="c-tag">&lt;/nav&gt;</span>',
             latihanList: [
-                {
-                    title: 'Halaman Link Saya', subtitle: 'Membuat link ke website favorit', gradient: 'from-teal-500 to-teal-600',
-                    desc: 'Buat halaman HTML berisi kumpulan link ke website-website yang kamu sukai.',
-                    instructions: ['Buat file "link-saya.html".', 'Tulis struktur dasar HTML.', 'Tambahkan judul dengan <h1>.', 'Buat minimal 3 link ke website berbeda.', 'Gunakan target="_blank" pada setiap link.', 'Tambahkan deskripsi di bawah setiap link.'],
-                    hint: 'Contoh: <a href="https://youtube.com" target="_blank">YouTube</a>',
-                },
-                {
-                    title: 'Daftar Kegiatan Harian', subtitle: 'Menggunakan ol dengan type dan start', gradient: 'from-orange-500 to-amber-500',
-                    desc: 'Buat halaman HTML dengan ordered list menggunakan variasi atribut type dan start.',
-                    instructions: ['Buat file "daftar-kegiatan.html".', 'Buat <ol type="A"> berisi 4 kegiatan pagi.', 'Buat <ol type="i" start="5"> berisi 3 kegiatan siang.', 'Buat <ul> berisi 5 benda di dalam tasku.', 'Buat satu nested list.'],
-                    hint: 'Contoh: <ol type="A"><li>Sarapan</li>...</ol> dan <ol type="i" start="5"><li>...</li></ol>',
-                },
-                {
-                    title: 'Menu Navigasi Website', subtitle: 'Navigasi cantik dengan CSS', gradient: 'from-violet-500 to-indigo-500',
-                    desc: 'Buat halaman HTML lengkap dengan menu navigasi horizontal yang dipercantik CSS.',
-                    instructions: ['Buat file "navigasi.html".', 'Buat <ul> berisi minimal 4 item menu.', 'Setiap item berisi <a>.', 'Tambahkan <style> di <head>.', 'Terapkan list-style:none, display:flex, gradien, border-radius, box-shadow.', 'Buat hover effect (ubah warna teks dan background).', 'Tambahkan garis bawah animasi (::after).', 'Tambahkan class "active" pada satu menu.', 'Di bawah navigasi, buat konten halaman.'],
-                    hint: 'Salin kode CSS dari contoh "Versi 3" di menu Materi, lalu modifikasi warna.',
-                },
+                { title: 'Halaman Link Saya', subtitle: 'Link ke website favorit', gradient: 'from-teal-500 to-teal-600', desc: 'Buat halaman HTML berisi link ke website favorit.', instructions: ['Buat file "link-saya.html".','Tulis struktur dasar HTML.','Tambahkan <h1>.','Buat minimal 3 link ke website berbeda.','Gunakan target="_blank".','Tambahkan deskripsi di bawah setiap link.'], hint: '<a href="https://youtube.com" target="_blank">YouTube</a>' },
+                { title: 'Daftar Kegiatan Harian', subtitle: 'ol dengan type dan start', gradient: 'from-orange-500 to-amber-500', desc: 'Buat ordered list dengan variasi type dan start.', instructions: ['Buat file "daftar-kegiatan.html".','<ol type="A"> berisi 4 kegiatan pagi.','<ol type="i" start="5"> berisi 3 kegiatan siang.','<ul> berisi 5 benda di tasku.','Buat satu nested list.'], hint: '<ol type="A"><li>Sarapan</li>...</ol>' },
+                { title: 'Menu Navigasi Website', subtitle: 'Navigasi cantik dengan CSS', gradient: 'from-violet-500 to-indigo-500', desc: 'Buat navigasi horizontal dipercantik CSS.', instructions: ['Buat file "navigasi.html".','<ul> minimal 4 item menu.','Setiap item berisi <a>.','Tambahkan <style> di <head>.','list-style:none, display:flex, gradien, border-radius, box-shadow.','Hover effect.','Garis bawah animasi (::after).','Class "active" pada satu menu.','Konten halaman di bawah navigasi.'], hint: 'Salin kode CSS dari contoh "Versi 3".' },
             ],
             cobaStep: 0, cobaScore: 0,
-            ex1Pieces: [
-                { id: 1, text: '<a', used: false }, { id: 2, text: 'href="https://google.com"', used: false },
-                { id: 3, text: 'target="_blank"', used: false }, { id: 4, text: '>', used: false },
-                { id: 5, text: 'Google', used: false }, { id: 6, text: '</a>', used: false },
-            ],
+            ex1Pieces: [{ id: 1, text: '<a', used: false },{ id: 2, text: 'href="https://google.com"', used: false },{ id: 3, text: 'target="_blank"', used: false },{ id: 4, text: '>', used: false },{ id: 5, text: 'Google', used: false },{ id: 6, text: '</a>', used: false }],
             ex1Answer: [], ex1CorrectOrder: [1,2,3,4,5,6], ex1Checked: false, ex1Correct: false,
             ex2: ['','','','','','','',''], ex2Blanks: ['ul','li','li','li','li','li','li','ul'], ex2Checked: false, ex2Correct: false,
             quizQuestions: [
                 { question: 'Tag HTML apa yang digunakan untuk membuat hyperlink?', options: ['<link>', '<a>', '<href>', '<url>'], answer: 1 },
-                { question: 'Atribut mana yang menentukan halaman tujuan dari sebuah link?', options: ['src', 'target', 'href', 'link'], answer: 2 },
-                { question: 'Atribut apa pada <ol> yang mengubah penomoran menjadi huruf besar (A, B, C...)?', options: ['format="A"', 'type="A"', 'style="A"', 'number="A"'], answer: 1 },
+                { question: 'Atribut mana yang menentukan halaman tujuan link?', options: ['src', 'target', 'href', 'link'], answer: 2 },
+                { question: 'Atribut apa pada <ol> yang mengubah penomoran menjadi huruf besar?', options: ['format="A"', 'type="A"', 'style="A"', 'number="A"'], answer: 1 },
             ],
             ex3Answers: [null, null, null], ex3Checked: false, ex3Correct: false,
             showCelebration: false, confettiPieces: [],
         };
     },
     computed: {
-        completedExercises() {
-            let c = 0;
-            if (this.ex1Checked && this.ex1Correct) c++;
-            if (this.ex2Checked && this.ex2Correct) c++;
-            if (this.ex3Checked && this.ex3Correct) c++;
-            return c;
-        }
+        completedExercises() { let c=0; if(this.ex1Checked&&this.ex1Correct)c++; if(this.ex2Checked&&this.ex2Correct)c++; if(this.ex3Checked&&this.ex3Correct)c++; return c; }
     },
     methods: {
-        switchTab(id) {
-            this.activeTab = id;
-            const m = this.$el.querySelector('main');
-            if (m) m.scrollTo({ top: 0, behavior: 'smooth' });
+        switchTab(id) { this.activeTab=id; const m=this.$el.querySelector('main'); if(m)m.scrollTo({top:0,behavior:'smooth'}); },
+        getPieceText(id) { const p=this.ex1Pieces.find(p=>p.id===id); return p?p.text:''; },
+        addEx1(id) { if(this.ex1Checked)return; const p=this.ex1Pieces.find(p=>p.id===id); if(p&&!p.used){p.used=true;this.ex1Answer.push(id);} },
+        removeEx1(id) { if(this.ex1Checked)return; const p=this.ex1Pieces.find(p=>p.id===id); if(p){p.used=false;this.ex1Answer=this.ex1Answer.filter(x=>x!==id);} },
+        checkEx1() { this.ex1Checked=true; this.ex1Correct=this.ex1Answer.every((p,i)=>p===this.ex1CorrectOrder[i]); if(this.ex1Correct)this.cobaScore+=30; },
+        resetEx1() { this.ex1Answer=[]; this.ex1Pieces.forEach(p=>p.used=false); this.ex1Checked=false; this.ex1Correct=false; if(this.cobaScore>=30)this.cobaScore-=30; },
+        checkEx2() { this.ex2Checked=true; this.ex2Correct=this.ex2.every((v,i)=>v.toLowerCase().trim()===this.ex2Blanks[i]); if(this.ex2Correct)this.cobaScore+=40; },
+        resetEx2() { this.ex2=['','','','','','','','']; this.ex2Checked=false; this.ex2Correct=false; if(this.cobaScore>=40)this.cobaScore-=40; },
+        // DIPERBAIKI: method khusus untuk memilih jawaban kuis
+        selectEx3(qi, oi) {
+            if (this.ex3Checked) return;
+            // Gunakan Vue.set agar reaktivitas array berjalan benar
+            this.ex3Answers.splice(qi, 1, oi);
         },
-        getPieceText(id) { const p = this.ex1Pieces.find(p => p.id === id); return p ? p.text : ''; },
-        addEx1(id) { if (this.ex1Checked) return; const p = this.ex1Pieces.find(p => p.id === id); if (p && !p.used) { p.used = true; this.ex1Answer.push(id); } },
-        removeEx1(id) { if (this.ex1Checked) return; const p = this.ex1Pieces.find(p => p.id === id); if (p) { p.used = false; this.ex1Answer = this.ex1Answer.filter(x => x !== id); } },
-        checkEx1() { this.ex1Checked = true; this.ex1Correct = this.ex1Answer.every((p, i) => p === this.ex1CorrectOrder[i]); if (this.ex1Correct) this.cobaScore += 30; },
-        resetEx1() { this.ex1Answer = []; this.ex1Pieces.forEach(p => p.used = false); this.ex1Checked = false; this.ex1Correct = false; if (this.cobaScore >= 30) this.cobaScore -= 30; },
-        checkEx2() { this.ex2Checked = true; this.ex2Correct = this.ex2.every((v, i) => v.toLowerCase().trim() === this.ex2Blanks[i]); if (this.ex2Correct) this.cobaScore += 40; },
-        resetEx2() { this.ex2 = ['','','','','','','','']; this.ex2Checked = false; this.ex2Correct = false; if (this.cobaScore >= 40) this.cobaScore -= 40; },
-        getOptionClass(qi, oi) {
-            const s = this.ex3Answers[qi] === oi, c = this.quizQuestions[qi].answer === oi;
-            if (!this.ex3Checked) return s ? 'border-violet-400 bg-violet-50' : 'border-stone-200 bg-white hover:border-stone-300';
-            if (c) return 'border-emerald-400 bg-emerald-50'; if (s && !c) return 'border-red-400 bg-red-50'; return 'border-stone-100 bg-stone-50 opacity-60';
-        },
-        getOptionRadioClass(qi, oi) {
-            const s = this.ex3Answers[qi] === oi, c = this.quizQuestions[qi].answer === oi;
-            if (!this.ex3Checked) return s ? 'border-violet-500 bg-violet-500' : 'border-stone-300 bg-white';
-            if (c) return 'border-emerald-500 bg-emerald-500'; if (s && !c) return 'border-red-500 bg-red-500'; return 'border-stone-200 bg-stone-100';
-        },
-        getOptionTextClass(qi, oi) {
-            const c = this.quizQuestions[qi].answer === oi, s = this.ex3Answers[qi] === oi;
-            if (!this.ex3Checked) return 'text-stone-700'; if (c) return 'text-emerald-700 font-semibold'; if (s && !c) return 'text-red-700 font-semibold'; return 'text-stone-400';
-        },
-        checkEx3() { this.ex3Checked = true; this.ex3Correct = this.ex3Answers.every((a, i) => a === this.quizQuestions[i].answer); if (this.ex3Correct) this.cobaScore += 30; },
-        resetEx3() { this.ex3Answers = [null, null, null]; this.ex3Checked = false; this.ex3Correct = false; if (this.cobaScore >= 30) this.cobaScore -= 30; },
-        resetCoba() {
-            this.cobaScore = 0; this.ex1Answer = []; this.ex1Pieces.forEach(p => p.used = false); this.ex1Checked = false; this.ex1Correct = false;
-            this.ex2 = ['','','','','','','','']; this.ex2Checked = false; this.ex2Correct = false;
-            this.ex3Answers = [null, null, null]; this.ex3Checked = false; this.ex3Correct = false; this.cobaStep = 0;
-        },
-        generateConfetti() {
-            const colors = ['#14B8A6','#F59E0B','#EA580C','#8B5CF6','#EC4899','#10B981','#F97316'];
-            const p = [];
-            for (let i = 0; i < 40; i++) p.push({ id: i, x: Math.random()*100, color: colors[Math.floor(Math.random()*colors.length)], delay: Math.random()*1.5, dur: 2+Math.random()*1.5, size: 6+Math.random()*8, round: Math.random()>0.5 });
-            this.confettiPieces = p;
-        },
+        getOptionClass(qi,oi) { const s=this.ex3Answers[qi]===oi,c=this.quizQuestions[qi].answer===oi; if(!this.ex3Checked)return s?'border-violet-400 bg-violet-50':'border-stone-200 bg-white hover:border-stone-300'; if(c)return'border-emerald-400 bg-emerald-50'; if(s&&!c)return'border-red-400 bg-red-50'; return'border-stone-100 bg-stone-50 opacity-60'; },
+        getOptionRadioClass(qi,oi) { const s=this.ex3Answers[qi]===oi,c=this.quizQuestions[qi].answer===oi; if(!this.ex3Checked)return s?'border-violet-500 bg-violet-500':'border-stone-300 bg-white'; if(c)return'border-emerald-500 bg-emerald-500'; if(s&&!c)return'border-red-500 bg-red-500'; return'border-stone-200 bg-stone-100'; },
+        getOptionTextClass(qi,oi) { const c=this.quizQuestions[qi].answer===oi,s=this.ex3Answers[qi]===oi; if(!this.ex3Checked)return'text-stone-700'; if(c)return'text-emerald-700 font-semibold'; if(s&&!c)return'text-red-700 font-semibold'; return'text-stone-400'; },
+        checkEx3() { this.ex3Checked=true; this.ex3Correct=this.ex3Answers.every((a,i)=>a===this.quizQuestions[i].answer); if(this.ex3Correct)this.cobaScore+=30; },
+        resetEx3() { this.ex3Answers=[null,null,null]; this.ex3Checked=false; this.ex3Correct=false; if(this.cobaScore>=30)this.cobaScore-=30; },
+        resetCoba() { this.cobaScore=0; this.ex1Answer=[]; this.ex1Pieces.forEach(p=>p.used=false); this.ex1Checked=false; this.ex1Correct=false; this.ex2=['','','','','','','','']; this.ex2Checked=false; this.ex2Correct=false; this.ex3Answers=[null,null,null]; this.ex3Checked=false; this.ex3Correct=false; this.cobaStep=0; },
+        generateConfetti() { const colors=['#14B8A6','#F59E0B','#EA580C','#8B5CF6','#EC4899','#10B981','#F97316']; const p=[]; for(let i=0;i<40;i++)p.push({id:i,x:Math.random()*100,color:colors[Math.floor(Math.random()*colors.length)],delay:Math.random()*1.5,dur:2+Math.random()*1.5,size:6+Math.random()*8,round:Math.random()>0.5}); this.confettiPieces=p; },
     },
-    watch: { showCelebration(v) { if (v) this.generateConfetti(); } }
+    watch: { showCelebration(v) { if(v)this.generateConfetti(); } }
 }).mount('#app');
 </script>
 </body>
